@@ -2,6 +2,7 @@
 require_once '../../../vendor/autoload.php';
 
 use App\sistema\acesso\{sConfiguracao,sHistorico,sEmail,sSenha};
+//novo comentário
 
 //Objetos instanciados
 $sConfiguracao = new sConfiguracao();
