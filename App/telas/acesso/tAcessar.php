@@ -21,6 +21,14 @@ if(isset($_POST) && !empty($_POST)){
     $sEmail->verificar(basename($_SERVER['PHP_SELF']));
     
     //Etapa3 - validar o campo senha
+    if($sEmail->getValidador()){
+        $sSenha->setEmail($_POST['email']);
+        $sSenha->verificar(basename($_SERVER['PHP_SELF']));
+        $sSenha->criptografar($_POST['senha']);
+        var_dump($sSenha);
+    }
+    
+    //Etapa3 - validar o campo senha
     //$sSenha->verificar();    
     
     
@@ -98,15 +106,15 @@ if(isset($_POST) && !empty($_POST)){
             </div>
             <?php
             if(isset($sEmail)){
-                if(!$sEmail->mConexao->getValidador()){
+                if(!$sEmail->getValidador()){
                     echo <<<HTML
                     <div class="col-mb-3">
-                        <div class="card card-outline card-{$sEmail->mConexao->sNotificacao->getTipo()}">
+                        <div class="card card-outline card-{$sEmail->sNotificacao->getTipo()}">
                             <div class="card-header">
-                                <h3 class="card-title">{$sEmail->mConexao->sNotificacao->getTitulo()}</h3>
+                                <h3 class="card-title">{$sEmail->sNotificacao->getTitulo()}</h3>
                             </div>
                             <div class="card-body">
-                                {$sEmail->mConexao->sNotificacao->getMensagem()}
+                                {$sEmail->sNotificacao->getMensagem()}
                             </div>
                         </div>
                     </div>

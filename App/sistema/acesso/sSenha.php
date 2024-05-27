@@ -3,6 +3,7 @@ namespace App\sistema\acesso;
 use App\modelo\{mConexao};
 
 class sSenha {
+    private $email;
     private $senhaCriptografada;
     private $senha;
     public sNotificacao $sNotificacao;
@@ -11,13 +12,42 @@ class sSenha {
         
     public function criptografar($senha) {
         $this->setSenha($senha);
-        $this->setSenhaCriptografada(password_hash(hash_hmac("sha256", $senha, "segurança"), PASSWORD_ARGON2ID));
+        $this->setSenhaCriptografada(password_hash(hash_hmac("sha256", $senha, "sspmi"), PASSWORD_ARGON2ID));
     }
     
-    public function verificar() {
+    public function verificar($pagina) {
+        if($pagina == 'tAcessar.php'){
+            //pega a senha do BD
+            $this->mConexao = new mConexao();
+            
+            
+            /*
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email',
+                'camposCondicionados' => 'nomenclatura',
+                'valoresCondicionados' => $this->getEmail(),
+                'camposOrdenados' => 'idemail',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];
+            
+            $senhaTemp = hash_hmac("sha256", $this->getSenha(), "sspmi");
+            if(password_verify($senhaTemp, $this->getSenhaCriptografada())){
+                echo "é a mesma senha";
+            }else{
+                echo "não é a mesma senha";
+            }
+             * 
+             */
+        }
+        
         //verifica se a senha informada está correta
-        $this->mConexao = new mConexao();
-        $this->mConexao->consultar($this->getSenhaCriptografada());
+        
+    }
+
+    public function getEmail() {
+        return $this->email;
     }
 
     public function getSenhaCriptografada() {
@@ -32,6 +62,18 @@ class sSenha {
         return $this->sNotificacao;
     }
 
+    public function getSConfiguracao(): sConfiguracao {
+        return $this->sConfiguracao;
+    }
+
+    public function getMConexao(): mConexao {
+        return $this->mConexao;
+    }
+
+    public function setEmail($email): void {
+        $this->email = $email;
+    }
+
     public function setSenhaCriptografada($senhaCriptografada): void {
         $this->senhaCriptografada = $senhaCriptografada;
     }
@@ -44,7 +86,15 @@ class sSenha {
         $this->sNotificacao = $sNotificacao;
     }
 
-       
+    public function setSConfiguracao(sConfiguracao $sConfiguracao): void {
+        $this->sConfiguracao = $sConfiguracao;
+    }
+
+    public function setMConexao(mConexao $mConexao): void {
+        $this->mConexao = $mConexao;
+    }
+
+           
     //QA - área de testes
     /*compara as senhas
      * 

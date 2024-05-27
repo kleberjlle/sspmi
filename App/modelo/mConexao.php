@@ -47,40 +47,54 @@ class mConexao {
     }
 
     private function consultar($dados) {
-        $i = 0;
-        $j = count($dados);
-        $query = '"';
+        $query = '';
+        $n1 = '';
+        $n2 = '';
+        $ordem = false;
+        $valoresCondicionados = false;
         
-        foreach ($dados as $key => $value) {
-            $i++;
-            if($key == 'camposCondicionados'){
+        //monta a query de consulta
+        foreach ($dados as $key => $value) {   
+            if($key == 'busca' && $value){
+                $query .= $value.' FROM ';
+            }else if($key == 'camposCondicionados' && $value){
                 $query .= 'WHERE '.$value.'=';
-            }else{               
-                if($key == 'valoresCondicionados'){
-                    $query .= "'$value' ";            
-                }else if($i != $j){
-                    $query .= $value.' ';
+            }else if($key == 'valoresCondicionados' && $value){
+                $valoresCondicionados = true;
+                $n1 = "'$value' ";
+                $n2 = "'$value'";
+            }else if($key == 'camposOrdenados' && $value){
+                $ordem = true;
+                $query .= $n1.'ORDER BY '.$value.' ';
+            }else if($key == 'ordem'){
+                if($ordem){
+                    $query .= $value;
                 }else{
-                    $query .= $value.'";';
-                }
-            }
+                    $query .= $n2;
+                }                
+            }else{
+                if($valoresCondicionados){
+                    $query .= $value;
+                }else{
+                    $query .= $value.' ';
+                }                
+            }                
         }
+        $query .= ';';
         
-        echo $query;
-        
-        //$resultado = $this->conexao->query($query);
+        $resultado = $this->conexao->query($query);
 
-        /*
+        
         if($resultado->num_rows > 0){
             $this->setValidador(true);
         }else{
             $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A2'));
         }
         
         /*QA - início da área de testes
         
-        var_dump($dados);
+        //var_dump($dados);
+        echo $query;
         
         foreach ($resultado as $key) {
             echo "<pre>";
@@ -88,7 +102,7 @@ class mConexao {
             echo "</pre>";
         }
         //QA - fim da área de testes
-        */
+        //*/
     }
 
     public function inserir($dados) {

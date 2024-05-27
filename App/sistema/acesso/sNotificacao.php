@@ -43,10 +43,10 @@ class sNotificacao{
         
         switch ($this->getNumero()) {
             case '1':               
-                $this->setMensagem('Usuário ou senha inválido.');
+                $this->setMensagem('O e-mail informado não está registrado em nosso sistema.');
                 break;
             case '2':
-                $this->setMensagem('E-mail incorreto ou não registrado.');
+                $this->setMensagem('O e-mail informado não é um endereço de e-mail válido.');
                 break;
             case '3':
                 $this->setMensagem('E-mail já registrado, favor clique na opção <a href="tRecuperarAcesso.php">esqueci minha senha</a>.');
