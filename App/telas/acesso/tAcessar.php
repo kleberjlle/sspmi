@@ -8,9 +8,9 @@ $sConfiguracao = new sConfiguracao();
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
-    //instancia sSenha para criptografar o conteúdo recebido via POST
     $sEmail = new sEmail($_POST['email']);
     $sSenha = new sSenha($_POST['senha']);
+    $sSenha->criptografar($_POST['senha']);
     
     //Etapa 1 - registrar histórico
     //instancia sHistorico para alimentar a tabela de log
@@ -24,12 +24,11 @@ if(isset($_POST) && !empty($_POST)){
     if($sEmail->getValidador()){
         $sSenha->setEmail($_POST['email']);
         $sSenha->verificar(basename($_SERVER['PHP_SELF']));
-        $sSenha->criptografar($_POST['senha']);
-        var_dump($sSenha);
+        
+        if($sSenha->getValidador()){
+            echo 'acessar o sistema';
+        }
     }
-    
-    //Etapa3 - validar o campo senha
-    //$sSenha->verificar();    
     
     
     //QA - início da área de testes
@@ -119,8 +118,24 @@ if(isset($_POST) && !empty($_POST)){
                         </div>
                     </div>
 HTML;
-            }
                 }
+            }
+             if(isset($sSenha)){
+                if(!$sSenha->getValidador()){
+                    echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$sSenha->sNotificacao->getTipo()}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$sSenha->sNotificacao->getTitulo()}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$sSenha->sNotificacao->getMensagem()}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                }
+            }
                 
             ?>
         </div>

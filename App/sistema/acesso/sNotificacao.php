@@ -40,6 +40,7 @@ class sNotificacao{
     private function tipoAtencao() {
         $this->setTipo('warning');
         $this->setTitulo('Atenção!');
+        $this->setSConfiguracao(new sConfiguracao());
         
         switch ($this->getNumero()) {
             case '1':               
@@ -52,7 +53,13 @@ class sNotificacao{
                 $this->setMensagem('E-mail já registrado, favor clique na opção <a href="tRecuperarAcesso.php">esqueci minha senha</a>.');
                 break;
             case '4':
-                $this->setMensagem('A senha deve ter de '.$this->sConfiguracao->getCaracterMinimo().' à '.$this->sConfiguracao->getCaracterMaximo());
+                $this->setMensagem('A senha deve ter de '.$this->sConfiguracao->getCaracterMinimo().' à '.$this->sConfiguracao->getCaracterMaximo().' caracteres.');
+                break;
+            case '5':
+                $this->setMensagem('A senha deve possuir letras e números');
+                break;
+            case '6':
+                $this->setMensagem('Senha incorreta, tente novamente.');
                 break;
             default:
                 $this->setTipo('danger');
@@ -149,6 +156,10 @@ class sNotificacao{
         return $this->mensagem;
     }
 
+    public function getSConfiguracao(): sConfiguracao {
+        return $this->sConfiguracao;
+    }
+
     public function setLetra($letra): void {
         $this->letra = $letra;
     }
@@ -171,6 +182,12 @@ class sNotificacao{
 
     public function setMensagem($mensagem): void {
         $this->mensagem = $mensagem;
-    }    
+    }
+
+    public function setSConfiguracao(sConfiguracao $sConfiguracao): void {
+        $this->sConfiguracao = $sConfiguracao;
+    }
+
+
 }
 ?>

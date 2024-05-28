@@ -3,59 +3,95 @@ namespace App\sistema\acesso;
 use App\modelo\{mConexao};
 
 class sSenha {
-    private $email;
-    private $senhaCriptografada;
-    private $senha;
+    private string $email;
+    private string $senhaCriptografada;
+    private string $senha;
+    private bool $validador;
     public sNotificacao $sNotificacao;
     public sConfiguracao $sConfiguracao;
     public mConexao $mConexao;
         
+    public function __construct(bool $validador) {
+        $this->validador = false;
+    }    
+    
     public function criptografar($senha) {
         $this->setSenha($senha);
         $this->setSenhaCriptografada(password_hash(hash_hmac("sha256", $senha, "sspmi"), PASSWORD_ARGON2ID));
     }
     
-    public function verificar($pagina) {
+    public function verificar($pagina) {        
         if($pagina == 'tAcessar.php'){
-            //pega a senha do BD
-            $this->mConexao = new mConexao();
+            //verifica os requisitos da senha
+            $this->verificaRequisitos();
             
-            
-            /*
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'email',
-                'camposCondicionados' => 'nomenclatura',
-                'valoresCondicionados' => $this->getEmail(),
-                'camposOrdenados' => 'idemail',//caso não tenha, colocar como null
-                'ordem' => 'ASC'
-            ];
-            
-            $senhaTemp = hash_hmac("sha256", $this->getSenha(), "sspmi");
-            if(password_verify($senhaTemp, $this->getSenhaCriptografada())){
-                echo "é a mesma senha";
-            }else{
-                echo "não é a mesma senha";
+            if($this->getValidador()){
+                //pega a senha do BD
+                $this->mConexao = new mConexao();
+
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => 'senha',
+                    'tabelas' => 'email',
+                    'camposCondicionados' => 'nomenclatura',
+                    'valoresCondicionados' => $this->getEmail(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => 'ASC'
+                ];
+
+                //busca a senha do e-mail correspondente
+                $this->mConexao->CRUD($dados);            
+
+                //verifica se a senha informada é a mesma constante no BD
+                if(password_verify(hash_hmac("sha256", $this->getSenha(), "sspmi"), $this->mConexao->getRetorno())){
+                    //permita o acesso ao sistema
+                    $this->setValidador(true);
+                }else{
+                    $this->setValidador(false);
+                    $this->setSNotificacao(new sNotificacao('A6'));
+                }
             }
-             * 
-             */
         }
         
         //verifica se a senha informada está correta
         
     }
+    
+    private function verificaRequisitos() {
+        //inicia configuração
+        $this->setSConfiguracao(new sConfiguracao());
+        
+        //verifica os requisitos da senha
+        if( strlen($_POST['senha']) < $this->sConfiguracao->getCaracterMinimo() ||
+            strlen($_POST['senha']) > $this->sConfiguracao->getCaracterMaximo()){
+            $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A4'));
+        }else if(ctype_alnum($_POST['senha'])){
+            if(ctype_alpha($_POST['senha']) || ctype_digit($_POST['senha'])){
+                $this->setValidador(false);
+                $this->setSNotificacao(new sNotificacao('A5'));                    
+            }else{
+                $this->setValidador(true);
+            }
+        }else{
+            $this->setValidador(false);
+        }
+    }
 
-    public function getEmail() {
+    public function getEmail(): string {
         return $this->email;
     }
 
-    public function getSenhaCriptografada() {
+    public function getSenhaCriptografada(): string {
         return $this->senhaCriptografada;
     }
 
-    public function getSenha() {
+    public function getSenha(): string {
         return $this->senha;
+    }
+
+    public function getValidador(): bool {
+        return $this->validador;
     }
 
     public function getSNotificacao(): sNotificacao {
@@ -70,16 +106,20 @@ class sSenha {
         return $this->mConexao;
     }
 
-    public function setEmail($email): void {
+    public function setEmail(string $email): void {
         $this->email = $email;
     }
 
-    public function setSenhaCriptografada($senhaCriptografada): void {
+    public function setSenhaCriptografada(string $senhaCriptografada): void {
         $this->senhaCriptografada = $senhaCriptografada;
     }
 
-    public function setSenha($senha): void {
+    public function setSenha(string $senha): void {
         $this->senha = $senha;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
     }
 
     public function setSNotificacao(sNotificacao $sNotificacao): void {
@@ -94,19 +134,6 @@ class sSenha {
         $this->mConexao = $mConexao;
     }
 
-           
-    //QA - área de testes
-    /*compara as senhas
-     * 
-    public function comparar($senha) {
-        $senhaTemp = hash_hmac("sha256", $senha, "teste");
-        if(password_verify($senhaTemp, $this->getSenha())){
-            echo "é a mesma senha";
-        }else{
-            echo "não é a mesma senha";
-        }
-    }
-    * 
-    */
-    //QA - fim da área de testes
+
+
 }

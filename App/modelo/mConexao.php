@@ -5,8 +5,8 @@ namespace App\modelo;
 use App\sistema\acesso\{sNotificacao,sConfiguracao};
 
 class mConexao {
-
-    private $conexao;
+    private mixed $retorno;
+    private mixed $conexao;
     private bool $validador;
     public sConfiguracao $sConfiguracao;
     public sNotificacao $sNotificacao;
@@ -21,6 +21,7 @@ class mConexao {
             $this->sConfiguracao->getPort(),
             $this->sConfiguracao->getSocket()
         ));
+        mysqli_set_charset($this->conexao, $this->sConfiguracao->getCharsetDB());
         $this->validador = false;
     }
     
@@ -83,19 +84,34 @@ class mConexao {
         $query .= ';';
         
         $resultado = $this->conexao->query($query);
-
         
-        if($resultado->num_rows > 0){
-            $this->setValidador(true);
-        }else{
-            $this->setValidador(false);
+        if($dados['busca'] == '*'){
+            if ($resultado->num_rows > 0) {
+                $this->setValidador(true);
+            } else {
+                $this->setValidador(false);
+            }
         }
+        if($dados['busca'] == 'senha'){
+            if ($resultado->num_rows > 0) {
+                $this->setValidador(true);
+                foreach ($resultado as $linha) {
+                    $this->setRetorno($linha['senha']);
+                }
+            } else {
+                $this->setValidador(false);
+            }
+        }
+                
+        mysqli_close($this->conexao);
+        
+ 
         
         /*QA - início da área de testes
         
-        //var_dump($dados);
+        var_dump($resultado);
         echo $query;
-        
+        echo $this->getValidador();
         foreach ($resultado as $key) {
             echo "<pre>";
             echo 'email = ' . $key['nomenclatura'];
@@ -121,8 +137,12 @@ class mConexao {
         //QA - fim da área de testes
         
     }
-    
-    public function getConexao() {
+        
+    public function getRetorno(): mixed {
+        return $this->retorno;
+    }
+
+    public function getConexao(): mixed {
         return $this->conexao;
     }
 
@@ -138,7 +158,11 @@ class mConexao {
         return $this->sNotificacao;
     }
 
-    public function setConexao($conexao): void {
+    public function setRetorno(mixed $retorno): void {
+        $this->retorno = $retorno;
+    }
+
+    public function setConexao(mixed $conexao): void {
         $this->conexao = $conexao;
     }
 
