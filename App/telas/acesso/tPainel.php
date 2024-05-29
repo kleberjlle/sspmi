@@ -1,34 +1,38 @@
 <?php
 session_start();
+//verifica se tem credencial para acessar o sistema
+if(!isset($_SESSION['crendecial'])){
+    //não permitir acesso e chamar notificação
+}
 echo $_SESSION['credencial']['nome'];
+require_once '../../../vendor/autoload.php';
+use App\sistema\acesso\{sConfiguracao};
+
+$sConfiguracao = new sConfiguracao();
 
 //verifica a opção de menu
 isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica se há retorno de notificações
-if (isset($_GET['notificacao'])) {
-    $notificacao = $_GET['notificacao'];
-    $codigo = notificacao($notificacao);
-}
+
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="<?php echo $sConfiguracao->getLang(); ?>">
     <head>
-        <meta charset="utf-8">
+        <meta charset="<?php echo $sConfiguracao->getCharset(); ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SSPMI</title>
+        <title><?php echo $sConfiguracao->getTitle(); ?></title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
         <!-- pace-progress -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
         <!-- adminlte-->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
         <!-- DataTables -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     </head>
     <body class="hold-transition sidebar-mini pace-primary">
         <!-- Site wrapper -->
@@ -61,7 +65,7 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </li>
                     <!-- Notifications Dropdown Menu -->
-
+                    <!-- Próxima sprint
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
                             <i class="far fa-bell"></i>
@@ -89,8 +93,9 @@ if (isset($_GET['notificacao'])) {
                         </div>
 
                     </li>
+                    -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="../../sistema/acesso/sSair.php">
+                        <a class="nav-link" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>sistema/acesso/sSair.php">
                             <i class="fas fa-sign-out-alt"></i>
                             <span class="badge badge-warning navbar-badge"></span>
                         </a>                        
@@ -525,26 +530,26 @@ switch ($menu) {
         
 
         <!--jQuery-->
-        <script src = "../../../vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src = "<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- pace-progress -->
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/pace-progress/pace.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/pace-progress/pace.min.js"></script>
         <!-- AdminLTE App -->
-        <script src="../../../vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
         <!-- DataTables  & Plugins -->
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/jszip/jszip.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/jszip/jszip.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <!-- Page specific script -->
         <script>
             $(function () {
