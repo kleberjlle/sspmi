@@ -1,12 +1,15 @@
 <?php
 session_start();
-//verifica se tem credencial para acessar o sistema
-if(!isset($_SESSION['crendecial'])){
-    //não permitir acesso e chamar notificação
-}
-echo $_SESSION['credencial']['nome'];
 require_once '../../../vendor/autoload.php';
-use App\sistema\acesso\{sConfiguracao};
+use App\sistema\acesso\{sConfiguracao,sSair};
+
+//verifica se tem credencial para acessar o sistema
+if(!isset($_SESSION['credencial'])){
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
+}
+
 
 $sConfiguracao = new sConfiguracao();
 
@@ -95,7 +98,7 @@ isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
                     </li>
                     -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>sistema/acesso/sSair.php">
+                        <a class="nav-link" href="<?php echo $sConfiguracao->getDiretorioPrincipal().$sConfiguracao->getDiretorioDoSistema(); ?>telas/acesso/tSair.php">
                             <i class="fas fa-sign-out-alt"></i>
                             <span class="badge badge-warning navbar-badge"></span>
                         </a>                        

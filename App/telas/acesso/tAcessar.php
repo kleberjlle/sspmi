@@ -7,11 +7,23 @@ use App\sistema\acesso\{
     sHistorico,
     sEmail,
     sSenha,
-    sUsuario
+    sUsuario,
+    sSair
 };
 
 //Objetos instanciados
 $sConfiguracao = new sConfiguracao();
+if(isset($_GET['validador'])){
+    if(!$_GET['validador']){
+        $sSair = new sSair();
+        $sSair->notificar($_GET['validador']);
+        
+        //cria as variáveis da notificação
+        $tipo = $sSair->sNotificacao->getTipo();
+        $titulo = $sSair->sNotificacao->getTitulo();
+        $email = $sSair->sNotificacao->getMensagem();  
+    }   
+}
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
@@ -37,7 +49,17 @@ if(isset($_POST) && !empty($_POST)){
             $sUsuario = new sUsuario();
             $sUsuario->setIdEmail($sEmail->mConexao->getRetorno());
             $sUsuario->consultar(basename($_SERVER['PHP_SELF']));
+        }else{
+            //cria as variáveis da notificação
+            $tipo = $sSenha->sNotificacao->getTipo();
+            $titulo = $sSenha->sNotificacao->getTitulo();
+            $email = $sSenha->sNotificacao->getMensagem();
         }
+    }else{
+        //cria as variáveis da notificação
+        $tipo = $sEmail->sNotificacao->getTipo();
+        $titulo = $sEmail->sNotificacao->getTitulo();
+        $email = $sEmail->sNotificacao->getMensagem();
     }
         
     //QA - início da área de testes
@@ -113,16 +135,7 @@ if(isset($_POST) && !empty($_POST)){
                 <!-- /.login-card-body -->
             </div>
             <?php
-            if(isset($sEmail) || isset($sSenha)){
-                if(!$sEmail->getValidador()){
-                    $tipo = $sEmail->sNotificacao->getTipo();
-                    $titulo = $sEmail->sNotificacao->getTitulo();
-                    $email = $sEmail->sNotificacao->getMensagem();
-                }else if($sEmail->getValidador() && !$sSenha->getValidador()){
-                    $tipo = $sSenha->sNotificacao->getTipo();
-                    $titulo = $sSenha->sNotificacao->getTitulo();
-                    $email = $sSenha->sNotificacao->getMensagem();                    
-                }
+            if(isset($tipo) && isset($titulo) && isset($email)){
                     echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">

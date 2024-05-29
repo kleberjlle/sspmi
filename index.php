@@ -5,9 +5,9 @@
     </head>
     <body>
         <?php
-            $manutencao = false;
+            $manutencao = true;
             if($manutencao){
-                header("Location: ./App/telas/acesso/tAcessar.php");
+                echo 'em breve teremos um sistema aqui';
             }else{
                 header("Location: ./App/telas/acesso/tAcessar.php");
             }

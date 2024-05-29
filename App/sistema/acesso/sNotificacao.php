@@ -75,7 +75,7 @@ class sNotificacao{
         
         switch ($this->getNumero()) {
             case '1':               
-                $this->setMensagem('Não esperávamos isso, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');
+                $this->setMensagem('Você está tentando violar uma política de privacidade, verificaremos os logs de acordo com a notificação ('.$this->getCodigo().').');
                 break;
             case '2':
                 $this->setMensagem('A página não está configurada, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');
