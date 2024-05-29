@@ -75,6 +75,7 @@ class sSenha {
             }
         }else{
             $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A5'));
         }
     }
 

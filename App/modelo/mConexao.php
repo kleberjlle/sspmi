@@ -81,27 +81,49 @@ class mConexao {
                 }                
             }                
         }
-        $query .= ';';
-        
+        $query .= ';';        
         $resultado = $this->conexao->query($query);
         
-        if($dados['busca'] == '*'){
-            if ($resultado->num_rows > 0) {
-                $this->setValidador(true);
-            } else {
-                $this->setValidador(false);
-            }
-        }
-        if($dados['busca'] == 'senha'){
-            if ($resultado->num_rows > 0) {
-                $this->setValidador(true);
-                foreach ($resultado as $linha) {
-                    $this->setRetorno($linha['senha']);
+        //tomada de decisão de acordo com o(s) campo(s)
+        switch ($dados['tabelas']) {
+            case 'email':
+                if($dados['busca'] == '*'){
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($linha['idemail']);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
                 }
-            } else {
-                $this->setValidador(false);
-            }
+                if($dados['busca'] == 'senha'){
+                    if ($resultado->num_rows > 0) {
+                        $this->setValidador(true);
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($linha['senha']);
+                        }
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }                
+                break;
+            case 'usuario':
+                if($dados['busca'] == '*'){
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+            default:
+                break;
         }
+        
+        
                 
         mysqli_close($this->conexao);
         
@@ -110,13 +132,8 @@ class mConexao {
         /*QA - início da área de testes
         
         var_dump($resultado);
-        echo $query;
-        echo $this->getValidador();
-        foreach ($resultado as $key) {
-            echo "<pre>";
-            echo 'email = ' . $key['nomenclatura'];
-            echo "</pre>";
-        }
+        echo $query.'<br />';
+        echo $this->getValidador().'<br />';
         //QA - fim da área de testes
         //*/
     }

@@ -6,8 +6,9 @@ use App\modelo\{mConexao};
 use App\sistema\acesso\{sNotificacao};
 
 class sEmail {
-    private $email;
-    private $validador;
+    private int $idEmail;
+    private string $email;
+    private bool $validador;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
 
@@ -20,10 +21,9 @@ class sEmail {
         if ($pagina == 'tAcessar.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {
-                $this->setValidador(true);
-                $this->mConexao = new mConexao();
-
-                //verificar se consta o email no BD            
+                
+                //verifica se consta o email no BD
+                $this->mConexao = new mConexao();                            
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => '*',
@@ -33,12 +33,15 @@ class sEmail {
                     'camposOrdenados' => 'idemail',//caso não tenha, colocar como null
                     'ordem' => 'ASC'
                 ];
-
                 $this->mConexao->CRUD($dados);
                 
+                //se não localizou o registro do no BD
                 if(!$this->mConexao->getValidador()){
                     $this->setValidador(false);
                     $this->setSNotificacao(new sNotificacao('A1'));
+                }else{
+                    $this->setIdEmail($this->mConexao->getRetorno());
+                    $this->setValidador(true);
                 }
             } else {
                 //retornar notificação
@@ -48,11 +51,15 @@ class sEmail {
         }
     }
 
-    public function getEmail() {
+    public function getIdEmail(): int {
+        return $this->idEmail;
+    }
+
+    public function getEmail(): string {
         return $this->email;
     }
 
-    public function getValidador() {
+    public function getValidador(): bool {
         return $this->validador;
     }
 
@@ -64,11 +71,15 @@ class sEmail {
         return $this->sNotificacao;
     }
 
-    public function setEmail($email): void {
+    public function setIdEmail(int $idEmail): void {
+        $this->idEmail = $idEmail;
+    }
+
+    public function setEmail(string $email): void {
         $this->email = $email;
     }
 
-    public function setValidador($validador): void {
+    public function setValidador(bool $validador): void {
         $this->validador = $validador;
     }
 
@@ -79,6 +90,4 @@ class sEmail {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

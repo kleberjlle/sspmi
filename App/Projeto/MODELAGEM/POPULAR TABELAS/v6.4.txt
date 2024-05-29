@@ -237,11 +237,11 @@ INSERT INTO `telefone`(`whatsApp`, `numero`) VALUES (1,'47996115955'); -- kleber
 -- término da tabela telefone
 
 -- início da tabela email
-INSERT INTO `email`(`nomenclatura`) VALUES ('kleberjlle@gmail.com');
-INSERT INTO `email`(`nomenclatura`) VALUES ('suporte@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`) VALUES ('cti@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`) VALUES ('informatica@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`) VALUES ('administracao@itapoa.sc.gov.br');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('kleberjlle@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$eVRwbGhnUlZKN0RuWjNCVA$u/F842aQ4EFlgkLB7O8hsaNTsbd+eOb1hHDnjjAhJN4');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('suporte@itapoa.sc.gov.br');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('cti@itapoa.sc.gov.br');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('informatica@itapoa.sc.gov.br');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('administracao@itapoa.sc.gov.br');
 -- fim da tabela email
 
 -- início da tabela email_has_setor

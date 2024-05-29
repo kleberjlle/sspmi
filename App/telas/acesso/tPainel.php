@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-require_once '../../sistema/acesso/sNotificacao.php';
+echo $_SESSION['credencial']['nome'];
 
 //verifica a opção de menu
 isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";

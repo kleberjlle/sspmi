@@ -2,7 +2,13 @@
 require_once '../../../vendor/autoload.php';
 //testar git hub
 
-use App\sistema\acesso\{sConfiguracao,sHistorico,sEmail,sSenha};
+use App\sistema\acesso\{
+    sConfiguracao,
+    sHistorico,
+    sEmail,
+    sSenha,
+    sUsuario
+};
 
 //Objetos instanciados
 $sConfiguracao = new sConfiguracao();
@@ -16,7 +22,7 @@ if(isset($_POST) && !empty($_POST)){
     //Etapa 1 - registrar histórico
     //instancia sHistorico para alimentar a tabela de log
     $sHistorico1 = new sHistorico(basename($_SERVER['PHP_SELF']), $_POST['acao'], 'email', $_POST['email'], null, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], php_uname(), gethostname(), null);
-    $sHistorico2 = new sHistorico(basename($_SERVER['PHP_SELF']), $_POST['acao'], 'senha', $sSenha->getSenha(), null, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], php_uname(), gethostname(), null);
+    $sHistorico2 = new sHistorico(basename($_SERVER['PHP_SELF']), $_POST['acao'], 'senha', $sSenha->getSenhaCriptografada(), null, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], php_uname(), gethostname(), null);
        
     //Etapa2 - validar o campo e-mail
     $sEmail->verificar(basename($_SERVER['PHP_SELF']));
@@ -27,11 +33,13 @@ if(isset($_POST) && !empty($_POST)){
         $sSenha->verificar(basename($_SERVER['PHP_SELF']));
         
         if($sSenha->getValidador()){
-            echo 'acessar o sistema';
+            //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
+            $sUsuario = new sUsuario();
+            $sUsuario->setIdEmail($sEmail->mConexao->getRetorno());
+            $sUsuario->consultar(basename($_SERVER['PHP_SELF']));
         }
     }
-    
-    
+        
     //QA - início da área de testes
     /*verificar o que tem no objeto
     /*
@@ -105,39 +113,29 @@ if(isset($_POST) && !empty($_POST)){
                 <!-- /.login-card-body -->
             </div>
             <?php
-            if(isset($sEmail)){
+            if(isset($sEmail) || isset($sSenha)){
                 if(!$sEmail->getValidador()){
+                    $tipo = $sEmail->sNotificacao->getTipo();
+                    $titulo = $sEmail->sNotificacao->getTitulo();
+                    $email = $sEmail->sNotificacao->getMensagem();
+                }else if($sEmail->getValidador() && !$sSenha->getValidador()){
+                    $tipo = $sSenha->sNotificacao->getTipo();
+                    $titulo = $sSenha->sNotificacao->getTitulo();
+                    $email = $sSenha->sNotificacao->getMensagem();                    
+                }
                     echo <<<HTML
                     <div class="col-mb-3">
-                        <div class="card card-outline card-{$sEmail->sNotificacao->getTipo()}">
+                        <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
-                                <h3 class="card-title">{$sEmail->sNotificacao->getTitulo()}</h3>
+                                <h3 class="card-title">{$titulo}</h3>
                             </div>
                             <div class="card-body">
-                                {$sEmail->sNotificacao->getMensagem()}
+                                {$email}
                             </div>
                         </div>
                     </div>
 HTML;
-                }
-            }
-             if(isset($sSenha)){
-                if(!$sSenha->getValidador()){
-                    echo <<<HTML
-                    <div class="col-mb-3">
-                        <div class="card card-outline card-{$sSenha->sNotificacao->getTipo()}">
-                            <div class="card-header">
-                                <h3 class="card-title">{$sSenha->sNotificacao->getTitulo()}</h3>
-                            </div>
-                            <div class="card-body">
-                                {$sSenha->sNotificacao->getMensagem()}
-                            </div>
-                        </div>
-                    </div>
-HTML;
-                }
-            }
-                
+            }       
             ?>
         </div>
 
