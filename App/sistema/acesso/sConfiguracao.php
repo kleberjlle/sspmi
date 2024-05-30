@@ -37,7 +37,7 @@ class sConfiguracao{
     
     public function __construct() {
         //Diretórios
-        $this->diretorioPrincipal = 'http://localhost/SSPMI/';
+        $this->diretorioPrincipal = 'https://itapoa.app.br/';
         $this->diretorioDoSistema = 'App/';
         $this->diretorioModelo = 'modelos/';        
         $this->diretorioControleAcesso = $this->diretorioPrincipal.$this->diretorioDoSistema.'sistema/acesso/';

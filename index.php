@@ -65,10 +65,6 @@ if(!$manutenção){
                         Itapoá, 29 de maio de 2024.
                     </p>
                 </div>
-
-                <div class="card-footer">
-                </div>
-                <!-- /.form-box -->
             </div>
         </div>
         <!-- jQuery -->
