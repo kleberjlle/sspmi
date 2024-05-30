@@ -78,7 +78,7 @@ class sNotificacao{
                 $this->setMensagem('Você está tentando violar uma política de privacidade, verificaremos os logs de acordo com a notificação ('.$this->getCodigo().').');
                 break;
             case '2':
-                $this->setMensagem('A página não está configurada, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');
+                $this->setMensagem('A estrutura de menus apresentou uma inconsistência, favor contate o administrador do sistema e informe a notificação ('.$this->getCodigo().').');
                 break;
             case '3':
                 $this->setMensagem('Um parâmetro do método CRUD foi definido incorretamente, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');

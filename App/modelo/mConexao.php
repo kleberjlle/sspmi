@@ -81,7 +81,7 @@ class mConexao {
                 }                
             }                
         }
-        $query .= ';';        
+        $query .= ';';
         $resultado = $this->conexao->query($query);
         
         //tomada de decisão de acordo com o(s) campo(s)
@@ -108,7 +108,7 @@ class mConexao {
                     }
                 }                
                 break;
-            case 'usuario':
+            case 'usuario' || 'secretaria':
                 if($dados['busca'] == '*'){
                     if ($resultado->num_rows > 0) {
                         foreach ($resultado as $linha) {
@@ -123,12 +123,6 @@ class mConexao {
                 break;
         }
         
-        
-                
-        mysqli_close($this->conexao);
-        
- 
-        
         /*QA - início da área de testes
         
         var_dump($resultado);
@@ -136,6 +130,12 @@ class mConexao {
         echo $this->getValidador().'<br />';
         //QA - fim da área de testes
         //*/
+                
+        mysqli_close($this->conexao);
+        
+ 
+        
+        
     }
 
     public function inserir($dados) {

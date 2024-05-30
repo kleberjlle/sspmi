@@ -12,6 +12,7 @@ class sUsuario {
     private bool $situacao;//alterar no bd
     private int $idSetor;
     private int $idCoordenacao;
+    private int $idDepartamento;
     private int $idSecretaria;
     private int $idTelefone;
     private int $idCargo;
@@ -53,6 +54,7 @@ class sUsuario {
                     'situacao' => $linha['situacao'],
                     'setor_idsetor' => $linha['setor_idsetor'],
                     'coordenacao_idcoordenacao' => $linha['coordenacao_idcoordenacao'],
+                    'departamento_iddepartamento' => $linha['departamento_iddepartamento'],
                     'secretaria_idsecretaria' => $linha['secretaria_idsecretaria'],
                     'telefone_idtelefone' => $linha['telefone_idtelefone'],
                     'cargo_idcargo' => $linha['cargo_idcargo'],
@@ -63,7 +65,6 @@ class sUsuario {
             header('Location: ./tPainel.php');
         }
     }
-    
     public function getIdUsuario(): int {
         return $this->idUsuario;
     }
@@ -94,6 +95,10 @@ class sUsuario {
 
     public function getIdCoordenacao(): int {
         return $this->idCoordenacao;
+    }
+
+    public function getIdDepartamento(): int {
+        return $this->idDepartamento;
     }
 
     public function getIdSecretaria(): int {
@@ -156,6 +161,10 @@ class sUsuario {
         $this->idCoordenacao = $idCoordenacao;
     }
 
+    public function setIdDepartamento(int $idDepartamento): void {
+        $this->idDepartamento = $idDepartamento;
+    }
+
     public function setIdSecretaria(int $idSecretaria): void {
         $this->idSecretaria = $idSecretaria;
     }
@@ -183,4 +192,6 @@ class sUsuario {
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
+
+
 }

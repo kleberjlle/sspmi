@@ -16,6 +16,16 @@ $sConfiguracao = new sConfiguracao();
 //verifica a opção de menu
 isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
 
+//QA - início da área de testes
+/*verificar o que tem no objeto
+
+echo "<pre>";
+var_dump($_SESSION['credencial']);
+echo "</pre>";
+ 
+//*/
+//QA - fim da área de testes
+
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $sConfiguracao->getLang(); ?>">
@@ -115,23 +125,11 @@ isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
                     <!-- Sidebar user (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="../../../vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                            <img src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
                             <a href="tPainel.php?menu=0" class="d-block">
-                            <?php
-                            if($_SESSION['email'] == 'usuario@gmail.com'){
-                                echo 'Fictício(a)';
-                            }else if($_SESSION['email'] == 'tecnico@gmail.com'){
-                                echo 'Técnico(a)';
-                            }else if($_SESSION['email'] == 'coordenador@gmail.com'){
-                                echo 'Coordenador(a)';
-                            }else if($_SESSION['email'] == 'diretor@gmail.com'){
-                                echo 'Diretor(a)';
-                            }else{
-                                echo 'Administrador';
-                            }
-                            ?>
+                            <?php echo $_SESSION['credencial']['nome'] ?>
                             </a>
                         </div>
                     </div>
@@ -143,7 +141,12 @@ isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
                             <!-- Add icons to the links using the .nav-icon class
                                  with font-awesome or any other icon font library -->
                             <?php
-                                $menu == '1_1' || $menu == '1_1_1' || $menu == '1_2' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';
+                            //abre o menu que atende a condição
+                                $menu == '1_1' ||
+                                $menu == '1_1_1' ||
+                                $menu == '1_2' ? 
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';
                             
                                 //INÍCIO DO CABEÇALHO DO MENU 1
                                 echo <<<HTML
@@ -160,8 +163,12 @@ isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
                                 <!--INÍCIO DO SUBMENU 1_1-->
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-HTML;
-                                $menu == '1_1' || $menu == '1_1_1' ? $atributo = ' active' : $atributo = '';
+HTML;                           
+                                //abre o menu que atende a condição
+                                $menu == '1_1' ||
+                                $menu == '1_1_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                             
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=1_1" class="nav-link $atributo">
@@ -173,8 +180,11 @@ HTML;
                                 
                                 <!--INÍCIO DO SUBMENU 1_2-->                                   
 HTML;
-                                if ($_SESSION['permissao'] > 1) {
-                                    $menu == '1_2' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                if ($_SESSION['credencial']['permissao_idpermissao'] > 1) {
+                                    $menu == '1_2' ?
+                                    $atributo = ' active' :
+                                    $atributo = '';
 
                                     echo <<<HTML
                                     <ul class="nav nav-treeview">
@@ -190,9 +200,16 @@ HTML;
                                 <!--INÍCIO DO MENU2-->
 HTML;
                                 }
-                                
-                                if($_SESSION['permissao']){
-                                $menu == '2_1' || $menu == '2_1_1' || $menu == '2_1_2' || $menu == '2_2' || $menu == '2_2_1' || $menu == '2_2_2' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';           
+                                //abre os menus da condição
+                                if($_SESSION['credencial']['permissao_idpermissao']){
+                                $menu == '2_1' ||
+                                $menu == '2_1_1' ||
+                                $menu == '2_1_2' ||
+                                $menu == '2_2' ||
+                                $menu == '2_2_1' ||
+                                $menu == '2_2_2' ?
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';           
                                 
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
@@ -209,7 +226,12 @@ HTML;
                                     <ul class="nav nav-treeview">
                                 <li class="nav-item">
 HTML;
-                                $menu == '2_1' || $menu == '2_1_1' || $menu == '2_1_2' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '2_1' ||
+                                $menu == '2_1_1' ||
+                                $menu == '2_1_2' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=2_1" class="nav-link $atributo">
@@ -223,7 +245,12 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '2_2' || $menu == '2_2_1' || $menu == '2_2_2' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '2_2' ||
+                                $menu == '2_2_1' ||
+                                $menu == '2_2_2' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=2_2" class="nav-link $atributo">
@@ -238,8 +265,15 @@ HTML;
                             <!--INÍCIO DO MENU3-->
 HTML;
                                             }
-                            if($_SESSION['permissao'] > 1){
-                                $menu == '3_1' || $menu == '3_1_1' || $menu == '3_2' || $menu == '3_2_1' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';
+                            //abre os menus da condição
+                            if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                                $menu == '3_1' ||
+                                $menu == '3_1_1' ||
+                                $menu == '3_2' ||
+                                $menu == '3_2_1' ?
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';
+                                
                                 echo <<<HTML
                                 <!--INÍCIO DO CABEÇALHO DO MENU 3-->
                                 <li class="nav-item $atributo">
@@ -256,7 +290,11 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '3_1' || $menu == '3_1_1' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '3_1' ||
+                                $menu == '3_1_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=3_1" class="nav-link $atributo">
@@ -270,7 +308,11 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '3_2' || $menu == '3_2_1' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '3_2' ||
+                                $menu == '3_2_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=3_2" class="nav-link $atributo">
@@ -283,8 +325,12 @@ HTML;
                                 <!--INÍCIO DO SUBMENU4-->
 HTML;
                             }
-                                if($_SESSION['permissao'] > 1){
-                                $menu == '4_1' || $menu == '4_2' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';
+                                //abre os menus da condição
+                                if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                                $menu == '4_1' ||
+                                $menu == '4_2' ?
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
@@ -301,8 +347,10 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                
-                                $menu == '4_1' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '4_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=4_1" class="nav-link $atributo">
@@ -316,7 +364,10 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '4_2' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '4_2' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=4_2" class="nav-link $atributo">
@@ -331,8 +382,12 @@ HTML;
                             <!--INÍCIO DO MENU5-->
 HTML;
                                 }
-                                if($_SESSION['permissao'] > 1){
-                                $menu == '5_1' || $menu == '5_2' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';
+                                //abre os menus da condição
+                                if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                                $menu == '5_1' ||
+                                $menu == '5_2' ?
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';
                             
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
@@ -349,7 +404,10 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">                                
 HTML;
-                                $menu == '5_1' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '5_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=5_1" class="nav-link $atributo">
@@ -363,7 +421,10 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '5_2' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '5_2' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=5_2" class="nav-link $atributo">
@@ -378,8 +439,11 @@ HTML;
                                 
 HTML;
                                 }
-                                if($_SESSION['permissao'] > 4){
-                                $menu == '6_1' ? $atributo = ' menu-is-opening menu-open' : $atributo = '';
+                                //abre os menus da condição
+                                if($_SESSION['credencial']['permissao_idpermissao'] > 4){
+                                $menu == '6_1' ?
+                                $atributo = ' menu-is-opening menu-open' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
@@ -396,7 +460,10 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
-                                $menu == '6_1' ? $atributo = ' active' : $atributo = '';
+                                //abre os menus da condição
+                                $menu == '6_1' ?
+                                $atributo = ' active' :
+                                $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=6_1" class="nav-link $atributo">
@@ -426,88 +493,88 @@ HTML;
 
                 <!-- Main content -->
                 <section class="content">
-<?php
-//configura tela de acesso
-switch ($menu) {
-    //início
-    case "0":
-        require_once './tInicio.php';
-        break;
-    //menu 1
-    case "1_1":
-        require_once './tMenu1_1.php';
-        break;
-    case "1_1_1":
-        require_once './tMenu1_1_1.php';
-        break;
-    case "1_2":
-        require_once './tMenu1_2.php';
-        break;
-    //menu 2
-    case "2_1":
-        require_once '../suporte/tMenu2_1.php';
-        break;
-    case "2_1_1":
-        require_once '../suporte/tMenu2_1_1.php';
-        break;
-    case "2_1_2":
-        require_once '../suporte/tMenu2_1_2.php';
-        break;
-    case "2_2":
-        require_once '../suporte/tMenu2_2.php';
-        break;
-    case "2_2_1":
-        require_once '../suporte/tMenu2_2_1.php';
-        break;
-    case "2_2_2":
-        require_once '../suporte/tMenu2_2_2.php';
-        break;
-    case "3_1":
-        require_once '../suporte/tMenu3_1.php';
-        break;
-    //menu 3
-    case "3_1_1":
-        require_once '../suporte/tMenu3_1_1.php';
-        break;
-    case "3_2":
-        require_once '../suporte/tMenu3_2.php';
-        break;
-    case "3_2_1":
-        require_once '../suporte/tMenu3_2_1.php';
-        break;
-    //menu 4
-    case "4_1":
-        require_once '../suporte/tMenu4_1.php';
-        break;
-    case "4_2":
-        require_once '../suporte/tMenu4_2.php';
-        break;
-    case "4_2_1":
-        require_once '../suporte/tMenu4_2_1.php';
-        break;
-    //menu 5
-    case "5_1":
-        require_once '../suporte/tMenu5_1.php';
-        break;
-    case "5_2":
-        require_once '../suporte/tMenu5_2.php';
-        break;
-    case "5_2_1":
-        require_once '../suporte/tMenu5_2_1.php';
-        break;
-    //menu 6
-    case "6_1":
-        require_once './tMenu6_1.php';
-        break;
-    case "6_2":
-        require_once './tMenu6_2.php';
-        break;
-    //padrão
-    default:
-        require_once '../acesso/tInicio.php?notificacao=E2';
-        break;
-}
-?>
+                    <?php
+                    //configura tela de acesso
+                    switch ($menu) {
+                        //início
+                        case "0":
+                            require_once './tInicio.php';
+                            break;
+                        //menu 1
+                        case "1_1":
+                            require_once './tMenu1_1.php';
+                            break;
+                        case "1_1_1":
+                            require_once './tMenu1_1_1.php';
+                            break;
+                        case "1_2":
+                            require_once './tMenu1_2.php';
+                            break;
+                        //menu 2
+                        case "2_1":
+                            require_once '../suporte/tMenu2_1.php';
+                            break;
+                        case "2_1_1":
+                            require_once '../suporte/tMenu2_1_1.php';
+                            break;
+                        case "2_1_2":
+                            require_once '../suporte/tMenu2_1_2.php';
+                            break;
+                        case "2_2":
+                            require_once '../suporte/tMenu2_2.php';
+                            break;
+                        case "2_2_1":
+                            require_once '../suporte/tMenu2_2_1.php';
+                            break;
+                        case "2_2_2":
+                            require_once '../suporte/tMenu2_2_2.php';
+                            break;
+                        case "3_1":
+                            require_once '../suporte/tMenu3_1.php';
+                            break;
+                        //menu 3
+                        case "3_1_1":
+                            require_once '../suporte/tMenu3_1_1.php';
+                            break;
+                        case "3_2":
+                            require_once '../suporte/tMenu3_2.php';
+                            break;
+                        case "3_2_1":
+                            require_once '../suporte/tMenu3_2_1.php';
+                            break;
+                        //menu 4
+                        case "4_1":
+                            require_once '../suporte/tMenu4_1.php';
+                            break;
+                        case "4_2":
+                            require_once '../suporte/tMenu4_2.php';
+                            break;
+                        case "4_2_1":
+                            require_once '../suporte/tMenu4_2_1.php';
+                            break;
+                        //menu 5
+                        case "5_1":
+                            require_once '../suporte/tMenu5_1.php';
+                            break;
+                        case "5_2":
+                            require_once '../suporte/tMenu5_2.php';
+                            break;
+                        case "5_2_1":
+                            require_once '../suporte/tMenu5_2_1.php';
+                            break;
+                        //menu 6
+                        case "6_1":
+                            require_once './tMenu6_1.php';
+                            break;
+                        case "6_2":
+                            require_once './tMenu6_2.php';
+                            break;
+                        //padrão
+                        default:
+                            require_once '../acesso/tInicio.php?notificacao=E2';
+                            break;
+                    }
+                    ?>
                 </section>
                 <!-- /.content -->
             </div>
@@ -515,11 +582,10 @@ switch ($menu) {
 
             <footer class="main-footer">
                 <div class="float-right d-none d-sm-block">
-                    <b>Versão</b> 3.12.0-dev
+                    <b>Versão</b> <?php echo $sConfiguracao->getVersao(); ?>
                 </div>
-                <strong>Copyright &copy; <a href="https://www.itapoa.sc.gov.br">Prefeitura de Itapoá</a>.</strong> Todos os direitos reservados.
+                <strong>Copyright &copy; <a href="<?php echo $sConfiguracao->getSiteDaEmpresa(); ?>"><?php echo $sConfiguracao->getEmpresa(); ?></a>.</strong> Todos os direitos reservados.
             </footer>
-
             <!--Control Sidebar-->
             <aside class = "control-sidebar control-sidebar-dark">
                 <!--Control sidebar content goes here-->
@@ -527,11 +593,6 @@ switch ($menu) {
             <!--/.control-sidebar-->
         </div>
         <!--./wrapper-->
-        
-        
-        
-        
-
         <!--jQuery-->
         <script src = "<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->

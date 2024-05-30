@@ -2,7 +2,7 @@
 namespace App\sistema\acesso;
 
 class sConfiguracao{
-    //atributos do servidor
+    //atributos de diretórios
     private $diretorioPrincipal;
     private $diretorioDoSistema;
     private $diretorioModelo;
@@ -35,6 +35,11 @@ class sConfiguracao{
     private $numero;
     private $caracterEspecial;
     
+    //atrimmbutos do sistema
+    private $versao;
+    private $empresa;
+    private $siteDaEmpresa;
+    
     public function __construct() {
         //Diretórios
         $this->diretorioPrincipal = 'https://itapoa.app.br/';
@@ -52,11 +57,11 @@ class sConfiguracao{
         $this->title = 'SSPMI';
         $this->loginLogo = '<b>SS</b>PMI';
         //BD
-        $this->hostname = '127.0.0.1';
-        $this->username = 'root';
-        $this->password = '';
-        $this->database = 'sspmi';
-        $this->port = '3306';
+        $this->hostname = 'localhost';
+        $this->username = 'itapoaap_admin';
+        $this->password = 'pr3f31tur4@2024';
+        $this->database = 'itapoaap_sspmi';
+        $this->port = 3306;
         $this->socket = '';
         $this->charsetDB = 'utf8mb4';
         //Segurança
@@ -65,8 +70,11 @@ class sConfiguracao{
         $this->caracterEspecial = false;
         $this->letra = true;
         $this->numero = true;
+        //sistema
+        $this->versao = '3.12.0-dev';
+        $this->empresa = 'Prefeitura de Itapoá';
+        $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
     }
-   
     public function getDiretorioPrincipal() {
         return $this->diretorioPrincipal;
     }
@@ -165,6 +173,18 @@ class sConfiguracao{
 
     public function getCaracterEspecial() {
         return $this->caracterEspecial;
+    }
+
+    public function getVersao() {
+        return $this->versao;
+    }
+
+    public function getEmpresa() {
+        return $this->empresa;
+    }
+
+    public function getSiteDaEmpresa() {
+        return $this->siteDaEmpresa;
     }
 
     public function setDiretorioPrincipal($diretorioPrincipal): void {
@@ -266,6 +286,19 @@ class sConfiguracao{
     public function setCaracterEspecial($caracterEspecial): void {
         $this->caracterEspecial = $caracterEspecial;
     }
+
+    public function setVersao($versao): void {
+        $this->versao = $versao;
+    }
+
+    public function setEmpresa($empresa): void {
+        $this->empresa = $empresa;
+    }
+
+    public function setSiteDaEmpresa($siteDaEmpresa): void {
+        $this->siteDaEmpresa = $siteDaEmpresa;
+    }
+
 
 }
 ?>

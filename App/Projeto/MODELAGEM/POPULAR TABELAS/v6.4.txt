@@ -238,10 +238,10 @@ INSERT INTO `telefone`(`whatsApp`, `numero`) VALUES (1,'47996115955'); -- kleber
 
 -- início da tabela email
 INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('kleberjlle@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$eVRwbGhnUlZKN0RuWjNCVA$u/F842aQ4EFlgkLB7O8hsaNTsbd+eOb1hHDnjjAhJN4');
-INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('suporte@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('cti@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('informatica@itapoa.sc.gov.br');
-INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('administracao@itapoa.sc.gov.br');
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('suporte@itapoa.sc.gov.br', null);
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('cti@itapoa.sc.gov.br', null);
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('informatica@itapoa.sc.gov.br', null);
+INSERT INTO `email`(`nomenclatura`, `senha`) VALUES ('administracao@itapoa.sc.gov.br', null);
 -- fim da tabela email
 
 -- início da tabela email_has_setor
@@ -359,17 +359,17 @@ INSERT INTO `categoria_has_marca`(`categoria_idcategoria`) VALUES (13);
 -- fim da tabela categoria_has_marca
 
 -- início da tabela sistemaOperacional
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 7 Starter Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 7 Home Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 7 Professional Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 8 Single Language');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 8.1 Single Language');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 10 Home Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 10 Professional Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 11 Home Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Windows 11 Professional Edition');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('Samba');
-INSERT INTO `sistemaoperacional`(`nomenclatura`) VALUES ('PF Sense');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 7 Starter Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 7 Home Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 7 Professional Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 8 Single Language');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 8.1 Single Language');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 10 Home Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 10 Professional Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 11 Home Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Windows 11 Professional Edition');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('Samba');
+INSERT INTO `sistemaOperacional`(`nomenclatura`) VALUES ('PF Sense');
 -- fim da tabela sistemaOperacional
 
 -- início da tabela tensao
