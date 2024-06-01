@@ -1,8 +1,33 @@
 <?php
-use App\sistema\acesso\{sSecretaria};
+use App\sistema\acesso\{
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor,
+    sCargo,
+    sTelefone
+};
 
+//busca dados dos ids do usuário
 $sSecretaria = new sSecretaria($_SESSION['credencial']['secretaria_idsecretaria']);
 $sSecretaria->consultar('tMenu1_1.php');
+
+$sDepartamento = new sDepartamento($_SESSION['credencial']['departamento_iddepartamento']);
+$sDepartamento->consultar('tMenu1_1.php');
+
+$sCoordenacao = new sCoordenacao($_SESSION['credencial']['coordenacao_idcoordenacao']);
+$sCoordenacao->consultar('tMenu1_1.php');
+
+$sSetor = new sSetor($_SESSION['credencial']['setor_idsetor']);
+$sSetor->consultar('tMenu1_1.php');
+
+$sCargo = new sCargo($_SESSION['credencial']['cargo_idcargo']);
+$sCargo->consultar('tMenu1_1.php');
+
+$sTelefone = new sTelefone($_SESSION['credencial']['telefone_idtelefone'], $_SESSION['credencial']['setor_idsetor']);
+$sCargo->consultar('tMenu1_1.php');
+
+echo $_SESSION['credencial']['setor_idsetor'];
 ?>
 
 <div class="container-fluid">
@@ -26,10 +51,16 @@ $sSecretaria->consultar('tMenu1_1.php');
                             <i class="fas fa-building mr-1"></i><b> Secretaria</b><a class="float-right"><?php echo $sSecretaria->getNomenclatura(); ?></a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-house-user mr-1"></i><b> Departamento/ Unidade</b> <a class="float-right"><?php echo $_SESSION['credencial']['departamento_iddepartamento']; ?></a>
+                            <i class="fas fa-house-user mr-1"></i><b> Departamento</b> <a class="float-right"><?php echo $sDepartamento->getNomenclatura(); ?></a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-briefcase mr-1"></i><b> Cargo/ Função</b> <a class="float-right">Técnico de Informática II</a>
+                            <i class="fas fa-house-user mr-1"></i><b> Coordenação</b> <a class="float-right"><?php echo $sCoordenacao->getNomenclatura(); ?></a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-house-user mr-1"></i><b> Setor</b> <a class="float-right"><?php echo $sSetor->getNomenclatura(); ?></a>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-briefcase mr-1"></i><b> Cargo/ Função</b> <a class="float-right"><?php echo $sCargo->getNomenclatura(); ?></a>
                         </li>
                         <li class="list-group-item">
                             <i class="fas fa-phone mr-1"></i><b> Telefone Corporativo</b> <a class="float-right">(47) 3443-8832</a><br />

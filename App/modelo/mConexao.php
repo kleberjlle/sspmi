@@ -82,6 +82,8 @@ class mConexao {
             }                
         }
         $query .= ';';
+        echo $query;
+        
         $resultado = $this->conexao->query($query);
         
         //tomada de decisão de acordo com o(s) campo(s)
@@ -132,10 +134,10 @@ class mConexao {
         //*/
                 
         mysqli_close($this->conexao);
-        
- 
-        
-        
+    }
+    
+    public function consultarJuncao($dados) {
+        //SELECT telefone.numero, telefone.whatsApp FROM `telefone` INNER JOIN `telefone_has_setor` ON telefone.idtelefone=telefone_has_setor.telefone_idtelefone;
     }
 
     public function inserir($dados) {

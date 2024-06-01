@@ -3,14 +3,13 @@ namespace App\sistema\acesso;
 
 use App\modelo\{mConexao};
 
-class sSecretaria {
-    private int $idSecretaria;
+class sCargo {
+    private int $idCargo;
     private string $nomenclatura;
-    private string $endereco;
     public mConexao $mConexao;
     
-    public function __construct(int $idSecretaria) {
-        $this->idSecretaria = $idSecretaria;
+    public function __construct(int $idCargo) {
+        $this->idCargo = $idCargo;
     }
     
     public function consultar($pagina) {
@@ -19,50 +18,43 @@ class sSecretaria {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
-                'tabelas' => 'secretaria',
-                'camposCondicionados' => 'idsecretaria',
-                'valoresCondicionados' => $this->getIdSecretaria(),
+                'tabelas' => 'cargo',
+                'camposCondicionados' => 'idcargo',
+                'valoresCondicionados' => $this->getIdCargo(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setEndereco($linha['endereco']);
-                $this->setNomenclatura($linha['nomenclatura']);               
+                $this->setNomenclatura($linha['nomenclatura']);
             }
         }        
     }
 
-    public function getIdSecretaria(): int {
-        return $this->idSecretaria;
+    public function getIdCargo(): int {
+        return $this->idCargo;
     }
 
     public function getNomenclatura(): string {
         return $this->nomenclatura;
     }
 
-    public function getEndereco(): string {
-        return $this->endereco;
-    }
-
     public function getMConexao(): mConexao {
         return $this->mConexao;
     }
 
-    public function setIdSecretaria(int $idSecretaria): void {
-        $this->idSecretaria = $idSecretaria;
+    public function setIdCargo(int $idCargo): void {
+        $this->idCargo = $idCargo;
     }
 
     public function setNomenclatura(string $nomenclatura): void {
         $this->nomenclatura = $nomenclatura;
     }
 
-    public function setEndereco(string $endereco): void {
-        $this->endereco = $endereco;
-    }
-
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
+
+
 }

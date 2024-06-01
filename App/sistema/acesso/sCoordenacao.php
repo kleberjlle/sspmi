@@ -3,14 +3,15 @@ namespace App\sistema\acesso;
 
 use App\modelo\{mConexao};
 
-class sSecretaria {
+class sCoordenacao {
+    private int $idCoordenacao;
     private int $idSecretaria;
     private string $nomenclatura;
     private string $endereco;
     public mConexao $mConexao;
     
-    public function __construct(int $idSecretaria) {
-        $this->idSecretaria = $idSecretaria;
+    public function __construct(int $idCoordenacao) {
+        $this->idCoordenacao = $idCoordenacao;
     }
     
     public function consultar($pagina) {
@@ -19,19 +20,24 @@ class sSecretaria {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
-                'tabelas' => 'secretaria',
-                'camposCondicionados' => 'idsecretaria',
-                'valoresCondicionados' => $this->getIdSecretaria(),
+                'tabelas' => 'coordenacao',
+                'camposCondicionados' => 'idcoordenacao',
+                'valoresCondicionados' => $this->getIdCoordenacao(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
+                $this->setIdSecretaria($linha['departamento_secretaria_idsecretaria']);
                 $this->setEndereco($linha['endereco']);
-                $this->setNomenclatura($linha['nomenclatura']);               
+                $this->setNomenclatura($linha['nomenclatura']);
             }
         }        
+    }
+
+    public function getIdCoordenacao(): int {
+        return $this->idCoordenacao;
     }
 
     public function getIdSecretaria(): int {
@@ -50,6 +56,10 @@ class sSecretaria {
         return $this->mConexao;
     }
 
+    public function setIdCoordenacao(int $idCoordenacao): void {
+        $this->idCoordenacao = $idCoordenacao;
+    }
+
     public function setIdSecretaria(int $idSecretaria): void {
         $this->idSecretaria = $idSecretaria;
     }
@@ -65,4 +75,6 @@ class sSecretaria {
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
+
+
 }
