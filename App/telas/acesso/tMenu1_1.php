@@ -40,7 +40,7 @@ $sConfiguracao = new sConfiguracao();
                             <i class="fas fa-phone mr-1"></i><b> Telefone Corporativo</b>
                             <a class="float-right">
                                 <?php
-                                echo 'Setor: ';
+                                echo '<b>Setor: </b>';
                                 if ($_SESSION['credencial']['whatsAppSetor']) {
                                     echo '<i class="fab fa-whatsapp mr-1"></i> ';
                                 }
@@ -49,7 +49,7 @@ $sConfiguracao = new sConfiguracao();
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Coordenação: ';
+                                echo '<b>Coordenação: </b>';
                                 if ($_SESSION['credencial']['whatsAppCoordenacao']) {
                                     echo '<i class="fab fa-whatsapp mr-1"></i> ';
                                 }
@@ -58,7 +58,7 @@ $sConfiguracao = new sConfiguracao();
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Departamento: ';
+                                echo '<b>Departamento: </b>';
                                 if ($_SESSION['credencial']['whatsAppDepartamento']) {
                                     echo '<i class="fab fa-whatsapp mr-1"></i> ';
                                 }
@@ -67,7 +67,7 @@ $sConfiguracao = new sConfiguracao();
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Secretaria: ';
+                                echo '<b>Secretaria: </b>';
                                 if ($_SESSION['credencial']['whatsAppSecretaria']) {
                                     echo 'Secretaria: <i class="fab fa-whatsapp mr-1"></i> ';
                                 }
@@ -80,7 +80,7 @@ $sConfiguracao = new sConfiguracao();
                             <a class="float-right">
                                 <?php
                                 if ($_SESSION['credencial']['whatsAppUsuario']) {
-                                    echo '<i class="fab fa-whatsapp mr-1"></i> ';
+                                    echo '<b><i class="fab fa-whatsapp mr-1"></i> </b>';
                                 }
                                 echo $_SESSION['credencial']['telefoneUsuario'];
                                 ?>
@@ -90,25 +90,25 @@ $sConfiguracao = new sConfiguracao();
                             <i class="fas fa-envelope-open-text mr-1"></i><b> Email Corporativo</b>
                             <a class="float-right">
                                 <?php
-                                echo 'Setor: ';
+                                echo '<b>Setor: </b>';
                                 echo $_SESSION['credencial']['emailSetor'];
                                 ?>
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Coordenação: ';
+                                echo '<b>Coordenação: </b>';
                                 echo $_SESSION['credencial']['emailCoordenacao'];
                                 ?>
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Departamento: ';
+                                echo '<b>Departamento: </b>';
                                 echo $_SESSION['credencial']['emailDepartamento'];
                                 ?>
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo 'Secretaria: ';
+                                echo '<b>Secretaria: </b>';
                                 echo $_SESSION['credencial']['emailSecretaria'];
                                 ?>
                             </a>

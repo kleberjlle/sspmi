@@ -40,11 +40,11 @@ if(!$manutenção){
                         <s>Requisitos do Sistema</s><br />
                         <s>Protótipo de Alta Fidelidade (Mockup)</s><br />
                         <s>Modelagem do BD (MER e Físico)</s><br />
+                        <s>Contratação de Domínio (itapoa.app.br)</s><br />
+                        <s>Contratação de Hospedagem</s><br />
                     </p>
                     <p>
                         <b>Desenvolvimento</b><br />
-                        <s>Contratação de Domínio (itapoa.app.br)</s><br />
-                        <s>Contratação de Hospedagem</s><br />
                         <s>Configuração do Servidor</s><br />
                         Módulo de Acesso - Lógica de Acesso<br />
                         Módulo de Acesso - Lógica de Registros de Usuários<br />

@@ -59,8 +59,8 @@ $sConfiguracao = new sConfiguracao();
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="meusDados" checked="checked" name="meusDados" value="1" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? '' : 'disabled=\"\"'; ?>>
-                                        <label class="custom-control-label" for="meusDados">Sim</label>
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppUsuario" checked="checked" name="whatsAppUsuario" value="1" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? '' : 'disabled=\"\"'; ?>>
+                                        <label class="custom-control-label" for="whatsAppUsuario">Sim</label>
                                     </div>
                                 </div>
                             </div>
@@ -114,30 +114,88 @@ $sConfiguracao = new sConfiguracao();
                                         <option selected="">Técnico de Informática</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="telefoneSetor">Telefone Setor</label>
-                                <input type="text" class="form-control" id="telefoneCorporativo" value="<?php echo $_SESSION['credencial']['telefoneSetor'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="whatsappCorporativo">WhatsApp Corporativo</label>
-                                <input type="text" class="form-control" id="whatsappCorporativo" value="(47) 9 8827-2029" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="emailCorporativo">Email Corporativo</label>
-                                <input type="text" class="form-control" id="emailCorporativo" value="suporte@itapoa.sc.gov.br" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                            </div>                            
+                            </div>                           
                         </div>
                         <div class="row">
+                            <div class="form-group col-md-2">
+                                <label for="telefoneSetor">Telefone Setor</label>
+                                <input type="text" class="form-control" id="telefoneSetor" value="<?php echo $_SESSION['credencial']['telefoneSetor'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>WhatsApp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppSetor" <?php echo $_SESSION['credencial']['whatsAppSetor'] ? 'checked=\"\"' : ''; ?> name="whatsAppSetor" value="1">
+                                        <label class="custom-control-label" for="whatsAppSetor">Sim</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="telefoneCoordenacao">Telefone Coordenacao</label>
+                                <input type="text" class="form-control" id="telefoneCoordenacao" value="<?php echo $_SESSION['credencial']['telefoneCoordenacao'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>WhatsApp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppCoordenacao" <?php echo $_SESSION['credencial']['whatsAppSetor'] ? 'checked=\"\"' : ''; ?> name="whatsAppCoordenacao" value="1">
+                                        <label class="custom-control-label" for="whatsAppSetor">Sim</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="telefoneDepartamento">Telefone Departamento</label>
+                                <input type="text" class="form-control" id="telefoneDepartamento" value="<?php echo $_SESSION['credencial']['telefoneDepartamento'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>WhatsApp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppDepartamento" <?php echo $_SESSION['credencial']['whatsAppSetor'] ? 'checked=\"\"' : ''; ?> name="whatsAppDepartamento" value="1">
+                                        <label class="custom-control-label" for="whatsAppSetor">Sim</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="telefoneSecretaria">Telefone Secretaria</label>
+                                <input type="text" class="form-control" id="telefoneSecretaria" value="<?php echo $_SESSION['credencial']['telefoneSecretaria'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>WhatsApp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppSecretaria" <?php echo $_SESSION['credencial']['whatsAppSetor'] ? 'checked=\"\"' : ''; ?> name="whatsAppSecretaria" value="1">
+                                        <label class="custom-control-label" for="whatsAppSetor">Sim</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div class="form-group col-md-2">
+                                <label for="emailSetor">Email Setor</label>
+                                <input type="text" class="form-control" id="emailSetor" value="<?php echo $_SESSION['credencial']['emailSetor'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div> 
+                            <div class="form-group col-md-2">
+                                <label for="emailCoordenacao">Email Coordenação</label>
+                                <input type="text" class="form-control" id="emailCoordenacao" value="<?php echo $_SESSION['credencial']['emailCoordenacao'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div> 
+                            <div class="form-group col-md-2">
+                                <label for="emailDepartamento">Email Departamento</label>
+                                <input type="text" class="form-control" id="emailDepartamento" value="<?php echo $_SESSION['credencial']['emailDepartamento'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div> 
+                            <div class="form-group col-md-2">
+                                <label for="emailSecretaria">Email Secretaria</label>
+                                <input type="text" class="form-control" id="emailSecretaria" value="<?php echo $_SESSION['credencial']['emailSecretaria'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                            </div> 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Permissão</label>
-                                    <select class="form-control" <?php echo $_SESSION['permissao'] > 4 ? '' : 'disabled=\"\"'; ?>>
-                                        <option>Nível 1 - Usuário</option>
-                                        <option>Nível 2 - Técnico</option>
-                                        <option>Nível 3 - Coordenador</option>
-                                        <option>Nível 4 - Diretor</option>
-                                        <option>Nível 5 - Administrador</option>
+                                    <select class="form-control" <?php echo $_SESSION['credencial']['nivelPermissao'] > 4 ? '' : 'disabled=\"\"'; ?>>
+                                        <option <?php echo $_SESSION['credencial']['nivelPermissao'] == 1 ? 'selected=\"\"' : ''; ?>>Nível 1 - Usuário</option>
+                                        <option <?php echo $_SESSION['credencial']['nivelPermissao'] == 2 ? 'selected=\"\"' : ''; ?>>Nível 2 - Técnico</option>
+                                        <option <?php echo $_SESSION['credencial']['nivelPermissao'] == 3 ? 'selected=\"\"' : ''; ?>>Nível 3 - Coordenador</option>
+                                        <option <?php echo $_SESSION['credencial']['nivelPermissao'] == 4 ? 'selected=\"\"' : ''; ?>>Nível 4 - Diretor</option>
+                                        <option <?php echo $_SESSION['credencial']['nivelPermissao'] == 5 ? 'selected=\"\"' : ''; ?>>Nível 5 - Administrador</option>
                                     </select>
                                 </div>
                             </div>
@@ -145,12 +203,14 @@ $sConfiguracao = new sConfiguracao();
                                 <div class="form-group">
                                     <label>Situação</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="meusDados" checked="checked" name="meusDados" value="1" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                        <input type="checkbox" class="custom-control-input" id="meusDados" <?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'checked=\"\"' : ''; ?> name="meusDados" value="1" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
                                         <label class="custom-control-label" for="meusDados">Conta Ativa</label>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
+                        
                     </div>
                     <!-- /.card-body -->
 
