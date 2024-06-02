@@ -27,7 +27,7 @@ if(isset($_GET['validador'])){
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
-    $sEmail = new sEmail($_POST['email']);
+    $sEmail = new sEmail($_POST['email'], '');
     $sSenha = new sSenha($_POST['senha']);
     $sSenha->criptografar($_POST['senha']);
     
@@ -45,10 +45,18 @@ if(isset($_POST) && !empty($_POST)){
         $sSenha->verificar(basename($_SERVER['PHP_SELF']));
         
         if($sSenha->getValidador()){
-            //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
             $sUsuario = new sUsuario();
-            $sUsuario->setIdEmail($sEmail->mConexao->getRetorno());
+            $sUsuario->setIdEmail($sEmail->getIdEmail());
             $sUsuario->consultar(basename($_SERVER['PHP_SELF']));
+            if($sUsuario->getValidador()){                
+                //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
+                $sUsuario->acessar(basename($_SERVER['PHP_SELF']));                        
+            }else{
+                //cria as variáveis da notificação
+                $tipo = $sUsuario->sNotificacao->getTipo();
+                $titulo = $sUsuario->sNotificacao->getTitulo();
+                $email = $sUsuario->sNotificacao->getMensagem();
+            }
         }else{
             //cria as variáveis da notificação
             $tipo = $sSenha->sNotificacao->getTipo();

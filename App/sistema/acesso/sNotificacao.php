@@ -61,6 +61,9 @@ class sNotificacao{
             case '6':
                 $this->setMensagem('Senha incorreta, tente novamente.');
                 break;
+            case '7':
+                $this->setMensagem('Esta conta está inativa, contate o administrador e informe o código ('.$this->getCodigo().').');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

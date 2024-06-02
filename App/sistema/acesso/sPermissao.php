@@ -3,15 +3,14 @@ namespace App\sistema\acesso;
 
 use App\modelo\{mConexao};
 
-class sDepartamento {
-    private int $idDepartamento;
-    private int $idSecretaria;
+class sPermissao {
+    private int $idPermissao;
+    private int $nivel;
     private string $nomenclatura;
-    private string $endereco;
     public mConexao $mConexao;
     
-    public function __construct(int $idDepartamento) {
-        $this->idDepartamento = $idDepartamento;
+    public function __construct(int $idPermissao) {
+        $this->idPermissao = $idPermissao;
     }
     
     public function consultar($pagina) {
@@ -20,56 +19,47 @@ class sDepartamento {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
-                'tabelas' => 'departamento',
-                'camposCondicionados' => 'iddepartamento',
-                'valoresCondicionados' => $this->getIdDepartamento(),
+                'tabelas' => 'permissao',
+                'camposCondicionados' => 'idpermissao',
+                'valoresCondicionados' => $this->getIdPermissao(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null //ASC ou DESC
             ];            
             $this->mConexao->CRUD($dados);
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setIdSecretaria($linha['secretaria_idsecretaria']);
-                $this->setEndereco($linha['endereco']);
+                $this->setNivel($linha['nivel']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
         }        
     }
 
-    public function getIdDepartamento(): int {
-        return $this->idDepartamento;
+    public function getIdPermissao(): int {
+        return $this->idPermissao;
     }
 
-    public function getIdSecretaria(): int {
-        return $this->idSecretaria;
+    public function getNivel(): int {
+        return $this->nivel;
     }
 
     public function getNomenclatura(): string {
         return $this->nomenclatura;
     }
 
-    public function getEndereco(): string {
-        return $this->endereco;
-    }
-
     public function getMConexao(): mConexao {
         return $this->mConexao;
     }
 
-    public function setIdDepartamento(int $idDepartamento): void {
-        $this->idDepartamento = $idDepartamento;
+    public function setIdPermissao(int $idPermissao): void {
+        $this->idPermissao = $idPermissao;
     }
 
-    public function setIdSecretaria(int $idSecretaria): void {
-        $this->idSecretaria = $idSecretaria;
+    public function setNivel(int $nivel): void {
+        $this->nivel = $nivel;
     }
 
     public function setNomenclatura(string $nomenclatura): void {
         $this->nomenclatura = $nomenclatura;
-    }
-
-    public function setEndereco(string $endereco): void {
-        $this->endereco = $endereco;
     }
 
     public function setMConexao(mConexao $mConexao): void {

@@ -1,38 +1,61 @@
 <?php
+
 namespace App\sistema\acesso;
 
-use App\modelo\{mConexao};
+use App\modelo\{
+    mConexao
+};
 
 class sTelefone {
+
     private int $idTelefone;
     private int $idLocal;
     private string $numero;
     private bool $whatsApp;
+    private string $nomenclaturaLocal;
     public mConexao $mConexao;
-    
-    public function __construct(int $idTelefone, int $idLocal) {
+
+    public function __construct(int $idTelefone, int $idLocal, string $nomenclaturaLocal) {
         $this->idTelefone = $idTelefone;
         $this->idLocal = $idLocal;
+        $this->nomenclaturaLocal = $nomenclaturaLocal;
     }
-    
+
     public function consultar($pagina) {
-        if($pagina == 'tMenu1_1.php'){
-            $this->setMConexao(new mConexao());                 
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => 'telefone.numero, telefone.whatsApp',
-                'tabelas' => ['telefone', 'telefone_has_setor'],
-                'camposCondicionados' => '',
-                'valoresCondicionados' => ['telefone.idtelefone', 'telefone_has_setor.telefone_idtelefone'],
-                'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
-            ];            
-            $this->mConexao->CRUD($dados);
-                        
-            foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setNomenclatura($linha['nomenclatura']);
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tAcessar.php') {
+            if ($this->getNomenclaturaLocal() == 'usuario') {             
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'telefone',
+                    'camposCondicionados' => 'idtelefone',
+                    'valoresCondicionados' => $this->getIdTelefone(),
+                    'camposOrdenados' => null, //caso não tenha, colocar como null
+                    'ordem' => 'ASC'
+                ];
+            } else if ($this->getNomenclaturaLocal() == 'setor' ||
+                        $this->getNomenclaturaLocal() == 'coordenacao' ||
+                        $this->getNomenclaturaLocal() == 'departamento' ||
+                        $this->getNomenclaturaLocal() == 'secretaria') {
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => ['telefone.numero', 'telefone.whatsApp'],
+                    'tabelas' => ['telefone', 'telefone_has_'.$this->getNomenclaturaLocal()],
+                    'camposCondicionados' => '',
+                    'valoresCondicionados' => ['telefone.idtelefone', 'telefone_has_'.$this->getNomenclaturaLocal().'.telefone_idtelefone'],
+                    'camposOrdenados' => null, //caso não tenha, colocar como null
+                    'ordem' => 'ASC'
+                ];
             }
-        }        
+            $this->mConexao->CRUD($dados);
+
+            foreach ($this->mConexao->getRetorno() as $linha) {                
+                $this->setNumero($linha['numero']);
+                $this->setWhatsApp($linha['whatsApp']);     
+            }
+            
+        }
     }
 
     public function getIdTelefone(): int {
@@ -49,6 +72,10 @@ class sTelefone {
 
     public function getWhatsApp(): bool {
         return $this->whatsApp;
+    }
+
+    public function getNomenclaturaLocal(): string {
+        return $this->nomenclaturaLocal;
     }
 
     public function getMConexao(): mConexao {
@@ -71,9 +98,12 @@ class sTelefone {
         $this->whatsApp = $whatsApp;
     }
 
+    public function setNomenclaturaLocal(string $nomenclaturaLocal): void {
+        $this->nomenclaturaLocal = $nomenclaturaLocal;
+    }
+
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
-
 
 }

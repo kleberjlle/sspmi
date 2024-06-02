@@ -16,7 +16,7 @@ class sSetor {
     }
     
     public function consultar($pagina) {
-        if($pagina == 'tMenu1_1.php'){
+        if($pagina == 'tAcessar.php'){
             $this->setMConexao(new mConexao());                 
             $dados = [
                 'comando' => 'SELECT',

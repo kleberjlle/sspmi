@@ -13,7 +13,7 @@ class sCargo {
     }
     
     public function consultar($pagina) {
-        if($pagina == 'tMenu1_1.php'){
+        if($pagina == 'tAcessar.php'){
             $this->setMConexao(new mConexao());                 
             $dados = [
                 'comando' => 'SELECT',
@@ -22,7 +22,7 @@ class sCargo {
                 'camposCondicionados' => 'idcargo',
                 'valoresCondicionados' => $this->getIdCargo(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null //ASC ou DESC
             ];            
             $this->mConexao->CRUD($dados);
                         

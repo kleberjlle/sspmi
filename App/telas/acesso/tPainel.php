@@ -10,7 +10,6 @@ if(!isset($_SESSION['credencial'])){
     $sSair->verificar('0');
 }
 
-
 $sConfiguracao = new sConfiguracao();
 
 //verifica a opção de menu
@@ -181,7 +180,7 @@ HTML;
                                 <!--INÍCIO DO SUBMENU 1_2-->                                   
 HTML;
                                 //abre os menus da condição
-                                if ($_SESSION['credencial']['permissao_idpermissao'] > 1) {
+                                if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                                     $menu == '1_2' ?
                                     $atributo = ' active' :
                                     $atributo = '';
@@ -201,7 +200,7 @@ HTML;
 HTML;
                                 }
                                 //abre os menus da condição
-                                if($_SESSION['credencial']['permissao_idpermissao']){
+                                if($_SESSION['credencial']['nivelPermissao']){
                                 $menu == '2_1' ||
                                 $menu == '2_1_1' ||
                                 $menu == '2_1_2' ||
@@ -266,7 +265,7 @@ HTML;
 HTML;
                                             }
                             //abre os menus da condição
-                            if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                            if($_SESSION['credencial']['nivelPermissao'] > 1){
                                 $menu == '3_1' ||
                                 $menu == '3_1_1' ||
                                 $menu == '3_2' ||
@@ -326,7 +325,7 @@ HTML;
 HTML;
                             }
                                 //abre os menus da condição
-                                if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                                if($_SESSION['credencial']['nivelPermissao'] > 1){
                                 $menu == '4_1' ||
                                 $menu == '4_2' ?
                                 $atributo = ' menu-is-opening menu-open' :
@@ -383,7 +382,7 @@ HTML;
 HTML;
                                 }
                                 //abre os menus da condição
-                                if($_SESSION['credencial']['permissao_idpermissao'] > 1){
+                                if($_SESSION['credencial']['nivelPermissao'] > 1){
                                 $menu == '5_1' ||
                                 $menu == '5_2' ?
                                 $atributo = ' menu-is-opening menu-open' :
@@ -440,7 +439,7 @@ HTML;
 HTML;
                                 }
                                 //abre os menus da condição
-                                if($_SESSION['credencial']['permissao_idpermissao'] > 4){
+                                if($_SESSION['credencial']['nivelPermissao'] > 4){
                                 $menu == '6_1' ?
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
