@@ -31,7 +31,20 @@ class sSecretaria {
                 $this->setEndereco($linha['endereco']);
                 $this->setNomenclatura($linha['nomenclatura']);               
             }
-        }        
+        } 
+        if($pagina == 'tMenu1_1_1.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'secretaria',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'idsecretaria',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];            
+            $this->mConexao->CRUD($dados);
+            var_dump($this->mConexao->getRetorno());
+        }
     }
 
     public function getIdSecretaria(): int {

@@ -626,6 +626,5 @@ HTML;
                 }).buttons().container().appendTo('#tabelaMenu2_1_wrapper .col-md-6:eq(0)');
             });
         </script>
-        
     </body>
 </html>

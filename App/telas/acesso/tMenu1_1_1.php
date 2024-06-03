@@ -1,9 +1,13 @@
 <?php
-use App\sistema\acesso\{sConfiguracao};
+use App\sistema\acesso\{
+    sConfiguracao,
+    sSecretaria
+};
 
 $sConfiguracao = new sConfiguracao();
+$sSecretaria = new sSecretaria(0);//id zero apenas para construir o objeto
+$sSecretaria->consultar('tMenu1_1_1.php');
 ?>
-
 <div class="container-fluid">
     <div class="row">
         <!-- left column -->
@@ -14,7 +18,7 @@ $sConfiguracao = new sConfiguracao();
                     <h3 class="card-title">Etapa 2 - Alterar</h3>
                 </div>
                 <!-- form start -->
-                <form action="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>sistema/acesso/sAlterarDadosDoUsuario.php">
+                <form name="form1_tMenu1_1_1" id="form1_tMenu1_1_1" action="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>sistema/acesso/sAlterarDadosDoUsuario.php">
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-md-1">
@@ -73,30 +77,30 @@ $sConfiguracao = new sConfiguracao();
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                                        <option <?php echo $_SESSION['credencial']['secretaria'] == 'Administração' ? 'selected=\"\"' : ''; ?>>Administração</option>
-                                        <option <?php echo $_SESSION['credencial']['secretaria'] == 'Agricultura e Pesca' ? 'selected=\"\"' : ''; ?>>Agricultura e Pesca</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Assistência Social' ? 'selected=\"\"' : ''; ?>>Assistência Social</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Chefia de Gabinete do Prefeito' ? 'selected=\"\"' : ''; ?>>Chefia de Gabinete do Prefeito</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Controladoria Interna' ? 'selected=\"\"' : ''; ?>>Controladoria Interna</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Desenvolvimento Social e Econômico' ? 'selected=\"\"' : ''; ?>>Desenvolvimento Social e Econômico</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Educação' ? 'selected=\"\"' : ''; ?>>Educação</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Esporte e Lazer' ? 'selected=\"\"' : ''; ?>>Esporte e Lazer</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Fazenda' ? 'selected=\"\"' : ''; ?>>Fazenda</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Infraestrutura' ? 'selected=\"\"' : ''; ?>>Infraestrutura</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Meio Ambiente' ? 'selected=\"\"' : ''; ?>>Meio Ambiente</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Planejamento Urbano' ? 'selected=\"\"' : ''; ?>>Planejamento Urbano</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Procuradoria-Geral do Município' ? 'selected=\"\"' : ''; ?>>Procuradoria-Geral do Município</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Saúde' ? 'selected=\"\"' : ''; ?>>Saúde</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Segurança Pública e Trânsito' ? 'selected=\"\"' : ''; ?>>Segurança Pública e Trânsito</option>
-                                        <option<?php echo $_SESSION['credencial']['secretaria'] == 'Turismo e Cultura' ? 'selected=\"\"' : ''; ?>>Turismo e Cultura</option>
+                                    <select class="form-control" name="secretaria" id="secretaria" onchange="showUser(this.value)" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Administração' ? 'selected=\"\"' : ''; ?>>Administração</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Agricultura e Pesca' ? 'selected=\"\"' : ''; ?>>Agricultura e Pesca</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Assistência Social' ? 'selected=\"\"' : ''; ?>>Assistência Social</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Chefia de Gabinete do Prefeito' ? 'selected=\"\"' : ''; ?>>Chefia de Gabinete do Prefeito</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Controladoria Interna' ? 'selected=\"\"' : ''; ?>>Controladoria Interna</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Desenvolvimento Social e Econômico' ? 'selected=\"\"' : ''; ?>>Desenvolvimento Social e Econômico</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Educação' ? 'selected=\"\"' : ''; ?>>Educação</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Esporte e Lazer' ? 'selected=\"\"' : ''; ?>>Esporte e Lazer</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Fazenda' ? 'selected=\"\"' : ''; ?>>Fazenda</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Infraestrutura' ? 'selected=\"\"' : ''; ?>>Infraestrutura</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Meio Ambiente' ? 'selected=\"\"' : ''; ?>>Meio Ambiente</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Planejamento Urbano' ? 'selected=\"\"' : ''; ?>>Planejamento Urbano</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Procuradoria-Geral do Município' ? 'selected=\"\"' : ''; ?>>Procuradoria-Geral do Município</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Saúde' ? 'selected=\"\"' : ''; ?>>Saúde</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Segurança Pública e Trânsito' ? 'selected=\"\"' : ''; ?>>Segurança Pública e Trânsito</option>
+                                        <option value="<?php echo $_SESSION['credencial']['secretaria']; ?>" <?php echo $_SESSION['credencial']['secretaria'] == 'Turismo e Cultura' ? 'selected=\"\"' : ''; ?>>Turismo e Cultura</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
-                                    <select class="form-control" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                    <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
                                         <option>Licitações, Contratos e Compras</option>
                                         <option>Patrimônio e Frotas</option>
                                         <option>Recursos Humanos</option>
@@ -223,3 +227,14 @@ $sConfiguracao = new sConfiguracao();
         </div>
     </div>
 </div>
+<!--Ajax-->
+<script type="text/javascript" src="../../sistema/acesso/jQuery.js"></script>
+<script>
+    $(document).on('change', '#secretaria', function(){
+        var secretaria = $('#secretaria').val();
+
+        $.ajax({
+            url: 
+        })
+    });
+</script>
