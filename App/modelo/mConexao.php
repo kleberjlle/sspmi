@@ -33,6 +33,7 @@ class mConexao {
         //verifica qual comando foi passado para solicitar o método apropriado
         switch ($dados['comando']) {
             case 'SELECT':
+                
                 $this->consultar($dados);
                 break;
             case 'INSERT':
@@ -52,6 +53,7 @@ class mConexao {
     }
 
     private function consultar($dados) {
+        
         //monta a query de consulta
         if (is_array($dados['tabelas'])) {
             $query = $this->consultarJuncao($dados);
@@ -140,6 +142,18 @@ class mConexao {
                 }
                 break;
             case 'telefone':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
+            case 'secretaria':
                 if ($dados['busca'] == '*') {
                     if ($resultado->num_rows > 0) {
                         foreach ($resultado as $linha) {

@@ -15,8 +15,8 @@ class sDepartamento {
     }
     
     public function consultar($pagina) {
-        if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+        $this->setMConexao(new mConexao());
+        if($pagina == 'tAcessar.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -33,7 +33,20 @@ class sDepartamento {
                 $this->setEndereco($linha['endereco']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
-        }        
+        }   
+        
+        if($pagina == 'tMenu1_1_1.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'departamento',
+                'camposCondicionados' => 'secretaria_idsecretaria',
+                'valoresCondicionados' => 5,
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];            
+            $this->mConexao->CRUD($dados);
+        }
     }
 
     public function getIdDepartamento(): int {

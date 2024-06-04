@@ -14,8 +14,9 @@ class sSecretaria {
     }
     
     public function consultar($pagina) {
+        $this->setMConexao(new mConexao());
         if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+                            
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -32,6 +33,7 @@ class sSecretaria {
                 $this->setNomenclatura($linha['nomenclatura']);               
             }
         } 
+        
         if($pagina == 'tMenu1_1_1.php'){
             $dados = [
                 'comando' => 'SELECT',
@@ -43,7 +45,6 @@ class sSecretaria {
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
-            var_dump($this->mConexao->getRetorno());
         }
     }
 
