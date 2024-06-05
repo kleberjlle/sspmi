@@ -36,16 +36,20 @@ class sDepartamento {
         }   
         
         if($pagina == 'tMenu1_1_1.php'){
+            $this->setIdSecretaria($this->getIdDepartamento());
+            $this->setIdDepartamento(0);
+            
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'departamento',
                 'camposCondicionados' => 'secretaria_idsecretaria',
-                'valoresCondicionados' => 5,
+                'valoresCondicionados' => $this->getIdSecretaria(),
                 'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
+            
         }
     }
 

@@ -7,11 +7,9 @@ use App\sistema\acesso\{
 };
 
 $sConfiguracao = new sConfiguracao();
+
 $sSecretaria = new sSecretaria(0); //id zero apenas para construir o objeto
 $sSecretaria->consultar('tMenu1_1_1.php');
-
-$sDepartamento = new sDepartamento(0); //id zero apenas para construir o objeto
-$sDepartamento->consultar('tMenu1_1_1.php');
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -79,29 +77,24 @@ $sDepartamento->consultar('tMenu1_1_1.php');
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control" name="secretaria" id="secretaria" onchange="showUser(this.value)" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                    <select class="form-control" name="secretaria" id="secretaria" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
-                                            $_SESSION['credencial']['idSecretaria'] == $value['idsecretaria'] ? $atributo = ' selected=\"\"' : $atributo = '';
-                                            echo '<option value="' . $value['idsecretaria'] .'"'.$atributo. '">' . $value['nomenclatura'] . '</option>';
+                                            $_SESSION['credencial']['idSecretaria'] == $value['idsecretaria'] ? $atributo = ' selected' : $atributo = '';
+                                            echo '<option value="' . $value['idsecretaria'] .'"'.$atributo. ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
-                                    <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['permissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                                        <?php
-                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
-                                            $_SESSION['credencial']['idDepartamento'] == $value['iddepartamento'] ? $atributo = ' selected=\"\"' : $atributo = '';
-                                            echo '<option value="' . $value['iddepartamento'] .'"'.$atributo. '">' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
+                                    <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                        <?php echo '<option value="">' . $_SESSION['credencial']['departamento'] . '</option>';?>
                                     </select>
                                 </div>
                             </div>
@@ -224,14 +217,19 @@ $sDepartamento->consultar('tMenu1_1_1.php');
         </div>
     </div>
 </div>
-<!--Ajax-->
-<script type="text/javascript" src="../../sistema/acesso/jQuery.js"></script>
-<script>
-    $(document).on('change', '#secretaria', function () {
-        var secretaria = $('#secretaria').val();
 
-        $.ajax({
-            url:
+<script>
+    $(document).ready(function(){$('#secretaria').on('change', function(){
+            var id = $(this).val();
+            
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/teste.php',
+                type: 'POST',
+                data: 'id='+id,
+                success: function (html){
+                    $('#departamento').html(html);
+                }
+            });
         })
     });
 </script>

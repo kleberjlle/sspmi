@@ -41,7 +41,7 @@ class sSecretaria {
                 'tabelas' => 'secretaria',
                 'camposCondicionados' => '',
                 'valoresCondicionados' => '',
-                'camposOrdenados' => 'idsecretaria',//caso não tenha, colocar como null
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
