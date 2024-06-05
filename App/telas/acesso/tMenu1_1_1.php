@@ -94,7 +94,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                                        <?php echo '<option value="">' . $_SESSION['credencial']['departamento'] . '</option>';?>
+                                        <?php //echo '<option value="">' . $_SESSION['credencial']['departamento'] . '</option>';?>
                                     </select>
                                 </div>
                             </div>
@@ -223,13 +223,13 @@ $sSecretaria->consultar('tMenu1_1_1.php');
             var id = $(this).val();
             
             $.ajax({
-                url: 'https://itapoa.app.br/App/sistema/acesso/teste.php',
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
                 type: 'POST',
                 data: 'id='+id,
                 success: function (html){
                     $('#departamento').html(html);
                 }
             });
-        })
+        });
     });
 </script>

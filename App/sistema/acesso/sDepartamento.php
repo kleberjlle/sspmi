@@ -35,7 +35,21 @@ class sDepartamento {
             }
         }   
         
-        if($pagina == 'tMenu1_1_1.php'){
+        if($pagina == 'tMenu1_1_1.php'){            
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'departamento',
+                'camposCondicionados' => 'secretaria_idsecretaria',
+                'valoresCondicionados' => $this->getIdSecretaria(),
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];            
+            $this->mConexao->CRUD($dados);
+        }
+        
+        if($pagina == 'ajaxMenu1_1_1.php'){
+            //reoordena os IDs corretamente
             $this->setIdSecretaria($this->getIdDepartamento());
             $this->setIdDepartamento(0);
             
@@ -49,7 +63,6 @@ class sDepartamento {
                 'ordem' => 'ASC'
             ];            
             $this->mConexao->CRUD($dados);
-            
         }
     }
 
