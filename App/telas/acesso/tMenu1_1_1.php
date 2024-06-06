@@ -6,6 +6,16 @@ use App\sistema\acesso\{
     sDepartamento
 };
 
+//QA - início da área de testes
+///*verificar o que tem no objeto
+
+echo "<pre>";
+var_dump($_SESSION['credencial']);
+echo "</pre>";
+
+//*/
+//QA - fim da área de testes
+
 $sConfiguracao = new sConfiguracao();
 
 $sSecretaria = new sSecretaria(0); //id zero apenas para construir o objeto
@@ -33,7 +43,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                 <label for="imagem">Alterar Imagem</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imagem">
+                                        <input type="file" class="custom-file-input" id="imagem" disabled="">
                                         <label class="custom-file-label" for="imagem"></label>
                                     </div>
                                     <div class="input-group-append">
@@ -66,7 +76,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="whatsAppUsuario" checked="checked" name="whatsAppUsuario" value="1" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? '' : 'disabled=\"\"'; ?>>
+                                        <input type="checkbox" class="custom-control-input" id="whatsAppUsuario" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'checked=\"\"' : ''; ?> name="whatsAppUsuario" value="1" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? '' : 'disabled=\"\"'; ?>>
                                         <label class="custom-control-label" for="whatsAppUsuario">Sim</label>
                                     </div>
                                 </div>
@@ -84,7 +94,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
                                             $_SESSION['credencial']['idSecretaria'] == $value['idsecretaria'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idsecretaria'] .'"'.$atributo. ' >' . $value['nomenclatura'] . '</option>';
+                                            echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -94,18 +104,23 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                                        <?php //echo '<option value="">' . $_SESSION['credencial']['departamento'] . '</option>';?>
+                                        <?php echo '<option value="">' . $_SESSION['credencial']['departamento'] . '</option>'; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Coordenação</label>
+                                    <select class="form-control" name="coordenacao" id="coordenacao" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                        <?php echo '<option value="">' . $_SESSION['credencial']['coordenacao'] . '</option>'; ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Cargo/ Função</label>
-                                    <select class="form-control" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
-                                        <option>Diretor</option>
-                                        <option>Coordenador</option>
-                                        <option>Agente Administrativo</option>
-                                        <option selected="">Técnico de Informática</option>
+                                    <select class="form-control" name="cargo" id="cargo" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+
                                     </select>
                                 </div>
                             </div>                           
@@ -217,19 +232,63 @@ $sSecretaria->consultar('tMenu1_1_1.php');
         </div>
     </div>
 </div>
+<?php
+is_null($_SESSION['credencial']['idDepartamento']) ? $tratamentoDepartamento = false : $tratamentoDepartamento = true;
+?>
 
 <script>
-    $(document).ready(function(){$('#secretaria').on('change', function(){
-            var id = $(this).val();
+    $(document).ready(function () {
+        var idSecretaria = $(this).val();
+        var campo = 'departamento';
+        var tratamentoDepartamento = "<?php echo $tratamentoDepartamento; ?>";
+        
+        $('#secretaria').on('change', function () {
             
+            //mostra somente os departamentos da secretaria escolhida
             $.ajax({
                 url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
                 type: 'POST',
-                data: 'id='+id,
-                success: function (html){
+                data: {
+                    'idSecretaria=' + idSecretaria,
+                    'campo=' + campo
+                },
+                success: function (html) {
                     $('#departamento').html(html);
                 }
             });
         });
+        
+        if (tratamentoDepartamento) {    
+            if(campo == 'departamento'){
+                $(document).ready(function () {
+                    $('#secretaria').on('change', function () {
+                        //mostra as coordenações do departamento escolhido
+                        $('#departamento').on('change', function () {
+                            $.ajax({
+                                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
+                                type: 'POST',
+                                data: {
+                                    'idSecretaria=' + idSecretaria,
+                                    'campo=' + campo
+                                },
+                                success: function (html) {
+                                    $('#coordenacao').html(html);
+                                }
+                            });
+                        });
+                    });
+                });
+            }
+        }
     });
+        
+        
+        
+        
+    
+</script>
+<script>
+    
+    
+    
 </script>

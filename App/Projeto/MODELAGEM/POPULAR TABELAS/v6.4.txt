@@ -262,6 +262,7 @@ INSERT INTO `email_has_secretaria`(`email_idemail`, `secretaria_idsecretaria`) V
 
 -- início da tabela Usuario
 INSERT INTO `usuario`(`nome`, `sobrenome`, `sexo`, `setor_idsetor`, `coordenacao_idcoordenacao`, `departamento_iddepartamento`, `secretaria_idsecretaria`, `telefone_idtelefone`, `cargo_idcargo`, `email_idemail`, `permissao_idpermissao`) VALUES ('Kleber', 'Pereira de Almeida', 'M', 25, 17, 19, 5, 1, 2, 1, 5);
+INSERT INTO `usuario`(`nome`, `sobrenome`, `sexo`, `coordenacao_idcoordenacao`, `departamento_iddepartamento`, `secretaria_idsecretaria`, `telefone_idtelefone`, `cargo_idcargo`, `email_idemail`, `permissao_idpermissao`) VALUES ('Fernanda', 'Luna', 'F', 17, 19, 5, 25, 3, 6, 3)
 -- fim da tabela Usuario
 
 -- início da tabela telefone_has_setor

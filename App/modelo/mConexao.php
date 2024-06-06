@@ -177,6 +177,30 @@ class mConexao {
                     }
                 }
                 break;
+            case 'coordenacao':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
+            case 'setor':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
             case is_array(['telefone', 'telefone_has_setor']):
                 if ($resultado->num_rows > 0) {
                     foreach ($resultado as $linha) {

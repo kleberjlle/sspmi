@@ -1,7 +1,10 @@
 <?php
+
 namespace App\sistema\acesso;
 
-use App\modelo\{mConexao};
+use App\modelo\{
+    mConexao
+};
 use App\sistema\acesso\{
     sNotificacao,
     sSetor,
@@ -15,6 +18,7 @@ use App\sistema\acesso\{
 };
 
 class sUsuario {
+
     private int $idUsuario;
     private int $idEmail;
     private bool $validador;
@@ -22,7 +26,7 @@ class sUsuario {
     private string $sobrenome;
     private string $sexo;
     private string $imagem;
-    private bool $situacao;//alterar no bd
+    private bool $situacao; //alterar no bd
     private sSetor $sSetor;
     private sCoordenacao $sCoordenacao;
     private sDepartamento $sDepartamento;
@@ -31,7 +35,7 @@ class sUsuario {
     private sTelefone $sTelefoneSetor;
     private sTelefone $sTelefoneCoordenacao;
     private sTelefone $sTelefoneDepartamento;
-    private sTelefone $sTelefoneSecretaria;    
+    private sTelefone $sTelefoneSecretaria;
     private sEmail $sEmailUsuario;
     private sEmail $sEmailSetor;
     private sEmail $sEmailCoordenacao;
@@ -45,23 +49,23 @@ class sUsuario {
     public function __construct() {
         $this->validador = false;
     }
-    
+
     public function consultar($pagina) {
         //tomada de decisão de acordo com a página
-        if($pagina == 'tAcessar.php'){            
+        if ($pagina == 'tAcessar.php') {
             //busca os dados do usuário no BD
-            $this->setMConexao(new mConexao());                            
+            $this->setMConexao(new mConexao());
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'usuario',
                 'camposCondicionados' => 'email_idemail',
                 'valoresCondicionados' => $this->getIdEmail(),
-                'camposOrdenados' => null,//caso não tenha, colocar como null
+                'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];
             $this->mConexao->CRUD($dados);
-            
+
             //busca dos dados do usuário
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $idUsuario = $linha['idusuario'];
@@ -79,103 +83,162 @@ class sUsuario {
                 $idEmail = $linha['email_idemail'];
                 $idPermissao = $linha['permissao_idpermissao'];
             }
-            
-            if(!$situacao){
+
+            if (!$situacao) {
                 //notifica o usuário sobre a inatividade do perfil
                 $this->setSNotificacao(new sNotificacao('A7'));
                 $this->setValidador(false);
-            }else{               
+            } else {
                 //tratamento dos dados buscados
-                $sexo == 'M' ? $sexo = 'Masculino' : 'Feminino';
+                $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
                 $situacao ? $situacao = 'Ativo' : $situacao = 'Inativo';
-                
-                $this->setSSetor(new sSetor($idSetor));
-                $this->sSetor->consultar($pagina);
-                
-                $this->setSCoordenacao(new sCoordenacao($idCoordenacao));
-                $this->sCoordenacao->consultar($pagina);
-                
-                $this->setSDepartamento(new sDepartamento($idDepartamento));
-                $this->sDepartamento->consultar($pagina);
+
+                if (!is_null($idSetor)) {
+                    $this->setSSetor(new sSetor($idSetor));
+                    $this->sSetor->consultar($pagina);
+                    $nomenclaturaSetor = $this->sSetor->getNomenclatura();
+                } else {
+                    $nomenclaturaSetor = '--';
+                }
+
+                if (!is_null($idCoordenacao)) {
+                    $this->setSCoordenacao(new sCoordenacao($idCoordenacao));
+                    $this->sCoordenacao->consultar($pagina);
+                    $nomenclaturaCoordenacao = $this->sCoordenacao->getNomenclatura();
+                } else {
+                    $nomenclaturaCoordenacao = '--';
+                }
+
+                if (!is_null($idDepartamento)) {
+                    $this->setSDepartamento(new sDepartamento($idDepartamento));
+                    $this->sDepartamento->consultar($pagina);
+                    $nomenclaturaDepartamento = $this->sDepartamento->getNomenclatura();
+                } else {
+                    $nomenclaturaDepartamento = '--';
+                }
 
                 $this->setSSecretaria(new sSecretaria($idSecretaria));
                 $this->sSecretaria->consultar($pagina);
-                
-                $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
-                $this->sTelefoneUsuario->consultar($pagina);
-                
-                $this->setSTelefoneSetor(new sTelefone(0, $this->sSetor->getIdSetor(), 'setor'));
-                $this->sTelefoneSetor->consultar($pagina);
-                
-                $this->setSTelefoneCoordenacao(new sTelefone(0, $this->sCoordenacao->getIdCoordenacao(), 'coordenacao'));
-                $this->sTelefoneCoordenacao->consultar($pagina);
-                
-                $this->setSTelefoneDepartamento(new sTelefone(0, $this->sDepartamento->getIdDepartamento(), 'departamento'));
-                $this->sTelefoneDepartamento->consultar($pagina);
-                
+
+                if (!is_null($idTelefoneUsuario)) {
+                    $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
+                    $this->sTelefoneUsuario->consultar($pagina);
+                    $telefoneUsuario = $this->sTelefoneUsuario->getNumero();
+                    $whatsAppUsuario = $this->sTelefoneUsuario->getWhatsApp();
+                } else {
+                    $telefoneUsuario = '--';
+                    $whatsAppUsuario = false;
+                }
+
+                if (!is_null($idSetor)) {
+                    $this->setSTelefoneSetor(new sTelefone(0, $this->sSetor->getIdSetor(), 'setor'));
+                    $this->sTelefoneSetor->consultar($pagina);
+                    $telefoneSetor = $this->sTelefoneSetor->getNumero();
+                    $whatsAppSetor = $this->sTelefoneSetor->getWhatsApp();
+                } else {
+                    $telefoneSetor = '--';
+                    $whatsAppSetor = false;
+                }
+
+                if (!is_null($idCoordenacao)) {
+                    $this->setSTelefoneCoordenacao(new sTelefone(0, $this->sCoordenacao->getIdCoordenacao(), 'coordenacao'));
+                    $this->sTelefoneCoordenacao->consultar($pagina);
+                    $telefoneCoordenacao = $this->sTelefoneCoordenacao->getNumero();
+                    $whatsAppCoordenacao = $this->sTelefoneCoordenacao->getWhatsApp();
+                } else {
+                    $telefoneCoordenacao = '--';
+                    $whatsAppCoordenacao = false;
+                }
+
+                if (!is_null($idDepartamento)) {
+                    $this->setSTelefoneDepartamento(new sTelefone(0, $this->sDepartamento->getIdDepartamento(), 'departamento'));
+                    $this->sTelefoneDepartamento->consultar($pagina);
+                    $telefoneDepartamento = $this->sTelefoneDepartamento->getNumero();
+                    $whatsAppDepartamento = $this->sTelefoneDepartamento->getWhatsApp();
+                } else {
+                    $telefoneDepartamento = '--';
+                    $whatsAppDepartamento = false;
+                }
+
                 $this->setSTelefoneSecretaria(new sTelefone(0, $this->sSecretaria->getIdSecretaria(), 'secretaria'));
                 $this->sTelefoneSecretaria->consultar($pagina);
-                
+
                 $this->setSEmailUsuario(new sEmail($idEmail, 'email'));
                 $this->sEmailUsuario->consultar($pagina);
-                
-                $this->setSEmailSetor(new sEmail($idEmail, 'setor'));
-                $this->sEmailSetor->consultar($pagina);
 
-                $this->setSEmailCoordenacao(new sEmail($idEmail, 'coordenacao'));
-                $this->sEmailCoordenacao->consultar($pagina);
-                
-                $this->setSEmailDepartamento(new sEmail($idEmail, 'departamento'));
-                $this->sEmailDepartamento->consultar($pagina);
+                if (!is_null($idSetor)) {
+                    $this->setSEmailSetor(new sEmail($idEmail, 'setor'));
+                    $this->sEmailSetor->consultar($pagina);
+                    $emailSetor = $this->sEmailSetor->getNomenclatura();
+                } else {
+                    $emailSetor = '--';
+                }
+
+                if (!is_null($idCoordenacao)) {
+                    $this->setSEmailCoordenacao(new sEmail($idEmail, 'coordenacao'));
+                    $this->sEmailCoordenacao->consultar($pagina);
+                    $emailCoordenacao = $this->sEmailCoordenacao->getNomenclatura();
+                } else {
+                    $emailCoordenacao = '--';
+                }
+
+                if (!is_null($idDepartamento)) {
+                    $this->setSEmailDepartamento(new sEmail($idEmail, 'departamento'));
+                    $this->sEmailDepartamento->consultar($pagina);
+                    $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
+                } else {
+                    $emailDepartamento = '--';
+                }
 
                 $this->setSEmailSecretaria(new sEmail($idEmail, 'secretaria'));
                 $this->sEmailSecretaria->consultar($pagina);
-                
+                $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
+
                 $this->setSCargo(new sCargo($idCargo));
                 $this->sCargo->consultar($pagina);
-                
+
                 $this->setSPermissao(new sPermissao($idPermissao));
                 $this->sPermissao->consultar($pagina);
-                
+
                 session_start();
                 $_SESSION['credencial'] = [
-                        'idUsuario' => $idUsuario,
-                        'nome' => $nome,
-                        'sobrenome' => $sobrenome,
-                        'sexo' => $sexo,
-                        'imagem' => $imagem,
-                        'situacao' => $situacao,
-                        'idSetor' => $idSetor,
-                        'setor' => $this->sSetor->getNomenclatura(),
-                        'idCoordenacao' => $idCoordenacao,
-                        'coordenacao' => $this->sCoordenacao->getNomenclatura(),
-                        'idDepartamento' => $idDepartamento,
-                        'departamento' => $this->sDepartamento->getNomenclatura(),
-                        'idSecretaria' => $idSecretaria,
-                        'secretaria' => $this->sSecretaria->getNomenclatura(),                        
-                        'telefoneUsuario' => $this->sTelefoneUsuario->getNumero(),
-                        'whatsAppUsuario' => $this->sTelefoneUsuario->getWhatsApp(),
-                        'telefoneSetor' => $this->sTelefoneSetor->getNumero(),
-                        'whatsAppSetor' => $this->sTelefoneSetor->getWhatsApp(),
-                        'telefoneCoordenacao' => $this->sTelefoneCoordenacao->getNumero(),
-                        'whatsAppCoordenacao' => $this->sTelefoneCoordenacao->getWhatsApp(),
-                        'telefoneDepartamento' => $this->sTelefoneDepartamento->getNumero(),
-                        'whatsAppDepartamento' => $this->sTelefoneDepartamento->getWhatsApp(),
-                        'telefoneSecretaria' => $this->sTelefoneSecretaria->getNumero(),
-                        'whatsAppSecretaria' => $this->sTelefoneSecretaria->getWhatsApp(),
-                        'emailUsuario' => $this->sEmailUsuario->getNomenclatura(),
-                        'emailSetor' => $this->sEmailSetor->getNomenclatura(),
-                        'emailCoordenacao' => $this->sEmailCoordenacao->getNomenclatura(),
-                        'emailDepartamento' => $this->sEmailDepartamento->getNomenclatura(),
-                        'emailSecretaria' => $this->sEmailSecretaria->getNomenclatura(),
-                        'cargo' => $this->sCargo->getNomenclatura(),
-                        'nivelPermissao' => $this->sPermissao->getNivel(),
-                        'permissao' => $this->sPermissao->getNomenclatura()
-                    ];
-                
+                    'idUsuario' => $idUsuario,
+                    'nome' => $nome,
+                    'sobrenome' => $sobrenome,
+                    'sexo' => $sexo,
+                    'imagem' => $imagem,
+                    'situacao' => $situacao,
+                    'idSetor' => $idSetor,
+                    'setor' => $nomenclaturaSetor,
+                    'idCoordenacao' => $idCoordenacao,
+                    'coordenacao' => $nomenclaturaCoordenacao,
+                    'idDepartamento' => $idDepartamento,
+                    'departamento' => $nomenclaturaDepartamento,
+                    'idSecretaria' => $idSecretaria,
+                    'secretaria' => $this->sSecretaria->getNomenclatura(),
+                    'telefoneUsuario' => $telefoneUsuario,
+                    'whatsAppUsuario' => $whatsAppUsuario,
+                    'telefoneSetor' => $telefoneSetor,
+                    'whatsAppSetor' => $whatsAppSetor,
+                    'telefoneCoordenacao' => $telefoneCoordenacao,
+                    'whatsAppCoordenacao' => $whatsAppCoordenacao,
+                    'telefoneDepartamento' => $telefoneDepartamento,
+                    'whatsAppDepartamento' => $whatsAppDepartamento,
+                    'telefoneSecretaria' => $this->sTelefoneSecretaria->getNumero(),
+                    'whatsAppSecretaria' => $this->sTelefoneSecretaria->getWhatsApp(),
+                    'emailUsuario' => $this->sEmailUsuario->getNomenclatura(),
+                    'emailSetor' => $emailSetor,
+                    'emailCoordenacao' => $emailCoordenacao,
+                    'emailDepartamento' => $emailDepartamento,
+                    'emailSecretaria' => $this->sEmailSecretaria->getNomenclatura(),
+                    'cargo' => $this->sCargo->getNomenclatura(),
+                    'nivelPermissao' => $this->sPermissao->getNivel(),
+                    'permissao' => $this->sPermissao->getNomenclatura()
+                ];
+
                 //aprovado em todas as validações
                 $this->setValidador(true);
-               
+
                 //QA - início da área de testes
                 /* verificar o que tem no objeto
 
@@ -188,12 +251,13 @@ class sUsuario {
             }
         }
     }
+
     public function acessar($pagina) {
-        if($pagina == 'tAcessar.php'){
+        if ($pagina == 'tAcessar.php') {
             header('Location: ./tPainel.php');
         }
     }
-    
+
     public function getIdUsuario(): int {
         return $this->idUsuario;
     }
@@ -401,6 +465,4 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

@@ -92,7 +92,6 @@ class sEmail {
                     'ordem' => null //ASC ou DESC
                 ];
             }
-            var_dump($dados);
             $this->mConexao->CRUD($dados);
 
             foreach ($this->mConexao->getRetorno() as $linha) {

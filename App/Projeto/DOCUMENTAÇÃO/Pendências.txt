@@ -2,3 +2,5 @@ Pendências para serem verificadas
 
 1 - Implementar lógica de caracteres especiais na senha do usuário;
 2 - Criar nova versão do BD que altere usuario.situacao de char para bool;
+3 - Fechar conexão do BD mysqli_close(mConexao);
+4 - Implementar tratamento de gênero para os cargos;

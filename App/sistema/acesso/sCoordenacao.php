@@ -15,8 +15,9 @@ class sCoordenacao {
     }
     
     public function consultar($pagina) {
+        $this->setMConexao(new mConexao());  
         if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -33,7 +34,24 @@ class sCoordenacao {
                 $this->setEndereco($linha['endereco']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
-        }        
+        }    
+        
+        if($pagina == 'ajaxMenu1_1_1.php'){
+            //reoordena os IDs corretamente
+            $this->setIdSecretaria($this->getIdCoordenacao());
+            $this->setIdCoordenacao(0);
+            
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'coordenacao',
+                'camposCondicionados' => 'departamento_secretaria_idsecretaria',
+                'valoresCondicionados' => $this->getIdSecretaria(),
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];            
+            $this->mConexao->CRUD($dados);
+        }
     }
 
     public function getIdCoordenacao(): int {
