@@ -15,6 +15,7 @@ class sDepartamento {
     }
     
     public function consultar($pagina) {
+        //cria conexão para as opções das páginas abaixo
         $this->setMConexao(new mConexao());
         if($pagina == 'tAcessar.php'){                             
             $dados = [

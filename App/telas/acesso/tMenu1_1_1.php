@@ -238,57 +238,54 @@ is_null($_SESSION['credencial']['idDepartamento']) ? $tratamentoDepartamento = f
 
 <script>
     $(document).ready(function () {
-        var idSecretaria = $(this).val();
-        var campo = 'departamento';
-        var tratamentoDepartamento = "<?php echo $tratamentoDepartamento; ?>";
-        
+        //traz os departamentos de acordo com a secretaria selecionada
+       
+        var campo = 'departamento';        
         $('#secretaria').on('change', function () {
-            
+            var idSecretaria = $(this).val();
             //mostra somente os departamentos da secretaria escolhida
             $.ajax({
                 url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
                 type: 'POST',
                 data: {
-                    'idSecretaria=' + idSecretaria,
-                    'campo=' + campo
+                    'idSecretaria': idSecretaria,
+                    'campo': campo
                 },
                 success: function (html) {
                     $('#departamento').html(html);
                 }
             });
         });
-        
-        if (tratamentoDepartamento) {    
-            if(campo == 'departamento'){
+
+        //traz as coordenações de acordo com a secretaria selecionada
+        /*
+        var campo = 'coordenacao';
+        var tratamentoDepartamento = "<?php echo $tratamentoDepartamento; ?>";
+        if (tratamentoDepartamento) {
+            if (campo == 'coordenacao') {
                 $(document).ready(function () {
                     $('#secretaria').on('change', function () {
+                        var idSecretaria = $(this).val();
                         //mostra as coordenações do departamento escolhido
-                        $('#departamento').on('change', function () {
-                            $.ajax({
-                                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
-                                type: 'POST',
-                                data: {
-                                    'idSecretaria=' + idSecretaria,
-                                    'campo=' + campo
-                                },
-                                success: function (html) {
-                                    $('#coordenacao').html(html);
-                                }
-                            });
+                        $.ajax({
+                            url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
+                            type: 'POST',
+                            data: {
+                                'idSecretaria': idSecretaria,
+                                'campo': campo
+                            },
+                            success: function (html) {
+                                $('#coordenacao').html(html);
+                            }
                         });
                     });
                 });
             }
+        } else {
+            alert('não pertence a nenhum departamento');
         }
+        */
+        
+        
     });
-        
-        
-        
-        
-    
-</script>
-<script>
-    
-    
-    
 </script>
