@@ -36,7 +36,7 @@ class sCoordenacao {
             }
         }    
         
-        if($pagina == 'ajaxMenu1_1_1.php'){
+        if($pagina == 'ajaxCoordenacao.php'){
             //reoordena os IDs corretamente
             $this->setIdSecretaria($this->getIdCoordenacao());
             $this->setIdCoordenacao(0);
@@ -49,8 +49,11 @@ class sCoordenacao {
                 'valoresCondicionados' => $this->getIdSecretaria(),
                 'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
                 'ordem' => 'ASC'
-            ];            
+            ];
+            
             $this->mConexao->CRUD($dados);
+            
+            
         }
     }
 

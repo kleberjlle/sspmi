@@ -87,7 +87,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
                                     <select class="form-control" name="secretaria" id="secretaria" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
@@ -100,7 +100,7 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control" name="departamento" id="departamento" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
@@ -113,6 +113,14 @@ $sSecretaria->consultar('tMenu1_1_1.php');
                                     <label>Coordenação</label>
                                     <select class="form-control" name="coordenacao" id="coordenacao" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
                                         <?php echo '<option value="">' . $_SESSION['credencial']['coordenacao'] . '</option>'; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Setor</label>
+                                    <select class="form-control" name="setor" id="setor" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
+                                        <?php echo '<option value="">' . $_SESSION['credencial']['setor'] . '</option>'; ?>
                                     </select>
                                 </div>
                             </div>
@@ -233,59 +241,67 @@ $sSecretaria->consultar('tMenu1_1_1.php');
     </div>
 </div>
 <?php
-is_null($_SESSION['credencial']['idDepartamento']) ? $tratamentoDepartamento = false : $tratamentoDepartamento = true;
+is_null($_SESSION['credencial']['idDepartamento']) ? $existeDepartamento = false : $existeDepartamento = true;
+is_null($_SESSION['credencial']['idCoordenacao']) ? $existeCoordenacao = false : $existeCoordenacao = true;
+is_null($_SESSION['credencial']['idSetor']) ? $existeSetor = false : $existeSetor = true;
 ?>
-
 <script>
     $(document).ready(function () {
-        //traz os departamentos de acordo com a secretaria selecionada
-       
-        var campo = 'departamento';        
+        //traz os departamentos de acordo com a secretaria selecionada   
         $('#secretaria').on('change', function () {
+            var existeDepartamento = "<?php echo $existeDepartamento; ?>";
             var idSecretaria = $(this).val();
-            //mostra somente os departamentos da secretaria escolhida
-            $.ajax({
-                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
-                type: 'POST',
-                data: {
-                    'idSecretaria': idSecretaria,
-                    'campo': campo
-                },
-                success: function (html) {
-                    $('#departamento').html(html);
-                }
-            });
-        });
 
-        //traz as coordenações de acordo com a secretaria selecionada
-        /*
-        var campo = 'coordenacao';
-        var tratamentoDepartamento = "<?php echo $tratamentoDepartamento; ?>";
-        if (tratamentoDepartamento) {
-            if (campo == 'coordenacao') {
-                $(document).ready(function () {
-                    $('#secretaria').on('change', function () {
-                        var idSecretaria = $(this).val();
-                        //mostra as coordenações do departamento escolhido
-                        $.ajax({
-                            url: 'https://itapoa.app.br/App/sistema/acesso/ajaxMenu1_1_1.php',
-                            type: 'POST',
-                            data: {
-                                'idSecretaria': idSecretaria,
-                                'campo': campo
-                            },
-                            success: function (html) {
-                                $('#coordenacao').html(html);
-                            }
-                        });
-                    });
+            //mostra somente os departamentos da secretaria escolhida
+            if (existeDepartamento) {
+                $.ajax({
+                    url: 'https://itapoa.app.br/App/sistema/acesso/ajaxDepartamento.php',
+                    type: 'POST',
+                    data: {
+                        'idSecretaria': idSecretaria
+                    },
+                    success: function (html) {
+                        $('#departamento').html(html);
+                    }
+                });
+            } else {
+                alert('não está vinculado a um departamento');
+            }
+
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var existeCoordenacao = "<?php echo $existeCoordenacao; ?>";
+            if (existeCoordenacao) {
+                var idSecretaria = $(this).val();
+                //mostra as coordenações do departamento escolhido
+                $.ajax({
+                    url: 'https://itapoa.app.br/App/sistema/acesso/ajaxCoordenacao.php',
+                    type: 'POST',
+                    data: {
+                        'idSecretaria': idSecretaria
+                    },
+                    success: function (html) {
+                        $('#coordenacao').html(html);
+                    }
                 });
             }
-        } else {
-            alert('não pertence a nenhum departamento');
-        }
-        */
-        
-        
+            
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var existeSetor = "<?php echo $existeSetor; ?>";
+            if (existeSetor) {
+                var idSecretaria = $(this).val();
+                //mostra as coordenações do departamento escolhido
+                $.ajax({
+                    url: 'https://itapoa.app.br/App/sistema/acesso/ajaxSetor.php',
+                    type: 'POST',
+                    data: {
+                        'idSecretaria': idSecretaria
+                    },
+                    success: function (html) {
+                        $('#setor').html(html);
+                    }
+                });
+            }
+        });
     });
+
 </script>

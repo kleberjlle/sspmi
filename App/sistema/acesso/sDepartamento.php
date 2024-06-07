@@ -49,7 +49,7 @@ class sDepartamento {
             $this->mConexao->CRUD($dados);
         }
         
-        if($pagina == 'ajaxMenu1_1_1.php'){
+        if($pagina == 'ajaxDepartamento.php'){
             //reoordena os IDs corretamente
             $this->setIdSecretaria($this->getIdDepartamento());
             $this->setIdDepartamento(0);

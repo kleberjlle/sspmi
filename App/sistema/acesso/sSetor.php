@@ -16,8 +16,9 @@ class sSetor {
     }
     
     public function consultar($pagina) {
+        $this->setMConexao(new mConexao());  
         if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -35,7 +36,24 @@ class sSetor {
                 $this->setEndereco($linha['endereco']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
-        }        
+        }    
+        if($pagina == 'ajaxSetor.php'){
+            //reoordena os IDs corretamente
+            $this->setIdSecretaria($this->getIdSetor());
+            $this->setIdSetor(0);
+            
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'setor',
+                'camposCondicionados' => 'coordenacao_departamento_secretaria_idsecretaria',
+                'valoresCondicionados' => $this->getIdSecretaria(),
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];
+            
+            $this->mConexao->CRUD($dados);
+        }
     }
 
     public function getIdSetor(): int {
