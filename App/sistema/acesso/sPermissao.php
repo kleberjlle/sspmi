@@ -14,8 +14,9 @@ class sPermissao {
     }
     
     public function consultar($pagina) {
-        if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+        //cria conexão para realizar a consulta de acordo com a página requerente
+        $this->setMConexao(new mConexao());  
+        if($pagina == 'tAcessar.php'){                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -31,7 +32,20 @@ class sPermissao {
                 $this->setNivel($linha['nivel']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
-        }        
+        }  
+        
+        if($pagina == 'tMenu1_1_1.php'){                           
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'permissao',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => null,//caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];            
+            $this->mConexao->CRUD($dados);
+        }     
     }
 
     public function getIdPermissao(): int {

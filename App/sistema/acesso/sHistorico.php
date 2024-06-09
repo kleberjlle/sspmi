@@ -1,28 +1,47 @@
 <?php
 namespace App\sistema\acesso;
-use App\modelo\{mConexao};
+use App\modelo\{
+    mConexao
+};
 
 class sHistorico{
-    private $dados;
     public mConexao $mConexao;
-
-    public function __construct($pagina, $acao, $campo, $valorAtual, $valorAnterior, $ip, $navegador, $sistemaOperacional, $nomeDoDispositivo, $idUsuario) {
-                
-        $dados = [
-        'pagina' => $pagina,
-        'acao' => $acao,
-        'campo' => $campo,
-        'valorAtual' => $valorAtual,
-        'valorAnterior' => $valorAnterior,
-        'ip' => $ip,
-        'navegador' => $navegador,
-        'sistemaOperacional' => $sistemaOperacional,
-        'nomeDoDispositivo' => $nomeDoDispositivo,
-        'idUsuario' => $idUsuario
-        ];
-        
-        $this->mConexao = new mConexao();
-        $this->mConexao->inserir($dados);
+    
+    public function inserir($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if($pagina == 'tMenu1_1_1.php'){
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'historico',
+                'camposInsercao' => [
+                    'pagina',
+                    'acao',
+                    'campo',
+                    'valorAtual',
+                    'valorAnterior',
+                    'ip',
+                    'navegador',
+                    'sistemaOperacional',
+                    'nomeDoDispositivo',
+                    'idusuario'
+                ],                    
+                'valoresInsercao' => [
+                    $tratarDados['pagina'],
+                    $tratarDados['acao'],
+                    $tratarDados['campo'],
+                    $tratarDados['valorCampoAtual'],
+                    $tratarDados['valorCampoAnterior'],
+                    $tratarDados['ip'],
+                    $tratarDados['navegador'],
+                    $tratarDados['sistemaOperacional'],
+                    $tratarDados['nomeDoDispositivo'],
+                    $tratarDados['idUsuario']
+                ]
+            ];
+        $this->mConexao->CRUD($dados);
+        }
     }
     
     public function getDados() {

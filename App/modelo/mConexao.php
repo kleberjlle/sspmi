@@ -33,11 +33,10 @@ class mConexao {
         //verifica qual comando foi passado para solicitar o método apropriado
         switch ($dados['comando']) {
             case 'SELECT':
-                
                 $this->consultar($dados);
                 break;
-            case 'INSERT':
-                echo "falta implementar insert";
+            case 'INSERT INTO':
+                $this->inserir($dados);
                 break;
             case 'UPDATE':
                 echo "falta implementar UPDATE";
@@ -53,7 +52,7 @@ class mConexao {
     }
 
     private function consultar($dados) {
-        
+
         //monta a query de consulta
         if (is_array($dados['tabelas'])) {
             $query = $this->consultarJuncao($dados);
@@ -340,16 +339,33 @@ class mConexao {
     }
 
     public function inserir($dados) {
+        //monta a query para inserção dos dados
+        $j = count($dados['camposInsercao'])-1;
+        $query = '';
+        $query .= $dados['comando'] . ' ';
+        $query .= $dados['tabela'] . '(';        
+        for ($i = 0; $i < count($dados['camposInsercao']); $i++) {
+            if($i == $j){
+                $query .= $dados['camposInsercao'][$i].') ';
+            }else{
+                $query .= $dados['camposInsercao'][$i].',';
+            }            
+        }
+        $query .= 'VALUES (';
+        for ($i = 0; $i < count($dados['valoresInsercao']); $i++) {
+            if($i == $j){
+                $query .= "'{$dados['valoresInsercao'][$i]}');";
+            }else{
+                $query .= "'{$dados['valoresInsercao'][$i]}',";
+            }            
+        }
+        
+        ///* QA - início da área de testes
 
-        $this->conexao->query("INSERT INTO historico(pagina, acao, campo, valorAtual, valorAnterior, ip, navegador, sistemaOperacional, nomeDoDispositivo, idusuario)"
-                . "VALUES ('{$dados['pagina']}','{$dados['acao']}','{$dados['campo']}','{$dados['valorAtual']}','{$dados['valorAnterior']}','{$dados['ip']}','{$dados['navegador']}','{$dados['sistemaOperacional']}','{$dados['nomeDoDispositivo']}','{$dados['idUsuario']}');");
-
-        /* QA - início da área de testes
-
-          echo '<pre>';
-          var_dump($dados);
-          echo '</pre>';
-         */
+        echo '<pre>';
+        echo $query;
+        echo '</pre>';
+        //*/
         //QA - fim da área de testes
     }
 

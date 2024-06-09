@@ -1,5 +1,4 @@
 <?php
-
 namespace App\sistema\acesso;
 
 use App\modelo\{
@@ -25,7 +24,8 @@ class sEmail {
     }
 
     public function verificar($pagina) {
-        if ($pagina == 'tAcessar.php') {
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_1_1.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
                 //verifica se consta o email no BD
@@ -41,16 +41,28 @@ class sEmail {
                 ];
                 $this->mConexao->CRUD($dados);
 
-                //se não localizou o registro do no BD
-                if (!$this->mConexao->getValidador()) {
-                    $this->setValidador(false);
-                    $this->setSNotificacao(new sNotificacao('A1'));
-                } else {
-                    foreach ($this->mConexao->getRetorno() as $linha) {
-                        $this->setIdEmail($linha['idemail']);
-                        $this->setNomenclatura($linha['nomenclatura']);
+                if ($pagina == 'tAcessar.php') {
+                    //se não localizou o registro do no BD
+                    if (!$this->mConexao->getValidador()) {
+                        $this->setValidador(false);
+                        $this->setSNotificacao(new sNotificacao('A1'));
+                    } else {
+                        foreach ($this->mConexao->getRetorno() as $linha) {
+                            $this->setIdEmail($linha['idemail']);
+                            $this->setNomenclatura($linha['nomenclatura']);
+                        }
+                        $this->setValidador(true);
                     }
-                    $this->setValidador(true);
+                }
+                if($pagina == 'tMenu1_1_1.php'){
+                    //se localizou o registro do no BD e o registro for diferento do email atual
+                    if ($this->mConexao->getValidador() &&
+                        $_SESSION['credencial']['email'] !== $this->getNomenclatura()) {
+                        $this->setValidador(false);
+                        $this->setSNotificacao(new sNotificacao('A12'));
+                    } else {
+                        $this->setValidador(true);
+                    }
                 }
             } else {
                 //retornar notificação
@@ -68,7 +80,7 @@ class sEmail {
                 //organiza os dados nos devidos campos
                 $this->setIdEmail($this->getNomenclatura());
                 $this->setNomenclatura('');
-                
+
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => '*',
@@ -85,9 +97,9 @@ class sEmail {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['email.idemail', 'email.nomenclatura'],
-                    'tabelas' => ['email', 'email_has_'.$this->getNomenclaturaLocal()],
+                    'tabelas' => ['email', 'email_has_' . $this->getNomenclaturaLocal()],
                     'camposCondicionados' => '',
-                    'valoresCondicionados' => ['email.idemail', 'email_has_'.$this->getNomenclaturaLocal().'.email_idemail'],
+                    'valoresCondicionados' => ['email.idemail', 'email_has_' . $this->getNomenclaturaLocal() . '.email_idemail'],
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null //ASC ou DESC
                 ];

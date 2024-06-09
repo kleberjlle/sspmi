@@ -13,8 +13,9 @@ class sCargo {
     }
     
     public function consultar($pagina) {
-        if($pagina == 'tAcessar.php'){
-            $this->setMConexao(new mConexao());                 
+        //cria conexão para sonsulta
+        $this->setMConexao(new mConexao());
+        if($pagina == 'tAcessar.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -29,7 +30,21 @@ class sCargo {
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $this->setNomenclatura($linha['nomenclatura']);
             }
-        }        
+        } 
+        
+        if($pagina == 'tMenu1_1_1.php'){                             
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'cargo',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC' //ASC ou DESC
+            ];            
+            $this->mConexao->CRUD($dados);
+                        
+        }         
     }
 
     public function getIdCargo(): int {

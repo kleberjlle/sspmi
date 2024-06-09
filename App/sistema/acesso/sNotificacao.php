@@ -64,6 +64,21 @@ class sNotificacao{
             case '7':
                 $this->setMensagem('Esta conta está inativa, contate o administrador e informe o código ('.$this->getCodigo().').');
                 break;
+            case '8':
+                $this->setMensagem('O campo deve conter de 2 a 20 caracteres ('.$this->getCodigo().').');
+                break;
+            case '9':
+                $this->setMensagem('Só pode ser inserido letras no campo ('.$this->getCodigo().').');
+                break;
+            case '10':
+                $this->setMensagem('O campo deve conter de 2 a 100 caracteres ('.$this->getCodigo().').');
+                break;
+            case '11':
+                $this->setMensagem('O telefone deve conter o seguinte formato (99) 9 9999-9999 ou (99) 9999-9999.');
+                break;
+            case '12':
+                $this->setMensagem('Esse e-mail já está registrado em nosso sistema, contate o administrador e informe o código ('.$this->getCodigo().').');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

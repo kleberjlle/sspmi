@@ -13,7 +13,11 @@ if(!isset($_SESSION['credencial'])){
 $sConfiguracao = new sConfiguracao();
 
 //verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
+if(isset($_GET['menu'])){
+    $menu = $_GET['menu'];
+}else{
+    $menu = "0";
+}
 
 //QA - início da área de testes
 /*verificar o que tem no objeto

@@ -123,7 +123,7 @@ class sUsuario {
                 if (!is_null($idTelefoneUsuario)) {
                     $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
                     $this->sTelefoneUsuario->consultar($pagina);
-                    $telefoneUsuario = $this->sTelefoneUsuario->getNumero();
+                    $telefoneUsuario = $this->sTelefoneUsuario->tratarTelefone($this->sTelefoneUsuario->getNumero());
                     $whatsAppUsuario = $this->sTelefoneUsuario->getWhatsApp();
                 } else {
                     $telefoneUsuario = '--';
@@ -231,8 +231,10 @@ class sUsuario {
                     'emailCoordenacao' => $emailCoordenacao,
                     'emailDepartamento' => $emailDepartamento,
                     'emailSecretaria' => $this->sEmailSecretaria->getNomenclatura(),
+                    'idCargo' => $idCargo,
                     'cargo' => $this->sCargo->getNomenclatura(),
                     'nivelPermissao' => $this->sPermissao->getNivel(),
+                    'idPermissao' => $idPermissao,
                     'permissao' => $this->sPermissao->getNomenclatura()
                 ];
 
@@ -256,6 +258,36 @@ class sUsuario {
         if ($pagina == 'tAcessar.php') {
             header('Location: ./tPainel.php');
         }
+    }
+    
+    public function verificarNome($nome) {
+        //verifica se tem letras e espaço
+        $caracterValido = !!preg_match('|^[\pL\s]+$|u', $nome);
+        if(mb_strlen($nome) < 2 ||
+            mb_strlen($nome) > 20){
+            $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A8'));
+        }else if(!$caracterValido){
+            $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A9'));
+        }else{
+            $this->setValidador(true);
+        }        
+    }
+    
+    public function verificarSobrenome($sobrenome) {
+        //verifica se tem letras e espaço
+        $caracterValido = !!preg_match('|^[\pL\s]+$|u', $sobrenome);
+        if(mb_strlen($sobrenome) < 2 ||
+            mb_strlen($sobrenome) > 100){
+            $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A8'));
+        }else if(!$caracterValido){
+            $this->setValidador(false);
+            $this->setSNotificacao(new sNotificacao('A9'));
+        }else{
+            $this->setValidador(true);
+        }        
     }
 
     public function getIdUsuario(): int {

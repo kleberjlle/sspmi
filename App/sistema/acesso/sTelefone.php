@@ -5,20 +5,25 @@ namespace App\sistema\acesso;
 use App\modelo\{
     mConexao
 };
+use App\sistema\acesso\{
+    sNotificacao
+}; 
 
 class sTelefone {
-
+    private bool $validador;
     private int $idTelefone;
     private int $idLocal;
     private string $numero;
     private bool $whatsApp;
     private string $nomenclaturaLocal;
     public mConexao $mConexao;
+    public sNotificacao $sNotificacao;
 
     public function __construct(int $idTelefone, int $idLocal, string $nomenclaturaLocal) {
         $this->idTelefone = $idTelefone;
         $this->idLocal = $idLocal;
         $this->nomenclaturaLocal = $nomenclaturaLocal;
+        $this->validador = false;
     }
 
     public function consultar($pagina) {
@@ -57,6 +62,30 @@ class sTelefone {
             
         }
     }
+    
+    public function tratarTelefone($telefone) {
+        if(ctype_alnum($telefone)){
+            $telefoneTratado = 'acrescentar caracteres';
+        }else{
+            $telefoneTratado = str_replace(['(', ')', '-', ' '], '', $telefone);
+        }
+        return $telefoneTratado;
+    }
+
+    public function verificarTelefone($telefone) {
+        echo $telefoneTratado = $this->tratarTelefone($telefone);
+        if(strlen($telefoneTratado) < 10 ||
+            strlen($telefoneTratado) > 11){
+            $this->setSNotificacao(new sNotificacao('A11'));
+            $this->setValidador(false);
+        }else{
+            $this->setValidador(true);
+        }
+    }
+    
+    public function getValidador(): bool {
+        return $this->validador;
+    }
 
     public function getIdTelefone(): int {
         return $this->idTelefone;
@@ -82,6 +111,14 @@ class sTelefone {
         return $this->mConexao;
     }
 
+    public function getSNotificacao(): sNotificacao {
+        return $this->sNotificacao;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
+    }
+
     public function setIdTelefone(int $idTelefone): void {
         $this->idTelefone = $idTelefone;
     }
@@ -105,5 +142,11 @@ class sTelefone {
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
+
+    public function setSNotificacao(sNotificacao $sNotificacao): void {
+        $this->sNotificacao = $sNotificacao;
+    }
+
+
 
 }

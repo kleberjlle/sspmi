@@ -35,7 +35,7 @@ class sConfiguracao{
     private $numero;
     private $caracterEspecial;
     
-    //atrimmbutos do sistema
+    //atributos do sistema
     private $versao;
     private $empresa;
     private $siteDaEmpresa;
