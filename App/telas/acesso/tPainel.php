@@ -619,7 +619,14 @@ HTML;
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        <!--jQuery Mask-->
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
         <!-- Page specific script -->
+        <script>
+        $(function(){
+           $('[data-mask]').inputmask();
+        });
+        </script>
         <script>
             $(function () {
                 $("#tabelaMenu1_2").DataTable({

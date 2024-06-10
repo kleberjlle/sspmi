@@ -3,9 +3,13 @@ namespace App\sistema\acesso;
 use App\modelo\{
     mConexao
 };
+use App\sistema\acesso\{
+    sNotificacao
+};
 
 class sHistorico{
     public mConexao $mConexao;
+    public sNotificacao $sNotificacao;
     
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
@@ -40,27 +44,30 @@ class sHistorico{
                     $tratarDados['idUsuario']
                 ]
             ];
-        $this->mConexao->CRUD($dados);
+            $this->mConexao->CRUD($dados);
+            if($this->mConexao->getValidador()){
+                $this->setSNotificacao(new sNotificacao('A6'));
+            }        
         }
     }
-    
-    public function getDados() {
-        return $this->dados;
-    }
-
     public function getMConexao(): mConexao {
         return $this->mConexao;
     }
 
-    public function setDados($dados): void {
-        $this->dados = $dados;
+    public function getSNotificacao(): sNotificacao {
+        return $this->sNotificacao;
     }
 
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
 
+    public function setSNotificacao(sNotificacao $sNotificacao): void {
+        $this->sNotificacao = $sNotificacao;
+    }
 
+
+    
 
 }
 

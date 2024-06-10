@@ -64,18 +64,15 @@ class sTelefone {
     }
     
     public function tratarTelefone($telefone) {
-        if(ctype_alnum($telefone)){
-            $telefoneTratado = 'acrescentar caracteres';
-        }else{
-            $telefoneTratado = str_replace(['(', ')', '-', ' '], '', $telefone);
+        if(!ctype_alnum($telefone)){
+            $telefoneTratado = str_replace(['(', ')', '-','_', ' '], '', $telefone);
         }
         return $telefoneTratado;
     }
 
     public function verificarTelefone($telefone) {
-        echo $telefoneTratado = $this->tratarTelefone($telefone);
-        if(strlen($telefoneTratado) < 10 ||
-            strlen($telefoneTratado) > 11){
+        if(strlen($telefone) < 10 ||
+            strlen($telefone) > 11){
             $this->setSNotificacao(new sNotificacao('A11'));
             $this->setValidador(false);
         }else{

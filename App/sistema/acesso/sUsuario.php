@@ -123,7 +123,8 @@ class sUsuario {
                 if (!is_null($idTelefoneUsuario)) {
                     $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
                     $this->sTelefoneUsuario->consultar($pagina);
-                    $telefoneUsuario = $this->sTelefoneUsuario->tratarTelefone($this->sTelefoneUsuario->getNumero());
+                    //$telefoneUsuario = $this->sTelefoneUsuario->tratarTelefone($this->sTelefoneUsuario->getNumero());
+                    $telefoneUsuario = $this->sTelefoneUsuario->getNumero();
                     $whatsAppUsuario = $this->sTelefoneUsuario->getWhatsApp();
                 } else {
                     $telefoneUsuario = '--';

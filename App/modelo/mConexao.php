@@ -360,7 +360,16 @@ class mConexao {
             }            
         }
         
-        ///* QA - início da área de testes
+        $resultado = $this->conexao->query($query);
+        
+        if($resultado){
+            $this->setValidador(true);
+        }else{
+            $this->setValidador(false);
+        }
+        
+        
+        /* QA - início da área de testes
 
         echo '<pre>';
         echo $query;

@@ -4,6 +4,7 @@ require_once '../../../vendor/autoload.php';
 use App\sistema\acesso\{
     sSair,
     sConfiguracao,
+    sNotificacao,
     sHistorico,
     sUsuario,
     sTelefone,
@@ -22,6 +23,8 @@ if(isset($_POST['pagina'])){
         $sSair = new sSair();
         $sSair->verificar('0');
     }
+    $sTelefoneUsuario = new sTelefone(0, 0, '0');
+    
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
@@ -29,11 +32,12 @@ if(isset($_POST['pagina'])){
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $sexo = $_POST['sexo'];
-    $telefoneUsuario = $_POST['telefoneUsuario'];
+    $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($_POST['telefoneUsuario']);
     isset($_POST['whatsAppUsuario']) ? $whatsAppUsuario = true : $whatsAppUsuario = false;
     $emailUsuario = $_POST['emailUsuario'];
-    $permissao = $_POST['permissao'];
+    isset($_POST['permissao']) ? $permissao = $_POST['permissao'] : $permissao = $_SESSION['credencial']['idPermissao'];
     isset($_POST['situacao']) ? $situacao = true : $situacao = false;
+    
     
     //etapa1 - verificar campos alterados
     if($_SESSION['credencial']['nome'] != $nome){
@@ -77,11 +81,10 @@ if(isset($_POST['pagina'])){
         alimentaHistorico($pagina, $acao, 'telefoneUsuario', $valorCampoAnterior, $nome, $idUsuario);
         
         //etapa2 - validação do conteúdo
-        $sTelefone = new sTelefone(0, 0, '0');
-        $sTelefone->verificarTelefone($telefoneUsuario);
-        if(!$sTelefone->getValidador()){
+        $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
+        if(!$sTelefoneUsuario->getValidador()){
             $sConfiguracao = new sConfiguracao();      
-            //header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefone->getSNotificacao()->getCodigo()}");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
         }
     }
     
@@ -135,11 +138,11 @@ function alimentaHistorico($pagina, $acao, $campo, $valorCampoAnterior, $valorCa
             
         //insere na tabela histórico
         $sHistorico = new sHistorico();
-        $sHistorico->inserir('tMenu1_1_1.php', $tratarDados);
+        $sHistorico->inserir('tMenu1_1_1.php', $tratarDados);  
         
-    }
-
-
-
-
+        if($sHistorico->mConexao->getValidador()){
+            $sConfiguracao = new sConfiguracao();      
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sHistorico->getSNotificacao()->getCodigo()}");
+        }
+}
 ?>

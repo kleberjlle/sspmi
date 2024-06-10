@@ -45,6 +45,9 @@ if(isset($_GET['campo'])){
         case 'email':
             $alertaEmail = true;
             break;
+        case 'todos':
+            $alertaSucesso = true;
+            break;
         default:
             break;
     }
@@ -92,7 +95,7 @@ if(isset($_GET['campo'])){
                                 <label for="nome">Nome</label>
                                 <input type="text" class="form-control<?php echo isset($alertaNome) ? ' is-warning' : ''; ?>" name="nome" id="nome" value="<?php echo $_SESSION['credencial']['nome']; ?>" required="">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-1">
                                 <label for="sobrenome">Sobrenome</label>
                                 <input class="form-control<?php echo isset($alertaSobrenome) ? ' is-warning' : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $_SESSION['credencial']['sobrenome']; ?>" required="">
                             </div>
@@ -105,15 +108,15 @@ if(isset($_GET['campo'])){
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label for="telefoneUsuario">Telefone Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaTelefone) ? ' is-warning' : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $_SESSION['credencial']['telefoneUsuario']; ?>">
+                                <input class="form-control<?php echo isset($alertaTelefone) ? ' is-warning' : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $_SESSION['credencial']['telefoneUsuario']; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'checked=""' : '';?><?php echo $_SESSION['credencial']['whatsAppUsuario'] ? '' : 'disabled'; ?>>
+                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'checked=""' : '';?>>
                                         <label class="custom-control-label" for="whatsAppUsuario"><?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'Sim' : 'Não'; ?></label>
                                     </div>
                                 </div>
