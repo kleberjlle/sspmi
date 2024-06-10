@@ -130,7 +130,7 @@ class sNotificacao{
                 $this->setMensagem('Suporte finalizado com sucesso.');
                 break;
             case '6':
-                $this->setMensagem('Alteração realizada com sucesso!');
+                $this->setMensagem('As alterações realizadas foram registradas');
                 break;
             default:
                 $this->setTipo('danger');

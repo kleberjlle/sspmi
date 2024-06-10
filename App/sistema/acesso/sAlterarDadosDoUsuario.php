@@ -37,6 +37,7 @@ if(isset($_POST['pagina'])){
     $emailUsuario = $_POST['emailUsuario'];
     isset($_POST['permissao']) ? $permissao = $_POST['permissao'] : $permissao = $_SESSION['credencial']['idPermissao'];
     isset($_POST['situacao']) ? $situacao = true : $situacao = false;
+    $atualizar = array();
     
     
     //etapa1 - verificar campos alterados
@@ -51,6 +52,9 @@ if(isset($_POST['pagina'])){
         if(!$sUsuarioNome->getValidador()){
             $sConfiguracao = new sConfiguracao();      
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=nome&codigo={$sUsuarioNome->getSNotificacao()->getCodigo()}");
+        }else{
+            //etapa3 - atualizar os dados
+            $atualizar['nome'] = $nome;
         }
     }
     
@@ -65,6 +69,9 @@ if(isset($_POST['pagina'])){
         if(!$sUsuarioSobrenome->getValidador()){
             $sConfiguracao = new sConfiguracao();      
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sobrenome&codigo={$sUsuarioSobrenome->getSNotificacao()->getCodigo()}");
+        }else{
+            //etapa3 - atualizar os dados
+            $atualizar['sobrenome'] = $sobrenome;
         }
     }
     
@@ -73,6 +80,10 @@ if(isset($_POST['pagina'])){
         //insere dados na tabela histórico
         $_SESSION['credencial']['sexo'] == 'Masculino' ? $valorCampoAnterior = 'M' : $valorCampoAnterior = 'F';        
         alimentaHistorico($pagina, $acao, 'sexo', $valorCampoAnterior, $sexo, $idUsuario);
+        
+        //etapa3 - atualizar os dados
+        $atualizar['sexo'] = $sexo;
+        
     }
     
     if($_SESSION['credencial']['telefoneUsuario'] != $telefoneUsuario){
@@ -85,6 +96,9 @@ if(isset($_POST['pagina'])){
         if(!$sTelefoneUsuario->getValidador()){
             $sConfiguracao = new sConfiguracao();      
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+        }else{
+            //etapa3 - atualizar os dados
+            $atualizar['telefoneUsuario'] = $telefoneUsuario;
         }
     }
     
@@ -92,6 +106,9 @@ if(isset($_POST['pagina'])){
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['whatsAppUsuario'];
         alimentaHistorico($pagina, $acao, 'whatsApp', $valorCampoAnterior, $whatsAppUsuario, $idUsuario);
+                
+        //etapa3 - atualizar os dados
+        $atualizar['whatsAppUsuario'] = $whatsAppUsuario;
     }
     
     if($_SESSION['credencial']['emailUsuario'] != $emailUsuario){
@@ -105,6 +122,9 @@ if(isset($_POST['pagina'])){
         if(!$sEmail->getValidador()){
             $sConfiguracao = new sConfiguracao();      
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmail->getSNotificacao()->getCodigo()}");
+        }else{
+            //etapa3 - atualizar os dados
+            $atualizar['emailUsuario'] = $emailUsuario;
         }
     }
     
@@ -112,37 +132,53 @@ if(isset($_POST['pagina'])){
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['permissao'];
         alimentaHistorico($pagina, $acao, 'permissao', $valorCampoAnterior, $permissao, $idUsuario);
+        
+        //etapa3 - atualizar os dados
+        $atualizar['permissao'] = $permissao;
+        
     }
     
     if($_SESSION['credencial']['situacao'] != $situacao){
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['situacao'];
         alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuario);
+                
+        //etapa3 - atualizar os dados
+        $atualizar['situacao'] = $situacao;    
+    }
+    
+    if(empty($atualizar)){
+        //se não tem campo para validar
+        $sConfiguracao = new sConfiguracao();      
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1");
+    }else{
+        //se tem campos para atualizar
+        var_dump($atualizar);
     }  
 }
 
 function alimentaHistorico($pagina, $acao, $campo, $valorCampoAnterior, $valorCampoAtual, $idUsuario) {
-        //tratar os campos antes do envio
-        $tratarDados = [
-            'pagina' => $pagina,
-            'acao' => $acao,
-            'campo' => $campo,
-            'valorCampoAtual' => $valorCampoAtual,
-            'valorCampoAnterior' => $valorCampoAnterior,
-            'ip' => $_SERVER['REMOTE_ADDR'],
-            'navegador' => $_SERVER['HTTP_USER_AGENT'],
-            'sistemaOperacional' => php_uname(),
-            'nomeDoDispositivo' => gethostname(),
-            'idUsuario' => $idUsuario
-        ];   
-            
-        //insere na tabela histórico
-        $sHistorico = new sHistorico();
-        $sHistorico->inserir('tMenu1_1_1.php', $tratarDados);  
-        
-        if($sHistorico->mConexao->getValidador()){
-            $sConfiguracao = new sConfiguracao();      
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sHistorico->getSNotificacao()->getCodigo()}");
-        }
+    //tratar os campos antes do envio
+    $tratarDados = [
+        'pagina' => $pagina,
+        'acao' => $acao,
+        'campo' => $campo,
+        'valorCampoAtual' => $valorCampoAtual,
+        'valorCampoAnterior' => $valorCampoAnterior,
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'navegador' => $_SERVER['HTTP_USER_AGENT'],
+        'sistemaOperacional' => php_uname(),
+        'nomeDoDispositivo' => gethostname(),
+        'idUsuario' => $idUsuario
+    ];   
+
+    //insere na tabela histórico
+    $sHistorico = new sHistorico();
+    $sHistorico->inserir('tMenu1_1_1.php', $tratarDados);
+
+    if($sHistorico->mConexao->getValidador()){
+        $sConfiguracao = new sConfiguracao();      
+        //header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sHistorico->getSNotificacao()->getCodigo()}");
+    }
 }
 ?>

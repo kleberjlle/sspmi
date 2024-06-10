@@ -46,7 +46,7 @@ class sHistorico{
             ];
             $this->mConexao->CRUD($dados);
             if($this->mConexao->getValidador()){
-                $this->setSNotificacao(new sNotificacao('A6'));
+                $this->setSNotificacao(new sNotificacao('S6'));
             }        
         }
     }
