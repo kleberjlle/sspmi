@@ -39,7 +39,7 @@ class mConexao {
                 $this->inserir($dados);
                 break;
             case 'UPDATE':
-                echo "falta implementar UPDATE";
+                $this->atualizar($dados);
                 break;
             case 'DELETE':
                 echo "falta implementar DELETE";
@@ -340,37 +340,61 @@ class mConexao {
 
     public function inserir($dados) {
         //monta a query para inserção dos dados
-        $j = count($dados['camposInsercao'])-1;
+        $j = count($dados['camposInsercao']) - 1;
         $query = '';
         $query .= $dados['comando'] . ' ';
-        $query .= $dados['tabela'] . '(';        
+        $query .= $dados['tabela'] . '(';
         for ($i = 0; $i < count($dados['camposInsercao']); $i++) {
-            if($i == $j){
-                $query .= $dados['camposInsercao'][$i].') ';
-            }else{
-                $query .= $dados['camposInsercao'][$i].',';
-            }            
+            if ($i == $j) {
+                $query .= $dados['camposInsercao'][$i] . ') ';
+            } else {
+                $query .= $dados['camposInsercao'][$i] . ',';
+            }
         }
         $query .= 'VALUES (';
         for ($i = 0; $i < count($dados['valoresInsercao']); $i++) {
-            if($i == $j){
+            if ($i == $j) {
                 $query .= "'{$dados['valoresInsercao'][$i]}');";
-            }else{
+            } else {
                 $query .= "'{$dados['valoresInsercao'][$i]}',";
-            }            
+            }
         }
-        
+
         $resultado = $this->conexao->query($query);
-        
-        if($resultado){
+
+        if ($resultado) {
             $this->setValidador(true);
-        }else{
+        } else {
             $this->setValidador(false);
         }
-        
-        
+
+
         /* QA - início da área de testes
 
+          echo '<pre>';
+          echo $query;
+          echo '</pre>';
+          // */
+        //QA - fim da área de testes
+    }
+
+    public function atualizar($dados) {
+        $query = '';
+        $query .= $dados['comando'] . ' ';
+        $query .= $dados['tabela'] . ' ';
+        $query .= 'SET ';
+        $query .= $dados['camposAtualizar'].'=';
+        $query .= "'{$dados['valoresAtualizar']}' ";
+        $query .= 'WHERE ';
+        $query .= $dados['camposCondicionados'].'=';
+        $query .= "'{$dados['valoresCondicionados']}'";
+        $query .= ';';
+        //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value
+        
+        $this->setValidador(true);
+        $this->conexao->query($query);
+        
+        /* QA - início da área de testes
         echo '<pre>';
         echo $query;
         echo '</pre>';
@@ -417,5 +441,4 @@ class mConexao {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
 }

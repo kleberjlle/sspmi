@@ -45,9 +45,6 @@ class sHistorico{
                 ]
             ];
             $this->mConexao->CRUD($dados);
-            if($this->mConexao->getValidador()){
-                $this->setSNotificacao(new sNotificacao('S6'));
-            }        
         }
     }
     public function getMConexao(): mConexao {

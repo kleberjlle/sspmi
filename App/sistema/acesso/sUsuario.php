@@ -27,6 +27,8 @@ class sUsuario {
     private string $sexo;
     private string $imagem;
     private bool $situacao; //alterar no bd
+    private string $nomeCampo;
+    private string $valorCampo;
     private sSetor $sSetor;
     private sCoordenacao $sCoordenacao;
     private sDepartamento $sDepartamento;
@@ -290,7 +292,30 @@ class sUsuario {
             $this->setValidador(true);
         }        
     }
+    
+    public function inserir($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());   
+                
+        if($pagina == 'tMenu1_1_1.php'){    
+                $dados = [
+                    'comando' => 'UPDATE',
+                    'tabela' => 'usuario',
+                    'camposAtualizar' => $this->getNomeCampo(),
+                    'valoresAtualizar' => $this->getValorCampo(),
+                    'camposCondicionados' => 'idusuario',
+                    'valoresCondicionados' => $this->getIdUsuario(),
+                ];
+            $this->mConexao->CRUD($dados);
+            //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
+            if($this->mConexao->getValidador()){
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S1'));
+            }
+        }
+    }
 
+   
     public function getIdUsuario(): int {
         return $this->idUsuario;
     }
@@ -321,6 +346,14 @@ class sUsuario {
 
     public function getSituacao(): bool {
         return $this->situacao;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
     }
 
     public function getSSetor(): sSetor {
@@ -427,6 +460,14 @@ class sUsuario {
         $this->situacao = $situacao;
     }
 
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
     public function setSSetor(sSetor $sSetor): void {
         $this->sSetor = $sSetor;
     }
@@ -498,4 +539,6 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

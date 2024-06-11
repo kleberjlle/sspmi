@@ -114,8 +114,8 @@ class sNotificacao{
         $this->setTitulo('Sucesso!');
         
         switch ($this->getNumero()) {
-            case '1':               
-                $this->setMensagem('Alteração realizada.');
+            case '1':
+                $this->setMensagem('As alterações realizadas foram registradas');
                 break;
             case '2':
                 $this->setMensagem('Verifique seu e-mail para finalizar a recuperação de acesso.');
