@@ -40,10 +40,10 @@ if(isset($_POST) && !empty($_POST)){
     $sEmail->verificar(basename($_SERVER['PHP_SELF']));
     
     //Etapa3 - validar o campo senha
+    
     if($sEmail->getValidador()){
         $sSenha->setEmail($_POST['email']);
         $sSenha->verificar(basename($_SERVER['PHP_SELF']));
-        
         if($sSenha->getValidador()){
             $sUsuario = new sUsuario();
             $sUsuario->setIdEmail($sEmail->getIdEmail());

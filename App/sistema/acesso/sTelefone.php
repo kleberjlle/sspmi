@@ -55,14 +55,13 @@ class sTelefone {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null
                 ];
-            } else {
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
+            }
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
 
-                foreach ($this->mConexao->getRetorno() as $linha) {
-                    $this->setNumero($linha['numero']);
-                    $this->setWhatsApp($linha['whatsApp']);
-                }
+            foreach ($this->mConexao->getRetorno() as $linha) {
+                $this->setNumero($linha['numero']);
+                $this->setWhatsApp($linha['whatsApp']);
             }
         }
     }
@@ -186,5 +185,4 @@ class sTelefone {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
 }

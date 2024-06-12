@@ -6,7 +6,6 @@ require_once '../../../vendor/autoload.php';
 use App\sistema\acesso\{
     sSair,
     sConfiguracao,
-    sNotificacao,
     sHistorico,
     sUsuario,
     sTelefone,
@@ -29,6 +28,7 @@ if (isset($_POST['pagina'])) {
 
     
     $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
+    $sWhatsAppUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
@@ -226,6 +226,21 @@ if (isset($_POST['pagina'])) {
             if ($sTelefoneUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('whatsAppUsuario', $atualizar)) {
+            //atualize o campo nome
+            $sWhatsAppUsuario->setNomeCampo('whatsApp');
+            $sWhatsAppUsuario->setValorCampo($whatsAppUsuario);
+            $sWhatsAppUsuario->inserir('tMenu1_1_1.php');
+            
+            //atualize a sessão nome
+            $_SESSION['credencial']['whatsAppUsuario'] = $whatsAppUsuario;
+            
+            if ($sWhatsAppUsuario->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
             }
         }
     }

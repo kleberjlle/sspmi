@@ -64,7 +64,7 @@ class sUsuario {
                 'camposCondicionados' => 'email_idemail',
                 'valoresCondicionados' => $this->getIdEmail(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null
             ];
             $this->mConexao->CRUD($dados);
 
@@ -121,7 +121,7 @@ class sUsuario {
 
                 $this->setSSecretaria(new sSecretaria($idSecretaria));
                 $this->sSecretaria->consultar($pagina);
-
+                
                 if (!is_null($idTelefoneUsuario)) {
                     $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
                     $this->sTelefoneUsuario->consultar($pagina);
