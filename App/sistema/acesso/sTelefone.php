@@ -83,7 +83,7 @@ class sTelefone {
         }
     }
 
-    public function inserir($pagina) {
+    public function alterar($pagina) {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
 

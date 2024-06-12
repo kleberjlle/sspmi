@@ -230,6 +230,7 @@ class sUsuario {
                     'whatsAppDepartamento' => $whatsAppDepartamento,
                     'telefoneSecretaria' => $this->sTelefoneSecretaria->getNumero(),
                     'whatsAppSecretaria' => $this->sTelefoneSecretaria->getWhatsApp(),
+                    'idEmailUsuario' => $idEmail,
                     'emailUsuario' => $this->sEmailUsuario->getNomenclatura(),
                     'emailSetor' => $emailSetor,
                     'emailCoordenacao' => $emailCoordenacao,
@@ -294,7 +295,7 @@ class sUsuario {
         }        
     }
     
-    public function inserir($pagina) {
+    public function alterar($pagina) {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());   
                 

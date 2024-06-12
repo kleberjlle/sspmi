@@ -9,8 +9,9 @@ use App\sistema\acesso\{
 };
 
 class sEmail {
-
     private int $idEmail;
+    private string $nomeCampo;
+    private string $valorCampo;
     private string $nomenclatura;
     private string $nomenclaturaLocal;
     private bool $validador;
@@ -54,10 +55,10 @@ class sEmail {
                         $this->setValidador(true);
                     }
                 }
+                
                 if($pagina == 'tMenu1_1_1.php'){
                     //se localizou o registro do no BD e o registro for diferento do email atual
-                    if ($this->mConexao->getValidador() &&
-                        $_SESSION['credencial']['email'] !== $this->getNomenclatura()) {
+                    if ($this->mConexao->getValidador() && $_SESSION['credencial']['emailUsuario'] != $this->getNomenclatura()) {
                         $this->setValidador(false);
                         $this->setSNotificacao(new sNotificacao('A12'));
                     } else {
@@ -113,9 +114,39 @@ class sEmail {
             $this->setValidador(true);
         }
     }
+    
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());   
+                
+        if($pagina == 'tMenu1_1_1.php'){    
+                $dados = [
+                    'comando' => 'UPDATE',
+                    'tabela' => 'email',
+                    'camposAtualizar' => $this->getNomeCampo(),
+                    'valoresAtualizar' => $this->getValorCampo(),
+                    'camposCondicionados' => 'idemail',
+                    'valoresCondicionados' => $this->getIdEmail(),
+                ];
+            $this->mConexao->CRUD($dados);
+            //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
+            if($this->mConexao->getValidador()){
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S1'));
+            }
+        }
+    }
 
     public function getIdEmail(): int {
         return $this->idEmail;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
     }
 
     public function getNomenclatura(): string {
@@ -142,6 +173,14 @@ class sEmail {
         $this->idEmail = $idEmail;
     }
 
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
     public function setNomenclatura(string $nomenclatura): void {
         $this->nomenclatura = $nomenclatura;
     }
@@ -161,5 +200,6 @@ class sEmail {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
 
 }
