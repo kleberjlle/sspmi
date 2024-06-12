@@ -7,9 +7,12 @@ use App\modelo\{
 };
 use App\sistema\acesso\{
     sNotificacao
-}; 
+};
 
 class sTelefone {
+
+    private string $nomeCampo;
+    private string $valorCampo;
     private bool $validador;
     private int $idTelefone;
     private int $idLocal;
@@ -29,7 +32,7 @@ class sTelefone {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php') {
-            if ($this->getNomenclaturaLocal() == 'usuario') {             
+            if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => '*',
@@ -37,49 +40,81 @@ class sTelefone {
                     'camposCondicionados' => 'idtelefone',
                     'valoresCondicionados' => $this->getIdTelefone(),
                     'camposOrdenados' => null, //caso não tenha, colocar como null
-                    'ordem' => 'ASC'
+                    'ordem' => null
                 ];
             } else if ($this->getNomenclaturaLocal() == 'setor' ||
-                        $this->getNomenclaturaLocal() == 'coordenacao' ||
-                        $this->getNomenclaturaLocal() == 'departamento' ||
-                        $this->getNomenclaturaLocal() == 'secretaria') {
+                    $this->getNomenclaturaLocal() == 'coordenacao' ||
+                    $this->getNomenclaturaLocal() == 'departamento' ||
+                    $this->getNomenclaturaLocal() == 'secretaria') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['telefone.numero', 'telefone.whatsApp'],
-                    'tabelas' => ['telefone', 'telefone_has_'.$this->getNomenclaturaLocal()],
+                    'tabelas' => ['telefone', 'telefone_has_' . $this->getNomenclaturaLocal()],
                     'camposCondicionados' => '',
-                    'valoresCondicionados' => ['telefone.idtelefone', 'telefone_has_'.$this->getNomenclaturaLocal().'.telefone_idtelefone'],
+                    'valoresCondicionados' => ['telefone.idtelefone', 'telefone_has_' . $this->getNomenclaturaLocal() . '.telefone_idtelefone'],
                     'camposOrdenados' => null, //caso não tenha, colocar como null
-                    'ordem' => 'ASC'
+                    'ordem' => null
                 ];
-            }
-            $this->mConexao->CRUD($dados);
+            } else {
+                $this->mConexao->CRUD($dados);
+                $this->setValidador($this->mConexao->getValidador());
 
-            foreach ($this->mConexao->getRetorno() as $linha) {                
-                $this->setNumero($linha['numero']);
-                $this->setWhatsApp($linha['whatsApp']);     
+                foreach ($this->mConexao->getRetorno() as $linha) {
+                    $this->setNumero($linha['numero']);
+                    $this->setWhatsApp($linha['whatsApp']);
+                }
             }
-            
         }
     }
-    
+
     public function tratarTelefone($telefone) {
-        if(!ctype_alnum($telefone)){
-            $telefoneTratado = str_replace(['(', ')', '-','_', ' '], '', $telefone);
+        if (!ctype_alnum($telefone)) {
+            $telefoneTratado = str_replace(['(', ')', '-', '_', ' '], '', $telefone);
         }
         return $telefoneTratado;
     }
 
     public function verificarTelefone($telefone) {
-        if(strlen($telefone) < 10 ||
-            strlen($telefone) > 11){
+        if (strlen($telefone) < 10 ||
+                strlen($telefone) > 11) {
             $this->setSNotificacao(new sNotificacao('A11'));
             $this->setValidador(false);
-        }else{
+        } else {
             $this->setValidador(true);
         }
     }
-    
+
+    public function inserir($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu1_1_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'telefone',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idtelefone',
+                'valoresCondicionados' => $this->getIdTelefone(),
+            ];
+
+            $this->mConexao->CRUD($dados);
+            //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S1'));
+            }
+        }
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
+    }
+
     public function getValidador(): bool {
         return $this->validador;
     }
@@ -110,6 +145,14 @@ class sTelefone {
 
     public function getSNotificacao(): sNotificacao {
         return $this->sNotificacao;
+    }
+
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
     }
 
     public function setValidador(bool $validador): void {
@@ -143,7 +186,5 @@ class sTelefone {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 
 }

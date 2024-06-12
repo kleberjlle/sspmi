@@ -11,9 +11,7 @@ $sConfiguracao = new sConfiguracao();
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle"
-                             src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg"
-                             alt="Imagem do Perfil">
+                        <img class="profile-user-img img-fluid img-circle" src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="Imagem do Perfil">
                     </div>
 
                     <h3 class="profile-username text-center"><?php echo $_SESSION['credencial']['nome'] . ' ' . $_SESSION['credencial']['sobrenome']; ?></h3>

@@ -219,6 +219,7 @@ class sUsuario {
                     'departamento' => $nomenclaturaDepartamento,
                     'idSecretaria' => $idSecretaria,
                     'secretaria' => $this->sSecretaria->getNomenclatura(),
+                    'idTelefoneUsuario' => $idTelefoneUsuario,
                     'telefoneUsuario' => $telefoneUsuario,
                     'whatsAppUsuario' => $whatsAppUsuario,
                     'telefoneSetor' => $telefoneSetor,

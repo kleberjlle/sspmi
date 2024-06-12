@@ -79,6 +79,9 @@ class sNotificacao{
             case '12':
                 $this->setMensagem('Esse e-mail já está registrado em nosso sistema, contate o administrador e informe o código ('.$this->getCodigo().').');
                 break;
+            case '13':
+                $this->setMensagem('Esse número de telefone já está registrado');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

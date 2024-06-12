@@ -26,8 +26,9 @@ if (isset($_POST['pagina'])) {
         $sSair = new sSair();
         $sSair->verificar('0');
     }
-    $sTelefoneUsuario = new sTelefone(0, 0, '0');
 
+    
+    $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
@@ -86,6 +87,8 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $_SESSION['credencial']['sexo'] == 'Masculino' ? $valorCampoAnterior = 'M' : $valorCampoAnterior = 'F';
         alimentaHistorico($pagina, $acao, 'sexo', $valorCampoAnterior, $sexo, $idUsuario);
+        
+        $sUsuarioSexo = new sUsuario();
 
         //etapa3 - atualizar os dados
         $atualizar['sexo'] = $sexo;
@@ -96,7 +99,7 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['telefoneUsuario'];
         alimentaHistorico($pagina, $acao, 'telefoneUsuario', $valorCampoAnterior, $telefoneUsuario, $idUsuario);
-
+        
         //etapa2 - validação do conteúdo
         $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
         if (!$sTelefoneUsuario->getValidador()) {
@@ -191,6 +194,38 @@ if (isset($_POST['pagina'])) {
             if ($sUsuarioSobrenome->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sUsuarioSobrenome->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('sexo', $atualizar)) {
+            //atualize o campo nome
+            $sUsuarioSexo->setIdUsuario($idUsuario);
+            $sUsuarioSexo->setNomeCampo('sexo');
+            $sUsuarioSexo->setValorCampo($sexo);
+            $sUsuarioSexo->inserir('tMenu1_1_1.php');
+            
+            //atualize a sessão nome
+            $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
+            $_SESSION['credencial']['sexo'] = $sexo;
+            
+            if ($sUsuarioSexo->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sUsuarioSexo->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('telefoneUsuario', $atualizar)) {
+            //atualize o campo nome
+            $sTelefoneUsuario->setNomeCampo('numero');
+            $sTelefoneUsuario->setValorCampo($telefoneUsuario);
+            $sTelefoneUsuario->inserir('tMenu1_1_1.php');
+            
+            //atualize a sessão nome
+            $_SESSION['credencial']['telefoneUsuario'] = $telefoneUsuario;
+            
+            if ($sTelefoneUsuario->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
             }
         }
     }
