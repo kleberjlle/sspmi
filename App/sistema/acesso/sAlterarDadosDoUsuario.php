@@ -38,7 +38,7 @@ if (isset($_POST['pagina'])) {
     $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($_POST['telefoneUsuario']);
     isset($_POST['whatsAppUsuario']) ? $whatsAppUsuario = 1 : $whatsAppUsuario = 0;
     $emailUsuario = $_POST['emailUsuario'];
-    isset($_POST['idPermissao']) ? $idPermissao = $_POST['idPermissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
+    isset($_POST['permissao']) ? $idPermissao = $_POST['permissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
     isset($_POST['situacao']) ? $situacao = 'Ativo' : $situacao = 'Inativo';
     $atualizar = [];
     $alteracao = false;
@@ -48,13 +48,13 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['nome'];
         alimentaHistorico($pagina, $acao, 'nome', $valorCampoAnterior, $nome, $idUsuario);
-        $sUsuarioNome = new sUsuario();
-        $sUsuarioNome->verificarNome($nome);
+        $sNomeUsuario = new sUsuario();
+        $sNomeUsuario->verificarNome($nome);
 
         //etapa2 - validação do conteúdo
-        if (!$sUsuarioNome->getValidador()) {
+        if (!$sNomeUsuario->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=nome&codigo={$sUsuarioNome->getSNotificacao()->getCodigo()}");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=nome&codigo={$sNomeUsuario->getSNotificacao()->getCodigo()}");
             exit();
         } else {
             //etapa3 - atualizar os dados
@@ -67,13 +67,13 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['sobrenome'];
         alimentaHistorico($pagina, $acao, 'sobrenome', $valorCampoAnterior, $sobrenome, $idUsuario);
-        $sUsuarioSobrenome = new sUsuario();
-        $sUsuarioSobrenome->verificarSobrenome($sobrenome);
+        $sSobrenomeUsuario = new sUsuario();
+        $sSobrenomeUsuario->verificarSobrenome($sobrenome);
         
         //etapa2 - validação do conteúdo
-        if (!$sUsuarioSobrenome->getValidador()) {
+        if (!$sSobrenomeUsuario->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sobrenome&codigo={$sUsuarioSobrenome->getSNotificacao()->getCodigo()}");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sobrenome&codigo={$sSobrenomeUsuario->getSNotificacao()->getCodigo()}");
             exit();
         } else {
             //etapa3 - atualizar os dados
@@ -88,7 +88,7 @@ if (isset($_POST['pagina'])) {
         $_SESSION['credencial']['sexo'] == 'Masculino' ? $valorCampoAnterior = 'M' : $valorCampoAnterior = 'F';
         alimentaHistorico($pagina, $acao, 'sexo', $valorCampoAnterior, $sexo, $idUsuario);
         
-        $sUsuarioSexo = new sUsuario();
+        $sSexoUsuario = new sUsuario();
 
         //etapa3 - atualizar os dados
         $alteracao = true;
@@ -142,7 +142,7 @@ if (isset($_POST['pagina'])) {
             $atualizar['emailUsuario'] = $emailUsuario;
         }
     }
-
+    
     if ($_SESSION['credencial']['idPermissao'] != $idPermissao) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['idPermissao'];
@@ -160,6 +160,8 @@ if (isset($_POST['pagina'])) {
         alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuario);
 
         //etapa3 - atualizar os dados
+        $sSituacaoUsuario = new sUsuario();
+        $situacao == 'Ativo' ? $situacao = 1 : $situacao = 0;
         $alteracao = true;
         $atualizar['situacao'] = $situacao;
     }
@@ -185,49 +187,49 @@ if (isset($_POST['pagina'])) {
         //se tem campos para atualizar
         if (array_key_exists('nome', $atualizar)) {
             //atualize o campo nome
-            $sUsuarioNome->setIdUsuario($idUsuario);
-            $sUsuarioNome->setNomeCampo('nome');
-            $sUsuarioNome->setValorCampo($nome);
-            $sUsuarioNome->alterar('tMenu1_1_1.php');
+            $sNomeUsuario->setIdUsuario($idUsuario);
+            $sNomeUsuario->setNomeCampo('nome');
+            $sNomeUsuario->setValorCampo($nome);
+            $sNomeUsuario->alterar('tMenu1_1_1.php');
             //atualize a sessão nome
             $_SESSION['credencial']['nome'] = $nome;
             
-            if ($sUsuarioNome->mConexao->getValidador()) {
+            if ($sNomeUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sUsuarioNome->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=nome&codigo={$sNomeUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
         if (array_key_exists('sobrenome', $atualizar)) {
             //atualize o campo nome
-            $sUsuarioSobrenome->setIdUsuario($idUsuario);
-            $sUsuarioSobrenome->setNomeCampo('sobrenome');
-            $sUsuarioSobrenome->setValorCampo($sobrenome);
-            $sUsuarioSobrenome->alterar('tMenu1_1_1.php');
+            $sSobrenomeUsuario->setIdUsuario($idUsuario);
+            $sSobrenomeUsuario->setNomeCampo('sobrenome');
+            $sSobrenomeUsuario->setValorCampo($sobrenome);
+            $sSobrenomeUsuario->alterar('tMenu1_1_1.php');
             
             //atualize a sessão nome
             $_SESSION['credencial']['sobrenome'] = $sobrenome;
             
-            if ($sUsuarioSobrenome->mConexao->getValidador()) {
+            if ($sSobrenomeUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sUsuarioSobrenome->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sobrenome&codigo={$sSobrenomeUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
         if (array_key_exists('sexo', $atualizar)) {
             //atualize o campo nome
-            $sUsuarioSexo->setIdUsuario($idUsuario);
-            $sUsuarioSexo->setNomeCampo('sexo');
-            $sUsuarioSexo->setValorCampo($sexo);
-            $sUsuarioSexo->alterar('tMenu1_1_1.php');
+            $sSexoUsuario->setIdUsuario($idUsuario);
+            $sSexoUsuario->setNomeCampo('sexo');
+            $sSexoUsuario->setValorCampo($sexo);
+            $sSexoUsuario->alterar('tMenu1_1_1.php');
             
             //atualize a sessão nome
             $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
             $_SESSION['credencial']['sexo'] = $sexo;
             
-            if ($sUsuarioSexo->mConexao->getValidador()) {
+            if ($sSexoUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sUsuarioSexo->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sexo&codigo={$sSexoUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
@@ -242,7 +244,7 @@ if (isset($_POST['pagina'])) {
             
             if ($sTelefoneUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
@@ -257,7 +259,7 @@ if (isset($_POST['pagina'])) {
             
             if ($sWhatsAppUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=whatsApp&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
@@ -273,7 +275,7 @@ if (isset($_POST['pagina'])) {
             
             if ($sEmailUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
@@ -290,7 +292,27 @@ if (isset($_POST['pagina'])) {
             
             if ($sPermissaoUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=todos&codigo={$sPermissaoUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=permissao&codigo={$sPermissaoUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('situacao', $atualizar)) {
+            //atualize o campo nome            
+            $sSituacaoUsuario->setIdUsuario($idUsuario);
+            $sSituacaoUsuario->setNomeCampo('situacao');
+            $sSituacaoUsuario->setValorCampo($situacao);
+            $sSituacaoUsuario->alterar('tMenu1_1_1.php');
+            
+            var_dump($situacao);
+            exit();
+            //atualize a sessão nome
+            $situacao == 1 ? $situacao = 'Ativo' : $situacao = 'Inativo';
+            $_SESSION['credencial']['situacao'] = $situacao;
+            //fazer consulta para retornar nomenclatura correta
+            
+            if ($sSituacaoUsuario->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=situacao&codigo={$sSituacaoUsuario->getSNotificacao()->getCodigo()}");
             }
         }
     }

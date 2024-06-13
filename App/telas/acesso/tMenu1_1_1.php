@@ -34,19 +34,46 @@ if(isset($_GET['campo'])){
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
         case 'nome':
-            $alertaNome = true;
+            if($_GET['codigo'] == 'S1'){
+                $alertaNome = ' is-valid';
+            }else{
+                $alertaNome = ' is-warning';
+            }            
             break;
         case 'sobrenome':
-            $alertaSobrenome = true;
+            if($_GET['codigo'] == 'S1'){
+                $alertaNome = ' is-valid';
+            }else{
+                $alertaSobrenome = ' is-warning';
+            }  
+            break;
+        case 'sexo':
+            if($_GET['codigo'] == 'S1'){
+                $alertaSexo = ' is-valid';
+            }else{
+                $alertaSexo = ' is-warning';
+            }  
             break;
         case 'telefone':
-            $alertaTelefone = true;
+            if($_GET['codigo'] == 'S1'){
+                $alertaTelefone = ' is-valid';
+            }else{
+                $alertaTelefone = ' is-warning';
+            }  
             break;
         case 'email':
-            $alertaEmail = true;
+            if($_GET['codigo'] == 'S1'){
+                $alertaEmail = ' is-valid';
+            }else{
+                $alertaEmail = ' is-warning';
+            }  
             break;
-        case 'todos':
-            $alertaSucesso = true;
+        case 'permissao':
+            if($_GET['codigo'] == 'S1'){
+                $alertaPermissao = ' is-valid';
+            }else{
+                $alertaPermissao = ' is-warning';
+            }  
             break;
         default:
             break;
@@ -93,16 +120,16 @@ if(isset($_GET['campo'])){
                             -->
                             <div class="form-group col-md-1">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control<?php echo isset($alertaNome) ? ' is-warning' : ''; ?>" name="nome" id="nome" value="<?php echo $_SESSION['credencial']['nome']; ?>" required="">
+                                <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $_SESSION['credencial']['nome']; ?>" required="">
                             </div>
                             <div class="form-group col-md-1">
                                 <label for="sobrenome">Sobrenome</label>
-                                <input class="form-control<?php echo isset($alertaSobrenome) ? ' is-warning' : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $_SESSION['credencial']['sobrenome']; ?>" required="">
+                                <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $_SESSION['credencial']['sobrenome']; ?>" required="">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Sexo</label>
-                                    <select class="form-control" name="sexo" id="sexo" required="">
+                                    <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="">
                                         <option value="Masculino" <?php echo $_SESSION['credencial']['sexo'] == 'Masculino' ? 'selected=\"\"' : ''; ?>>Masculino</option>
                                         <option value="Feminino" <?php echo $_SESSION['credencial']['sexo'] == 'Feminino' ? 'selected=\"\"' : ''; ?>>Feminino</option>
                                     </select>
@@ -110,7 +137,7 @@ if(isset($_GET['campo'])){
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="telefoneUsuario">Telefone Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaTelefone) ? ' is-warning' : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $_SESSION['credencial']['telefoneUsuario']; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $_SESSION['credencial']['telefoneUsuario']; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
@@ -123,16 +150,16 @@ if(isset($_GET['campo'])){
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="emailUsuario">Email Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? ' is-warning' : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $_SESSION['credencial']['emailUsuario']; ?>" required="">
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $_SESSION['credencial']['emailUsuario']; ?>" required="">
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Permissão</label>
-                                    <select class="form-control" name="permissao" id="permissao" <?php echo $_SESSION['credencial']['nivelPermissao'] > 4 ? '' : 'disabled=""'; ?> required="">
+                                    <select class="form-control<?php echo isset($alertaPermissao) ? $alertaPermissao : ''; ?>" name="permissao" id="permissao" <?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled=""'; ?>>
                                         <?php  
                                             foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
                                                 $_SESSION['credencial']['idPermissao'] == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idPermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                             }                                       
                                         ?>
                                     </select>
@@ -142,7 +169,7 @@ if(isset($_GET['campo'])){
                                 <div class="form-group">
                                     <label>Situação</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'checked=""' : ''; ?><?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=""'; ?>>
+                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'checked=""' : ''; ?><?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled=""'; ?>>
                                         <label class="custom-control-label" for="situacao"><?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
                                     </div>
                                 </div>
