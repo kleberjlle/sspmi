@@ -132,7 +132,7 @@ if(isset($_GET['campo'])){
                                         <?php  
                                             foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
                                                 $_SESSION['credencial']['idPermissao'] == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                echo '<option value="' . $value['idPermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                             }                                       
                                         ?>
                                     </select>
