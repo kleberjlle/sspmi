@@ -32,7 +32,7 @@ class sTelefone {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php') {
+                $pagina == 'tMenu1_2.php') {
             if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
                     'comando' => 'SELECT',
@@ -57,7 +57,7 @@ class sTelefone {
                     'ordem' => null
                 ];
             }
-            
+
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
 
@@ -71,7 +71,21 @@ class sTelefone {
     public function tratarTelefone($telefone) {
         if (!ctype_alnum($telefone)) {
             $telefoneTratado = str_replace(['(', ')', '-', '_', ' '], '', $telefone);
+        } else {
+            $telefoneTratado = str_replace(" ", "", $telefone);
+            //se for número de telefone fixo
+            if (strlen($telefoneTratado) == 10) {
+                $mascara = "(##) ####-####";                
+            } else {
+                //se for número de telefone celular
+                $mascara = "(##) # ####-####";
+            }
+            for ($i = 0; $i < strlen($telefoneTratado); $i++) {
+                $mascara[strpos($mascara, "#")] = $telefoneTratado[$i];
+            }
+            $telefoneTratado = $mascara;
         }
+
         return $telefoneTratado;
     }
 
@@ -187,4 +201,5 @@ class sTelefone {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
 }

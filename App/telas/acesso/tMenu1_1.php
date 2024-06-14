@@ -1,7 +1,11 @@
 <?php
-use App\sistema\acesso\{sConfiguracao};
+use App\sistema\acesso\{
+    sConfiguracao,
+    sTelefone
+};
 
 $sConfiguracao = new sConfiguracao();
+$sTelefone = new sTelefone(0, 0, '0');
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -37,20 +41,11 @@ $sConfiguracao = new sConfiguracao();
                             <i class="fas fa-phone mr-1"></i><b> Telefone Corporativo</b>
                             <a class="float-right">
                                 <?php
-                                echo '<b>Setor: </b>';
-                                if ($_SESSION['credencial']['whatsAppSetor']) {
-                                    echo '<i class="fab fa-whatsapp mr-1"></i> ';
+                                echo '<b>Secretaria: </b>';
+                                if ($_SESSION['credencial']['whatsAppSecretaria']) {
+                                    echo 'Secretaria: <i class="fab fa-whatsapp mr-1"></i> ';
                                 }
-                                echo $_SESSION['credencial']['telefoneSetor'];
-                                ?>
-                            </a><br />
-                            <a class="float-right">
-                                <?php
-                                echo '<b>Coordenação: </b>';
-                                if ($_SESSION['credencial']['whatsAppCoordenacao']) {
-                                    echo '<i class="fab fa-whatsapp mr-1"></i> ';
-                                }
-                                echo $_SESSION['credencial']['telefoneCoordenacao'];
+                                echo $sTelefone->tratarTelefone($_SESSION['credencial']['telefoneSecretaria']);
                                 ?>
                             </a><br />
                             <a class="float-right">
@@ -59,16 +54,25 @@ $sConfiguracao = new sConfiguracao();
                                 if ($_SESSION['credencial']['whatsAppDepartamento']) {
                                     echo '<i class="fab fa-whatsapp mr-1"></i> ';
                                 }
-                                echo $_SESSION['credencial']['telefoneDepartamento'];
+                                echo $sTelefone->tratarTelefone($_SESSION['credencial']['telefoneDepartamento']);
                                 ?>
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo '<b>Secretaria: </b>';
-                                if ($_SESSION['credencial']['whatsAppSecretaria']) {
-                                    echo 'Secretaria: <i class="fab fa-whatsapp mr-1"></i> ';
+                                echo '<b>Coordenação: </b>';
+                                if ($_SESSION['credencial']['whatsAppCoordenacao']) {
+                                    echo '<i class="fab fa-whatsapp mr-1"></i> ';
                                 }
-                                echo $_SESSION['credencial']['telefoneSecretaria'];
+                                echo $sTelefone->tratarTelefone($_SESSION['credencial']['telefoneCoordenacao']);
+                                ?>
+                            </a><br />
+                            <a class="float-right">
+                                <?php
+                                echo '<b>Setor: </b>';
+                                if ($_SESSION['credencial']['whatsAppSetor']) {
+                                    echo '<i class="fab fa-whatsapp mr-1"></i> ';
+                                }
+                                echo $sTelefone->tratarTelefone($_SESSION['credencial']['telefoneSetor']);
                                 ?>
                             </a>
                         </li>
@@ -79,7 +83,7 @@ $sConfiguracao = new sConfiguracao();
                                 if ($_SESSION['credencial']['whatsAppUsuario']) {
                                     echo '<b><i class="fab fa-whatsapp mr-1"></i> </b>';
                                 }
-                                echo $_SESSION['credencial']['telefoneUsuario'];
+                                echo $sTelefone->tratarTelefone($_SESSION['credencial']['telefoneUsuario']);
                                 ?>
                             </a>
                         </li>
@@ -87,14 +91,8 @@ $sConfiguracao = new sConfiguracao();
                             <i class="fas fa-envelope-open-text mr-1"></i><b> Email Corporativo</b>
                             <a class="float-right">
                                 <?php
-                                echo '<b>Setor: </b>';
-                                echo $_SESSION['credencial']['emailSetor'];
-                                ?>
-                            </a><br />
-                            <a class="float-right">
-                                <?php
-                                echo '<b>Coordenação: </b>';
-                                echo $_SESSION['credencial']['emailCoordenacao'];
+                                echo '<b>Secretaria: </b>';
+                                echo $_SESSION['credencial']['emailSecretaria'];
                                 ?>
                             </a><br />
                             <a class="float-right">
@@ -105,8 +103,14 @@ $sConfiguracao = new sConfiguracao();
                             </a><br />
                             <a class="float-right">
                                 <?php
-                                echo '<b>Secretaria: </b>';
-                                echo $_SESSION['credencial']['emailSecretaria'];
+                                echo '<b>Coordenação: </b>';
+                                echo $_SESSION['credencial']['emailCoordenacao'];
+                                ?>
+                            </a><br />
+                            <a class="float-right">
+                                <?php
+                                echo '<b>Setor: </b>';
+                                echo $_SESSION['credencial']['emailSetor'];
                                 ?>
                             </a>
                         </li>

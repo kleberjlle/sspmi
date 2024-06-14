@@ -75,7 +75,8 @@ $sUsuario->consultar('tMenu1_2.php');
                     $sTelefoneSecretaria = new sTelefone(0, $value['secretaria_idsecretaria'], 'secretaria'); 
                     $sTelefoneSecretaria->consultar('tMenu1_2.php');
                     if($sTelefoneSecretaria->getValidador()){                        
-                        $telefoneSecretaria = $sTelefoneSecretaria->getNumero();
+                        $telefoneSecretaria = $sTelefoneSecretaria->tratarTelefone($sTelefoneSecretaria->getNumero());
+                        $sTelefoneSecretaria->getWhatsApp() ? $whatsAppSecretaria = '<i class="fab fa-whatsapp mr-1"></i>' : $whatsAppSecretaria = '';
                     }else{
                         $telefoneSecretaria = '--';
                     }
@@ -83,7 +84,8 @@ $sUsuario->consultar('tMenu1_2.php');
                     $sTelefoneDepartamento = new sTelefone(0, $value['secretaria_idsecretaria'], 'departamento'); 
                     $sTelefoneDepartamento->consultar('tMenu1_2.php');
                     if($sTelefoneDepartamento->getValidador() && $value['departamento_iddepartamento']){                        
-                        $telefoneDepartamento = $sTelefoneDepartamento->getNumero();
+                        $telefoneDepartamento = $sTelefoneDepartamento->tratarTelefone($sTelefoneDepartamento->getNumero());
+                        $sTelefoneDepartamento->getWhatsApp() ? $whatsAppDepartamento = '<i class="fab fa-whatsapp mr-1"></i>' : $whatsAppDepartamento = '';
                     }else{
                         $telefoneDepartamento = '--';
                     }
@@ -91,7 +93,8 @@ $sUsuario->consultar('tMenu1_2.php');
                     $sTelefoneCoordenacao = new sTelefone(0, $value['secretaria_idsecretaria'], 'coordenacao'); 
                     $sTelefoneCoordenacao->consultar('tMenu1_2.php');
                     if($sTelefoneCoordenacao->getValidador() && $value['coordenacao_idcoordenacao']){                        
-                        $telefoneCoordenacao = $sTelefoneCoordenacao->getNumero();
+                        $telefoneCoordenacao = $sTelefoneCoordenacao->tratarTelefone($sTelefoneCoordenacao->getNumero());
+                        $sTelefoneCoordenacao->getWhatsApp() ? $whatsAppCoordenacao = '<i class="fab fa-whatsapp mr-1"></i>' : $whatsAppCoordenacao = '';
                     }else{
                         $telefoneCoordenacao = '--';
                     }
@@ -99,7 +102,8 @@ $sUsuario->consultar('tMenu1_2.php');
                     $sTelefoneSetor = new sTelefone(0, $value['secretaria_idsecretaria'], 'setor'); 
                     $sTelefoneSetor->consultar('tMenu1_2.php');
                     if($sTelefoneSetor->getValidador() && $value['setor_idsetor']){                        
-                        $telefoneSetor = $sTelefoneSetor->getNumero();
+                        $telefoneSetor = $sTelefoneSetor->tratarTelefone($sTelefoneSetor->getNumero());
+                        $sTelefoneSetor->getWhatsApp() ? $whatsAppSetor = '<i class="fab fa-whatsapp mr-1"></i>' : $whatsAppSetor = '';
                     }else{
                         $telefoneSetor = '--';
                     }
@@ -107,7 +111,8 @@ $sUsuario->consultar('tMenu1_2.php');
                     $sTelefoneUsuario = new sTelefone($value['telefone_idtelefone'], '0', 'usuario'); 
                     $sTelefoneUsuario->consultar('tMenu1_2.php');
                     if($sTelefoneUsuario->getValidador()){                        
-                        $telefoneUsuario = $sTelefoneUsuario->getNumero();
+                        $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($sTelefoneUsuario->getNumero());
+                        $sTelefoneUsuario->getWhatsApp() ? $whatsAppUsuario = '<i class="fab fa-whatsapp mr-1"></i>' : $whatsAppUsuario = '';
                     }else{
                         $telefoneUsuario = '--';
                     }
@@ -152,13 +157,20 @@ $sUsuario->consultar('tMenu1_2.php');
                         $emailUsuario = '--';
                     }
                     
+                    if($value['situacao'] == true){
+                        $situacao = '<span class="bg-green">ativa</span>';
+                    }else{
+                        $situacao = '<span class="bg-red">inativa</span>';
+                    }
+                    
+                    
                     echo "<tr>";
                         echo "<td>{$nome}</td>";
                         echo "<td>{$cargo}</td>";
                         echo "<td>{$secretaria}<br / >{$departamento}<br />{$coordenacao}<br />{$setor}</td>";
-                        echo "<td><i class=\"fas fa-building mr-1\"></i> {$telefoneSecretaria}<br /><i class=\"fas fa-building mr-1\"></i> {$telefoneDepartamento}<br /><i class=\"fas fa-building mr-1\"></i> {$telefoneCoordenacao}<br /><i class=\"fas fa-building mr-1\"></i> {$telefoneSetor}<br /><i class=\"fas fa-user-alt mr-1\"><br /></i> {$telefoneUsuario}</td>";
+                        echo "<td><i class=\"fas fa-building mr-1\"></i> {$whatsAppSecretaria} {$telefoneSecretaria}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppDepartamento} {$telefoneDepartamento}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppCoordenacao} {$telefoneCoordenacao}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppSetor} {$telefoneSetor}<br /><i class=\"fas fa-user-alt mr-1\"></i> {$whatsAppUsuario} {$telefoneUsuario}</td>";
                         echo "<td>{$emailSecretaria}<br />{$emailDepartamento}<br />{$emailCoordenacao}<br />{$emailSetor}<br />{$emailUsuario}<br /></td>";
-                        echo "<td><span class=\"bg-green\">{$value['situacao']}</span></td>";
+                        echo "<td>{$situacao}</td>";
                         echo "<td><span class=\"bg-green\">aprovada</span> <i>por Kleber Pereira de Almeida</i></td>";
                         echo "<td><a href=\"tPainel.php?menu=1_1_1&id=2\"><i class=\"fas fa-edit mr-1\"></i></a></td>";
                     echo "</tr>";
