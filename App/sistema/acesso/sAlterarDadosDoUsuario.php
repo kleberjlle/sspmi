@@ -38,8 +38,8 @@ if (isset($_POST['pagina'])) {
     $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($_POST['telefoneUsuario']);
     isset($_POST['whatsAppUsuario']) ? $whatsAppUsuario = 1 : $whatsAppUsuario = 0;
     $emailUsuario = $_POST['emailUsuario'];
-    isset($_POST['permissao']) ? $idPermissao = $_POST['permissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
-    isset($_POST['situacao']) ? $situacao = 'Ativo' : $situacao = 'Inativo';
+    //isset($_POST['permissao']) ? $idPermissao = $_POST['permissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
+    //isset($_POST['situacao']) ? $situacao = 'Ativo' : $situacao = 'Inativo';
     $atualizar = [];
     $alteracao = false;
 
@@ -142,7 +142,7 @@ if (isset($_POST['pagina'])) {
             $atualizar['emailUsuario'] = $emailUsuario;
         }
     }
-    
+    /* área para envios futuros
     if ($_SESSION['credencial']['idPermissao'] != $idPermissao) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['idPermissao'];
@@ -165,7 +165,8 @@ if (isset($_POST['pagina'])) {
         $alteracao = true;
         $atualizar['situacao'] = $situacao;
     }
-    
+     * 
+     */
     //QA - início da área de testes
     /* verificar o que tem no objeto
 
@@ -296,6 +297,7 @@ if (isset($_POST['pagina'])) {
             }
         }
         
+        /* área para uso futuro
         if (array_key_exists('situacao', $atualizar)) {
             //atualize o campo nome            
             $sSituacaoUsuario->setIdUsuario($idUsuario);
@@ -315,6 +317,8 @@ if (isset($_POST['pagina'])) {
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=situacao&codigo={$sSituacaoUsuario->getSNotificacao()->getCodigo()}");
             }
         }
+         * 
+         */
     }
 }else{
     //solicitar saída com tentativa de violação

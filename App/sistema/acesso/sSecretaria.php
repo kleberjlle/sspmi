@@ -34,7 +34,8 @@ class sSecretaria {
             }
         } 
         
-        if($pagina == 'tMenu1_1_1.php'){
+        if( $pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tSolicitarAcesso.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

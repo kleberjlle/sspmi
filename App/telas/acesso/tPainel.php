@@ -621,6 +621,8 @@ HTML;
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <!--jQuery Mask-->
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
+        <!--input Customs-->
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <!-- Page specific script -->
         <script>
         $(function(){

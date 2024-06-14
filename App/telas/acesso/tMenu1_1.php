@@ -125,8 +125,9 @@ $sTelefone = new sTelefone(0, 0, '0');
                     </ul>
                 </div>
                 <form action="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso() ?>tPainel.php" method="get">
-                    <input type="hidden" name="menu" value="1_1_1">
+                    
                     <div class="card-footer">
+                        <input type="hidden" name="menu" value="1_1_1">
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>

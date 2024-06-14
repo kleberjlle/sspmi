@@ -1,30 +1,40 @@
+<?php
+require_once '../../../vendor/autoload.php';
+
+use App\sistema\acesso\{
+    sConfiguracao,
+    sSecretaria
+};
+
+$sConfiguracao = new sConfiguracao();
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SSPMI</title>
+        <title><?php echo $sConfiguracao->getTitle(); ?></title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/fontawesome-free/css/all.min.css">
         <!-- icheck bootstrap -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="../../../vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
+        <link rel="stylesheet" href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
     </head>
     <body class="hold-transition register-page">
         <div class="register-box">
-            <div class="register-logo">
-                <b>SS</b>PMI
+            <div class="login-logo">
+                <?php echo $sConfiguracao->getLoginLogo(); ?>
             </div>
 
             <div class="card">
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Solicitar Conta</p>
 
-                    <form action="../../sistema/acesso/sSolicitarConta.php" method="post">
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sSolicitarConta.php" method="post">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Nome" name="nome" required="">
                             <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" required="">
@@ -37,8 +47,8 @@
                         <div class="input-group mb-3">
                             <select class="form-control" name="sexo" required="">
                                 <option value="" selected="" disabled="">Sexo</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="feminino">Feminino</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -55,12 +65,12 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="WhatsApp pessoal" name="whatsAppPessoal">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fab fa-whatsapp"></span>
-                                </div>
-                            </div>
+                            <input class="form-control" type="text" value="Permito comunicação via WhatsApp" disabled>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <input type="checkbox">
+                                </span>
+                            </div>                            
                         </div>
                         <div class="input-group mb-3">
                             <input type="email" class="form-control" placeholder="Email pessoal" name="emailPessoal" required="">
@@ -69,27 +79,18 @@
                                     <span class="fas fa-envelope"></span>
                                 </div>
                             </div>
-                        </div>
+                        </div>                            
                         <div class="input-group mb-3">
-                            <select class="form-control" name="secretaria" required="">
+                            <select class="form-control" name="secretaria" required>
                                 <option value="" selected="" disabled="">Secretaria</option>
-                                <option value="administracao">Administração</option>
-                                <option value="agricultura">Agricultura e Pesca</option>
-                                <option value="assistencia">Assistência Social</option>
-                                <option value="chefia">Chefia de Gabinete do Prefeito</option>
-                                <option value="controladoria">Controladoria Interna</option>
-                                <option value="desenvolvimento">Desenvolvimento Social e Econômico</option>
-                                <option value="educacao">Educação</option>
-                                <option value="esporte">Esporte e Lazer</option>
-                                <option value="fazenda">Fazenda</option>
-                                <option value="infraestrutura">Infraestrutura</option>
-                                <option value="meioAmbiente">Meio Ambiente</option>
-                                <option value="planejamento">Planejamento Urbano</option>
-                                <option value="procuradoria">Procuradoria Jurídica</option>
-                                <option value="saude">Saúde</option>
-                                <option value="seguranca">Segurança Pública e Trânsito</option>
-                                <option value="turismo">Turismo e Cultura</option>
-                                <option value="ouvidoria">Ouvidoria</option>
+                                <?php
+                                $sSecretaria = new sSecretaria(0);
+                                $sSecretaria->consultar('tSolicitarAcesso.php');
+                                
+                                foreach ($sSecretaria->mConexao->getRetorno() as $key => $value) {
+                                    echo '<option value="$value['idsecretaria']">$value['nomenclatura']</option>';                                    
+                                }
+                            ?>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -114,6 +115,20 @@
                         <div class="input-group mb-3">
                             <select class="form-control" name="coordenacao" required="">
                                 <option value="" selected="" disabled="">Coordenação</option>
+                                <option value="licitacoes">Contratos</option>
+                                <option value="patrimonio">Patrimônio e Frotas</option>
+                                <option value="rh">Recursos Humanos</option>
+                                <option value="tecnologia">Informática e Sistemas</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-house-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="coordenacao" required="">
+                                <option value="" selected="" disabled="">Setor</option>
                                 <option value="licitacoes">Contratos</option>
                                 <option value="patrimonio">Patrimônio e Frotas</option>
                                 <option value="rh">Recursos Humanos</option>
@@ -163,10 +178,17 @@
         <!-- /.register-box -->
 
         <!-- jQuery -->
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>
         <!-- Bootstrap 4 -->
-        <script src="../../../vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
-        <script src="../../../vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
+        <!--input Customs-->
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <script>
+            $(function () {
+                bsCustomFileInput.init();
+            });
+        </script>
     </body>
 </html>

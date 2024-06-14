@@ -121,6 +121,36 @@
                                 <label for="emailSecretaria">Email Secretaria</label>
                                 <input type="text" class="form-control" id="emailSecretaria" value="<?php echo $_SESSION['credencial']['emailSecretaria'] ?>" <?php echo $_SESSION['credencial']['nivelPermissao'] > 2 ? '' : 'disabled=\"\"'; ?>>
                             </div> 
+
+                            //campo permissão e situação
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Permissão</label>
+                                    <select class="form-control<?php echo isset($alertaPermissao) ? $alertaPermissao : ''; ?>" name="permissao" id="permissao" <?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled=""'; ?>>
+                                        <?php  
+                                            foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
+                                                $_SESSION['credencial']['idPermissao'] == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
+                                                echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }                                       
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Situação</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'value="Ativo"' : 'value="Inativo"'; ?><?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'checked=""' : ''; ?><?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled'; ?>>
+                                        <label class="custom-control-label" for="situacao"><?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
 <?php
 is_null($_SESSION['credencial']['idDepartamento']) ? $existeDepartamento = false : $existeDepartamento = true;
 is_null($_SESSION['credencial']['idCoordenacao']) ? $existeCoordenacao = false : $existeCoordenacao = true;

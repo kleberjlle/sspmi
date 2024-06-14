@@ -152,28 +152,6 @@ if(isset($_GET['campo'])){
                                 <label for="emailUsuario">Email Pessoal</label>
                                 <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $_SESSION['credencial']['emailUsuario']; ?>" required="">
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Permissão</label>
-                                    <select class="form-control<?php echo isset($alertaPermissao) ? $alertaPermissao : ''; ?>" name="permissao" id="permissao" <?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled=""'; ?>>
-                                        <?php  
-                                            foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
-                                                $_SESSION['credencial']['idPermissao'] == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }                                       
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Situação</label>
-                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'checked=""' : ''; ?><?php echo $_SESSION['credencial']['idPermissao'] > 4 ? '' : 'disabled=""'; ?>>
-                                        <label class="custom-control-label" for="situacao"><?php echo $_SESSION['credencial']['situacao'] == 'Ativo' ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <?php
