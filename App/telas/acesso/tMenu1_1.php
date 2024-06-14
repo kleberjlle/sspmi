@@ -3,7 +3,6 @@ use App\sistema\acesso\{sConfiguracao};
 
 $sConfiguracao = new sConfiguracao();
 ?>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">

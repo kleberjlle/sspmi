@@ -17,7 +17,8 @@ class sDepartamento {
     public function consultar($pagina) {
         //cria conexão para as opções das páginas abaixo
         $this->setMConexao(new mConexao());
-        if($pagina == 'tAcessar.php'){                             
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -25,7 +26,7 @@ class sDepartamento {
                 'camposCondicionados' => 'iddepartamento',
                 'valoresCondicionados' => $this->getIdDepartamento(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null
             ];            
             $this->mConexao->CRUD($dados);
                         

@@ -15,8 +15,8 @@ class sSecretaria {
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if($pagina == 'tAcessar.php'){
-                            
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php'){                            
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -24,13 +24,13 @@ class sSecretaria {
                 'camposCondicionados' => 'idsecretaria',
                 'valoresCondicionados' => $this->getIdSecretaria(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null
             ];            
             $this->mConexao->CRUD($dados);
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $this->setEndereco($linha['endereco']);
-                $this->setNomenclatura($linha['nomenclatura']);               
+                $this->setNomenclatura($linha['nomenclatura']);  
             }
         } 
         

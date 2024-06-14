@@ -53,10 +53,11 @@ class sUsuario {
     }
 
     public function consultar($pagina) {
+        //busca os dados do usuário no BD
+        $this->setMConexao(new mConexao());
+        
         //tomada de decisão de acordo com a página
         if ($pagina == 'tAcessar.php') {
-            //busca os dados do usuário no BD
-            $this->setMConexao(new mConexao());
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -256,6 +257,21 @@ class sUsuario {
                   // */
                 //QA - fim da área de testes
             }
+        }
+        
+        if($pagina == 'tMenu1_2.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'usuario',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            
+            $this->setValidador($this->mConexao->getValidador());
         }
     }
 

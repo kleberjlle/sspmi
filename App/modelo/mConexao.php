@@ -67,7 +67,6 @@ class mConexao {
           echo "<pre>";
           echo $query;
           echo "</pre>";
-
           // */
         //QA - fim da área de testes
 

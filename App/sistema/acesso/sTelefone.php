@@ -31,7 +31,8 @@ class sTelefone {
 
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tAcessar.php') {
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php') {
             if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
                     'comando' => 'SELECT',
@@ -56,6 +57,7 @@ class sTelefone {
                     'ordem' => null
                 ];
             }
+            
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
 

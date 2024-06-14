@@ -17,7 +17,8 @@ class sSetor {
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());  
-        if($pagina == 'tAcessar.php'){
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php'){
                            
             $dados = [
                 'comando' => 'SELECT',
@@ -26,7 +27,7 @@ class sSetor {
                 'camposCondicionados' => 'idsetor',
                 'valoresCondicionados' => $this->getIdSetor(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => 'ASC'
+                'ordem' => null
             ];            
             $this->mConexao->CRUD($dados);
                         
