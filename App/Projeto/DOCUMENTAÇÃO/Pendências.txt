@@ -6,3 +6,4 @@ Pendências para serem verificadas
 4 - Implementar tratamento de gênero para os cargos;
 ok - 5 - Implementar tratamento de máscara para números de telefones;
 6 - Verificar mecanismo de captura do navegador, IP e Host do dispositivo;
+7 - Alterar instância do sHistorico no arquivo tAcessar.php

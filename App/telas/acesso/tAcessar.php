@@ -1,6 +1,5 @@
 <?php
 require_once '../../../vendor/autoload.php';
-//testar git hub
 
 use App\sistema\acesso\{
     sConfiguracao,

@@ -16,6 +16,7 @@ if(isset($_POST['idSecretaria'])){
             $_SESSION['credencial']['idSecretaria'] == $value['coordenacao_departamento_secretaria_idsecretaria'] ? $atributo = ' selected' : $atributo = '';
             echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
         }
+        echo '<option value="0">--</option>';
     }else{
         echo '<option value="" selected>--</option>';
     }    

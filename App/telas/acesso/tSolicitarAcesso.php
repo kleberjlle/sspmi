@@ -3,10 +3,31 @@ require_once '../../../vendor/autoload.php';
 
 use App\sistema\acesso\{
     sConfiguracao,
-    sSecretaria
+    sSecretaria,
+    sCargo,
+    sNotificacao
 };
 
 $sConfiguracao = new sConfiguracao();
+
+//retorno de campo inválidos para notificação
+if(isset($_GET['campo'])){
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'email':
+            if($_GET['codigo'] == 'S1'){
+                $alertaEmail = ' is-warning';
+            }            
+            break;
+        default:
+            break;
+    }
+    
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $email = $sNotificacao->getMensagem();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,12 +53,12 @@ $sConfiguracao = new sConfiguracao();
 
             <div class="card">
                 <div class="card-body register-card-body">
-                    <p class="login-box-msg">Solicitar Conta</p>
+                    <p class="login-box-msg">Solicitar Acesso</p>
 
-                    <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sSolicitarConta.php" method="post">
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sSolicitarAcesso.php" method="post">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Nome" name="nome" required="">
-                            <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" required="">
+                            <input type="text" class="form-control" placeholder="Nome" name="nome" id="nome" required="">
+                            <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" id="sobrenome" required="">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>
@@ -45,8 +66,8 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="sexo" required="">
-                                <option value="" selected="" disabled="">Sexo</option>
+                            <select class="form-control" name="sexo" id="sexo" required="">
+                                <option selected="" disabled="">Sexo</option>
                                 <option value="M">Masculino</option>
                                 <option value="F">Feminino</option>
                             </select>
@@ -57,7 +78,7 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Telefone pessoal" name="telefonePessoal">
+                            <input class="form-control" type="text" name="telefone" id="telefone" placeholder="Telefone pessoal">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-phone"></span>
@@ -68,12 +89,12 @@ $sConfiguracao = new sConfiguracao();
                             <input class="form-control" type="text" value="Permito comunicação via WhatsApp" disabled>
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="whatsApp" id="whatsApp">
                                 </span>
                             </div>                            
                         </div>
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Email pessoal" name="emailPessoal" required="">
+                            <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" placeholder="Email pessoal" name="email" id="email" required="">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -81,16 +102,16 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>                            
                         <div class="input-group mb-3">
-                            <select class="form-control" name="secretaria" required>
-                                <option value="" selected="" disabled="">Secretaria</option>
+                            <select class="form-control" name="secretaria" id="secretaria" required="">
+                                <option selected="" value="1">Secretaria</option>
                                 <?php
                                 $sSecretaria = new sSecretaria(0);
                                 $sSecretaria->consultar('tSolicitarAcesso.php');
-                                
+
                                 foreach ($sSecretaria->mConexao->getRetorno() as $key => $value) {
-                                    echo '<option value="$value['idsecretaria']">$value['nomenclatura']</option>';                                    
+                                    echo "<option value=\"{$value['idsecretaria']}\">{$value['nomenclatura']}</option>";
                                 }
-                            ?>
+                                ?>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -99,12 +120,8 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="departamentoUnidade" required="">
-                                <option value="" selected="" disabled="">Departamento/ Unidade</option>
-                                <option value="licitacoes">Licitações, Contratos e Compras</option>
-                                <option value="patrimonio">Patrimônio e Frotas</option>
-                                <option value="rh">Recursos Humanos</option>
-                                <option value="tecnologia">Tecnologia da Informação</option>
+                            <select class="form-control" name="departamento" id="departamento" required="">
+                                <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -113,12 +130,8 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="coordenacao" required="">
-                                <option value="" selected="" disabled="">Coordenação</option>
-                                <option value="licitacoes">Contratos</option>
-                                <option value="patrimonio">Patrimônio e Frotas</option>
-                                <option value="rh">Recursos Humanos</option>
-                                <option value="tecnologia">Informática e Sistemas</option>
+                            <select class="form-control" name="coordenacao" id="coordenacao" required="">
+                                <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -127,12 +140,8 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="coordenacao" required="">
-                                <option value="" selected="" disabled="">Setor</option>
-                                <option value="licitacoes">Contratos</option>
-                                <option value="patrimonio">Patrimônio e Frotas</option>
-                                <option value="rh">Recursos Humanos</option>
-                                <option value="tecnologia">Informática e Sistemas</option>
+                            <select class="form-control" name="setor" id="setor" required="">
+                                <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -141,12 +150,15 @@ $sConfiguracao = new sConfiguracao();
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="cargoFuncao" required="">
-                                <option value="" selected="" disabled="">Cargo/ Função</option>
-                                <option value="diretor">Diretor</option>
-                                <option value="coordenador">Coordenador</option>
-                                <option value="agenteAdministrativo">Agente Administrativo</option>
-                                <option value="tecnicoDeInformatica">Técnico de Informática</option>
+                            <select class="form-control" name="cargo" id="cargo" required="">
+                                <?php
+                                $sCargo = new sCargo(0);
+                                $sCargo->consultar('tSolicitarAcesso.php');
+
+                                foreach ($sCargo->mConexao->getRetorno() as $key => $value) {
+                                    echo "<option value=\"{$value['idcargo']}\">{$value['nomenclatura']}</option>";
+                                }
+                                ?>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -157,21 +169,39 @@ $sConfiguracao = new sConfiguracao();
                         <div class="row">
                             <div class="col-12">
                                 <div class="icheck-primary">
-                                    <input type="checkbox" id="termosDeUso" name="termosDeUso" value="aceito" required="">
-                                    <label for="termosDeUso">
+                                    <input type="checkbox" name="termo" id="termo">
+                                    <label for="termo">
                                         Eu aceito os <a href="tTermosDeUso.php">termos de uso</a>
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div>                        
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-block">Solicitar</button>
+                                <input type="hidden" name="acao" id="acao" value="inserir">
+                                <input type="hidden" name="pagina" id="pagina" value="tSolicitarAcesso.php">
+                                <button class="btn btn-primary btn-block" type="submit" name="solicitar" id="solicitar" disabled>Solicitar</button>
                             </div>
                         </div>
                     </form>
-                    <a href="tAcessar.php" class="text-center">Já possuo conta</a>
+                    <a href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>tAcessar.php" class="text-center">Já possuo conta</a>
                 </div>
+                <?php
+                            if(isset($tipo) && isset($titulo) && isset($email)){
+                            echo <<<HTML
+                            <div class="col-mb-3">
+                                <div class="card card-outline card-{$tipo}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">{$titulo}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        {$email}
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                            }       
+                            ?>
                 <!-- /.form-box -->
             </div><!-- /.card -->
         </div>
@@ -185,9 +215,63 @@ $sConfiguracao = new sConfiguracao();
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js"></script>
         <!--input Customs-->
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <!--Ajax-->
+        <script type="text/javascript" src="<?php echo $sConfiguracao->getDiretorioControleAcesso() ?>jQuery.js"></script>
         <script>
-            $(function () {
-                bsCustomFileInput.init();
+            $(document).ready(function () {
+                //traz os departamentos de acordo com a secretaria selecionada   
+                $('#secretaria').on('change', function () {
+                    var idSecretaria = $(this).val();
+
+                    //mostra somente os departamentos da secretaria escolhida
+                    $.ajax({
+                        url: 'https://itapoa.app.br/App/sistema/acesso/ajaxDepartamento.php',
+                        type: 'POST',
+                        data: {
+                            'idSecretaria': idSecretaria
+                        },
+                        success: function (html) {
+                            $('#departamento').html(html);
+                        }
+                    });
+
+                    //mostra somente as coordenações de acordo com a secretaria selecionada
+                    var idSecretaria = $(this).val();
+                    //mostra as coordenações do departamento escolhido
+                    $.ajax({
+                        url: 'https://itapoa.app.br/App/sistema/acesso/ajaxCoordenacao.php',
+                        type: 'POST',
+                        data: {
+                            'idSecretaria': idSecretaria
+                        },
+                        success: function (html) {
+                            $('#coordenacao').html(html);
+                        }
+                    });
+
+                    //mostra somente as coordenações de acordo com a secretaria selecionada
+                    var idSecretaria = $(this).val();
+                    //mostra as coordenações do departamento escolhido
+                    $.ajax({
+                        url: 'https://itapoa.app.br/App/sistema/acesso/ajaxSetor.php',
+                        type: 'POST',
+                        data: {
+                            'idSecretaria': idSecretaria
+                        },
+                        success: function (html) {
+                            $('#setor').html(html);
+                        }
+                    });
+                });
+                
+                //autoriza o clique no botão de envio
+                $('#termo').change(function(){
+                    if ($(this).is(':checked')) {
+                        $('#solicitar').removeAttr('disabled');
+                    } else {
+                        $('#solicitar').attr('disabled',true);
+                    }
+                });
             });
         </script>
     </body>
