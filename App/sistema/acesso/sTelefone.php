@@ -32,7 +32,8 @@ class sTelefone {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_2.php') {
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_3.php') {
             if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
                     'comando' => 'SELECT',

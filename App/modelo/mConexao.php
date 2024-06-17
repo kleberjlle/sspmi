@@ -199,6 +199,18 @@ class mConexao {
                     }
                 }
                 break;
+            case 'solicitacao':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
             case is_array(['telefone', 'telefone_has_setor']):
                 if ($resultado->num_rows > 0) {
                     foreach ($resultado as $linha) {
@@ -373,6 +385,7 @@ class mConexao {
           echo '<pre>';
           echo $query;
           echo '</pre>';
+          exit();
           // */
         //QA - fim da área de testes
     }
@@ -382,22 +395,22 @@ class mConexao {
         $query .= $dados['comando'] . ' ';
         $query .= $dados['tabela'] . ' ';
         $query .= 'SET ';
-        $query .= $dados['camposAtualizar'].'=';
+        $query .= $dados['camposAtualizar'] . '=';
         $query .= "'{$dados['valoresAtualizar']}' ";
         $query .= 'WHERE ';
-        $query .= $dados['camposCondicionados'].'=';
+        $query .= $dados['camposCondicionados'] . '=';
         $query .= "'{$dados['valoresCondicionados']}'";
         $query .= ';';
         //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value
-        
+
         $this->setValidador(true);
         $this->conexao->query($query);
-        
+
         /* QA - início da área de testes
-        echo '<pre>';
-        echo $query;
-        echo '</pre>';
-        //*/
+          echo '<pre>';
+          echo $query;
+          echo '</pre>';
+          // */
         //QA - fim da área de testes
     }
 

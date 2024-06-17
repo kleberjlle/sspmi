@@ -149,7 +149,8 @@ echo "</pre>";
                             //abre o menu que atende a condição
                                 $menu == '1_1' ||
                                 $menu == '1_1_1' ||
-                                $menu == '1_2' ? 
+                                $menu == '1_2' ||
+                                $menu == '1_3' ? 
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
                             
@@ -177,7 +178,7 @@ HTML;
                             
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=1_1" class="nav-link $atributo">
-                                            <p>Meus dados</p>
+                                            <p>Meus Dados</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -199,8 +200,27 @@ HTML;
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
                                 <!--FINAL DO SUBMENU 1_2-->
+                                            
+                                <!--INÍCIO DO SUBMENU 1_3-->                                   
+HTML;
+                                }
+                                //abre os menus da condição
+                                if ($_SESSION['credencial']['nivelPermissao'] > 1) {
+                                    $menu == '1_3' ?
+                                    $atributo = ' active' :
+                                    $atributo = '';
+
+                                    echo <<<HTML
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="tPainel.php?menu=1_3" class="nav-link $atributo"> 
+                                                <p>Solicitações de Acesso</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--FINAL DO SUBMENU 1_3-->
                             
                                 <!--INÍCIO DO MENU2-->
 HTML;
@@ -515,6 +535,9 @@ HTML;
                         case "1_2":
                             require_once './tMenu1_2.php';
                             break;
+                        case "1_3":
+                            require_once './tMenu1_3.php';
+                            break;
                         //menu 2
                         case "2_1":
                             require_once '../suporte/tMenu2_1.php';
@@ -632,6 +655,10 @@ HTML;
         <script>
             $(function () {
                 $("#tabelaMenu1_2").DataTable({
+                    "responsive": true, "lengthChange": false, "autoWidth": false,
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
+                $("#tabelaMenu1_3").DataTable({
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                 }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');

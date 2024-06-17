@@ -82,6 +82,9 @@ class sNotificacao{
             case '13':
                 $this->setMensagem('Esse número de telefone já está registrado');
                 break;
+            case '14':
+                $this->setMensagem('Identificamos que já existe uma solicitação, favor verifique sua caixa de e-mail. Caso já tenha decorrido 24 horas úteis, favor contatar o administrador do sistema e informe o código ('.$this->getCodigo().').');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');
@@ -124,7 +127,7 @@ class sNotificacao{
                 $this->setMensagem('Verifique seu e-mail para finalizar a recuperação de acesso.');
                 break;
             case '3':
-                $this->setMensagem('Registro realizado, você receberá um e-mail com a liberação do Departamento de Tecnologia da Informação.');
+                $this->setMensagem('Registro realizado, você receberá um e-mail com a liberação de acesso do Departamento de Tecnologia da Informação em até 24 horas úteis.');
                 break;
             case '4':
                 $this->setMensagem('Registro realizado com sucesso.');

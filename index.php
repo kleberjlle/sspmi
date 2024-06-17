@@ -64,6 +64,9 @@ if(!$manutenção){
                     <p>
                         Itapoá, 29 de maio de 2024.
                     </p>
+                    <p>
+                        <a href="http://www.itapoa.app.br/App/telas/acesso/tAcessar.php">Testar</a>
+                    </p>
                 </div>
             </div>
         </div>

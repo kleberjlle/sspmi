@@ -21,6 +21,14 @@ class sUsuario {
 
     private int $idUsuario;
     private int $idEmail;
+    private string $email;
+    private string $telefone;
+    private int $whatsApp;
+    private int $idSecretaria;
+    private int $idDepartamento;
+    private int $idCoordenacao;
+    private int $idSetor;
+    private int $idCargo;
     private bool $validador;
     private string $nome;
     private string $sobrenome;
@@ -29,22 +37,22 @@ class sUsuario {
     private bool $situacao; //alterar no bd
     private string $nomeCampo;
     private string $valorCampo;
-    private sSetor $sSetor;
-    private sCoordenacao $sCoordenacao;
-    private sDepartamento $sDepartamento;
-    private sSecretaria $sSecretaria;
-    private sTelefone $sTelefoneUsuario;
-    private sTelefone $sTelefoneSetor;
-    private sTelefone $sTelefoneCoordenacao;
-    private sTelefone $sTelefoneDepartamento;
-    private sTelefone $sTelefoneSecretaria;
-    private sEmail $sEmailUsuario;
-    private sEmail $sEmailSetor;
-    private sEmail $sEmailCoordenacao;
-    private sEmail $sEmailDepartamento;
-    private sEmail $sEmailSecretaria;
-    private sCargo $sCargo;
-    private sPermissao $sPermissao;
+    public sSetor $sSetor;
+    public sCoordenacao $sCoordenacao;
+    public sDepartamento $sDepartamento;
+    public sSecretaria $sSecretaria;
+    public sTelefone $sTelefoneUsuario;
+    public sTelefone $sTelefoneSetor;
+    public sTelefone $sTelefoneCoordenacao;
+    public sTelefone $sTelefoneDepartamento;
+    public sTelefone $sTelefoneSecretaria;
+    public sEmail $sEmailUsuario;
+    public sEmail $sEmailSetor;
+    public sEmail $sEmailCoordenacao;
+    public sEmail $sEmailDepartamento;
+    public sEmail $sEmailSecretaria;
+    public sCargo $sCargo;
+    public sPermissao $sPermissao;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
 
@@ -273,6 +281,21 @@ class sUsuario {
             
             $this->setValidador($this->mConexao->getValidador());
         }
+        
+        if($pagina == 'tMenu1_3.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'solicitacao',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            
+            $this->setValidador($this->mConexao->getValidador());
+        }
     }
 
     public function acessar($pagina) {
@@ -333,6 +356,49 @@ class sUsuario {
         }
     }
 
+    public function inserir($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+        
+        if($pagina == 'sSolicitarAcesso.php'){
+                $dados = [
+                    'comando' => 'INSERT INTO',
+                    'tabela' => 'solicitacao',
+                    'camposInsercao' => [
+                        'nome',
+                        'sobrenome',
+                        'sexo',
+                        'telefone',
+                        'whatsApp',
+                        'email',
+                        'secretaria_idsecretaria',
+                        'departamento_iddepartamento',
+                        'coordenacao_idcoordenacao',
+                        'setor_idsetor',
+                        'cargo_idcargo'
+                    ],                    
+                    'valoresInsercao' => [
+                        $this->getNome(),
+                        $this->getSobrenome(),
+                        $this->getSexo(),
+                        $this->getTelefone(),
+                        $this->getWhatsApp(),
+                        $this->getEmail(),
+                        $this->getIdSecretaria(),
+                        $this->getIdDepartamento(),
+                        $this->getIdCoordenacao(),
+                        $this->getIdSetor(),
+                        $this->getIdCargo()
+                    ]
+                ];
+            $this->mConexao->CRUD($dados);
+            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+            if($this->mConexao->getValidador()){
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S3'));
+            }
+        }
+    }
    
     public function getIdUsuario(): int {
         return $this->idUsuario;
@@ -340,6 +406,38 @@ class sUsuario {
 
     public function getIdEmail(): int {
         return $this->idEmail;
+    }
+
+    public function getEmail(): string {
+        return $this->email;
+    }
+
+    public function getTelefone(): string {
+        return $this->telefone;
+    }
+
+    public function getWhatsApp(): int {
+        return $this->whatsApp;
+    }
+
+    public function getIdSecretaria(): int {
+        return $this->idSecretaria;
+    }
+
+    public function getIdDepartamento(): int {
+        return $this->idDepartamento;
+    }
+
+    public function getIdCoordenacao(): int {
+        return $this->idCoordenacao;
+    }
+
+    public function getIdSetor(): int {
+        return $this->idSetor;
+    }
+
+    public function getIdCargo(): int {
+        return $this->idCargo;
     }
 
     public function getValidador(): bool {
@@ -452,6 +550,38 @@ class sUsuario {
 
     public function setIdEmail(int $idEmail): void {
         $this->idEmail = $idEmail;
+    }
+
+    public function setEmail(string $email): void {
+        $this->email = $email;
+    }
+
+    public function setTelefone(string $telefone): void {
+        $this->telefone = $telefone;
+    }
+
+    public function setWhatsApp(int $whatsApp): void {
+        $this->whatsApp = $whatsApp;
+    }
+
+    public function setIdSecretaria(int $idSecretaria): void {
+        $this->idSecretaria = $idSecretaria;
+    }
+
+    public function setIdDepartamento(int $idDepartamento): void {
+        $this->idDepartamento = $idDepartamento;
+    }
+
+    public function setIdCoordenacao(int $idCoordenacao): void {
+        $this->idCoordenacao = $idCoordenacao;
+    }
+
+    public function setIdSetor(int $idSetor): void {
+        $this->idSetor = $idSetor;
+    }
+
+    public function setIdCargo(int $idCargo): void {
+        $this->idCargo = $idCargo;
     }
 
     public function setValidador(bool $validador): void {

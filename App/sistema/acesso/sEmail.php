@@ -1,4 +1,5 @@
 <?php
+
 namespace App\sistema\acesso;
 
 use App\modelo\{
@@ -9,6 +10,7 @@ use App\sistema\acesso\{
 };
 
 class sEmail {
+
     private int $idEmail;
     private string $nomeCampo;
     private string $valorCampo;
@@ -25,13 +27,13 @@ class sEmail {
     }
 
     public function verificar($pagina) {
+        $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tSolicitarAcesso.php') {
+                $pagina == 'tMenu1_1_1.php' ||
+                $pagina == 'tSolicitarAcesso.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
-                //verifica se consta o email no BD
-                $this->setMConexao(new mConexao());
+                //verifica se consta o email no BD               
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => '*',
@@ -56,8 +58,8 @@ class sEmail {
                         $this->setValidador(true);
                     }
                 }
-                
-                if( $pagina == 'tMenu1_1_1.php'){
+
+                if ($pagina == 'tMenu1_1_1.php') {
                     //se localizou o registro do no BD e o registro for diferento do email atual
                     if ($this->mConexao->getValidador() && $_SESSION['credencial']['emailUsuario'] != $this->getNomenclatura()) {
                         $this->setValidador(false);
@@ -66,14 +68,32 @@ class sEmail {
                         $this->setValidador(true);
                     }
                 }
-                
-                if( $pagina == 'tSolicitarAcesso.php'){
+
+                if ($pagina == 'tSolicitarAcesso.php') {
                     //se localizou o registro do no BD
                     if ($this->mConexao->getValidador()) {
                         $this->setValidador(false);
                         $this->setSNotificacao(new sNotificacao('A12'));
                     } else {
-                        $this->setValidador(true);
+                        //senão verifique se o já não tem uma solicitação para esse email
+                        $dados = [
+                            'comando' => 'SELECT',
+                            'busca' => '*',
+                            'tabelas' => 'solicitacao',
+                            'camposCondicionados' => 'email',
+                            'valoresCondicionados' => $this->getNomenclatura(),
+                            'camposOrdenados' => null, //caso não tenha, colocar como null
+                            'ordem' => null //ASC ou DESC
+                        ];
+                        $this->mConexao->CRUD($dados);
+                        
+                        if($this->mConexao->getValidador()){
+                            $this->setValidador(false);
+                            $this->setSNotificacao(new sNotificacao('A14'));
+                        }else{
+                            $this->setValidador(true);
+                        }
+                        
                     }
                 }
             } else {
@@ -87,7 +107,8 @@ class sEmail {
     public function consultar($pagina) {
         //encaminha as buscas de acordo com a origem 
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php') {
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_3.php') {
             $this->setMConexao(new mConexao());
             if ($this->getNomenclaturaLocal() == 'email') {
                 //organiza os dados nos devidos campos
@@ -126,23 +147,23 @@ class sEmail {
             $this->setValidador(true);
         }
     }
-    
+
     public function alterar($pagina) {
         //cria conexão para inserir os dados no BD
-        $this->setMConexao(new mConexao());   
-                
-        if($pagina == 'tMenu1_1_1.php'){    
-                $dados = [
-                    'comando' => 'UPDATE',
-                    'tabela' => 'email',
-                    'camposAtualizar' => $this->getNomeCampo(),
-                    'valoresAtualizar' => $this->getValorCampo(),
-                    'camposCondicionados' => 'idemail',
-                    'valoresCondicionados' => $this->getIdEmail(),
-                ];
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu1_1_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'email',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idemail',
+                'valoresCondicionados' => $this->getIdEmail(),
+            ];
             $this->mConexao->CRUD($dados);
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
-            if($this->mConexao->getValidador()){
+            if ($this->mConexao->getValidador()) {
                 $this->setValidador(true);
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
@@ -212,6 +233,4 @@ class sEmail {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

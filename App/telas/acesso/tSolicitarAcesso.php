@@ -13,20 +13,26 @@ $sConfiguracao = new sConfiguracao();
 //retorno de campo inválidos para notificação
 if(isset($_GET['campo'])){
     $sNotificacao = new sNotificacao($_GET['codigo']);
-    switch ($_GET['campo']) {
-        case 'email':
-            if($_GET['codigo'] == 'S1'){
-                $alertaEmail = ' is-warning';
-            }            
-            break;
-        default:
-            break;
-    }
     
     //cria as variáveis da notificação
     $tipo = $sNotificacao->getTipo();
     $titulo = $sNotificacao->getTitulo();
     $email = $sNotificacao->getMensagem();
+        
+    switch ($_GET['campo']) {
+        case 'email':
+            if($_GET['codigo'] == 'A1'){
+                $alertaEmail = ' is-warning';
+            }            
+            break;
+        case 'telefone':
+            if($_GET['codigo'] == 'A11'){
+                $alertaTelefone = ' is-warning';
+            }            
+            break;
+        default:
+            break;
+    }    
 }
 ?>
 <!DOCTYPE html>
@@ -78,7 +84,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input class="form-control" type="text" name="telefone" id="telefone" placeholder="Telefone pessoal">
+                            <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" placeholder="Telefone pessoal" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-phone"></span>
@@ -184,24 +190,24 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                     </form>
-                    <a href="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>tAcessar.php" class="text-center">Já possuo conta</a>
+                    <a href="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tAcessar.php" class="text-center">Já possuo conta</a>
                 </div>
                 <?php
-                            if(isset($tipo) && isset($titulo) && isset($email)){
-                            echo <<<HTML
-                            <div class="col-mb-3">
-                                <div class="card card-outline card-{$tipo}">
-                                    <div class="card-header">
-                                        <h3 class="card-title">{$titulo}</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        {$email}
-                                    </div>
-                                </div>
-                            </div>
+                if(isset($tipo) && isset($titulo) && isset($email)){
+                echo <<<HTML
+                <div class="col-mb-3">
+                    <div class="card card-outline card-{$tipo}">
+                        <div class="card-header">
+                            <h3 class="card-title">{$titulo}</h3>
+                        </div>
+                        <div class="card-body">
+                            {$email}
+                        </div>
+                    </div>
+                </div>
 HTML;
-                            }       
-                            ?>
+                }       
+                ?>
                 <!-- /.form-box -->
             </div><!-- /.card -->
         </div>
@@ -217,6 +223,16 @@ HTML;
         <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <!--Ajax-->
         <script type="text/javascript" src="<?php echo $sConfiguracao->getDiretorioControleAcesso() ?>jQuery.js"></script>
+        <!--jQuery Mask-->
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
+        <!--input Customs-->
+        <script src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <!-- Page specific script -->
+        <script>
+        $(function(){
+           $('[data-mask]').inputmask();
+        });
+        </script>
         <script>
             $(document).ready(function () {
                 //traz os departamentos de acordo com a secretaria selecionada   
