@@ -37,6 +37,7 @@ class sUsuario {
     private bool $situacao; //alterar no bd
     private string $nomeCampo;
     private string $valorCampo;
+    private int $examinador;
     public sSetor $sSetor;
     public sCoordenacao $sCoordenacao;
     public sDepartamento $sDepartamento;
@@ -296,6 +297,26 @@ class sUsuario {
             
             $this->setValidador($this->mConexao->getValidador());
         }
+        
+        if($pagina == 'tMenu1_3-examinador.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'usuario',
+                'camposCondicionados' => 'idusuario',
+                'valoresCondicionados' => $this->getIdUsuario(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            
+            $this->mConexao->CRUD($dados);
+            foreach ($this->mConexao->getRetorno() as $linha) {
+                $this->setNome($linha['nome']);
+                $this->setSobrenome($linha['sobrenome']);
+            }
+            
+            $this->setValidador($this->mConexao->getValidador());
+        }
     }
 
     public function acessar($pagina) {
@@ -399,7 +420,13 @@ class sUsuario {
             }
         }
     }
-   
+    
+    public function tratarData($data) {
+        $dataTratada = date("d/m/Y H:i:s", strtotime(str_replace('-', '/', $data)));
+        
+        return $dataTratada;
+    }
+    
     public function getIdUsuario(): int {
         return $this->idUsuario;
     }
@@ -470,6 +497,10 @@ class sUsuario {
 
     public function getValorCampo(): string {
         return $this->valorCampo;
+    }
+
+    public function getExaminador(): int {
+        return $this->examinador;
     }
 
     public function getSSetor(): sSetor {
@@ -614,6 +645,10 @@ class sUsuario {
 
     public function setValorCampo(string $valorCampo): void {
         $this->valorCampo = $valorCampo;
+    }
+
+    public function setExaminador(int $examinador): void {
+        $this->examinador = $examinador;
     }
 
     public function setSSetor(sSetor $sSetor): void {

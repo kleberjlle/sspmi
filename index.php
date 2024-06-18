@@ -22,7 +22,20 @@ if(!$manutenção){
         <link rel="stylesheet" href="vendor/almasaeed2010/adminlte/dist/css/adminlte.min.css">
     </head>
     <body class="hold-transition register-page">
-        <div class="register-box">
+        <div class="register-box">                
+            <a class="btn btn-app bg-green" href="App/telas/acesso/tAcessar.php">
+                <span class="badge bg-success"></span>
+                <i class="fas fa-user-check"></i> Possuo Acesso
+            </a>
+            <a class="btn btn-app bg-warning" href="App/telas/acesso/tSolicitarAcesso.php">
+                <span class="badge bg-success"></span>
+                <i class="fas fa-user-clock"></i> Solicitar Acesso
+            </a>
+                
+            
+            
+            
+            <!--
             <div class="register-logo">
                 Quase lá!
             </div>
@@ -69,6 +82,7 @@ if(!$manutenção){
                     </p>
                 </div>
             </div>
+            -->
         </div>
         <!-- jQuery -->
         <script src="vendor/almasaeed2010/adminlte/plugins/jquery/jquery.min.js"></script>

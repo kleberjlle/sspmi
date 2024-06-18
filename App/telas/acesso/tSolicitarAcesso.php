@@ -131,7 +131,7 @@ if(isset($_GET['campo'])){
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-house-user"></span>
+                                    <span class="fas fa-building"></span>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@ if(isset($_GET['campo'])){
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-house-user"></span>
+                                    <span class="fas fa-building"></span>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +151,7 @@ if(isset($_GET['campo'])){
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-house-user"></span>
+                                    <span class="fas fa-building"></span>
                                 </div>
                             </div>
                         </div>

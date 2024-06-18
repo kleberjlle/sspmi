@@ -71,7 +71,6 @@ class mConexao {
         //QA - fim da área de testes
 
         $resultado = $this->conexao->query($query);
-
         //tomada de decisão de acordo com o(s) campo(s)
         switch ($dados['tabelas']) {
             case 'email':

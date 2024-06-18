@@ -35,6 +35,7 @@ if (isset($_POST['pagina'])) {
     isset($_POST['setor']) ? $setor = $_POST['setor'] : $setor = '';
     isset($_POST['cargo']) ? $cargo = $_POST['cargo'] : $cargo = '';
     isset($_POST['termo']) ? $termo = 1 : $termo = 0;
+    $situacao = 0;
     
     //tratamento de campos
     $sTelefone = new sTelefone(0, 0, '0');
@@ -62,6 +63,7 @@ if (isset($_POST['pagina'])) {
     alimentaHistorico($pagina, $acao, 'setor', $valorCampoAnterior, $setor, $idUsuario);
     alimentaHistorico($pagina, $acao, 'cargo', $valorCampoAnterior, $cargo, $idUsuario);
     alimentaHistorico($pagina, $acao, 'termo', $valorCampoAnterior, $termo, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuario);
     
     $inserir = [
         'nome' => $nome,
@@ -74,7 +76,8 @@ if (isset($_POST['pagina'])) {
         'departamento_iddepartamento' => $departamento,
         'coordenacao_idcoordenacao' => $coordenacao,
         'setor_idsetor' => $setor,
-        'cargo_idcargo' => $cargo
+        'cargo_idcargo' => $cargo,
+        'situacao' => $situacao,
     ];
 
     //verifica se o email já não está registrado
@@ -98,6 +101,7 @@ if (isset($_POST['pagina'])) {
         $sUsuario->setIdCoordenacao($coordenacao);
         $sUsuario->setIdSetor($setor);
         $sUsuario->setIdCargo($cargo);
+        $sUsuario->setSituacao($situacao);
                 
         //insere os dados no bd
         $sUsuario->inserir('sSolicitarAcesso.php');
