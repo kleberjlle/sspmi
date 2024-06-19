@@ -64,7 +64,7 @@ class sUsuario {
     public function consultar($pagina) {
         //busca os dados do usuário no BD
         $this->setMConexao(new mConexao());
-        
+
         //tomada de decisão de acordo com a página
         if ($pagina == 'tAcessar.php') {
             $dados = [
@@ -131,7 +131,7 @@ class sUsuario {
 
                 $this->setSSecretaria(new sSecretaria($idSecretaria));
                 $this->sSecretaria->consultar($pagina);
-                
+
                 if (!is_null($idTelefoneUsuario)) {
                     $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
                     $this->sTelefoneUsuario->consultar($pagina);
@@ -267,23 +267,73 @@ class sUsuario {
                 //QA - fim da área de testes
             }
         }
-        
-        if($pagina == 'tMenu1_2.php'){
+
+        if ($pagina == 'tMenu1_2.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'usuario',
                 'camposCondicionados' => '',
                 'valoresCondicionados' => '',
+                'camposOrdenados' => 'idusuario', //caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];
+            $this->mConexao->CRUD($dados);
+
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tMenu1_2_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'usuario',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null
             ];
             $this->mConexao->CRUD($dados);
-            
             $this->setValidador($this->mConexao->getValidador());
+
+            foreach ($this->mConexao->getRetorno() as $linha) {
+                $this->setNome($linha['nome']);
+                $this->setSobrenome($linha['sobrenome']);
+                $this->setSexo($linha['sexo']);
+                $this->setImagem($linha['imagem']);
+                $this->setSituacao($linha['situacao']);
+                if (strlen($linha['setor_idsetor']) > 0) {
+                    $this->setIdSetor($linha['setor_idsetor']);
+                }else{
+                    $this->setIdSetor(0);
+                }
+                if (strlen($linha['coordenacao_idcoordenacao']) > 0) {
+                    $this->setIdCoordenacao($linha['coordenacao_idcoordenacao']);
+                }else{
+                    $this->setIdCoordenacao(0);
+                }
+                if(strlen($linha['departamento_iddepartamento']) > 0){
+                    $this->setIdDepartamento($linha['departamento_iddepartamento']);
+                }else{
+                    $this->setIdDepartamento(0);
+                }
+                $this->setIdSecretaria($linha['secretaria_idsecretaria']);
+                if(strlen($linha['telefone_idtelefone']) > 0){
+                    $this->setTelefone($linha['telefone_idtelefone']);
+                }else{
+                    $this->setTelefone(0);
+                }
+                $this->setEmail($linha['email_idemail']);
+                
+                $this->setSCargo(new sCargo($linha['cargo_idcargo']));
+                $this->sCargo->consultar('tMenu1_2_1.php');
+                                
+                $this->setSPermissao(new sPermissao($linha['permissao_idpermissao']));
+                $this->sPermissao->consultar('tMenu1_2_1.php');
+            }
         }
-        
-        if($pagina == 'tMenu1_3.php'){
+
+        if ($pagina == 'tMenu1_3.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -294,11 +344,11 @@ class sUsuario {
                 'ordem' => null
             ];
             $this->mConexao->CRUD($dados);
-            
+
             $this->setValidador($this->mConexao->getValidador());
         }
-        
-        if($pagina == 'tMenu1_3-examinador.php'){
+
+        if ($pagina == 'tMenu1_3-examinador.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -308,13 +358,13 @@ class sUsuario {
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null
             ];
-            
+
             $this->mConexao->CRUD($dados);
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $this->setNome($linha['nome']);
                 $this->setSobrenome($linha['sobrenome']);
             }
-            
+
             $this->setValidador($this->mConexao->getValidador());
         }
     }
@@ -324,53 +374,53 @@ class sUsuario {
             header('Location: ./tPainel.php');
         }
     }
-    
+
     public function verificarNome($nome) {
         //verifica se tem letras e espaço
         $caracterValido = !!preg_match('|^[\pL\s]+$|u', $nome);
-        if(mb_strlen($nome) < 2 ||
-            mb_strlen($nome) > 20){
+        if (mb_strlen($nome) < 2 ||
+                mb_strlen($nome) > 20) {
             $this->setValidador(false);
             $this->setSNotificacao(new sNotificacao('A8'));
-        }else if(!$caracterValido){
+        } else if (!$caracterValido) {
             $this->setValidador(false);
             $this->setSNotificacao(new sNotificacao('A9'));
-        }else{
+        } else {
             $this->setValidador(true);
-        }        
+        }
     }
-    
+
     public function verificarSobrenome($sobrenome) {
         //verifica se tem letras e espaço
         $caracterValido = !!preg_match('|^[\pL\s]+$|u', $sobrenome);
-        if(mb_strlen($sobrenome) < 2 ||
-            mb_strlen($sobrenome) > 100){
+        if (mb_strlen($sobrenome) < 2 ||
+                mb_strlen($sobrenome) > 100) {
             $this->setValidador(false);
             $this->setSNotificacao(new sNotificacao('A8'));
-        }else if(!$caracterValido){
+        } else if (!$caracterValido) {
             $this->setValidador(false);
             $this->setSNotificacao(new sNotificacao('A9'));
-        }else{
+        } else {
             $this->setValidador(true);
-        }        
+        }
     }
-    
+
     public function alterar($pagina) {
         //cria conexão para inserir os dados no BD
-        $this->setMConexao(new mConexao());   
-                
-        if($pagina == 'tMenu1_1_1.php'){    
-                $dados = [
-                    'comando' => 'UPDATE',
-                    'tabela' => 'usuario',
-                    'camposAtualizar' => $this->getNomeCampo(),
-                    'valoresAtualizar' => $this->getValorCampo(),
-                    'camposCondicionados' => 'idusuario',
-                    'valoresCondicionados' => $this->getIdUsuario(),
-                ];
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu1_1_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'usuario',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idusuario',
+                'valoresCondicionados' => $this->getIdUsuario(),
+            ];
             $this->mConexao->CRUD($dados);
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
-            if($this->mConexao->getValidador()){
+            if ($this->mConexao->getValidador()) {
                 $this->setValidador(true);
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
@@ -380,53 +430,53 @@ class sUsuario {
     public function inserir($pagina) {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
-        
-        if($pagina == 'sSolicitarAcesso.php'){
-                $dados = [
-                    'comando' => 'INSERT INTO',
-                    'tabela' => 'solicitacao',
-                    'camposInsercao' => [
-                        'nome',
-                        'sobrenome',
-                        'sexo',
-                        'telefone',
-                        'whatsApp',
-                        'email',
-                        'secretaria_idsecretaria',
-                        'departamento_iddepartamento',
-                        'coordenacao_idcoordenacao',
-                        'setor_idsetor',
-                        'cargo_idcargo'
-                    ],                    
-                    'valoresInsercao' => [
-                        $this->getNome(),
-                        $this->getSobrenome(),
-                        $this->getSexo(),
-                        $this->getTelefone(),
-                        $this->getWhatsApp(),
-                        $this->getEmail(),
-                        $this->getIdSecretaria(),
-                        $this->getIdDepartamento(),
-                        $this->getIdCoordenacao(),
-                        $this->getIdSetor(),
-                        $this->getIdCargo()
-                    ]
-                ];
+
+        if ($pagina == 'sSolicitarAcesso.php') {
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'solicitacao',
+                'camposInsercao' => [
+                    'nome',
+                    'sobrenome',
+                    'sexo',
+                    'telefone',
+                    'whatsApp',
+                    'email',
+                    'secretaria_idsecretaria',
+                    'departamento_iddepartamento',
+                    'coordenacao_idcoordenacao',
+                    'setor_idsetor',
+                    'cargo_idcargo'
+                ],
+                'valoresInsercao' => [
+                    $this->getNome(),
+                    $this->getSobrenome(),
+                    $this->getSexo(),
+                    $this->getTelefone(),
+                    $this->getWhatsApp(),
+                    $this->getEmail(),
+                    $this->getIdSecretaria(),
+                    $this->getIdDepartamento(),
+                    $this->getIdCoordenacao(),
+                    $this->getIdSetor(),
+                    $this->getIdCargo()
+                ]
+            ];
             $this->mConexao->CRUD($dados);
             //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
-            if($this->mConexao->getValidador()){
+            if ($this->mConexao->getValidador()) {
                 $this->setValidador(true);
                 $this->setSNotificacao(new sNotificacao('S3'));
             }
         }
     }
-    
+
     public function tratarData($data) {
         $dataTratada = date("d/m/Y H:i:s", strtotime(str_replace('-', '/', $data)));
-        
+
         return $dataTratada;
     }
-    
+
     public function getIdUsuario(): int {
         return $this->idUsuario;
     }
@@ -722,6 +772,4 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

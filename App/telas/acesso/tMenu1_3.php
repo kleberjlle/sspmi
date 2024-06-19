@@ -51,24 +51,36 @@ $sUsuario->consultar('tMenu1_3.php');
                         $sCargo = new sCargo($value['cargo_idcargo']);
                         $sCargo->consultar('tMenu1_3.php');
                         $cargo = $sCargo->getNomenclatura();
-                        $dataHora = $value['dataHora'];
-                        $dataHoraTratada = $sUsuario->tratarData($dataHora);
-                        //obtem os dados do usuário que validou ou não acesso
-                        $idExaminador = intval($value['examinador']);
-                        $sExaminador = new sUsuario();
-                        $sExaminador->setIdUsuario($idExaminador);
-                        $sExaminador->consultar('tMenu1_3-examinador.php');
-                        $nomeExaminador = $sExaminador->getNome();
+                        $dataHoraSolicitacao = $value['dataHoraSolicitacao'];
+                        $dataHoraSolicitacaoTratada = $sUsuario->tratarData($dataHoraSolicitacao);
+                        
+                        if(!empty($value['dataHoraExaminador'])){
+                            $dataHoraExaminador = $value['dataHoraExaminador'];
+                            
+                            $sExaminador = new sUsuario();
+                            $dataHoraExaminador = $sExaminador->tratarData($dataHoraExaminador);
+                        }
+                        
+                        //obtem os dados do usuário que solicitou acesso
+                        if(!empty($value['examinador'])){
+                            $idExaminador = $value['examinador'];
+                            
+                            $sExaminador = new sUsuario();
+                            $sExaminador->setIdUsuario($idExaminador);
+                            $sExaminador->consultar('tMenu1_3-examinador.php');
+                            $nomeExaminador = $sExaminador->getNome().' '.$sExaminador->getSobrenome();                            
+                        }
+                        
                         
                         //verifica se o registro já foi aprovado e por quem
                         if($value['examinador']){
                             if($value['situacao']){
-                                $situacao = '<span class="bg-green"> aprovada</span><br /><i>por '.$nomeExaminador.'</i>';
+                                $situacao = '<span class="bg-green"> aprovada</span><br /><i>por '.$nomeExaminador.'<br />em '.$dataHoraExaminador.'</i>';
                             }else{
-                                $situacao = '<span class="bg-red">reprovada</span><br /><i>por '.$nomeExaminador.'</i>';
+                                $situacao = '<span class="bg-red">reprovada</span><br /><i>por '.$nomeExaminador.'<br />em '.$dataHoraExaminador.'</i>';
                             }
                         }else{
-                            $situacao = '<span class="bg-info">aguardando análise</span><br /><i>desde '.$dataHoraTratada.'</i>';
+                            $situacao = '<span class="bg-info">aguardando análise</span><br /><i>desde '.$dataHoraSolicitacaoTratada.'</i>';
                         }
 
                         //se tiver um departamento vinculado, retorna os dados
@@ -208,8 +220,8 @@ $sUsuario->consultar('tMenu1_3.php');
                                 {$situacao}
                             </td>
                             <td>
-                                <a href="tPainel.php?menu=1_1_1&id=2">
-                                    <i class=\"fas fa-edit mr-1\"></i>
+                                <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&id=2">
+                                    <i class="fas fa-edit mr-1"></i>
                                 </a>
                             </td>
                         </tr>

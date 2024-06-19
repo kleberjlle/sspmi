@@ -17,6 +17,7 @@ class sSecretaria {
         $this->setMConexao(new mConexao());
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php'){                            
             $dados = [
                 'comando' => 'SELECT',

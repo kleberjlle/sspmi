@@ -190,7 +190,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                     </form>
-                    <a href="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tAcessar.php" class="text-center">Já possuo conta</a>
+                    <a href="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tAcessar.php" class="text-center">Já possuo acesso</a>
                 </div>
                 <?php
                 if(isset($tipo) && isset($titulo) && isset($email)){

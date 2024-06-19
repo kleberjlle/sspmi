@@ -31,14 +31,15 @@ $sUsuario->consultar('tMenu1_2.php');
                     <th>Telefones</th>
                     <th>E-mails</th>
                     <th>Situação</th>
-                    <th>Solicitação</th>
                     <th>Editar</th>
                 </tr>
             </thead>
             <tbody>
             <?php
+            if($sUsuario->getValidador()){
                 foreach ($sUsuario->mConexao->getRetorno() as $key => $value) {
-                    //consultar os dados do usuário e armazenar em variáveis locais                    
+                    //consultar os dados do usuário e armazenar em variáveis locais    
+                    $idUsuario = $value['idusuario'];
                     $nome = $value['nome'].' '.$value['sobrenome'];
                     $sSecretaria = new sSecretaria($value['secretaria_idsecretaria']);
                     $sSecretaria->consultar('tMenu1_2.php');
@@ -164,17 +165,53 @@ $sUsuario->consultar('tMenu1_2.php');
                     }
                     
                     
-                    echo "<tr>";
-                        echo "<td>{$nome}</td>";
-                        echo "<td>{$cargo}</td>";
-                        echo "<td>{$secretaria}<br / >{$departamento}<br />{$coordenacao}<br />{$setor}</td>";
-                        echo "<td><i class=\"fas fa-building mr-1\"></i> {$whatsAppSecretaria} {$telefoneSecretaria}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppDepartamento} {$telefoneDepartamento}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppCoordenacao} {$telefoneCoordenacao}<br /><i class=\"fas fa-building mr-1\"></i> {$whatsAppSetor} {$telefoneSetor}<br /><i class=\"fas fa-user-alt mr-1\"></i> {$whatsAppUsuario} {$telefoneUsuario}</td>";
-                        echo "<td>{$emailSecretaria}<br />{$emailDepartamento}<br />{$emailCoordenacao}<br />{$emailSetor}<br />{$emailUsuario}<br /></td>";
-                        echo "<td>{$situacao}</td>";
-                        echo "<td><span class=\"bg-green\">aprovada</span> <i>por Kleber Pereira de Almeida</i></td>";
-                        echo "<td><a href=\"tPainel.php?menu=1_1_1&id=2\"><i class=\"fas fa-edit mr-1\"></i></a></td>";
-                    echo "</tr>";
+                    echo <<<HTML
+                    <tr>
+                        <td>{$nome}</td>
+                        <td>{$cargo}</td>
+                        <td>
+                            {$secretaria}<br />
+                            {$departamento}<br />
+                            {$coordenacao}<br />
+                            {$setor}</td>
+                        </td>
+                        <td>
+                            <i class="fas fa-building mr-1"></i> {$whatsAppSecretaria} {$telefoneSecretaria}<br />
+                            <i class="fas fa-building mr-1"></i> {$whatsAppDepartamento} {$telefoneDepartamento}<br />
+                            <i class="fas fa-building mr-1"></i> {$whatsAppCoordenacao} {$telefoneCoordenacao}<br />
+                            <i class="fas fa-building mr-1"></i> {$whatsAppSetor} {$telefoneSetor}<br />
+                            <i class="fas fa-user-alt mr-1"></i> {$whatsAppUsuario} {$telefoneUsuario}
+                        </td>
+                        <td>
+                            {$emailSecretaria}<br />
+                            {$emailDepartamento}<br />
+                            {$emailCoordenacao}<br />
+                            {$emailSetor}<br />
+                            {$emailUsuario}<br />
+                        </td>
+                        <td>{$situacao}</td>
+                        <td>
+                            <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}">
+                                <i class="fas fa-edit mr-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+HTML;
                 }
+            }else{
+                echo <<<HTML
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+HTML;
+            }
+                
             ?>
             </tbody>
             <tfoot>
@@ -185,7 +222,6 @@ $sUsuario->consultar('tMenu1_2.php');
                     <th>Telefones</th>
                     <th>E-mails</th>
                     <th>Situação</th>
-                    <th>Solicitação</th>
                     <th>Editar</th>
                 </tr>
             </tfoot>

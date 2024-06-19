@@ -150,6 +150,7 @@ echo "</pre>";
                                 $menu == '1_1' ||
                                 $menu == '1_1_1' ||
                                 $menu == '1_2' ||
+                                $menu == '1_2_1' ||
                                 $menu == '1_3' ? 
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
@@ -188,7 +189,8 @@ HTML;
 HTML;
                                 //abre os menus da condição
                                 if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                                    $menu == '1_2' ?
+                                    $menu == '1_2' ||
+                                    $menu == '1_2_1' ?
                                     $atributo = ' active' :
                                     $atributo = '';
 
@@ -534,6 +536,9 @@ HTML;
                             break;
                         case "1_2":
                             require_once './tMenu1_2.php';
+                            break;
+                        case "1_2_1":
+                            require_once './tMenu1_2_1.php';
                             break;
                         case "1_3":
                             require_once './tMenu1_3.php';
