@@ -108,6 +108,7 @@ class sEmail {
         //encaminha as buscas de acordo com a origem 
         if ($pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php') {
             $this->setMConexao(new mConexao());
             if ($this->getNomenclaturaLocal() == 'email') {

@@ -10,7 +10,8 @@ use App\sistema\acesso\{
     sCargo,
     sPermissao,
     sNotificacao,
-    sTelefone
+    sTelefone,
+    sEmail
 };
 
 //QA - início da área de testes
@@ -38,6 +39,28 @@ $sUsuario = new sUsuario();
 $sUsuario->setNomeCampo('idusuario');
 $sUsuario->setValorCampo($idUsuario);
 $sUsuario->consultar('tMenu1_2_1.php');
+$nome = $sUsuario->getNome();
+$sobrenome = $sUsuario->getSobrenome();
+$sexo = $sUsuario->getSexo();
+$idTelefone = $sUsuario->getTelefone();
+if($idTelefone != 0){
+    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');     
+    $sTelefone->consultar('tMenu1_2_1.php');
+    $telefone = $sTelefone->getNumero();
+    $telefoneTratado = $sTelefone->tratarTelefone($telefone);
+    if($sTelefone->getWhatsApp()){
+        $whatsApp = true;
+    }else{
+        $whatsApp = false;
+    }
+}else{
+    $telefoneTratado = '';
+    $whatsApp = false;
+}
+
+$sEmail = new sEmail($sUsuario->getIdEmail(), 'email');
+$sEmail->consultar('tMenu1_2_1.php');
+$email = $sEmail->getNomenclatura();
 
 $sSecretaria = new sSecretaria($sUsuario->getIdSecretaria()); //id zero apenas para construir o objeto
 $sSecretaria->consultar('tMenu1_2_1.php');
@@ -56,16 +79,6 @@ if($sUsuario->getIdSetor() != 0){
     $sSetor = new sSetor($sUsuario->getIdSetor()); //id zero apenas para construir o objeto
     $sSetor->consultar('tMenu1_2_1.php');
 }
-
-if($sUsuario->getTelefone() != 0){
-    $sTelefone = new sTelefone($sUsuario->getTelefone(), 0, 'usuario'); //id zero apenas para construir o objeto
-    $sTelefone->consultar('tMenu1_2_1.php');
-}
-
-$sCargo = new sCargo($sUsuario->getIdCargo());
-$sCargo->consultar('tMenu1_2_1.php');
-
-
 //retorno de campo inválidos para notificação
 if(isset($_GET['campo'])){
     $sNotificacao = new sNotificacao($_GET['codigo']);
@@ -157,37 +170,37 @@ if(isset($_GET['campo'])){
                             -->
                             <div class="form-group col-md-1">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $sUsuario->getNome(); ?>" required="">
+                                <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $nome; ?>" required="">
                             </div>
                             <div class="form-group col-md-1">
                                 <label for="sobrenome">Sobrenome</label>
-                                <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $sUsuario->getSobrenome(); ?>" required="">
+                                <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $sobrenome; ?>" required="">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Sexo</label>
                                     <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="">
-                                        <option value="Masculino" <?php echo $sUsuario->getSexo() == 'M' ? 'selected=""' : ''; ?>>Masculino</option>
-                                        <option value="Feminino" <?php echo $sUsuario->getSexo() == 'F' ? 'selected=""' : ''; ?>>Feminino</option>
+                                        <option value="Masculino" <?php echo $sexo == 'M' ? 'selected=""' : ''; ?>>Masculino</option>
+                                        <option value="Feminino" <?php echo $sexo == 'F' ? 'selected=""' : ''; ?>>Feminino</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="telefoneUsuario">Telefone Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $sUsuario->getTelefone(); ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $telefoneTratado; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $sUsuario->getWhatsApp() ? 'checked=""' : '';?>>
-                                        <label class="custom-control-label" for="whatsAppUsuario"><?php echo $sUsuario->getWhatsApp() ? 'Sim' : 'Não'; ?></label>
+                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $whatsApp ? 'checked=""' : '';?>>
+                                        <label class="custom-control-label" for="whatsAppUsuario"><?php echo $whatsApp ? 'Sim' : 'Não'; ?></label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="emailUsuario">Email Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $sUsuario->getEmail(); ?>" required="">
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $email; ?>" required="">
                             </div>
                         </div>
                     </div>

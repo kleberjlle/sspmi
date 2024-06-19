@@ -29,6 +29,7 @@ class sUsuario {
     private int $idCoordenacao;
     private int $idSetor;
     private int $idCargo;
+    private int $idPermissao;
     private bool $validador;
     private string $nome;
     private string $sobrenome;
@@ -318,18 +319,18 @@ class sUsuario {
                     $this->setIdDepartamento(0);
                 }
                 $this->setIdSecretaria($linha['secretaria_idsecretaria']);
-                if(strlen($linha['telefone_idtelefone']) > 0){
+                 
+                if(!empty($linha['telefone_idtelefone'])){
                     $this->setTelefone($linha['telefone_idtelefone']);
                 }else{
                     $this->setTelefone(0);
                 }
-                $this->setEmail($linha['email_idemail']);
+                  
+                $this->setIdEmail($linha['email_idemail']);
                 
-                $this->setSCargo(new sCargo($linha['cargo_idcargo']));
-                $this->sCargo->consultar('tMenu1_2_1.php');
+                $this->setIdCargo($linha['cargo_idcargo']);
                                 
-                $this->setSPermissao(new sPermissao($linha['permissao_idpermissao']));
-                $this->sPermissao->consultar('tMenu1_2_1.php');
+                $this->setIdPermissao($linha['permissao_idpermissao']);
             }
         }
 
@@ -517,6 +518,10 @@ class sUsuario {
         return $this->idCargo;
     }
 
+    public function getIdPermissao(): int {
+        return $this->idPermissao;
+    }
+
     public function getValidador(): bool {
         return $this->validador;
     }
@@ -665,6 +670,10 @@ class sUsuario {
         $this->idCargo = $idCargo;
     }
 
+    public function setIdPermissao(int $idPermissao): void {
+        $this->idPermissao = $idPermissao;
+    }
+
     public function setValidador(bool $validador): void {
         $this->validador = $validador;
     }
@@ -772,4 +781,6 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }
