@@ -17,7 +17,6 @@ class sCargo {
         $this->setMConexao(new mConexao());
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php'){                             
             $dados = [
                 'comando' => 'SELECT',
@@ -36,7 +35,8 @@ class sCargo {
         } 
         
         if( $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tSolicitarAcesso.php'){                             
+            $pagina == 'tSolicitarAcesso.php' ||
+            $pagina == 'tMenu1_2_1.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
