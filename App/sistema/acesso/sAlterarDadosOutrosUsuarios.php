@@ -9,7 +9,8 @@ use App\sistema\acesso\{
     sHistorico,
     sUsuario,
     sTelefone,
-    sEmail
+    sEmail,
+    sCargo
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -37,10 +38,10 @@ if (isset($_POST['pagina'])) {
     $sexo = $_POST['sexo'];
     $telefone = $_POST['telefoneUsuario'];
     isset($_POST['whatsAppUsuario']) ? $whatsApp = 1 : $whatsApp = 0;
-    $emailUsuario = $_POST['emailUsuario'];
+    $email = $_POST['emailUsuario'];
     $idCargo = $_POST['cargo'];
     $idPermissao = $_POST['permissao'];
-    $idScretaria = $_POST['secretaria'];
+    $idSecretaria = $_POST['secretaria'];
     $idDepartamento = $_POST['departamento'];
     $idCoordenacao = $_POST['coordenacao'];
     $idSetor = $_POST['setor'];
@@ -57,6 +58,12 @@ if (isset($_POST['pagina'])) {
     $sTelefone = new sTelefone($sUsuario->getTelefone(), 0, 'usuario');
     $sTelefone->consultar('tMenu1_2_1.php');
     $telefoneTratado = $sTelefone->tratarTelefone($telefone);
+    
+    $sEmail = new sEmail($sUsuario->getIdEmail(), 'email');
+    $sEmail->consultar('tMenu1_2_1.php');
+    
+    $sCargo = new sCargo($idCargo);
+    $sCargo->consultar('tMenu1_2_1.php');
         
     //etapa3 - verificar campos alterados
     if ($sUsuario->getNome() != $nome) {
@@ -133,50 +140,95 @@ if (isset($_POST['pagina'])) {
         $atualizar['whatsApp'] = $whatsApp;
     }
 
-    if ($_SESSION['credencial']['emailUsuario'] != $emailUsuario) {
+    if ($sEmail->getNomenclatura() != $email) {
         //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['emailUsuario'];
-        alimentaHistorico($pagina, $acao, 'nomenclatura', $valorCampoAnterior, $emailUsuario, $idUsuario);
+        $valorCampoAnterior = $sEmail->getNomenclatura();
+        alimentaHistorico($pagina, $acao, 'nomenclatura', $valorCampoAnterior, $email, $idUsuarioSolicitante);
         
-        //etapa2 - validação de conteúdo
-        $sEmailUsuario = new sEmail($emailUsuario, 'tMenu1_1_1.php');
-        $sEmailUsuario->verificar('tMenu1_1_1.php');
-        
-        if (!$sEmailUsuario->getValidador()) {
+        //etapa4 - validação de conteúdo
+        $sEmail->setNomenclatura($email);
+        $sEmail->verificar('tMenu1_2_1.php');  
+        if (!$sEmail->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=email&codigo={$sEmail->getSNotificacao()->getCodigo()}");
             exit();
         } else {
-            //etapa3 - atualizar os dados
+            //etapa5 - atualizar os dados
             $alteracao = true;
-            $atualizar['emailUsuario'] = $emailUsuario;
+            $atualizar['email'] = $email;
         }
     }
-    /* área para envios futuros
-    if ($_SESSION['credencial']['idPermissao'] != $idPermissao) {
+    
+    if ($sUsuario->getIdCargo() != $idCargo) {
         //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['idPermissao'];
+        $valorCampoAnterior = $sUsuario->getIdCargo();
+        alimentaHistorico($pagina, $acao, 'cargo_idcargo', $valorCampoAnterior, $idCargo, $idUsuarioSolicitante);
+
+        //etapa4 - atualizar os dados
+        $alteracao = true;
+        $atualizar['idCargo'] = $idCargo;
+    }    
+    
+    if ($sUsuario->getIdPermissao() != $idPermissao) {
+        //insere dados na tabela histórico
+        $valorCampoAnterior = $idPermissao;
         alimentaHistorico($pagina, $acao, 'permissao_idpermissao', $valorCampoAnterior, $idPermissao, $idUsuario);
 
-        //etapa3 - atualizar os dados
-        $sPermissaoUsuario = new sUsuario();
+        //etapa4 - atualizar os dados
         $alteracao = true;
         $atualizar['idPermissao'] = $idPermissao;
     }
-
-    if ($_SESSION['credencial']['situacao'] != $situacao) {
+    
+    if ($sUsuario->getSituacao() != $situacao) {
         //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['situacao'];
-        alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuario);
+        $valorCampoAnterior = $sUsuario->getSituacao();
+        alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuarioSolicitante);
 
-        //etapa3 - atualizar os dados
-        $sSituacaoUsuario = new sUsuario();
-        $situacao == 'Ativo' ? $situacao = 1 : $situacao = 0;
+        //etapa4 - atualizar os dados
         $alteracao = true;
         $atualizar['situacao'] = $situacao;
     }
-     * 
-     */
+    
+    if ($sUsuario->getIdSecretaria() != $idSecretaria) {
+        //insere dados na tabela histórico
+        $valorCampoAnterior = $sUsuario->getIdSecretaria();
+        alimentaHistorico($pagina, $acao, 'secretaria_idsecretaria', $valorCampoAnterior, $idSecretaria, $idUsuarioSolicitante);
+
+        //etapa4 - atualizar os dados
+        $alteracao = true;
+        $atualizar['secretaria'] = $idSecretaria;
+    }
+    
+    if ($sUsuario->getIdDepartamento() != $idDepartamento && $idDepartamento != 0) {
+        //insere dados na tabela histórico
+        $valorCampoAnterior = $sUsuario->getIdDepartamento();
+        alimentaHistorico($pagina, $acao, 'departamento_iddepartamento', $valorCampoAnterior, $idDepartamento, $idUsuarioSolicitante);
+
+        //etapa4 - atualizar os dados
+        $alteracao = true;
+        $atualizar['departamento'] = $idDepartamento;
+    }
+    
+    if ($sUsuario->getIdCoordenacao() != $idCoordenacao && $idCoordenacao != 0) {
+        //insere dados na tabela histórico
+        $valorCampoAnterior = $sUsuario->getIdCoordenacao();
+        alimentaHistorico($pagina, $acao, 'coordenacao_idcoordenacao', $valorCampoAnterior, $idCoordenacao, $idUsuarioSolicitante);
+
+        //etapa4 - atualizar os dados
+        $alteracao = true;
+        $atualizar['coordenacao'] = $idCoordenacao;
+    }
+    
+    if ($sUsuario->getIdSetor() != $idSetor && $idSetor != 0) {
+        //insere dados na tabela histórico
+        $valorCampoAnterior = $sUsuario->getIdSetor();
+        alimentaHistorico($pagina, $acao, 'setor_idsetor', $valorCampoAnterior, $idSetor, $idUsuarioSolicitante);
+
+        //etapa4 - atualizar os dados
+        $alteracao = true;
+        $atualizar['setor'] = $idSetor;
+    }
+    
     //QA - início da área de testes
     /* verificar o que tem no objeto
 
@@ -190,40 +242,36 @@ if (isset($_POST['pagina'])) {
       exit();
       // */
     //QA - fim da área de testes
+    
+    
     if ($alteracao == false) {
         //se não tem campo para validar
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}");
     }else{        
         //se tem campos para atualizar
         if (array_key_exists('nome', $atualizar)) {
             //atualize o campo nome
-            $sNomeUsuario->setIdUsuario($idUsuario);
-            $sNomeUsuario->setNomeCampo('nome');
-            $sNomeUsuario->setValorCampo($nome);
-            $sNomeUsuario->alterar('tMenu1_1_1.php');
-            //atualize a sessão nome
-            $_SESSION['credencial']['nome'] = $nome;
-            
-            if ($sNomeUsuario->mConexao->getValidador()) {
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('nome');
+            $sUsuario->setValorCampo($nome);
+            $sUsuario->alterar('tMenu1_2_1.php');
+                        
+            if ($sUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=nome&codigo={$sNomeUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=nome&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
         if (array_key_exists('sobrenome', $atualizar)) {
             //atualize o campo nome
-            $sSobrenomeUsuario->setIdUsuario($idUsuario);
-            $sSobrenomeUsuario->setNomeCampo('sobrenome');
-            $sSobrenomeUsuario->setValorCampo($sobrenome);
-            $sSobrenomeUsuario->alterar('tMenu1_1_1.php');
-            
-            //atualize a sessão nome
-            $_SESSION['credencial']['sobrenome'] = $sobrenome;
-            
-            if ($sSobrenomeUsuario->mConexao->getValidador()) {
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('sobrenome');
+            $sUsuario->setValorCampo($sobrenome);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            if ($sUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sobrenome&codigo={$sSobrenomeUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=sobrenome&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         

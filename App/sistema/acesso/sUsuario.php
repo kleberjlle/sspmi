@@ -410,7 +410,8 @@ class sUsuario {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
 
-        if ($pagina == 'tMenu1_1_1.php') {
+        if ($pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'usuario',

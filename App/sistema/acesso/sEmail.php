@@ -29,8 +29,9 @@ class sEmail {
     public function verificar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_1_1.php' ||
-                $pagina == 'tSolicitarAcesso.php') {
+            $pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tSolicitarAcesso.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
                 //verifica se consta o email no BD               
@@ -94,6 +95,16 @@ class sEmail {
                             $this->setValidador(true);
                         }
                         
+                    }
+                }
+                
+                if ($pagina == 'tMenu1_2_1.php') {
+                    //se localizou o registro do no BD e o registro for diferento do email atual
+                    if ($this->mConexao->getValidador()) {
+                        $this->setValidador(false);
+                        $this->setSNotificacao(new sNotificacao('A12'));
+                    } else {
+                        $this->setValidador(true);
                     }
                 }
             } else {

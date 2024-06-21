@@ -121,7 +121,7 @@ if ($idTelefone != 0) {
 
 $sEmail = new sEmail($sUsuario->getIdEmail(), 'email');
 $sEmail->consultar('tMenu1_2_1.php');
-$email = $sEmail->getNomenclatura();
+$emailUsuario = $sEmail->getNomenclatura();
 
 $sCargo = new sCargo($idCargo);
 $sCargo->consultar('tMenu1_2_1.php');
@@ -170,7 +170,7 @@ if (isset($_GET['campo'])) {
             break;
         case 'sobrenome':
             if ($_GET['codigo'] == 'S1') {
-                $alertaNome = ' is-valid';
+                $alertaSobrenome = ' is-valid';
             } else {
                 $alertaSobrenome = ' is-warning';
             }
@@ -278,7 +278,7 @@ if (isset($_GET['campo'])) {
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="emailUsuario">Email Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $email; ?>" required="">
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $emailUsuario; ?>" required="">
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
