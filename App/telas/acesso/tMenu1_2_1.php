@@ -17,20 +17,80 @@ use App\sistema\acesso\{
 //QA - início da área de testes
 /* verificar o que tem no objeto
 
-echo "<pre>";
-var_dump($_SESSION['credencial']);
-echo "</pre>";
+  echo "<pre>";
+  var_dump($_SESSION['credencial']);
+  echo "</pre>";
 
-// */
+  // */
 //QA - fim da área de testes
-//verifica se tem o método GET['id']
-if (!isset($_GET['id'])) {
-    //solicitar saída com tentativa de violação
-    $sSair = new sSair();
-    $sSair->verificar('0');
-} else {
-    $idUsuario = $_GET['id'];
+
+//verifica se está recebendo $_GET['id'] ou $_GET['campo']
+if (isset($_GET['id']) ||
+    isset($_GET['campo']) ||
+    isset($_GET['codigo'])) {
+    if (isset($_GET['id'])) {
+        $idUsuario = $_GET['id'];
+    } else if (isset($_GET['campo'])) {
+        $idUsuario = $_GET['id'];
+        $sNotificacao = new sNotificacao($_GET['codigo']);
+        switch ($_GET['campo']) {
+            case 'nome':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaNome = ' is-valid';
+                } else {
+                    $alertaNome = ' is-warning';
+                }
+                break;
+            case 'sobrenome':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaNome = ' is-valid';
+                } else {
+                    $alertaSobrenome = ' is-warning';
+                }
+                break;
+            case 'sexo':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaSexo = ' is-valid';
+                } else {
+                    $alertaSexo = ' is-warning';
+                }
+                break;
+            case 'telefone':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaTelefone = ' is-valid';
+                } else {
+                    $alertaTelefone = ' is-warning';
+                }
+                break;
+            case 'email':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaEmail = ' is-valid';
+                } else {
+                    $alertaEmail = ' is-warning';
+                }
+                break;
+            case 'permissao':
+                if ($_GET['codigo'] == 'S1') {
+                    $alertaPermissao = ' is-valid';
+                } else {
+                    $alertaPermissao = ' is-warning';
+                }
+                break;
+            default:
+                break;
+        }
+
+        //cria as variáveis da notificação
+        $tipo = $sNotificacao->getTipo();
+        $titulo = $sNotificacao->getTitulo();
+        $email = $sNotificacao->getMensagem();
+    } else {
+        //solicitar saída com tentativa de violação
+        $sSair = new sSair();
+        $sSair->verificar('0');
+    }
 }
+
 
 $sConfiguracao = new sConfiguracao();
 
@@ -170,7 +230,7 @@ if (isset($_GET['campo'])) {
                             //próxima build
                             <div class="form-group col-md-1">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="<?php //echo $sConfiguracao->getDiretorioPrincipal();      ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="<?php //echo $sConfiguracao->getDiretorioPrincipal();       ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
@@ -198,8 +258,8 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Sexo</label>
                                     <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="">
-                                        <option value="Masculino" <?php echo $sexo == 'M' ? 'selected=""' : ''; ?>>Masculino</option>
-                                        <option value="Feminino" <?php echo $sexo == 'F' ? 'selected=""' : ''; ?>>Feminino</option>
+                                        <option value="M" <?php echo $sexo == 'M' ? 'selected=""' : ''; ?>>Masculino</option>
+                                        <option value="F" <?php echo $sexo == 'F' ? 'selected=""' : ''; ?>>Feminino</option>
                                     </select>
                                 </div>
                             </div>
@@ -224,12 +284,12 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Cargo/ Função</label>
                                     <select class="form-control" name="cargo" id="cargo">
-                                        <?php
-                                        foreach ($sCargo->mConexao->getRetorno() as $value) {
-                                            $idCargo == $value['idcargo'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idcargo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
+<?php
+foreach ($sCargo->mConexao->getRetorno() as $value) {
+    $idCargo == $value['idcargo'] ? $atributo = ' selected' : $atributo = '';
+    echo '<option value="' . $value['idcargo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>  
@@ -237,12 +297,12 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Permissão</label>
                                     <select class="form-control" name="permissao" id="permissao">
-                                        <?php
-                                        foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
-                                            $idPermissao == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
+<?php
+foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
+    $idPermissao == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
+    echo '<option value="' . $value['idpermissao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>
@@ -252,12 +312,12 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Secretaria</label>
                                     <select class="form-control" name="secretaria" id="secretaria">
-                                        <?php
-                                        foreach ($sSecretaria->mConexao->getRetorno() as $value) {
-                                            $idSecretaria == $value['idsecretaria'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
+<?php
+foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+    $idSecretaria == $value['idsecretaria'] ? $atributo = ' selected' : $atributo = '';
+    echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>
@@ -265,16 +325,16 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control" name="departamento" id="departamento">
-                                        <?php
-                                        if (!is_numeric($idDepartamento)) {
-                                            foreach ($sDepartamento->mConexao->getRetorno() as $value) {
-                                                $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
-                                        }
-                                        ?>
+<?php
+if (!is_numeric($idDepartamento)) {
+    foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+        $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
+        echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>
@@ -282,16 +342,16 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Coordenação</label>
                                     <select class="form-control" name="coordenacao" id="coordenacao">
-                                        <?php
-                                        if (!is_numeric($idCoordenacao)) {
-                                            foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
-                                                $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
-                                        }
-                                        ?>
+<?php
+if (!is_numeric($idCoordenacao)) {
+    foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+        $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
+        echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>
@@ -299,16 +359,16 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Setor</label>
                                     <select class="form-control" name="setor" id="setor">
-                                        <?php
-                                        if (!is_numeric($idSetor)) {
-                                            foreach ($sSetor->mConexao->getRetorno() as $value) {
-                                                $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
-                                        }
-                                        ?>
+<?php
+if (!is_numeric($idSetor)) {
+    foreach ($sSetor->mConexao->getRetorno() as $value) {
+        $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
+        echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
                                     </select>
                                 </div>
                             </div>    
@@ -325,11 +385,11 @@ if (isset($_GET['campo'])) {
                             </div>    
                         </div>
                     </div>
-                    <?php
-                    if (isset($tipo) &&
-                            isset($titulo) &&
-                            isset($email)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($email)) {
+    echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -341,8 +401,8 @@ if (isset($_GET['campo'])) {
                         </div>
                     </div>
 HTML;
-                    }
-                    ?>
+}
+?>
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" name="idUsuario" id="idUsuario" value="<?php echo $idUsuario; ?>">
