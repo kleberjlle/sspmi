@@ -32,8 +32,35 @@ if(isset($_POST) && !empty($_POST)){
     
     //Etapa 1 - registrar histórico
     //instancia sHistorico para alimentar a tabela de log
-    $sHistorico1 = new sHistorico(basename($_SERVER['PHP_SELF']), $_POST['acao'], 'email', $_POST['email'], null, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], php_uname(), gethostname(), null);
-    $sHistorico2 = new sHistorico(basename($_SERVER['PHP_SELF']), $_POST['acao'], 'senha', $sSenha->getSenhaCriptografada(), null, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], php_uname(), gethostname(), null);
+    $tratarDados = [
+        'pagina' => basename($_SERVER['PHP_SELF']),
+        'acao' => $_POST['acao'],
+        'campo' => 'email',
+        'valorCampoAtual' => $_POST['email'],
+        'valorCampoAnterior' => null,
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'navegador' => $_SERVER['HTTP_USER_AGENT'],
+        'sistemaOperacional' => php_uname(),
+        'nomeDoDispositivo' => gethostname(),
+        'idUsuario' => null
+    ];
+    $sHistorico = new sHistorico();
+    $sHistorico->inserir('tAcessar.php', $tratarDados);
+    
+    $tratarDados = [
+        'pagina' => basename($_SERVER['PHP_SELF']),
+        'acao' => $_POST['acao'],
+        'campo' => 'senha',
+        'valorCampoAtual' => $sSenha->getSenhaCriptografada(),
+        'valorCampoAnterior' => null,
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'navegador' => $_SERVER['HTTP_USER_AGENT'],
+        'sistemaOperacional' => php_uname(),
+        'nomeDoDispositivo' => gethostname(),
+        'idUsuario' => null
+    ];
+    $sHistorico = new sHistorico();
+    $sHistorico->inserir('tAcessar.php', $tratarDados);
        
     //Etapa2 - validar o campo e-mail
     $sEmail->verificar(basename($_SERVER['PHP_SELF']));
@@ -45,7 +72,7 @@ if(isset($_POST) && !empty($_POST)){
         $sSenha->verificar(basename($_SERVER['PHP_SELF']));
         if($sSenha->getValidador()){
             $sUsuario = new sUsuario();
-            $sUsuario->setIdEmail($sEmail->getIdEmail());
+            $sUsuario->setIdEmail($sEmail->getIdEmail());            
             $sUsuario->consultar(basename($_SERVER['PHP_SELF']));
             if($sUsuario->getValidador()){                
                 //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
@@ -125,7 +152,7 @@ if(isset($_POST) && !empty($_POST)){
                         <div class="row">
                             <!-- /.col -->
                             <div class="col-12">
-                                <input type="hidden" id="acao" name="acao" value="acesso">
+                                <input type="hidden" id="acao" name="acao" value="consultar">
                                 <button type="submit" class="btn btn-primary btn-block">Acessar</button>
                             </div>
                             <!-- /.col -->

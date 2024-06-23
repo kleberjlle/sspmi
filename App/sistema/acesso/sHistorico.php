@@ -15,7 +15,8 @@ class sHistorico{
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
         if( $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tSolicitarAcesso.php'){
+            $pagina == 'tSolicitarAcesso.php' ||
+            $pagina == 'tAcessar.php'){
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

@@ -142,31 +142,7 @@ if (isset($_POST['pagina'])) {
             $atualizar['emailUsuario'] = $emailUsuario;
         }
     }
-    /* área para envios futuros
-    if ($_SESSION['credencial']['idPermissao'] != $idPermissao) {
-        //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['idPermissao'];
-        alimentaHistorico($pagina, $acao, 'permissao_idpermissao', $valorCampoAnterior, $idPermissao, $idUsuario);
-
-        //etapa3 - atualizar os dados
-        $sPermissaoUsuario = new sUsuario();
-        $alteracao = true;
-        $atualizar['idPermissao'] = $idPermissao;
-    }
-
-    if ($_SESSION['credencial']['situacao'] != $situacao) {
-        //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['situacao'];
-        alimentaHistorico($pagina, $acao, 'situacao', $valorCampoAnterior, $situacao, $idUsuario);
-
-        //etapa3 - atualizar os dados
-        $sSituacaoUsuario = new sUsuario();
-        $situacao == 'Ativo' ? $situacao = 1 : $situacao = 0;
-        $alteracao = true;
-        $atualizar['situacao'] = $situacao;
-    }
-     * 
-     */
+    
     //QA - início da área de testes
     /* verificar o que tem no objeto
 
@@ -297,28 +273,6 @@ if (isset($_POST['pagina'])) {
             }
         }
         
-        /* área para uso futuro
-        if (array_key_exists('situacao', $atualizar)) {
-            //atualize o campo nome            
-            $sSituacaoUsuario->setIdUsuario($idUsuario);
-            $sSituacaoUsuario->setNomeCampo('situacao');
-            $sSituacaoUsuario->setValorCampo($situacao);
-            $sSituacaoUsuario->alterar('tMenu1_1_1.php');
-            
-            var_dump($situacao);
-            exit();
-            //atualize a sessão nome
-            $situacao == 1 ? $situacao = 'Ativo' : $situacao = 'Inativo';
-            $_SESSION['credencial']['situacao'] = $situacao;
-            //fazer consulta para retornar nomenclatura correta
-            
-            if ($sSituacaoUsuario->mConexao->getValidador()) {
-                $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=situacao&codigo={$sSituacaoUsuario->getSNotificacao()->getCodigo()}");
-            }
-        }
-         * 
-         */
     }
 }else{
     //solicitar saída com tentativa de violação

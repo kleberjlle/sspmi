@@ -204,8 +204,8 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $sUsuario->getIdSecretaria();
         alimentaHistorico($pagina, $acao, 'secretaria_idsecretaria', $valorCampoAnterior, $idSecretaria, $idUsuarioSolicitante);
-        echo $valorCampoAnterior = $sEmailSecretariaAnterior->getNomenclatura();
-        alimentaHistorico($pagina, $acao, 'email', $valorCampoAnterior, $sEmailSecretariaAtual->getNomenclatura(), $idUsuarioSolicitante);
+        echo $valorCampoAnterior = $sEmailSecretariaAnterior->getIdEmail();
+        alimentaHistorico($pagina, $acao, 'email', $valorCampoAnterior, $sEmailSecretariaAtual->getIdEmail(), $idUsuarioSolicitante);
         exit();
         //etapa4 - atualizar os dados
         $alteracao = true;

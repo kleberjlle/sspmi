@@ -78,7 +78,6 @@ class sUsuario {
                 'ordem' => null
             ];
             $this->mConexao->CRUD($dados);
-
             //busca dos dados do usuário
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $idUsuario = $linha['idusuario'];
@@ -195,7 +194,7 @@ class sUsuario {
                 } else {
                     $emailCoordenacao = '--';
                 }
-
+                
                 if (!is_null($idDepartamento)) {
                     $this->setSEmailDepartamento(new sEmail($idEmail, 'departamento'));
                     $this->sEmailDepartamento->consultar($pagina);
@@ -206,7 +205,6 @@ class sUsuario {
 
                 $this->setSEmailSecretaria(new sEmail($idEmail, 'secretaria'));
                 $this->sEmailSecretaria->consultar($pagina);
-                $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
 
                 $this->setSCargo(new sCargo($idCargo));
                 $this->sCargo->consultar($pagina);
