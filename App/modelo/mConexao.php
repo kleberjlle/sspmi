@@ -64,10 +64,10 @@ class mConexao {
         //QA - início da área de testes
         /* verificar o que tem no objeto
 
-          echo "<pre>";
-          echo $query;
-          echo "</pre>";
-          // */
+        echo "<pre>";
+        echo $query;
+        echo "</pre>";
+        */
         //QA - fim da área de testes
 
         $resultado = $this->conexao->query($query);
@@ -395,7 +395,11 @@ class mConexao {
         $query .= $dados['tabela'] . ' ';
         $query .= 'SET ';
         $query .= $dados['camposAtualizar'] . '=';
-        $query .= "'{$dados['valoresAtualizar']}' ";
+        if($dados['valoresAtualizar'] == 'null'){
+            $query .= 'null ';
+        }else{
+            $query .= "'{$dados['valoresAtualizar']}' ";
+        }    
         $query .= 'WHERE ';
         $query .= $dados['camposCondicionados'] . '=';
         $query .= "'{$dados['valoresCondicionados']}'";
@@ -406,10 +410,11 @@ class mConexao {
         $this->conexao->query($query);
 
         /* QA - início da área de testes
-          echo '<pre>';
-          echo $query;
-          echo '</pre>';
-          // */
+        echo '<pre>';
+        echo $query;
+        echo '</pre>';
+        exit();
+        // */
         //QA - fim da área de testes
     }
 

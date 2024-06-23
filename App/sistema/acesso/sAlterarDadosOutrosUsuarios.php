@@ -10,7 +10,11 @@ use App\sistema\acesso\{
     sUsuario,
     sTelefone,
     sEmail,
-    sCargo
+    sCargo,
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -64,7 +68,14 @@ if (isset($_POST['pagina'])) {
     
     $sCargo = new sCargo($idCargo);
     $sCargo->consultar('tMenu1_2_1.php');
-        
+    
+    $sEmailSecretariaAnterior = new sEmail($sUsuario->getIdSecretaria(), 'secretaria');
+    $sEmailSecretariaAnterior->consultar('tMenu1_2_1.php');
+    
+    $sEmailSecretariaAtual = new sEmail($idSecretaria, 'email');
+    $sEmailSecretariaAtual->consultar('tMenu1_2_1.php');
+    
+    
     //etapa3 - verificar campos alterados
     if ($sUsuario->getNome() != $nome) {
         //insere dados na tabela histórico
@@ -193,20 +204,25 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $sUsuario->getIdSecretaria();
         alimentaHistorico($pagina, $acao, 'secretaria_idsecretaria', $valorCampoAnterior, $idSecretaria, $idUsuarioSolicitante);
-
+        echo $valorCampoAnterior = $sEmailSecretariaAnterior->getNomenclatura();
+        alimentaHistorico($pagina, $acao, 'email', $valorCampoAnterior, $sEmailSecretariaAtual->getNomenclatura(), $idUsuarioSolicitante);
+        exit();
         //etapa4 - atualizar os dados
         $alteracao = true;
-        $atualizar['secretaria'] = $idSecretaria;
+        $atualizar['idSecretaria'] = $idSecretaria;
     }
     
-    if ($sUsuario->getIdDepartamento() != $idDepartamento && $idDepartamento != 0) {
+    if ($sUsuario->getIdDepartamento() != $idDepartamento) {
         //insere dados na tabela histórico
+        if($idDepartamento == 0){
+            $idDepartamento = '';
+        }
         $valorCampoAnterior = $sUsuario->getIdDepartamento();
         alimentaHistorico($pagina, $acao, 'departamento_iddepartamento', $valorCampoAnterior, $idDepartamento, $idUsuarioSolicitante);
 
         //etapa4 - atualizar os dados
         $alteracao = true;
-        $atualizar['departamento'] = $idDepartamento;
+        $atualizar['idDepartamento'] = $idDepartamento;
     }
     
     if ($sUsuario->getIdCoordenacao() != $idCoordenacao && $idCoordenacao != 0) {
@@ -216,7 +232,7 @@ if (isset($_POST['pagina'])) {
 
         //etapa4 - atualizar os dados
         $alteracao = true;
-        $atualizar['coordenacao'] = $idCoordenacao;
+        $atualizar['idCoordenacao'] = $idCoordenacao;
     }
     
     if ($sUsuario->getIdSetor() != $idSetor && $idSetor != 0) {
@@ -226,7 +242,7 @@ if (isset($_POST['pagina'])) {
 
         //etapa4 - atualizar os dados
         $alteracao = true;
-        $atualizar['setor'] = $idSetor;
+        $atualizar['idSetor'] = $idSetor;
     }
     
     //QA - início da área de testes
@@ -243,7 +259,7 @@ if (isset($_POST['pagina'])) {
       // */
     //QA - fim da área de testes
     
-    
+    //etapa5 - alterar os dados
     if ($alteracao == false) {
         //se não tem campo para validar
         $sConfiguracao = new sConfiguracao();
@@ -264,11 +280,12 @@ if (isset($_POST['pagina'])) {
         }
         
         if (array_key_exists('sobrenome', $atualizar)) {
-            //atualize o campo nome
+            //atualize o campo sobrenome
             $sUsuario->setIdUsuario($idUsuario);
             $sUsuario->setNomeCampo('sobrenome');
             $sUsuario->setValorCampo($sobrenome);
             $sUsuario->alterar('tMenu1_2_1.php');
+            
             if ($sUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=sobrenome&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
@@ -276,107 +293,159 @@ if (isset($_POST['pagina'])) {
         }
         
         if (array_key_exists('sexo', $atualizar)) {
-            //atualize o campo nome
-            $sSexoUsuario->setIdUsuario($idUsuario);
-            $sSexoUsuario->setNomeCampo('sexo');
-            $sSexoUsuario->setValorCampo($sexo);
-            $sSexoUsuario->alterar('tMenu1_1_1.php');
+            //atualize o campo sexo
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('sexo');
+            $sUsuario->setValorCampo($sexo);
+            $sUsuario->alterar('tMenu1_2_1.php');
             
-            //atualize a sessão nome
-            $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
-            $_SESSION['credencial']['sexo'] = $sexo;
-            
-            if ($sSexoUsuario->mConexao->getValidador()) {
+            if ($sUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=sexo&codigo={$sSexoUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=sexo&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
-        if (array_key_exists('telefoneUsuario', $atualizar)) {
-            //atualize o campo nome
-            $sTelefoneUsuario->setNomeCampo('numero');
-            $sTelefoneUsuario->setValorCampo($telefoneUsuario);
-            $sTelefoneUsuario->alterar('tMenu1_1_1.php');
+        if (array_key_exists('telefone', $atualizar)) {
+            //atualize o campo telefone
+            $sTelefone->setIdTelefone($sUsuario->getTelefone());
+            $sTelefone->setNomeCampo('numero');
+            $sTelefone->setValorCampo($telefoneTratado);
+            $sTelefone->alterar('tMenu1_2_1.php');
             
-            //atualize a sessão nome
-            $_SESSION['credencial']['telefoneUsuario'] = $telefoneUsuario;
-            
-            if ($sTelefoneUsuario->mConexao->getValidador()) {
+            if ($sTelefone->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=telefone&codigo={$sTelefone->getSNotificacao()->getCodigo()}");
             }
         }
         
-        if (array_key_exists('whatsAppUsuario', $atualizar)) {
-            //atualize o campo nome
-            $sWhatsAppUsuario->setNomeCampo('whatsApp');
-            $sWhatsAppUsuario->setValorCampo($whatsAppUsuario);
-            $sWhatsAppUsuario->alterar('tMenu1_1_1.php');
+        if (array_key_exists('whatsApp', $atualizar)) {
+            //atualize o campo whatsApp
+            $sTelefone->setIdTelefone($sUsuario->getTelefone());
+            $sTelefone->setNomeCampo('whatsApp');
+            $sTelefone->setValorCampo($whatsApp);
+            $sTelefone->alterar('tMenu1_2_1.php');
             
-            //atualize a sessão nome
-            $_SESSION['credencial']['whatsAppUsuario'] = $whatsAppUsuario;
-            
-            if ($sWhatsAppUsuario->mConexao->getValidador()) {
+            if ($sTelefone->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=whatsApp&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=whatsApp&codigo={$sTelefone->getSNotificacao()->getCodigo()}");
             }
         }
         
-        if (array_key_exists('emailUsuario', $atualizar)) {
-            //atualize o campo nome
-            $sEmailUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
-            $sEmailUsuario->setNomeCampo('nomenclatura');
-            $sEmailUsuario->setValorCampo($emailUsuario);
-            $sEmailUsuario->alterar('tMenu1_1_1.php');
+        if (array_key_exists('email', $atualizar)) {
+            //atualize o campo email
+            $sEmail->setIdEmail($sUsuario->getIdEmail());
+            $sEmail->setNomeCampo('nomenclatura');
+            $sEmail->setValorCampo($email);
+            $sEmail->alterar('tMenu1_2_1.php');
             
-            //atualize a sessão nome
-            $_SESSION['credencial']['emailUsuario'] = $emailUsuario;
-            
-            if ($sEmailUsuario->mConexao->getValidador()) {
+            if ($sEmail->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=email&codigo={$sEmail->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('idCargo', $atualizar)) {
+            //atualize o campo cargo
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('cargo_idcargo');
+            $sUsuario->setValorCampo($idCargo);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            
+            if ($sUsuario->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=cargo&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
         if (array_key_exists('idPermissao', $atualizar)) {
-            //atualize o campo nome            
-            $sPermissaoUsuario->setIdUsuario($idUsuario);
-            $sPermissaoUsuario->setNomeCampo('permissao_idpermissao');
-            $sPermissaoUsuario->setValorCampo($idPermissao);
-            $sPermissaoUsuario->alterar('tMenu1_1_1.php');
+            //atualize o campo cargo
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('permissao_idpermissao');
+            $sUsuario->setValorCampo($idPermissao);
+            $sUsuario->alterar('tMenu1_2_1.php');
             
-            //atualize a sessão nome
-            $_SESSION['credencial']['idPermissao'] = $idPermissao;
-            //fazer consulta para retornar nomenclatura correta
-            
-            if ($sPermissaoUsuario->mConexao->getValidador()) {
+            if ($sUsuario->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=permissao&codigo={$sPermissaoUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=permissao&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
         
-        /* área para uso futuro
-        if (array_key_exists('situacao', $atualizar)) {
-            //atualize o campo nome            
-            $sSituacaoUsuario->setIdUsuario($idUsuario);
-            $sSituacaoUsuario->setNomeCampo('situacao');
-            $sSituacaoUsuario->setValorCampo($situacao);
-            $sSituacaoUsuario->alterar('tMenu1_1_1.php');
+        if (array_key_exists('idSecretaria', $atualizar)) {
+            //atualize o campo cargo
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('secretaria_idsecretaria');
+            $sUsuario->setValorCampo($idSecretaria);
+            $sUsuario->alterar('tMenu1_2_1.php');
             
-            var_dump($situacao);
-            exit();
-            //atualize a sessão nome
-            $situacao == 1 ? $situacao = 'Ativo' : $situacao = 'Inativo';
-            $_SESSION['credencial']['situacao'] = $situacao;
-            //fazer consulta para retornar nomenclatura correta
-            
-            if ($sSituacaoUsuario->mConexao->getValidador()) {
+            if ($sUsuario->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=situacao&codigo={$sSituacaoUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=secretaria&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
             }
         }
-         * 
-         */
+        
+        if (array_key_exists('idDepartamento', $atualizar)) {
+            //atualize o campo cargo
+            if(empty($idDepartamento)){
+                $idDepartamento = 'null';
+            }
+            
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('departamento_iddepartamento');
+            $sUsuario->setValorCampo($idDepartamento);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            
+            if ($sUsuario->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=departamento&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('idCoordenacao', $atualizar)) {
+            //atualize o campo cargo
+            if(empty($idCoordenacao)){
+                $idCoordenacao = 'null';
+            }
+            
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('coordenacao_idcoordenacao');
+            $sUsuario->setValorCampo($idCoordenacao);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            
+            if ($sUsuario->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=coordenacao&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('idSetor', $atualizar)) {
+            //atualize o campo cargo
+            if(empty($idSetor)){
+                $idSetor = 'null';
+            }
+            
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('setor_idsetor');
+            $sUsuario->setValorCampo($idSetor);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            
+            if ($sUsuario->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=setor&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('situacao', $atualizar)) {
+            //atualize o campo situacao
+            $sUsuario->setIdUsuario($idUsuario);
+            $sUsuario->setNomeCampo('situacao');
+            $sUsuario->setValorCampo($situacao);
+            $sUsuario->alterar('tMenu1_2_1.php');
+            
+            if ($sUsuario->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}&campo=situacao&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
     }
 }else{
     //solicitar saída com tentativa de violação

@@ -37,7 +37,7 @@ class sUsuario {
     private string $imagem;
     private bool $situacao; //alterar no bd
     private string $nomeCampo;
-    private string $valorCampo;
+    private mixed $valorCampo;
     private int $examinador;
     public sSetor $sSetor;
     public sCoordenacao $sCoordenacao;
@@ -551,7 +551,7 @@ class sUsuario {
         return $this->nomeCampo;
     }
 
-    public function getValorCampo(): string {
+    public function getValorCampo(): mixed {
         return $this->valorCampo;
     }
 
@@ -703,7 +703,7 @@ class sUsuario {
         $this->nomeCampo = $nomeCampo;
     }
 
-    public function setValorCampo(string $valorCampo): void {
+    public function setValorCampo(mixed $valorCampo): void {
         $this->valorCampo = $valorCampo;
     }
 
@@ -782,6 +782,4 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

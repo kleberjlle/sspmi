@@ -7,3 +7,4 @@ Pendências para serem verificadas
 ok - 5 - Implementar tratamento de máscara para números de telefones;
 6 - Verificar mecanismo de captura do navegador, IP e Host do dispositivo;
 7 - Alterar instância do sHistorico no arquivo tAcessar.php
+8 - Campos telefone e email do menu outros usuários não atualizam após alteração dos dados do usuário;

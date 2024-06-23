@@ -164,7 +164,8 @@ class sEmail {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
 
-        if ($pagina == 'tMenu1_1_1.php') {
+        if ($pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'email',
@@ -174,6 +175,7 @@ class sEmail {
                 'valoresCondicionados' => $this->getIdEmail(),
             ];
             $this->mConexao->CRUD($dados);
+            
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
             if ($this->mConexao->getValidador()) {
                 $this->setValidador(true);
