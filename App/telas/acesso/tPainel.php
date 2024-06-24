@@ -1,7 +1,11 @@
 <?php
 session_start();
 require_once '../../../vendor/autoload.php';
-use App\sistema\acesso\{sConfiguracao,sSair};
+use App\sistema\acesso\{
+    sConfiguracao,
+    sSair
+    
+};
 
 //verifica se tem credencial para acessar o sistema
 if(!isset($_SESSION['credencial'])){

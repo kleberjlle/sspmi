@@ -137,10 +137,12 @@ class sEmail {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null //ASC ou DESC
                 ];
-            } else if ($this->getNomenclaturaLocal() == 'setor' ||
-                    $this->getNomenclaturaLocal() == 'coordenacao' ||
-                    $this->getNomenclaturaLocal() == 'departamento' ||
-                    $this->getNomenclaturaLocal() == 'secretaria') {
+            }
+            
+            if ($this->getNomenclaturaLocal() == 'setor' ||
+                $this->getNomenclaturaLocal() == 'coordenacao' ||
+                $this->getNomenclaturaLocal() == 'departamento' ||
+                $this->getNomenclaturaLocal() == 'secretaria') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['email.idemail', 'email.nomenclatura'],
@@ -151,6 +153,7 @@ class sEmail {
                     'ordem' => null //ASC ou DESC
                 ];
             }
+            
             $this->mConexao->CRUD($dados);
 
             foreach ($this->mConexao->getRetorno() as $linha) {

@@ -1,13 +1,9 @@
 <?php
-require_once '../../sistema/acesso/sNotificacao.php';
+use App\sistema\acesso\{
+    sConfiguracao,
+};
 
-//verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica se há retorno de notificações
-if (isset($_GET['notificacao'])) {
-    $notificacao = $_GET['notificacao'];
-    $codigo = notificacao($notificacao);
-}
+$sConfiguracao = new sConfiguracao();
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -34,38 +30,31 @@ if (isset($_GET['notificacao'])) {
                         
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarCargo.php" id="cargo" method="post" enctype="multipart/form-data">
+                <?php
+                    if(isset($tipo) && isset($titulo) && isset($email)){
+                    echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$email}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }       
+                    ?>
+                <form id="cargo" name="cargo" action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarCargo.php" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
-                        <input type="hidden" name="pagina" value="menu5_1">
+                        <input name="pagina" type="hidden" value="menu5_1">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
             </div>
         </div>
         <!-- /.card -->
-    </div>    
-    <div class="row">
-        <div class="col-lg-12 col-12">
-            <?php
-            require_once '../../sistema/acesso/sNotificacao.php';
-
-            if (isset($codigo)) {
-                $mensagem = explode('|', $codigo);
-                echo <<<HTML
-                <div class="col-mb-3">
-                    <div class="card card-outline card-{$mensagem[0]}">
-                        <div class="card-header">
-                            <h3 class="card-title">{$mensagem[1]}</h3>
-                        </div>
-                        <div class="card-body">
-                            {$mensagem[2]}
-                        </div>
-                    </div>
-                </div>
-HTML;
-            }
-            ?>
-        </div>
     </div>
 </div>

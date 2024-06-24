@@ -36,7 +36,7 @@ if (isset($_POST['pagina'])) {
     $idUsuario = $_POST['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
-    //$imagem = $_POST['imagem']; próxima build
+    //$imagem = $_POST['imagem']; próxima building
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $sexo = $_POST['sexo'];
@@ -71,6 +71,7 @@ if (isset($_POST['pagina'])) {
     
     $sEmailSecretariaAnterior = new sEmail($sUsuario->getIdSecretaria(), 'secretaria');
     $sEmailSecretariaAnterior->consultar('tMenu1_2_1.php');
+    echo $sEmailSecretariaAnterior->getIdEmail();
     
     $sEmailSecretariaAtual = new sEmail($idSecretaria, 'email');
     $sEmailSecretariaAtual->consultar('tMenu1_2_1.php');

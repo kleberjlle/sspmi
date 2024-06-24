@@ -1,13 +1,9 @@
 <?php
-require_once '../../sistema/acesso/sNotificacao.php';
+use App\sistema\acesso\{
+    sConfiguracao,
+};
 
-//verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica se há retorno de notificações
-if (isset($_GET['notificacao'])) {
-    $notificacao = $_GET['notificacao'];
-    $codigo = notificacao($notificacao);
-}
+$sConfiguracao = new sConfiguracao();
 ?>
 <div class="container-fluid">
     <div class="row">

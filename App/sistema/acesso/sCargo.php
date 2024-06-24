@@ -36,7 +36,8 @@ class sCargo {
         
         if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||
-            $pagina == 'tMenu1_2_1.php'){                             
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu5_1.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -47,6 +48,7 @@ class sCargo {
                 'ordem' => 'ASC' //ASC ou DESC
             ];            
             $this->mConexao->CRUD($dados);
+            
                         
         }         
     }
