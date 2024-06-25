@@ -1,12 +1,35 @@
 <?php
-require_once '../../sistema/acesso/sNotificacao.php';
 
-//verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica se há retorno de notificações
-if (isset($_GET['notificacao'])) {
-    $notificacao = $_GET['notificacao'];
-    $codigo = notificacao($notificacao);
+use App\sistema\acesso\{
+    sConfiguracao,
+    sNotificacao,
+    sCargo
+};
+
+$sConfiguracao = new sConfiguracao();
+
+$sCargo = new sCargo(0);
+$sCargo->consultar('tMenu5_2.php');
+
+//retorno de campo inválidos para notificação
+if (isset($_GET['campo'])) {
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'cargo':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaCargo = ' is-valid';
+            } else {
+                $alertaCargo = ' is-warning';
+            }
+            break;
+        default:
+            break;
+    }
+
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $email = $sNotificacao->getMensagem();
 }
 ?>
 <div class="container-fluid">
@@ -30,21 +53,38 @@ if (isset($_GET['notificacao'])) {
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Cargo/ Função</label>
-                                <select class="form-control" required="" name="nomenclatura" form="cargo">
-                                    <option selected="" disabled="">--</option>
-                                    <option>Diretor</option>
-                                    <option>Coordenador</option>
-                                    <option>Agente Administrativo</option>
-                                    <option>Técnico de Informática</option>
-                                </select>
+                                <select class="form-control<?php echo isset($alertaCargo) ? $alertaCargo: ''; ?>" name="cargo" id="cargo" form="form1_tMenu5_2">
+                                        <?php
+                                        foreach ($sCargo->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idcargo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sAlterarCargo.php" id="cargo" method="post" enctype="multipart/form-data">
+                <?php
+                    if(isset($tipo) && isset($titulo) && isset($email)){
+                    echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$email}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }       
+                    ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tPainel.php?menu=5_2_1" name="form1_tMenu5_2" id="form1_tMenu5_2" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
-                        <input type="hidden" name="pagina" value="menu5_2" form="cargo">
+                        <input type="hidden" name="pagina" value="menu5_2" form="form1_tMenu5_2">
+                        <input type="hidden" name="acao" value="alterar" form="form1_tMenu5_2">
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>
@@ -52,27 +92,4 @@ if (isset($_GET['notificacao'])) {
         </div>
         <!-- /.card -->
     </div>    
-    <div class="row">
-        <div class="col-lg-12 col-12">
-            <?php
-            require_once '../../sistema/acesso/sNotificacao.php';
-
-            if (isset($codigo)) {
-                $mensagem = explode('|', $codigo);
-                echo <<<HTML
-                <div class="col-mb-3">
-                    <div class="card card-outline card-{$mensagem[0]}">
-                        <div class="card-header">
-                            <h3 class="card-title">{$mensagem[1]}</h3>
-                        </div>
-                        <div class="card-body">
-                            {$mensagem[2]}
-                        </div>
-                    </div>
-                </div>
-HTML;
-            }
-            ?>
-        </div>
-    </div>
 </div>

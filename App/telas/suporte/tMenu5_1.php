@@ -1,9 +1,31 @@
 <?php
 use App\sistema\acesso\{
     sConfiguracao,
+    sNotificacao
 };
 
 $sConfiguracao = new sConfiguracao();
+
+//retorno de campo inválidos para notificação
+if(isset($_GET['campo'])){
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'cargo':
+            if($_GET['codigo'] == 'S4'){
+                $alertaCargo = ' is-valid';
+            }else{
+                $alertaCargo = ' is-warning';
+            }            
+            break;
+        default:
+            break;
+    }
+    
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $email = $sNotificacao->getMensagem();
+}
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -25,7 +47,7 @@ $sConfiguracao = new sConfiguracao();
                     <div class="row">
                         <div class="form-group col-md-2">
                             <label for="cargo">Cargo/ Função</label>
-                            <input type="text" class="form-control" id="nomenclatura" name="nomenclatura" placeholder="Ex.: Diretor" required="" form="cargo">
+                            <input class="form-control<?php echo isset($alertaCargo) ? $alertaCargo: ''; ?>" type="text" id="cargo" name="cargo" placeholder="Ex.: Diretor" required="" form="form1_tMenu5_1">
                         </div>
                         
                     </div>
@@ -46,10 +68,11 @@ $sConfiguracao = new sConfiguracao();
 HTML;
                     }       
                     ?>
-                <form id="cargo" name="cargo" action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarCargo.php" method="post" enctype="multipart/form-data">
+                <form id="form1_tMenu5_1" name="form1_tMenu5_1" action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarCargo.php" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
-                        <input name="pagina" type="hidden" value="menu5_1">
+                        <input name="pagina" type="hidden" value="menu5_1" form="form1_tMenu5_1">
+                        <input name="acao" type="hidden" value="inserir" form="form1_tMenu5_1">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>

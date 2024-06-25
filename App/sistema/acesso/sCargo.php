@@ -6,6 +6,9 @@ use App\modelo\{mConexao};
 class sCargo {
     private int $idCargo;
     private string $nomenclatura;
+    private string $nomeCampo;
+    private string $valorCampo;
+    private bool $validador;
     public mConexao $mConexao;
     
     public function __construct(int $idCargo) {
@@ -17,7 +20,8 @@ class sCargo {
         $this->setMConexao(new mConexao());
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_3.php'){                             
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu5_2_1.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -37,7 +41,8 @@ class sCargo {
         if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu5_1.php'){                             
+            $pagina == 'tMenu5_1.php' ||
+            $pagina == 'tMenu5_2.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -49,8 +54,23 @@ class sCargo {
             ];            
             $this->mConexao->CRUD($dados);
             
-                        
+            $this->setValidador($this->mConexao->getValidador());
         }         
+    }
+    
+    public function inserir($pagina) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if( $pagina == 'tMenu5_1.php'){
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'cargo',
+                'camposInsercao' => [$this->getNomeCampo()],                    
+                'valoresInsercao' => [$this->getValorCampo()]
+            ];
+            $this->mConexao->CRUD($dados);
+        }
     }
 
     public function getIdCargo(): int {
@@ -59,6 +79,18 @@ class sCargo {
 
     public function getNomenclatura(): string {
         return $this->nomenclatura;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
+    }
+
+    public function getValidador(): bool {
+        return $this->validador;
     }
 
     public function getMConexao(): mConexao {
@@ -71,6 +103,18 @@ class sCargo {
 
     public function setNomenclatura(string $nomenclatura): void {
         $this->nomenclatura = $nomenclatura;
+    }
+
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
     }
 
     public function setMConexao(mConexao $mConexao): void {
