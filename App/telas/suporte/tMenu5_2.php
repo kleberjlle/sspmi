@@ -84,7 +84,6 @@ HTML;
                     <!-- /.card-body-->
                     <div class="card-footer">
                         <input type="hidden" name="pagina" value="menu5_2" form="form1_tMenu5_2">
-                        <input type="hidden" name="acao" value="alterar" form="form1_tMenu5_2">
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>

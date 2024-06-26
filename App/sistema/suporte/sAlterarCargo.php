@@ -30,7 +30,7 @@ if (isset($_POST['pagina'])) {
     $sCargoAnterior->consultar('tMenu5_2_1.php');
     $valorCampoAnterior = $sCargoAnterior->getNomenclatura();
         
-    //tratar os campos antes do envio
+    //alimentar o histórico
     $dados = [
         'pagina' => $pagina,
         'acao' => $acao,
@@ -47,15 +47,17 @@ if (isset($_POST['pagina'])) {
     $sHistorico = new sHistorico();
     $sHistorico->inserir('tMenu5_2_1.php', $dados);
     
-    
-
     //coloca primeiras letras maiúsculas para comparativo
     $sTratamentoDados = new sTratamentoDados($_POST['cargo']);
     $dadosTratados = $sTratamentoDados->tratarNomenclatura();
 
-    $registro = false;
+    $sCargoAtual = new sCargo($idCargo);
+    $sCargoAtual->consultar('sAlterarCargo.php');
+    
+    $registro = false;    
+    
     //compara os registros do BD com a nova solicitação
-    foreach ($sCargo->mConexao->getRetorno() as $linha) {
+    foreach ($sCargoAtual->mConexao->getRetorno() as $linha) {
         if ($linha['nomenclatura'] == $dadosTratados) {
             $registro = true;
         }
@@ -64,16 +66,18 @@ if (isset($_POST['pagina'])) {
     //caso já exista registro no BD, retornar mensagem de alerta, senão retorna mensagem de sucesso
     if($registro){
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=5_1&campo=cargo&codigo=A15");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=5_2_1&campo=cargo&cargo={$idCargo}&codigo=A15");
         exit();
     }else{
-        //inserir novo registro no BD
-        $sCargo->setNomeCampo('nomenclatura');
-        $sCargo->setValorCampo($dadosTratados);
-        $sCargo->inserir('tMenu5_1.php');
+        //altera os dados existentes no BD
+        $sCargoAtual->setNomeCampo('nomenclatura');
+        $sCargoAtual->setValorCampo($dadosTratados);
+        $sCargoAtual->setIdCargo($idCargo);
+        $sCargoAtual->setNomenclatura($dadosTratados);
+        $sCargoAtual->alterar('tMenu5_2_1.php');
         
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=5_1&campo=cargo&codigo=S4");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=5_2_1&campo=cargo&cargo={$idCargo}&codigo=S1");
         exit();
     }
 }

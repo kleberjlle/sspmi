@@ -17,7 +17,8 @@ class sHistorico{
         if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||
             $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu5_1.php'){
+            $pagina == 'tMenu5_1.php' ||
+            $pagina == 'tMenu5_2_1.php'){
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

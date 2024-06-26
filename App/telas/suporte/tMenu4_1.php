@@ -1,9 +1,31 @@
 <?php
 use App\sistema\acesso\{
     sConfiguracao,
+    sNotificacao
 };
 
 $sConfiguracao = new sConfiguracao();
+
+//retorno de campo inválidos para notificação
+if(isset($_GET['campo'])){
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'cargo':
+            if($_GET['codigo'] == 'S4'){
+                $alertaCargo = ' is-valid';
+            }else{
+                $alertaCargo = ' is-warning';
+            }            
+            break;
+        default:
+            break;
+    }
+    
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $email = $sNotificacao->getMensagem();
+}
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -26,20 +48,22 @@ $sConfiguracao = new sConfiguracao();
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="secretaria">Nomenclatura</label>
-                            <input type="text" class="form-control" name="secretaria" placeholder="Ex.: Administração" form="secretaria" required="">
+                            <input class="form-control" type="text" name="secretaria" id="secretaria" placeholder="Ex.: Administração" form="form1_tMenu4_1" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="endereco">Endereço</label>
-                            <input type="text" class="form-control" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="endereco" required="">
+                            <input class="form-control" type="text" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="form1_tMenu4_1" required="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <label>Ambiente</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <select class="form-control" id="ambiente" name="ambiente" form="secretaria" required="">
-                                <option value="" selected="" disabled="">--</option>
+                            <label>Ambiente</label>
+                            <a href="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tFAQ.php" target="_blank">
+                                <i class="fas fa-info-circle text-primary mr-1"></i>
+                            </a>
+                            <select class="form-control" name="ambiente" id="ambiente" form="form1_tMenu4_1" required="">
                                 <option value="interno">Interno</option>
                                 <option value="externo">Externo</option>
                             </select>
@@ -48,21 +72,22 @@ $sConfiguracao = new sConfiguracao();
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" placeholder="Ex.: 47 3443-8832" form="secretaria">
+                            <input class="form-control" type="text" name="telefone" id="telefone" placeholder="Ex.: 47 3443-8832" form="form1_tMenu4_1">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="whatsApp">WhatsApp</label>
-                            <input type="text" class="form-control" name="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="secretaria">
+                            <input class="form-control" type="text" name="whatsApp" id="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="form1_tMenu4_1">
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarLocal.php" method="post" id="secretaria" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="form1_tMenu4_1" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" value="secretaria" name="opcao" form="secretaria">
-                        <input type="hidden" value="menu4_1" name="pagina" form="secretaria">
+                        <input type="hidden" value="form1_tMenu4_1" name="formulario" form="form1_tMenu4_1">
+                        <input type="hidden" value="inserir" name="acao" form="form1_tMenu4_1">
+                        <input type="hidden" value="menu4_1" name="pagina" form="form1_tMenu4_1">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>

@@ -138,9 +138,6 @@ class sNotificacao{
             case '5':
                 $this->setMensagem('Suporte finalizado.');
                 break;
-            case '6':
-                $this->setMensagem('As alterações realizadas foram registradas');
-                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

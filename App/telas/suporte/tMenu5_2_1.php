@@ -7,10 +7,16 @@ use App\sistema\acesso\{
 };
 
 $sConfiguracao = new sConfiguracao();
-
-$idCargo = $_POST['cargo'];
-$sCargo = new sCargo($idCargo);
-$sCargo->consultar('tMenu5_2_1.php');
+   
+if(isset($_POST['cargo'])){
+    $idCargo = $_POST['cargo'];
+    $sCargo = new sCargo($idCargo);
+    $sCargo->consultar('tMenu5_2_1.php');
+}else{
+    $idCargo = $_GET['cargo'];
+    $sCargo = new sCargo($idCargo);
+    $sCargo->consultar('tMenu5_2_1.php');
+}
 
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
@@ -52,8 +58,8 @@ if (isset($_GET['campo'])) {
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-2">
-                            <label for="cargo">Cargo</label>
-                            <input class="form-control" type="text" name="cargo" id="cargo" value="<?php echo $sCargo->getNomenclatura(); ?>"  form="form1_tMenu5_2_1" required="">
+                            <label for="cargo">Cargo/ Função</label>
+                            <input class="form-control<?php echo isset($alertaCargo) ? $alertaCargo: ''; ?>" type="text" name="cargo" id="cargo" value="<?php echo isset($idCargo) ? $sCargo->getNomenclatura() : ''; ?>"  form="form1_tMenu5_2_1" required="">
                         </div>                        
                     </div>
                 </div>

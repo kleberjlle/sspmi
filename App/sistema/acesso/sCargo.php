@@ -42,7 +42,8 @@ class sCargo {
             $pagina == 'tSolicitarAcesso.php' ||
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu5_1.php' ||
-            $pagina == 'tMenu5_2.php'){                             
+            $pagina == 'tMenu5_2.php' ||
+            $pagina == 'sAlterarCargo.php'){                             
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -70,6 +71,27 @@ class sCargo {
                 'valoresInsercao' => [$this->getValorCampo()]
             ];
             $this->mConexao->CRUD($dados);
+        }
+    }
+    
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu5_2_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'cargo',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idcargo',
+                'valoresCondicionados' => $this->getIdCargo(),
+            ];
+            $this->mConexao->CRUD($dados);
+            //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+            }
         }
     }
 
