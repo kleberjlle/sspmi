@@ -1,5 +1,7 @@
 <?php
+
 namespace App\sistema\acesso;
+
 use App\modelo\{
     mConexao
 };
@@ -7,18 +9,20 @@ use App\sistema\acesso\{
     sNotificacao
 };
 
-class sHistorico{
+class sHistorico {
+
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
-    
+
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
-        if( $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tSolicitarAcesso.php' ||
-            $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu5_1.php' ||
-            $pagina == 'tMenu5_2_1.php'){
+        if ($pagina == 'tMenu1_1_1.php' ||
+                $pagina == 'tSolicitarAcesso.php' ||
+                $pagina == 'tAcessar.php' ||
+                $pagina == 'tMenu5_1.php' ||
+                $pagina == 'tMenu5_2_1.php' ||
+                $pagina == 'tMenu4_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -34,7 +38,7 @@ class sHistorico{
                     'sistemaOperacional',
                     'nomeDoDispositivo',
                     'idusuario'
-                ],                    
+                ],
                 'valoresInsercao' => [
                     $tratarDados['pagina'],
                     $tratarDados['acao'],
@@ -51,6 +55,24 @@ class sHistorico{
             $this->mConexao->CRUD($dados);
         }
     }
+
+    public function consultar($pagina) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu6_2.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'historico',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'idhistorico', //caso não tenha, colocar como null
+                'ordem' => 'DESC' //ASC ou DESC
+            ];
+            $this->mConexao->CRUD($dados);
+        }
+    }
+
     public function getMConexao(): mConexao {
         return $this->mConexao;
     }
@@ -66,10 +88,6 @@ class sHistorico{
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
-    
-
 }
 
 ?>

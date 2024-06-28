@@ -472,7 +472,8 @@ HTML;
                                 }
                                 //abre os menus da condição
                                 if($_SESSION['credencial']['nivelPermissao'] > 4){
-                                $menu == '6_1' ?
+                                $menu == '6_1' ||
+                                $menu == '6_2'?
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
                                 
@@ -503,6 +504,22 @@ HTML;
                                     </li>
                                 </ul>
                                 <!--FINAL SUBMENU 6_1-->
+                                <!--SUBMENU 6_2-->
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+HTML;
+                                //abre os menus da condição
+                                $menu == '6_2' ?
+                                $atributo = ' active' :
+                                $atributo = '';
+                                
+                                echo <<<HTML
+                                        <a href="tPainel.php?menu=6_2" class="nav-link $atributo">
+                                            <p>Histórico</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!--FINAL SUBMENU 6_2-->
                                 <!--FINAL DO MENU 6-->
 HTML;
                                 }
@@ -604,7 +621,7 @@ HTML;
                             require_once './tMenu6_1.php';
                             break;
                         case "6_2":
-                            require_once './tMenu6_2.php';
+                            require_once '../suporte/tMenu6_2.php';
                             break;
                         //padrão
                         default:

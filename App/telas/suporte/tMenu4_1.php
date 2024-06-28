@@ -1,4 +1,5 @@
 <?php
+
 use App\sistema\acesso\{
     sConfiguracao,
     sNotificacao
@@ -7,20 +8,34 @@ use App\sistema\acesso\{
 $sConfiguracao = new sConfiguracao();
 
 //retorno de campo inválidos para notificação
-if(isset($_GET['campo'])){
+if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
-        case 'cargo':
-            if($_GET['codigo'] == 'S4'){
-                $alertaCargo = ' is-valid';
-            }else{
-                $alertaCargo = ' is-warning';
-            }            
+        case 'secretaria':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaSecretaria = ' is-valid';
+            } else {
+                $alertaSecretaria = ' is-warning';
+            }
+            break;
+        case 'endereco':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEndereco = ' is-valid';
+            } else {
+                $alertaEndereco = ' is-warning';
+            }
+            break;
+        case 'telefone':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTelefone = ' is-valid';
+            } else {
+                $alertaTelefone = ' is-warning';
+            }
             break;
         default:
             break;
     }
-    
+
     //cria as variáveis da notificação
     $tipo = $sNotificacao->getTipo();
     $titulo = $sNotificacao->getTitulo();
@@ -33,12 +48,12 @@ if(isset($_GET['campo'])){
         <!--registro secretaria-->
         <div class="col-md-3">
             <!-- general form elements -->
-            <div class="card card-outline card-primary collapsed-card">
+            <div class="card card-outline card-primary <?php echo isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Secretaria</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas <?php echo isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
@@ -48,13 +63,13 @@ if(isset($_GET['campo'])){
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="secretaria">Nomenclatura</label>
-                            <input class="form-control" type="text" name="secretaria" id="secretaria" placeholder="Ex.: Administração" form="form1_tMenu4_1" required="">
+                            <input class="form-control <?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" type="text" name="secretaria" id="secretaria" placeholder="Ex.: Administração" form="form1_tMenu4_1" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="endereco">Endereço</label>
-                            <input class="form-control" type="text" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="form1_tMenu4_1" required="">
+                            <input class="form-control <?php echo isset($alertaEndereco) ? $alertaEndereco : ''; ?>" type="text" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="form1_tMenu4_1" required="">
                         </div>
                     </div>
                     <div class="row">
@@ -72,16 +87,37 @@ if(isset($_GET['campo'])){
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="telefone">Telefone</label>
-                            <input class="form-control" type="text" name="telefone" id="telefone" placeholder="Ex.: 47 3443-8832" form="form1_tMenu4_1">
+                            <input class="form-control <?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" placeholder="Ex.: 47 3443-8832" form="form1_tMenu4_1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                         </div>
                     </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="whatsApp">WhatsApp</label>
-                            <input class="form-control" type="text" name="whatsApp" id="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="form1_tMenu4_1">
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp">
+                                <label class="custom-control-label" for="whatsApp">Não</label>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <?php
+                if (isset($tipo) && isset($titulo) && isset($email)) {
+                    if (isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$email}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
                 <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="form1_tMenu4_1" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
