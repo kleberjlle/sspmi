@@ -31,7 +31,8 @@ class sEmail {
         if ($pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tSolicitarAcesso.php') {
+            $pagina == 'tSolicitarAcesso.php'||
+            $pagina == 'tMenu4_1.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
                 //verifica se consta o email no BD               
@@ -70,7 +71,8 @@ class sEmail {
                     }
                 }
 
-                if ($pagina == 'tSolicitarAcesso.php') {
+                if ($pagina == 'tSolicitarAcesso.php' ||
+                    $pagina == 'tMenu4_1.php') {
                     //se localizou o registro do no BD
                     if ($this->mConexao->getValidador()) {
                         $this->setValidador(false);
@@ -155,12 +157,15 @@ class sEmail {
             }
             
             $this->mConexao->CRUD($dados);
-
-            foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setIdEmail($linha['idemail']);
-                $this->setNomenclatura($linha['nomenclatura']);
+            $this->setValidador($this->mConexao->getValidador());
+            
+            if($this->getValidador()){
+                foreach ($this->mConexao->getRetorno() as $linha) {
+                    $this->setIdEmail($linha['idemail']);
+                    $this->setNomenclatura($linha['nomenclatura']);
+                }
             }
-            $this->setValidador(true);
+            
         }
     }
 
@@ -186,6 +191,44 @@ class sEmail {
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
+    }
+    
+    public function inserir($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu4_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'email',
+                'camposInsercao' => [
+                    'nomenclatura'
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['nomenclatura']
+                ]
+            ];
+        }
+        
+        if ($pagina == 'tMenu4_1-email_has_secretaria.php' ||
+            $pagina == 'tMenu4_1-email_has_departamento.php' ||
+            $pagina == 'tMenu4_1-email_has_coordenacao.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'email_has_'.$this->getNomeCampo(),
+                'camposInsercao' => [
+                    'email_idemail',
+                    $this->getNomeCampo().'_id'.$this->getNomeCampo()
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['idemail'],
+                    $tratarDados['id'.$this->getNomeCampo()],
+                ]
+            ];
+        }
+        
+        $this->mConexao->CRUD($dados);
     }
 
     public function getIdEmail(): int {

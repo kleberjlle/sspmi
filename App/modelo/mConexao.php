@@ -8,7 +8,7 @@ use App\sistema\acesso\{
 };
 
 class mConexao {
-
+    private int $registro;
     private mixed $retorno;
     private mixed $conexao;
     private bool $validador;
@@ -52,7 +52,6 @@ class mConexao {
     }
 
     private function consultar($dados) {
-
         //monta a query de consulta
         if (is_array($dados['tabelas'])) {
             $query = $this->consultarJuncao($dados);
@@ -371,6 +370,8 @@ class mConexao {
         }
 
         $resultado = $this->conexao->query($query);
+        $id = $this->conexao->insert_id;
+        $this->setRegistro($id);
 
         if ($resultado) {
             $this->setValidador(true);
@@ -418,6 +419,10 @@ class mConexao {
         //QA - fim da área de testes
     }
 
+    public function getRegistro(): int {
+        return $this->registro;
+    }
+
     public function getRetorno(): mixed {
         return $this->retorno;
     }
@@ -436,6 +441,10 @@ class mConexao {
 
     public function getSNotificacao(): sNotificacao {
         return $this->sNotificacao;
+    }
+
+    public function setRegistro(int $registro): void {
+        $this->registro = $registro;
     }
 
     public function setRetorno(mixed $retorno): void {
@@ -457,4 +466,6 @@ class mConexao {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

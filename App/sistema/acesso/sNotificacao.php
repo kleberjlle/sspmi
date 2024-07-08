@@ -89,7 +89,7 @@ class sNotificacao{
                 $this->setMensagem('Identificamos que já existe um registro com essa nomenclatura');
                 break;
             case '16':
-                $this->setMensagem('O campo deve conter de 10 a 100 caracteres');
+                $this->setMensagem('O campo deve conter de 5 a 100 caracteres');
                 break;
             default:
                 $this->setTipo('danger');

@@ -3,6 +3,7 @@ session_start();
 require_once '../../../vendor/autoload.php';
 use App\sistema\acesso\{
     sConfiguracao,
+    sUsuario,
     sSair
     
 };
@@ -13,6 +14,11 @@ if(!isset($_SESSION['credencial'])){
     $sSair = new sSair();
     $sSair->verificar('0');
 }
+
+//atualizar dados do usuário sem realizar logoff
+$sUsuario = new sUsuario();
+$sUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
+$sUsuario->consultar('tAcessar.php');
 
 $sConfiguracao = new sConfiguracao();
 

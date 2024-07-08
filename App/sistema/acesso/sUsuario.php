@@ -96,6 +96,7 @@ class sUsuario {
                 $idPermissao = $linha['permissao_idpermissao'];
             }
 
+            //trataemnto de dados
             if (!$situacao) {
                 //notifica o usuário sobre a inatividade do perfil
                 $this->setSNotificacao(new sNotificacao('A7'));
@@ -135,7 +136,6 @@ class sUsuario {
                 if (!is_null($idTelefoneUsuario)) {
                     $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
                     $this->sTelefoneUsuario->consultar($pagina);
-                    //$telefoneUsuario = $this->sTelefoneUsuario->tratarTelefone($this->sTelefoneUsuario->getNumero());
                     $telefoneUsuario = $this->sTelefoneUsuario->getNumero();
                     $whatsAppUsuario = $this->sTelefoneUsuario->getWhatsApp();
                 } else {
@@ -146,8 +146,13 @@ class sUsuario {
                 if (!is_null($idSetor)) {
                     $this->setSTelefoneSetor(new sTelefone(0, $this->sSetor->getIdSetor(), 'setor'));
                     $this->sTelefoneSetor->consultar($pagina);
-                    $telefoneSetor = $this->sTelefoneSetor->getNumero();
-                    $whatsAppSetor = $this->sTelefoneSetor->getWhatsApp();
+                    if ($this->sTelefoneSetor->getValidador()) {
+                        $telefoneSetor = $this->sTelefoneSetor->getNumero();
+                        $whatsAppSetor = $this->sTelefoneSetor->getWhatsApp();
+                    } else {
+                        $telefoneSetor = '--';
+                        $whatsAppSetor = false;
+                    }
                 } else {
                     $telefoneSetor = '--';
                     $whatsAppSetor = false;
@@ -156,8 +161,13 @@ class sUsuario {
                 if (!is_null($idCoordenacao)) {
                     $this->setSTelefoneCoordenacao(new sTelefone(0, $this->sCoordenacao->getIdCoordenacao(), 'coordenacao'));
                     $this->sTelefoneCoordenacao->consultar($pagina);
-                    $telefoneCoordenacao = $this->sTelefoneCoordenacao->getNumero();
-                    $whatsAppCoordenacao = $this->sTelefoneCoordenacao->getWhatsApp();
+                    if ($this->sTelefoneCoordenacao->getValidador()) {
+                        $telefoneCoordenacao = $this->sTelefoneCoordenacao->getNumero();
+                        $whatsAppCoordenacao = $this->sTelefoneCoordenacao->getWhatsApp();
+                    } else {
+                        $telefoneCoordenacao = '--';
+                        $whatsAppCoordenacao = false;
+                    }
                 } else {
                     $telefoneCoordenacao = '--';
                     $whatsAppCoordenacao = false;
@@ -166,8 +176,13 @@ class sUsuario {
                 if (!is_null($idDepartamento)) {
                     $this->setSTelefoneDepartamento(new sTelefone(0, $this->sDepartamento->getIdDepartamento(), 'departamento'));
                     $this->sTelefoneDepartamento->consultar($pagina);
-                    $telefoneDepartamento = $this->sTelefoneDepartamento->getNumero();
-                    $whatsAppDepartamento = $this->sTelefoneDepartamento->getWhatsApp();
+                    if ($this->sTelefoneDepartamento->getValidador()) {
+                        $telefoneDepartamento = $this->sTelefoneDepartamento->getNumero();
+                        $whatsAppDepartamento = $this->sTelefoneDepartamento->getWhatsApp();
+                    } else {
+                        $telefoneDepartamento = '--';
+                        $whatsAppDepartamento = false;
+                    }
                 } else {
                     $telefoneDepartamento = '--';
                     $whatsAppDepartamento = false;
@@ -175,6 +190,13 @@ class sUsuario {
 
                 $this->setSTelefoneSecretaria(new sTelefone(0, $this->sSecretaria->getIdSecretaria(), 'secretaria'));
                 $this->sTelefoneSecretaria->consultar($pagina);
+                if ($this->sTelefoneSecretaria->getValidador()) {
+                    $telefoneSecretaria = $this->sTelefoneSecretaria->getNumero();
+                    $whatsAppSecretaria = $this->sTelefoneSecretaria->getWhatsApp();
+                } else {
+                    $telefoneSecretaria = '--';
+                    $whatsAppSecretaria = false;
+                }
 
                 $this->setSEmailUsuario(new sEmail($idEmail, 'email'));
                 $this->sEmailUsuario->consultar($pagina);
@@ -182,7 +204,11 @@ class sUsuario {
                 if (!is_null($idSetor)) {
                     $this->setSEmailSetor(new sEmail($idEmail, 'setor'));
                     $this->sEmailSetor->consultar($pagina);
-                    $emailSetor = $this->sEmailSetor->getNomenclatura();
+                    if ($this->sEmailSetor->getValidador()) {
+                        $emailSetor = $this->sEmailSetor->getNomenclatura();
+                    } else {
+                        $emailSetor = '--';
+                    }
                 } else {
                     $emailSetor = '--';
                 }
@@ -190,21 +216,34 @@ class sUsuario {
                 if (!is_null($idCoordenacao)) {
                     $this->setSEmailCoordenacao(new sEmail($idEmail, 'coordenacao'));
                     $this->sEmailCoordenacao->consultar($pagina);
-                    $emailCoordenacao = $this->sEmailCoordenacao->getNomenclatura();
+                    if ($this->sEmailCoordenacao->getValidador()) {
+                        $emailCoordenacao = $this->sEmailCoordenacao->getNomenclatura();
+                    } else {
+                        $emailCoordenacao = '--';
+                    }
                 } else {
                     $emailCoordenacao = '--';
                 }
-                
+
                 if (!is_null($idDepartamento)) {
                     $this->setSEmailDepartamento(new sEmail($idEmail, 'departamento'));
                     $this->sEmailDepartamento->consultar($pagina);
-                    $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
+                    if ($this->sEmailDepartamento->getValidador()) {
+                        $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
+                    } else {
+                        $emailDepartamento = '--';
+                    }
                 } else {
                     $emailDepartamento = '--';
                 }
 
                 $this->setSEmailSecretaria(new sEmail($idEmail, 'secretaria'));
                 $this->sEmailSecretaria->consultar($pagina);
+                if($this->sEmailSecretaria->getValidador()){
+                    $emailSecretaria = $this->sEmailSecretaria->getNomenclatura();
+                }else{
+                    $emailSecretaria = '--';
+                }
 
                 $this->setSCargo(new sCargo($idCargo));
                 $this->sCargo->consultar($pagina);
@@ -212,7 +251,10 @@ class sUsuario {
                 $this->setSPermissao(new sPermissao($idPermissao));
                 $this->sPermissao->consultar($pagina);
 
-                session_start();
+                if(!isset($_SESSION)){
+                    session_start();
+                }
+                
                 $_SESSION['credencial'] = [
                     'idUsuario' => $idUsuario,
                     'nome' => $nome,
@@ -237,14 +279,14 @@ class sUsuario {
                     'whatsAppCoordenacao' => $whatsAppCoordenacao,
                     'telefoneDepartamento' => $telefoneDepartamento,
                     'whatsAppDepartamento' => $whatsAppDepartamento,
-                    'telefoneSecretaria' => $this->sTelefoneSecretaria->getNumero(),
-                    'whatsAppSecretaria' => $this->sTelefoneSecretaria->getWhatsApp(),
+                    'telefoneSecretaria' => $telefoneSecretaria,
+                    'whatsAppSecretaria' => $whatsAppSecretaria,
                     'idEmailUsuario' => $idEmail,
                     'emailUsuario' => $this->sEmailUsuario->getNomenclatura(),
                     'emailSetor' => $emailSetor,
                     'emailCoordenacao' => $emailCoordenacao,
                     'emailDepartamento' => $emailDepartamento,
-                    'emailSecretaria' => $this->sEmailSecretaria->getNomenclatura(),
+                    'emailSecretaria' => $emailSecretaria,
                     'idCargo' => $idCargo,
                     'cargo' => $this->sCargo->getNomenclatura(),
                     'nivelPermissao' => $this->sPermissao->getNivel(),
@@ -303,31 +345,31 @@ class sUsuario {
                 $this->setSituacao($linha['situacao']);
                 if (strlen($linha['setor_idsetor']) > 0) {
                     $this->setIdSetor($linha['setor_idsetor']);
-                }else{
+                } else {
                     $this->setIdSetor(0);
                 }
                 if (strlen($linha['coordenacao_idcoordenacao']) > 0) {
                     $this->setIdCoordenacao($linha['coordenacao_idcoordenacao']);
-                }else{
+                } else {
                     $this->setIdCoordenacao(0);
                 }
-                if(strlen($linha['departamento_iddepartamento']) > 0){
+                if (strlen($linha['departamento_iddepartamento']) > 0) {
                     $this->setIdDepartamento($linha['departamento_iddepartamento']);
-                }else{
+                } else {
                     $this->setIdDepartamento(0);
                 }
                 $this->setIdSecretaria($linha['secretaria_idsecretaria']);
-                 
-                if(!empty($linha['telefone_idtelefone'])){
+
+                if (!empty($linha['telefone_idtelefone'])) {
                     $this->setTelefone($linha['telefone_idtelefone']);
-                }else{
+                } else {
                     $this->setTelefone(0);
                 }
-                  
+
                 $this->setIdEmail($linha['email_idemail']);
-                
+
                 $this->setIdCargo($linha['cargo_idcargo']);
-                                
+
                 $this->setIdPermissao($linha['permissao_idpermissao']);
             }
         }
@@ -409,7 +451,7 @@ class sUsuario {
         $this->setMConexao(new mConexao());
 
         if ($pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_2_1.php') {
+                $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'usuario',

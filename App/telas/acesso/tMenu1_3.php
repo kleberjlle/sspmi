@@ -227,16 +227,6 @@ $sUsuario->consultar('tMenu1_3.php');
                         </tr>
 HTML;
                     }
-                }else{
-                    echo <<<HTML
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-HTML;
                 }
                 ?>
             </tbody>

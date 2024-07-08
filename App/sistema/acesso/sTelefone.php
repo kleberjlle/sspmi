@@ -63,10 +63,13 @@ class sTelefone {
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
 
-            foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setNumero($linha['numero']);
-                $this->setWhatsApp($linha['whatsApp']);
+            if($this->getValidador()){
+                foreach ($this->mConexao->getRetorno() as $linha) {
+                    $this->setNumero($linha['numero']);
+                    $this->setWhatsApp($linha['whatsApp']);
+                }
             }
+            
         }
     }
 
@@ -123,6 +126,47 @@ class sTelefone {
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
+    }
+    
+    public function inserir($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu4_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'telefone',
+                'camposInsercao' => [
+                    'whatsApp',
+                    'numero'
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['whatsApp'],
+                    $tratarDados['numero'],
+                ]
+            ];
+        }
+        
+        if ($pagina == 'tMenu4_1-telefone_has_secretaria.php' ||
+            $pagina == 'tMenu4_1-telefone_has_departamento.php' ||
+            $pagina == 'tMenu4_1-telefone_has_coordenacao.php' ||
+            $pagina == 'tMenu4_1-telefone_has_setor.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'telefone_has_'.$this->getNomeCampo(),
+                'camposInsercao' => [
+                    'telefone_idtelefone',
+                    $this->getNomeCampo().'_id'.$this->getNomeCampo()
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['idtelefone'],
+                    $tratarDados['id'.$this->getNomeCampo()],
+                ]
+            ];
+        }
+        
+        $this->mConexao->CRUD($dados);
     }
 
     public function getNomeCampo(): string {

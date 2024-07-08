@@ -57,6 +57,43 @@ class sSetor {
             
             $this->mConexao->CRUD($dados);
         }
+        if ($pagina == 'tMenu4_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'setor',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];
+            
+            $this->mConexao->CRUD($dados);
+        }
+    }
+    
+    public function inserir($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu4_1.php') {
+            
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'setor',
+                'camposInsercao' => [
+                    'nomenclatura',
+                    'endereco',
+                    'secretaria_idsecretaria'
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['nomenclatura'],
+                    $tratarDados['endereco'],
+                    $tratarDados['idSecretaria']
+                ]
+            ];            
+        }
+        $this->mConexao->CRUD($dados);
     }
 
     public function getIdSetor(): int {

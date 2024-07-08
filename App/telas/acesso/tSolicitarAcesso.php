@@ -114,9 +114,14 @@ if(isset($_GET['campo'])){
                                 $sSecretaria = new sSecretaria(0);
                                 $sSecretaria->consultar('tSolicitarAcesso.php');
 
-                                foreach ($sSecretaria->mConexao->getRetorno() as $key => $value) {
-                                    echo "<option value=\"{$value['idsecretaria']}\">{$value['nomenclatura']}</option>";
+                                if($sSecretaria->mConexao->getValidador()){
+                                    foreach ($sSecretaria->mConexao->getRetorno() as $key => $value) {
+                                        echo "<option value=\"{$value['idsecretaria']}\">{$value['nomenclatura']}</option>";
+                                    }
+                                }else{
+                                    echo "<option value=\"0\" selected=\"\" disabeld=\"\">--</option>";
                                 }
+                                
                                 ?>
                             </select>
                             <div class="input-group-append">
@@ -161,9 +166,14 @@ if(isset($_GET['campo'])){
                                 $sCargo = new sCargo(0);
                                 $sCargo->consultar('tSolicitarAcesso.php');
 
-                                foreach ($sCargo->mConexao->getRetorno() as $key => $value) {
-                                    echo "<option value=\"{$value['idcargo']}\">{$value['nomenclatura']}</option>";
+                                if($sCargo->getValidador()){
+                                    foreach ($sCargo->mConexao->getRetorno() as $key => $value) {
+                                        echo "<option value=\"{$value['idcargo']}\">{$value['nomenclatura']}</option>";
+                                    }
+                                }else{
+                                    echo "<option value=\"0\">--</option>";
                                 }
+                                
                                 ?>
                             </select>
                             <div class="input-group-append">

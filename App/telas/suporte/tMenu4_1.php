@@ -2,34 +2,138 @@
 
 use App\sistema\acesso\{
     sConfiguracao,
-    sNotificacao
+    sNotificacao,
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor
 };
 
+//instancia classes para manipulação dos dados
 $sConfiguracao = new sConfiguracao();
 
+$sSecretaria = new sSecretaria(0);
+$sSecretaria->consultar('tMenu4_1.php');
+
+$sDepartamento = new sDepartamento(0);
+$sDepartamento->consultar('tMenu4_1.php');
+
+$sCoordenacao = new sCoordenacao(0);
+$sCoordenacao->consultar('tMenu4_1.php');
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
-        case 'secretaria':
+        case 'secretariaF1':
             if ($_GET['codigo'] == 'S4') {
-                $alertaSecretaria = ' is-valid';
+                $alertaSecretariaF1 = ' is-valid';
             } else {
-                $alertaSecretaria = ' is-warning';
+                $alertaSecretariaF1 = ' is-warning';
             }
             break;
-        case 'endereco':
+        case 'enderecoF1':
             if ($_GET['codigo'] == 'S4') {
-                $alertaEndereco = ' is-valid';
+                $alertaEnderecoF1 = ' is-valid';
             } else {
-                $alertaEndereco = ' is-warning';
+                $alertaEnderecoF1 = ' is-warning';
             }
             break;
-        case 'telefone':
+        case 'emailF1':
             if ($_GET['codigo'] == 'S4') {
-                $alertaTelefone = ' is-valid';
+                $alertaEmailF1 = ' is-valid';
             } else {
-                $alertaTelefone = ' is-warning';
+                $alertaEmailF1 = ' is-warning';
+            }
+            break;
+        case 'telefoneF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTelefoneF1 = ' is-valid';
+            } else {
+                $alertaTelefoneF1 = ' is-warning';
+            }
+            break;
+        case 'departamentoF2':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaDepartamentoF2 = ' is-valid';
+            } else {
+                $alertaDepartamentoF2 = ' is-warning';
+            }
+            break;
+        case 'enderecoF2':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEnderecoF2 = ' is-valid';
+            } else {
+                $alertaEnderecoF2 = ' is-warning';
+            }
+            break;
+        case 'emailF2':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEmailF2 = ' is-valid';
+            } else {
+                $alertaEmailF2 = ' is-warning';
+            }
+            break;
+        case 'telefoneF2':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTelefoneF2 = ' is-valid';
+            } else {
+                $alertaTelefoneF2 = ' is-warning';
+            }
+            break;
+        case 'coordenacaoF3':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaCoordenacaoF3 = ' is-valid';
+            } else {
+                $alertaCoordenacaoF3 = ' is-warning';
+            }
+            break;
+        case 'enderecoF3':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEnderecoF3 = ' is-valid';
+            } else {
+                $alertaEnderecoF3 = ' is-warning';
+            }
+            break;
+        case 'emailF3':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEmailF3 = ' is-valid';
+            } else {
+                $alertaEmailF3 = ' is-warning';
+            }
+            break;
+        case 'telefoneF3':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTelefoneF3 = ' is-valid';
+            } else {
+                $alertaTelefoneF3 = ' is-warning';
+            }
+            break;
+        case 'setorF4':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaSetorF4 = ' is-valid';
+            } else {
+                $alertaSetorF4 = ' is-warning';
+            }
+            break;
+        case 'enderecoF4':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEnderecoF4 = ' is-valid';
+            } else {
+                $alertaEnderecoF4 = ' is-warning';
+            }
+            break;
+        case 'emailF4':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEmailF4 = ' is-valid';
+            } else {
+                $alertaEmailF4 = ' is-warning';
+            }
+            break;
+        case 'telefoneF4':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTelefoneF4 = ' is-valid';
+            } else {
+                $alertaTelefoneF4 = ' is-warning';
             }
             break;
         default:
@@ -39,7 +143,7 @@ if (isset($_GET['campo'])) {
     //cria as variáveis da notificação
     $tipo = $sNotificacao->getTipo();
     $titulo = $sNotificacao->getTitulo();
-    $email = $sNotificacao->getMensagem();
+    $mensagem = $sNotificacao->getMensagem();
 }
 ?>
 <div class="container-fluid">
@@ -48,12 +152,12 @@ if (isset($_GET['campo'])) {
         <!--registro secretaria-->
         <div class="col-md-3">
             <!-- general form elements -->
-            <div class="card card-outline card-primary <?php echo isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone) ? '' : 'collapsed-card' ?>">
+            <div class="card card-outline card-primary <?php echo isset($alertaSecretariaF1) || isset($alertaEnderecoF1) || isset($alertaTelefoneF1) || isset($alertaEmailF1) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Secretaria</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            <i class="fas <?php echo isset($alertaSecretariaF1) || isset($alertaEnderecoF1) || isset($alertaTelefoneF1) || isset($alertaEmailF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
@@ -62,47 +166,46 @@ if (isset($_GET['campo'])) {
                 <div class="card-body">
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="secretaria">Nomenclatura</label>
-                            <input class="form-control <?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" type="text" name="secretaria" id="secretaria" placeholder="Ex.: Administração" form="form1_tMenu4_1" required="">
+                            <label for="secretariaF1">Secretaria</label>
+                            <input class="form-control <?php echo isset($alertaSecretariaF1) ? $alertaSecretariaF1 : ''; ?>" type="text" name="secretariaF1" id="secretariaF1" placeholder="Ex.: Administração" form="f1" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="endereco">Endereço</label>
-                            <input class="form-control <?php echo isset($alertaEndereco) ? $alertaEndereco : ''; ?>" type="text" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="form1_tMenu4_1" required="">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Ambiente</label>
-                            <a href="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso(); ?>tFAQ.php" target="_blank">
-                                <i class="fas fa-info-circle text-primary mr-1"></i>
-                            </a>
-                            <select class="form-control" name="ambiente" id="ambiente" form="form1_tMenu4_1" required="">
-                                <option value="interno">Interno</option>
-                                <option value="externo">Externo</option>
-                            </select>
+                            <label for="enderecoF1">Endereço</label>
+                            <input class="form-control <?php echo isset($alertaEnderecoF1) ? $alertaEnderecoF1 : ''; ?>" type="text" name="enderecoF1" id="enderecoF1" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="f1" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="telefone">Telefone</label>
-                            <input class="form-control <?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" placeholder="Ex.: 47 3443-8832" form="form1_tMenu4_1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                            <label for="emailF1">E-mail</label>
+                            <input class="form-control <?php echo isset($alertaEmailF1) ? $alertaEmailF1 : ''; ?>" type="email" name="emailF1" id="emailF1" placeholder="Ex.: secretaria@itapoa.sc.gov.br" form="f1" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="telefoneF1">Telefone</label>
+                            <input class="form-control <?php echo isset($alertaTelefoneF1) ? $alertaTelefoneF1 : ''; ?>" type="text" name="telefoneF1" id="telefoneF1" placeholder="Ex.: 47 3443-8832" form="f1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                         </div>
                     </div>
                     <div class="col-md-1">
                         <div class="form-group">
                             <label>WhatsApp</label>
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp">
-                                <label class="custom-control-label" for="whatsApp">Não</label>
+                                <input class="custom-control-input" type="checkbox" name="whatsAppF1" id="whatsAppF1" form="f1">
+                                <label class="custom-control-label" for="whatsAppF1">Não</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php
-                if (isset($tipo) && isset($titulo) && isset($email)) {
-                    if (isset($alertaSecretaria) || isset($alertaEndereco) || isset($alertaTelefone)) {
+                if (isset($tipo) &&
+                        isset($titulo) &&
+                        isset($mensagem)) {
+                    if (isset($alertaSecretariaF1) ||
+                            isset($alertaEnderecoF1) ||
+                            isset($alertaTelefoneF1) ||
+                            isset($alertaEmailF1)) {
                         echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
@@ -110,7 +213,7 @@ if (isset($_GET['campo'])) {
                                 <h3 class="card-title">{$titulo}</h3>
                             </div>
                             <div class="card-body">
-                                {$email}
+                                {$mensagem}
                             </div>
                         </div>
                     </div>
@@ -118,12 +221,12 @@ HTML;
                     }
                 }
                 ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="form1_tMenu4_1" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="f1" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" value="form1_tMenu4_1" name="formulario" form="form1_tMenu4_1">
-                        <input type="hidden" value="inserir" name="acao" form="form1_tMenu4_1">
-                        <input type="hidden" value="menu4_1" name="pagina" form="form1_tMenu4_1">
+                        <input type="hidden" value="f1" name="formulario" form="f1">
+                        <input type="hidden" value="inserir" name="acaoF1" form="f1">
+                        <input type="hidden" value="menu4_1" name="paginaF1" form="f1">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
@@ -132,72 +235,95 @@ HTML;
         <!--registro deaprtamento/ unidade-->
         <div class="col-md-3">
             <!-- general form elements -->
-            <div class="card card-outline card-primary collapsed-card">
+            <div class="card card-outline card-primary <?php echo isset($alertaDepartamentoF2) || isset($alertaEnderecoF2) || isset($alertaTelefoneF2) || isset($alertaEmailF2) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
-                    <h3 class="card-title">Departamento/ Unidade</h3>
+                    <h3 class="card-title">Departamento</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas <?php echo isset($alertaDepartamentoF2) || isset($alertaEnderecoF2) || isset($alertaTelefoneF2) || isset($alertaEmailF2) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
-                <!-- form start -->
+                <!-- form start -->                
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Secretaria</label>
-                                <select class="form-control" name="secretaria" required="" form="departamentoUnidade">
-                                    <option value="" selected="" disabled="">--</option>
-                                    <option value="administracao">Administração</option>
-                                    <option value="infraestrutura">Infraestrutura</option>
-                                    <option value="ouvidoria">Ouvidoria</option>
-                                    <option value="turismo">Turismo</option>
+                                <select class="form-control<?php echo isset($alertaSecretariaF2) ? $alertaSecretariaF2 : ''; ?>" name="secretariaF2" id="secretariaF2" form="f2">
+                                    <?php
+                                    foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                                        echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
-                        </div>  
-                    </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="departamentoUnidade">Nomenclatura</label>
-                            <input type="text" class="form-control" name="departamentoUnidade" placeholder="Ex.: Tecnologia da Informação" form="departamentoUnidade" required="">
-                            <input type="hidden" value="departamentoUnidade" name="opcao" form="departamentoUnidade">
-                            <input type="hidden" value="menu4_1" name="pagina" form="departamentoUnidade">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="endereco">Endereço</label>
-                            <input type="text" class="form-control" name="endereco" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="endereco" required="">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Ambiente</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <select class="form-control" id="ambiente" name="ambiente" form="departamentoUnidade" required="">
-                                <option value="" selected="" disabled="">--</option>
-                                <option value="interno">Interno</option>
-                                <option value="externo">Externo</option>
-                            </select>
+                            <label for="departamentoF2">Departamento</label>
+                            <input class="form-control <?php echo isset($alertaDepartamentoF2) ? $alertaDepartamentoF2 : ''; ?>" type="text" name="departamentoF2" id="departamentoF2" placeholder="Ex.: Departamento de Tecnologia da Informação" form="f2" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" placeholder="Ex.: 47 3443-8832" form="departamentoUnidade">
+                            <label for="enderecoF2">Endereço</label>
+                            <input class="form-control <?php echo isset($alertaEnderecoF2) ? $alertaEnderecoF2 : ''; ?>" type="text" name="enderecoF2" id="enderecoF2" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="f2" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="whatsApp">WhatsApp</label>
-                            <input type="text" class="form-control" name="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="departamentoUnidade">
+                            <label for="emailF2">E-mail</label>
+                            <input class="form-control <?php echo isset($alertaEmailF2) ? $alertaEmailF2 : ''; ?>" type="email" name="emailF2" id="emailF2" placeholder="Ex.: departamento@itapoa.sc.gov.br" form="f2" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="telefoneF2">Telefone</label>
+                            <input class="form-control <?php echo isset($alertaTelefoneF2) ? $alertaTelefoneF2 : ''; ?>" type="text" name="telefoneF2" id="telefoneF2" placeholder="Ex.: 47 3443-8832" form="f2" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                <input class="custom-control-input" type="checkbox" name="whatsAppF2" id="whatsAppF2" form="f2">
+                                <label class="custom-control-label" for="whatsAppF2">Não</label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarLocal.php" id="departamentoUnidade" method="post" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                        isset($titulo) &&
+                        isset($mensagem)) {
+                    if (isset($alertaDepartamentoF2) ||
+                            isset($alertaEnderecoF2) ||
+                            isset($alertaTelefoneF2) ||
+                            isset($alertaEmailF2)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$mensagem}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="f2" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
+                        <input type="hidden" value="f2" name="formulario" form="f2">
+                        <input type="hidden" value="inserir" name="acaoF2" form="f2">
+                        <input type="hidden" value="menu4_1" name="paginaF2" form="f2">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
@@ -206,81 +332,95 @@ HTML;
         <!--registro coordenação-->
         <div class="col-md-3">
             <!-- general form elements -->
-            <div class="card card-outline card-primary collapsed-card">
+            <div class="card card-outline card-primary <?php echo isset($alertaCoordenacaoF3) || isset($alertaEnderecoF3) || isset($alertaTelefoneF3) || isset($alertaEmailF3) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Coordenação</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas <?php echo isset($alertaCoordenacaoF3) || isset($alertaEnderecoF3) || isset($alertaTelefoneF3) || isset($alertaEmailF3) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
-                <!-- form start -->
+                <!-- form start -->                
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Secretaria</label>
-                                <select class="form-control" name="secretaria" required="" form="coordenacao">
-                                    <option value="" selected="" disabled="">--</option>
-                                    <option value="administracao">Administração</option>
-                                    <option value="infraestrutura">Infraestrutura</option>
-                                    <option value="ouvidoria">Ouvidoria</option>
-                                    <option value="turismo">Turismo</option>
-                                </select>
-                            </div>
-                        </div>  
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Departamento/ Unidade</label>
-                                <select class="form-control" name="departamentoUnidade" required="" form="coordenacao">
-                                    <option value="" selected="" disabled="">--</option>
-                                    <option value="recursosHumanos">Recursos Humanos</option>
-                                    <option value="tecnologiaDaInformacao">Tecnologia da Informação</option>
-                                    <option value="frotas">Frotas</option>
-                                    <option value="patrimonio">Patrimônio</option>
-                                    <option value="licitacoesECompras">Licitações e Compras</option>
+                                <select class="form-control" name="secretariaF3" id="secretariaF3" form="f3">
+                                    <?php
+                                    foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                                        echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="coordenacao">Nomenclatura</label>
-                            <input type="text" class="form-control" name="coordenacao" placeholder="Ex.: Informática" form="coordenacao" required="">
-                            <input type="hidden" value="coordenacao" name="opcao" form="coordenacao">
-                            <input type="hidden" value="menu4_1" name="pagina" form="coordenacao">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Ambiente</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <select class="form-control" id="ambiente" name="ambiente" form="coordenacao" required="">
-                                <option value="" selected="" disabled="">--</option>
-                                <option value="interno">Interno</option>
-                                <option value="externo">Externo</option>
-                            </select>
+                            <label for="coordenacaoF3">Coordenação</label>
+                            <input class="form-control <?php echo isset($alertaCoordenacaoF3) ? $alertaCoordenacaoF3 : ''; ?>" type="text" name="coordenacaoF3" id="coordenacaoF3" placeholder="Ex.: Coordenacao de Tecnologia da Informação" form="f3" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" placeholder="Ex.: 47 3443-8832" form="coordenacao">
+                            <label for="enderecoF3">Endereço</label>
+                            <input class="form-control <?php echo isset($alertaEnderecoF3) ? $alertaEnderecoF3 : ''; ?>" type="text" name="enderecoF3" id="enderecoF3" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="f3" required="">
                         </div>
                     </div>
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="whatsApp">WhatsApp</label>
-                            <input type="text" class="form-control" name="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="coordenacao">
+                            <label for="emailF3">E-mail</label>
+                            <input class="form-control <?php echo isset($alertaEmailF3) ? $alertaEmailF3 : ''; ?>" type="email" name="emailF3" id="emailF3" placeholder="Ex.: coordenacao@itapoa.sc.gov.br" form="f3" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="telefoneF3">Telefone</label>
+                            <input class="form-control <?php echo isset($alertaTelefoneF3) ? $alertaTelefoneF3 : ''; ?>" type="text" name="telefoneF3" id="telefoneF3" placeholder="Ex.: 47 3443-8832" form="f3" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                <input class="custom-control-input" type="checkbox" name="whatsAppF3" id="whatsAppF3" form="f3">
+                                <label class="custom-control-label" for="whatsAppF3">Não</label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarLocal.php" id="coordenacao" method="post" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                        isset($titulo) &&
+                        isset($mensagem)) {
+                    if (isset($alertaCoordenacaoF3) ||
+                            isset($alertaEnderecoF3) ||
+                            isset($alertaTelefoneF3) ||
+                            isset($alertaEmailF3)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$mensagem}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="f3" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
+                        <input type="hidden" value="f3" name="formulario" form="f3">
+                        <input type="hidden" value="inserir" name="acaoF3" form="f3">
+                        <input type="hidden" value="menu4_1" name="paginaF3" form="f3">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
@@ -289,101 +429,100 @@ HTML;
         <!--registro setor-->
         <div class="col-md-3">
             <!-- general form elements -->
-            <div class="card card-outline card-primary collapsed-card">
+            <div class="card card-outline card-primary <?php echo isset($alertaSetorF4) || isset($alertaEnderecoF4) || isset($alertaTelefoneF4) || isset($alertaEmailF4) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Setor</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas <?php echo isset($alertaSetorF4) || isset($alertaEnderecoF4) || isset($alertaTelefoneF4) || isset($alertaEmailF4) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
-                <!-- form start -->
+                <!-- form start -->                
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Secretaria</label>
-                                <select class="form-control" name="secretaria" required="" form="setor">
-                                    <option value="" selected="" disabled="">--</option>
-                                    <option value="administracao">Administração</option>
-                                    <option value="infraestrutura">Infraestrutura</option>
-                                    <option value="ouvidoria">Ouvidoria</option>
-                                    <option value="turismo">Turismo</option>
-                                </select>
-                            </div>
-                        </div>  
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Departamento/ Unidade</label>
-                                <select class="form-control" name="departamentoUnidade" required="" form="setor">
-                                    <option value="" selected="" disabled="">--</option>
-                                    <option value="recursosHumanos">Recursos Humanos</option>
-                                    <option value="tecnologiaDaInformacao">Tecnologia da Informação</option>
-                                    <option value="frotas">Frotas</option>
-                                    <option value="patrimonio">Patrimônio</option>
-                                    <option value="licitacoesECompras">Licitações e Compras</option>
+                                <select class="form-control" name="secretariaF4" id="secretariaF4" form="f4">
+                                    <?php
+                                    foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                                        echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Coordenação</label>
-                                <select class="form-control" name="coordenacao" required="" form="setor">
-                                    <option value="" selected="" >--</option>
-                                    <option value="informaticaESistemas">Informática e Sistemas</option>
-                                    <option value="pessoalERecursosHumanos">Pessoal e Recursos Humanos</option>
-                                    <option value="comprasEAlmoxarifado">Compras e Almoxarifado</option>
-                                    <option value="contratosELicitacoes">Contratos e Licitações</option>
-                                    <option value="patrimonioPublico">Patrimônio Público</option>
-                                </select>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="setorF4">Setor</label>
+                            <input class="form-control <?php echo isset($alertaSetorF4) ? $alertaSetorF4 : ''; ?>" type="text" name="setorF4" id="setorF4" placeholder="Ex.: Setor de Tecnologia da Informação" form="f4" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="enderecoF4">Endereço</label>
+                            <input class="form-control <?php echo isset($alertaEnderecoF4) ? $alertaEnderecoF4 : ''; ?>" type="text" name="enderecoF4" id="enderecoF4" placeholder="Ex.: Rua 960, Mariana Michels Borges, 201" form="f4" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="emailF4">E-mail</label>
+                            <input class="form-control <?php echo isset($alertaEmailF4) ? $alertaEmailF4 : ''; ?>" type="email" name="emailF4" id="emailF4" placeholder="Ex.: setor@itapoa.sc.gov.br" form="f4" required="">
+                        </div>
+                    </div>
+                    <div class="row">                      
+                        <div class="form-group col-md-12">
+                            <label for="telefoneF4">Telefone</label>
+                            <input class="form-control <?php echo isset($alertaTelefoneF4) ? $alertaTelefoneF4 : ''; ?>" type="text" name="telefoneF4" id="telefoneF4" placeholder="Ex.: 47 3443-8832" form="f4" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                <input class="custom-control-input" type="checkbox" name="whatsAppF4" id="whatsAppF4" form="f4">
+                                <label class="custom-control-label" for="whatsAppF4">Não</label>
                             </div>
-                        </div>  
-                    </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="setor">Nomenclatura</label>
-                            <input type="text" class="form-control" name="setor" placeholder="Ex.: Informática" form="setor" required="">
-                            <input type="hidden" value="setor" name="opcao" form="setor">
-                            <input type="hidden" value="menu4_1" name="pagina" form="setor">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Ambiente</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <select class="form-control" id="ambiente" name="ambiente" form="setor" required="">
-                                <option value="" selected="" disabled="">--</option>
-                                <option value="interno">Interno</option>
-                                <option value="externo">Externo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" placeholder="Ex.: 47 3443-8832" form="setor">
-                        </div>
-                    </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="whatsApp">WhatsApp</label>
-                            <input type="text" class="form-control" name="whatsApp" placeholder="Ex.: 47 9 9999-9999" form="setor">
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarLocal.php" id="setor" method="post" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                    isset($titulo) &&
+                    isset($mensagem)) {
+                    if (isset($alertaSetorF4) ||
+                        isset($alertaEnderecoF4) ||
+                        isset($alertaTelefoneF4) ||
+                        isset($alertaEmailF4)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$mensagem}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarLocal.php" method="post" id="f4" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
+                        <input type="hidden" value="f4" name="formulario" form="f4">
+                        <input type="hidden" value="inserir" name="acaoF4" form="f4">
+                        <input type="hidden" value="menu4_1" name="paginaF4" form="f4">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
             </div>
-        </div>        
+        </div>    
         <!-- /.card -->
     </div>
     <div class="row">
@@ -410,3 +549,52 @@ HTML;
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        //traz os departamentos de acordo com a secretaria selecionada   
+        $('#secretariaF3').on('change', function () {
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var idSecretaria = $(this).val();
+            //mostra as coordenações do departamento escolhido
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxDepartamento.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#departamentoF3').html(html);
+                }
+            });
+        });
+        
+        //traz os departamentos de acordo com a secretaria selecionada   
+        $('#secretariaF4').on('change', function () {
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var idSecretaria = $(this).val();
+            //mostra os departamentos da secretaria escolhida
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxDepartamento.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#departamentoF4').html(html);
+                }
+            });
+            
+            //mostra as coordenações da secretaria escolhida
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxCoordenacao.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#coordenacaoF4').html(html);
+                }
+            });
+        });
+    });
+</script>

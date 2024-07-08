@@ -8,6 +8,7 @@ use App\sistema\acesso\{
 };
 
 if(isset($_POST['idSecretaria'])){
+    
     $sCoordenacao = new sCoordenacao($_POST['idSecretaria']);
     $sCoordenacao->consultar('ajaxCoordenacao.php');
 

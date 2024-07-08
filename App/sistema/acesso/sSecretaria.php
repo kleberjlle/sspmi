@@ -51,6 +51,28 @@ class sSecretaria {
             $this->mConexao->CRUD($dados);
         }
     }
+    
+    public function inserir($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu4_1.php') {
+            
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'secretaria',
+                'camposInsercao' => [
+                    'nomenclatura',
+                    'endereco'
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['nomenclatura'],
+                    $tratarDados['endereco'],
+                ]
+            ];            
+        }
+        $this->mConexao->CRUD($dados);
+    }
 
     public function getIdSecretaria(): int {
         return $this->idSecretaria;
