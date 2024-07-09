@@ -212,7 +212,8 @@ class sEmail {
         
         if ($pagina == 'tMenu4_1-email_has_secretaria.php' ||
             $pagina == 'tMenu4_1-email_has_departamento.php' ||
-            $pagina == 'tMenu4_1-email_has_coordenacao.php') {
+            $pagina == 'tMenu4_1-email_has_coordenacao.php' ||
+            $pagina == 'tMenu4_1-email_has_setor.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

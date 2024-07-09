@@ -34,8 +34,7 @@ class sSetor {
             $this->mConexao->CRUD($dados);
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setIdSecretaria($linha['coordenacao_departamento_secretaria_idsecretaria']);
-                $this->setIdDepartamento($linha['coordenacao_departamento_iddepartamento']);
+                $this->setIdSecretaria($linha['secretaria_idsecretaria']);
                 $this->setEndereco($linha['endereco']);
                 $this->setNomenclatura($linha['nomenclatura']);
             }
@@ -49,7 +48,7 @@ class sSetor {
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'setor',
-                'camposCondicionados' => 'coordenacao_departamento_secretaria_idsecretaria',
+                'camposCondicionados' => 'secretaria_idsecretaria',
                 'valoresCondicionados' => $this->getIdSecretaria(),
                 'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
                 'ordem' => 'ASC'

@@ -1,12 +1,44 @@
 <?php
-require_once '../../sistema/acesso/sNotificacao.php';
 
-//verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica se há retorno de notificações
-if (isset($_GET['notificacao'])) {
-    $notificacao = $_GET['notificacao'];
-    $codigo = notificacao($notificacao);
+use App\sistema\acesso\{
+    sConfiguracao,
+    sNotificacao,
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor
+};
+
+//instancia classes para manipulação dos dados
+$sConfiguracao = new sConfiguracao();
+
+$sSecretaria = new sSecretaria(0);
+$sSecretaria->consultar('tMenu4_1.php');
+
+$sDepartamento = new sDepartamento(0);
+$sDepartamento->consultar('tMenu4_1.php');
+
+$sCoordenacao = new sCoordenacao(0);
+$sCoordenacao->consultar('tMenu4_1.php');
+//retorno de campo inválidos para notificação
+if (isset($_GET['campo'])) {
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'categoriaF2':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaCategoriaF2 = ' is-valid';
+            } else {
+                $alertaCategoriaF2 = ' is-warning';
+            }
+            break;
+        default:
+            break;
+    }
+
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();
 }
 ?>
 <div class="container-fluid">
@@ -94,9 +126,12 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarEquipamento.php" id="equipamento" method="post" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarCategoria.php" name="categoriaF2" id="categoriaF2" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
+                        <input type="hidden" value="f2" name="formulario" form="f2">
+                        <input type="hidden" value="inserir" name="acaoF2" form="f2">
+                        <input type="hidden" value="menu3_1" name="paginaF2" form="f2">
                         <button type="submit" class="btn btn-primary">Próxima</button>
                     </div>
                 </form>
@@ -108,12 +143,12 @@ if (isset($_GET['notificacao'])) {
         <!-- left column -->
         <div class="col-md-2">
             <!-- general form elements -->
-            <div class="card card-outline card-primary collapsed-card">
+            <div class="card card-outline card-primary <?php echo isset($alertaCategoriaF2) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Categoria</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas <?php echo isset($alertaCategoriaF2) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
@@ -122,16 +157,37 @@ if (isset($_GET['notificacao'])) {
                 <div class="card-body">
                     <div class="row">                      
                         <div class="form-group col-md-12">
-                            <label for="categoria">Nomenclatura</label>
-                            <input type="text" class="form-control" name="categoria" placeholder="Ex.: Impressora">
-                            <input type="hidden" value="categoria" name="opcao" form="categoria">
-                            <input type="hidden" value="menu3_1" name="pagina" form="categoria">
+                            <label for="categoria">Categoria</label>
+                            <input class="form-control<?php echo isset($alertaCategoriaF2) ? $alertaCategoriaF2 : ''; ?>" type="text" name="categoriaF2" id="categoriaF2" placeholder="Ex.: Impressora" form="f2" required="">
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sRegistrarEquipamento.php" method="post" id="categoria" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                    isset($titulo) &&
+                    isset($mensagem)) {
+                    if (isset($alertaCategoriaF2)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$mensagem}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f2" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
+                        <input type="hidden" value="f2" name="formulario" form="f2">
+                        <input type="hidden" value="inserir" name="acaoF2" form="f2">
+                        <input type="hidden" value="menu4_1" name="paginaF2" form="f2">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>

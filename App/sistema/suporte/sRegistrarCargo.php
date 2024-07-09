@@ -67,5 +67,9 @@ if (isset($_POST['pagina'])) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=5_1&campo=cargo&codigo=S4");
         exit();
     }
+}else{
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
 }
 ?>
