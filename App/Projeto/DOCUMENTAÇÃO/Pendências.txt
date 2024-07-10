@@ -9,3 +9,4 @@ ok - 5 - Implementar tratamento de máscara para números de telefones;
 ok - Alterar instância do sHistorico no arquivo tAcessar.php
 8 - Campos telefone e email do menu outros usuários não atualizam após alteração dos dados do usuário;
 9 - Atualizar os dados da sessão sempre que o tPainel.php for carregado;
+10 - Remover número de série e service tag da tabela modelo e inserir na tabela equipamento;
