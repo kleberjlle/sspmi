@@ -12,7 +12,6 @@ use App\sistema\acesso\{
 };
 use App\sistema\suporte\{
     sCategoria,
-    sMarca,
     sModelo,
     sTensao,
     sCorrente,
@@ -69,44 +68,44 @@ if (isset($_POST['formulario'])) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=categoriaF2&codigo=S4");
         exit();
     }
-    //registrar marca
+    //registrar tensao
     if ($_POST['formulario'] == 'f3') {
         $pagina = $_POST['paginaF3'];
         $acao = $_POST['acaoF3'];
         $idUsuario = $_SESSION['credencial']['idUsuario'];
-        $marca = $_POST['marcaF3'];
+        $tensao = $_POST['tensaoF3'];
 
         //alimenta a tabela de histórico
-        alimentaHistorico($pagina, $acao, 'marca', null, $marca, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'tensao', null, $tensao, $idUsuario);
 
         //tratamento de dados
-        $tratamentoMarca = new sTratamentoDados($marca);
-        $marcaTratada = $tratamentoMarca->tratarNomenclatura();
+        $tratamentoTensao = new sTratamentoDados($tensao);
+        $tensaoTratada = $tratamentoTensao->tratarNomenclatura();
         
         //instancia classe
-        $sMarca = new sMarca();
-        $sMarca->setNomeCampo('nomenclatura');
-        $sMarca->setValorCampo($marcaTratada);
-        $sMarca->consultar('tMenu3_1.php');
+        $sTensao = new sTensao();
+        $sTensao->setNomeCampo('nomenclatura');
+        $sTensao->setValorCampo($tensaoTratada);
+        $sTensao->consultar('tMenu3_1.php');
 
         //compara os registros do BD com a nova solicitação
-        if ($sMarca->getValidador()) {
+        if ($sTensao->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=A10");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=A10");
             exit();
         }
         
-        if(strlen($marcaTratada) < 5){
+        if(strlen($tensaoTratada) < 5){
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=A16");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=A16");
             exit();
         }
         
         //inserir novo registro no BD
-        $sMarca->inserir('tMenu3_1.php');
+        $sTensao->inserir('tMenu3_1.php');
         
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=S4");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=S4");
         exit();
     }    
     //registrar modelo
@@ -115,7 +114,7 @@ if (isset($_POST['formulario'])) {
         $acao = $_POST['acaoF4'];
         $idUsuario = $_SESSION['credencial']['idUsuario'];
         $modelo = $_POST['modeloF4'];
-        $idMarca = $_POST['marcaF4'];
+        $idTensao = $_POST['tensaoF4'];
 
         //alimenta a tabela de histórico
         alimentaHistorico($pagina, $acao, 'modelo', null, $modelo, $idUsuario);
@@ -126,8 +125,8 @@ if (isset($_POST['formulario'])) {
         
         //instancia classe
         $sModelo = new sModelo();
-        $sModelo->setNomeCampo('nomenclatura', 'marca_idmarca');
-        $sModelo->setValorCampo($modeloTratado, $idMarca);
+        $sModelo->setNomeCampo('nomenclatura', 'tensao_idtensao');
+        $sModelo->setValorCampo($modeloTratado, $idTensao);
         $sModelo->consultar('tMenu3_1.php');
 
         //compara os registros do BD com a nova solicitação
@@ -146,14 +145,138 @@ if (isset($_POST['formulario'])) {
         //inserir novo registro no BD
         $dados = [
             'nomenclatura' => $modeloTratado,
-            'marca_idmarca' => $idMarca
+            'tensao_idtensao' => $idTensao
         ];
         $sModelo->inserir('tMenu3_1.php', $dados);
         
         $sConfiguracao = new sConfiguracao();
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF4&codigo=S4");
         exit();
-    }
+    }    
+    //registrar tensão
+    if ($_POST['formulario'] == 'f5') {
+        $pagina = $_POST['paginaF5'];
+        $acao = $_POST['acaoF5'];
+        $idUsuario = $_SESSION['credencial']['idUsuario'];
+        $tensao = $_POST['tensaoF5'];
+
+        //alimenta a tabela de histórico
+        alimentaHistorico($pagina, $acao, 'tensao', null, $tensao, $idUsuario);
+
+        //tratamento de dados
+        $tratamentoTensao = new sTratamentoDados($tensao);
+        $tensaoTratada = $tratamentoTensao->tratarNomenclatura();
+        
+        //instancia classe
+        $sTensao = new sTensao();
+        $sTensao->setNomeCampo('nomenclatura');
+        $sTensao->setValorCampo($tensaoTratada);
+        $sTensao->consultar('tMenu3_1.php');
+        
+        //compara os registros do BD com a nova solicitação
+        if ($sTensao->getValidador()) {
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF5&codigo=A15");
+            exit();
+        }
+        
+        //verifica se a quantidade de caracter atende aos requisitos do sistema
+        if(strlen($tensaoTratada) < 2){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF5&codigo=A8");
+            exit();
+        }
+        
+        //inserir novo registro no BD
+        $sTensao->inserir('tMenu3_1.php');
+        
+        $sConfiguracao = new sConfiguracao();
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF5&codigo=S4");
+        exit();
+    } 
+    //registrar corrente
+    if ($_POST['formulario'] == 'f6') {
+        $pagina = $_POST['paginaF6'];
+        $acao = $_POST['acaoF6'];
+        $idUsuario = $_SESSION['credencial']['idUsuario'];
+        $corrente = $_POST['correnteF6'];
+
+        //alimenta a tabela de histórico
+        alimentaHistorico($pagina, $acao, 'corrente', null, $corrente, $idUsuario);
+
+        //tratamento de dados
+        $tratamentoCorrente = new sTratamentoDados($corrente);
+        $correnteTratada = $tratamentoCorrente->tratarNomenclatura();
+        
+        //instancia classe
+        $sCorrente = new sCorrente();
+        $sCorrente->setNomeCampo('nomenclatura');
+        $sCorrente->setValorCampo($correnteTratada);
+        $sCorrente->consultar('tMenu3_1.php');
+        
+        //compara os registros do BD com a nova solicitação
+        if ($sCorrente->getValidador()) {
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=correnteF6&codigo=A15");
+            exit();
+        }
+        
+        //verifica se a quantidade de caracter atende aos requisitos do sistema
+        if(strlen($correnteTratada) < 2){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=correnteF6&codigo=A8");
+            exit();
+        }
+        
+        //inserir novo registro no BD
+        $sCorrente->inserir('tMenu3_1.php');
+        
+        $sConfiguracao = new sConfiguracao();
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=correnteF6&codigo=S4");
+        exit();
+    } 
+    //registrar sistema operacional
+    if ($_POST['formulario'] == 'f7') {
+        $pagina = $_POST['paginaF7'];
+        $acao = $_POST['acaoF7'];
+        $idUsuario = $_SESSION['credencial']['idUsuario'];
+        $sistemaOperacional = $_POST['sistemaOperacionalF7'];
+
+        //alimenta a tabela de histórico
+        alimentaHistorico($pagina, $acao, 'sistemaOperacional', null, $sistemaOperacional, $idUsuario);
+
+        //tratamento de dados
+        $tratamentoSistemaOperacional = new sTratamentoDados($sistemaOperacional);
+        $sistemaOperacionalTratada = $tratamentoSistemaOperacional->tratarNomenclatura();
+        
+        //instancia classe
+        $sSistemaOperacional = new sSistemaOperacional();
+        $sSistemaOperacional->setNomeCampo('nomenclatura');
+        $sSistemaOperacional->setValorCampo($sistemaOperacionalTratada);
+        $sSistemaOperacional->consultar('tMenu3_1.php');
+        
+        //compara os registros do BD com a nova solicitação
+        if ($sSistemaOperacional->getValidador()) {
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=sistemaOperacionalF7&codigo=A15");
+            exit();
+        }
+        
+        //verifica se a quantidade de caracter atende aos requisitos do sistema
+        if(strlen($sistemaOperacionalTratada) < 5){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=sistemaOperacionalF7&codigo=A16");
+            exit();
+        }
+        
+        //inserir novo registro no BD
+        $sSistemaOperacional->inserir('tMenu3_1.php');
+        
+        $sConfiguracao = new sConfiguracao();
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=sistemaOperacionalF7&codigo=S4");
+        exit();
+    } 
+    
     
 } else {
     //solicitar saída com tentativa de violação

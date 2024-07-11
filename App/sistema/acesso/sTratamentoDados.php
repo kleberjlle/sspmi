@@ -18,7 +18,12 @@ class sTratamentoDados {
         $j = count($palavras) - 1;
         for ($i = 0; $i < count($palavras); $i++) {
             if (strlen($palavras[$i]) < 3) {
-                $palavrasTratadas .= $palavras[$i] . ' ';
+                if($j == 0){
+                    $palavrasTratadas .= $palavras[$i];
+                }else{
+                    $palavrasTratadas .= $palavras[$i] . ' ';
+                }
+                
             } else {
                 if ($j == $i) {
                     $palavrasTratadas .= ucfirst($palavras[$i]);
