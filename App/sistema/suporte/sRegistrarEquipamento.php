@@ -26,12 +26,40 @@ if (!isset($_SESSION['credencial'])) {
 }
 
 if (isset($_POST['formulario'])) {
+    //registrar equipamento
+    if($_POST['formulario'] == 'f1'){
+        $pagina = $_POST['paginaF1'];
+        $acao = $_POST['acaoF1'];
+        $idUsuario = $_SESSION['credencial']['idUsuario'];
+        $patrimonio = $_POST['patrimonioF1'];
+        $idCategoria = $_POST['categoriaF1'];
+        $idMarca = $_POST['marcaF1'];
+        $modelo = $_POST['modeloF1'];
+        $serviceTag = $_POST['serviceTagF1'];
+        $numeroDeSerie = $_POST['numeroDeSerieF1'];
+        $tensao = $_POST['tensaoF1'];
+        $corrente = $_POST['correnteF1'];
+        $sistemaOperacional = $_POST['sistemaOperacionalF1'];
+        $atualizar = [];
+        
+        $sTratamentoPatrimonio = new sTratamentoDados($patrimonio);
+        $patrimonioTratado = $sTratamentoPatrimonio->tratarNomenclatura();
+        
+        //alimenta a tabela de histórico
+        alimentaHistorico($pagina, $acao, 'patrimonio', null, $patrimonioTratado, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'categoria_idcategoria', null, $idCategoria, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'marca_idmarca', null, $idMarca, $idUsuario);
+        
+        //verifica se os dados atendem aos requisitos
+        $atualizar['patrimonio'] = $patrimonioTratado;
+        $atualizar['categoria_idcategoria'] = $idCategoria;
+        
+    }
     //registrar categoria
     if ($_POST['formulario'] == 'f2') {
         $pagina = $_POST['paginaF2'];
         $acao = $_POST['acaoF2'];
-        $idUsuario = $_SESSION['credencial']['idUsuario'];
-        
+        $idUsuario = $_SESSION['credencial']['idUsuario'];        
         
         $categoria = $_POST['categoriaF2'];
 
@@ -247,12 +275,12 @@ if (isset($_POST['formulario'])) {
 
         //tratamento de dados
         $tratamentoSistemaOperacional = new sTratamentoDados($sistemaOperacional);
-        $sistemaOperacionalTratada = $tratamentoSistemaOperacional->tratarNomenclatura();
+        $sistemaOperacionalTratado = $tratamentoSistemaOperacional->tratarNomenclatura();
         
         //instancia classe
         $sSistemaOperacional = new sSistemaOperacional();
         $sSistemaOperacional->setNomeCampo('nomenclatura');
-        $sSistemaOperacional->setValorCampo($sistemaOperacionalTratada);
+        $sSistemaOperacional->setValorCampo($sistemaOperacionalTratado);
         $sSistemaOperacional->consultar('tMenu3_1.php');
         
         //compara os registros do BD com a nova solicitação
@@ -263,7 +291,7 @@ if (isset($_POST['formulario'])) {
         }
         
         //verifica se a quantidade de caracter atende aos requisitos do sistema
-        if(strlen($sistemaOperacionalTratada) < 5){
+        if(strlen($sistemaOperacionalTratado) < 5){
             $sConfiguracao = new sConfiguracao();
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=sistemaOperacionalF7&codigo=A16");
             exit();

@@ -3,14 +3,11 @@
 use App\sistema\acesso\{
     sConfiguracao,
     sNotificacao,
-    sSecretaria,
-    sDepartamento,
-    sCoordenacao,
-    sSetor
 };
 
 use App\sistema\suporte\{
-    sMarca
+    sMarca,
+    sCategoria
 };
 
 //instancia classes para manipulação dos dados
@@ -19,10 +16,78 @@ $sConfiguracao = new sConfiguracao();
 $sMarca = new sMarca();
 $sMarca->consultar('tMenu3_1.php-f4');
 
+$sCategoria = new sCategoria();
+$sCategoria->consultar('tMenu3_1.php-f1');
+
+
+
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
+        case 'patrimonioF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaPatrimonioF1 = ' is-valid';
+            } else {
+                $alertaPatrimonioF1 = ' is-warning';
+            }
+            break;
+        case 'categoriaF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaCategoriaF1 = ' is-valid';
+            } else {
+                $alertaCategoriaF1 = ' is-warning';
+            }
+            break;
+        case 'marcaF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaMarcaF1 = ' is-valid';
+            } else {
+                $alertaMarcaF1 = ' is-warning';
+            }
+            break;
+        case 'modeloF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaModeloF1 = ' is-valid';
+            } else {
+                $alertaModeloF1 = ' is-warning';
+            }
+            break;
+        case 'serviceTagF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaServiceTagF1 = ' is-valid';
+            } else {
+                $alertaServiceTagF1 = ' is-warning';
+            }
+            break;
+        case 'numeroDeSerieF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaNumeroDeSerieF1 = ' is-valid';
+            } else {
+                $alertaNumeroDeSerieF1 = ' is-warning';
+            }
+            break;
+        case 'tensaoF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaTensaoF1 = ' is-valid';
+            } else {
+                $alertaTensaoF1 = ' is-warning';
+            }
+            break;
+        case 'correnteF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaCorrenteF1 = ' is-valid';
+            } else {
+                $alertaCorrenteF1 = ' is-warning';
+            }
+            break;
+        case 'sistemaOperacionalF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaSistemaOperacionalF1 = ' is-valid';
+            } else {
+                $alertaSistemaOperacionalF1 = ' is-warning';
+            }
+            break;
         case 'categoriaF2':
             if ($_GET['codigo'] == 'S4') {
                 $alertaCategoriaF2 = ' is-valid';
@@ -80,53 +145,59 @@ if (isset($_GET['campo'])) {
         <!-- left column -->
         <div class="col-md-12">
             <!-- general form elements -->
-            <div class="card card-outline card-primary">
+            <div class="card card-outline card-primary  <?php echo isset($alertaPatrimonioF1) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
                     <h3 class="card-title">Etapa 1 - Equipamento</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
+                            <i class="fas <?php echo isset($alertaPatrimonioF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
                 <!-- form start -->
-
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-1">
-                            <label for="patrimonio">Patrimônio</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <input type="text" class="form-control" id="patrimonio" name="patrimonio" placeholder="Ex.: 20580">
+                            <label for="Patrimonio">Patrimônio</label> <a href="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                            <input class="form-control <?php echo isset($alertaPatrimonioF1) ? $alertaPatrimonioF1 : ''; ?>" type="number" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 20580" form="f1">
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Categoria</label>
-                                <select class="form-control" name="categoria">
-                                    <option value="" selected="" >--</option>
-                                    <option value="computador">Computador</option>
-                                    <option value="monitor">Monitor</option>
-                                    <option value="impressora">Impressora</option>
-                                    <option value="scanner">Scanner</option>
+                                <select class="form-control" name="categoriaF1" id="categoriaF1" form="f1">
+                                    <?php
+                                    if($sCategoria->getValidador()){
+                                        foreach ($sCategoria->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idcategoria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }else{
+                                       echo '<option value="0" selected="">--</option>'; 
+                                    }
+                                    ?>
                                 </select>
                             </div>
-                        </div>                            
-                        <div class="col-md-1">
+                        </div>                           
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Marca</label>
-                                <select class="form-control" name="marca">
-                                    <option value="" selected="" >--</option>
-                                    <option value="dell">Dell</option>
-                                    <option value="positivo">Positivo</option>
-                                    <option value="Lenovo">Lenovo</option>
-                                    <option value="aoc">AOC</option>
-                                    <option value="lg">LG</option>
+                                <select class="form-control" name="marcaF1" id="marcaF1" form="f1">
+                                    <?php
+                                    if($sMarca->getValidador()){
+                                        foreach ($sMarca->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }else{
+                                       echo '<option value="0" selected="">--</option>'; 
+                                    }
+                                    ?>
                                 </select>
                             </div>
-                        </div>        
+                        </div>   
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Modelo</label>
-                                <select class="form-control" name="modelo">
+                                <select class="form-control" name="modeloF1" id="modeloF1" form="f1">
                                     <option value="" selected="" >--</option>
                                     <option value="optilex3000">OptiLex 3000</option>
                                     <option value="masterd40">Master D40</option>
@@ -137,35 +208,53 @@ if (isset($_GET['campo'])) {
                             </div>
                         </div>  
                         <div class="form-group col-md-1">
-                            <label for="serviceTag">Service Tag</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <input type="text" class="form-control" name="serviceTag" placeholder="Ex.: 5VPMLY3">
+                            <label for="serviceTagF1">Service Tag</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                            <input class="form-control" type="text" name="serviceTagF1" id="serviceTagF1" placeholder="Ex.: 5VPMLY3" form="f1">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="numeroDeSerie">Número de Série</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <input type="text" class="form-control" name="numeroDeSerie" placeholder="Ex.: 8498732518">
+                            <label for="numeroDeSerieF1">Número de Série</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                            <input class="form-control" type="text" name="numeroDeSerieF1" id="numeroDeSerieF1" placeholder="Ex.: 8498732518" form="f1">
                         </div>
                         <div class="form-group col-md-1">
-                            <label for="tensao">Tensão de Entrada</label>
-                            <input type="text" class="form-control" name="tensao" placeholder="Ex.: 19V">
+                            <label for="tensaoF1">Tensão de Entrada</label>
+                            <input class="form-control" type="text" name="tensaoF1" id="tensaoF1" placeholder="Ex.: 19V" form="f1">
                         </div>
                         <div class="form-group col-md-1">
-                            <label for="corrente">Corrente de Entrada</label>
-                            <input type="text" class="form-control" name="corrente" placeholder="Ex.: 3.42A">
+                            <label for="correnteF1">Corrente de Entrada</label>
+                            <input class="form-control" type="text" name="correnteF1" id="correnteF1" placeholder="Ex.: 3.42A" form="f1">
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="corrente">Sistema Operacional</label>
-                            <input type="text" class="form-control" name="sistemaOpercaional" placeholder="Ex.: Windows 11">
-                            <input type="hidden" value="equipamento" name="opcao" form="equipamento">
-                            <input type="hidden" value="menu3_1" name="pagina" form="equipamento">
+                            <label for="sistemaOperacionalF1">Sistema Operacional</label>
+                            <input class="form-control" type="text" name="sistemaOperacionalF1" id="sistemaOperacionalF1" placeholder="Ex.: Windows 11" form="f1">
                         </div>
                     </div>
                 </div>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarCategoria.php" name="categoriaF2" id="categoriaF2" method="post" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                    isset($titulo) &&
+                    isset($mensagem)) {
+                    if (isset($alertaCategoriaF2)) {
+                        echo <<<HTML
+                    <div class="col-mb-3">
+                        <div class="card card-outline card-{$tipo}">
+                            <div class="card-header">
+                                <h3 class="card-title">{$titulo}</h3>
+                            </div>
+                            <div class="card-body">
+                                {$mensagem}
+                            </div>
+                        </div>
+                    </div>
+HTML;
+                    }
+                }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" id="f1" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
-                        <input type="hidden" value="f2" name="formulario" form="f2">
-                        <input type="hidden" value="inserir" name="acaoF2" form="f2">
-                        <input type="hidden" value="menu3_1" name="paginaF2" form="f2">
+                        <input type="hidden" value="f1" name="formulario" form="f1">
+                        <input type="hidden" value="inserir" name="acaoF1" form="f1">
+                        <input type="hidden" value="menu3_1" name="paginaF1" form="f1">
                         <button type="submit" class="btn btn-primary">Próxima</button>
                     </div>
                 </form>
@@ -470,7 +559,7 @@ HTML;
                     <div class="row">                      
                         <div class="form-group col-md-12">
                             <label for="sistemaOperacional">Sistema Operacional</label>
-                            <input class="form-control<?php echo isset($alertaSistemaOperacionalF7) ? $alertaSistemaOperacionalF7 : ''; ?>" type="text" name="sistemaOperacionalF7" id="sistemaOperacionalF7" placeholder="Ex.: Windows 11 Professional Edition" form="f6" required="">
+                            <input class="form-control<?php echo isset($alertaSistemaOperacionalF7) ? $alertaSistemaOperacionalF7 : ''; ?>" type="text" name="sistemaOperacionalF7" id="sistemaOperacionalF7" placeholder="Ex.: Windows 11 Professional Edition" form="f7" required="">
                         </div>
                     </div>
                 </div>
@@ -494,40 +583,17 @@ HTML;
                     }
                 }
                 ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f6" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f7" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" value="f6" name="formulario" form="f6">
-                        <input type="hidden" value="inserir" name="acaoF7" form="f6">
-                        <input type="hidden" value="menu3_1" name="paginaF7" form="f6">
+                        <input type="hidden" value="f7" name="formulario" form="f7">
+                        <input type="hidden" value="inserir" name="acaoF7" form="f7">
+                        <input type="hidden" value="menu3_1" name="paginaF7" form="f7">
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
             </div>
         </div>
         <!-- /.card -->
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-12">
-            <?php
-            require_once '../../sistema/acesso/sNotificacao.php';
-
-            if (isset($codigo)) {
-                $mensagem = explode('|', $codigo);
-                echo <<<HTML
-                <div class="col-mb-3">
-                    <div class="card card-outline card-{$mensagem[0]}">
-                        <div class="card-header">
-                            <h3 class="card-title">{$mensagem[1]}</h3>
-                        </div>
-                        <div class="card-body">
-                            {$mensagem[2]}
-                        </div>
-                    </div>
-                </div>
-HTML;
-            }
-            ?>
-        </div>
     </div>
 </div>

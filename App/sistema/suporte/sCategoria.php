@@ -41,6 +41,24 @@ class sCategoria {
                 $this->setSNotificacao(new sNotificacao('A15'));
             }
         }
+        
+        if ($pagina == 'tMenu3_1.php-f1') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'categoria',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];
+            //envia os dados para elaboração da query
+            $this->mConexao->CRUD($dados);
+
+            //atualiza o validador da classe de acordo com o validador da conexão
+            $this->setValidador($this->mConexao->getValidador());
+        }
     }
 
     public function inserir($pagina) {
