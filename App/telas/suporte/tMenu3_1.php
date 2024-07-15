@@ -4,7 +4,6 @@ use App\sistema\acesso\{
     sConfiguracao,
     sNotificacao,
 };
-
 use App\sistema\suporte\{
     sMarca,
     sCategoria
@@ -18,8 +17,6 @@ $sMarca->consultar('tMenu3_1.php-f4');
 
 $sCategoria = new sCategoria();
 $sCategoria->consultar('tMenu3_1.php-f1');
-
-
 
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
@@ -166,31 +163,31 @@ if (isset($_GET['campo'])) {
                             <div class="form-group">
                                 <label>Categoria</label>
                                 <select class="form-control" name="categoriaF1" id="categoriaF1" form="f1">
-                                    <?php
-                                    if($sCategoria->getValidador()){
-                                        foreach ($sCategoria->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idcategoria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                    }else{
-                                       echo '<option value="0" selected="">--</option>'; 
-                                    }
-                                    ?>
+<?php
+if ($sCategoria->getValidador()) {
+    foreach ($sCategoria->mConexao->getRetorno() as $value) {
+        echo '<option value="' . $value['idcategoria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
                                 </select>
                             </div>
                         </div>                           
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label>Marca</label>
                                 <select class="form-control" name="marcaF1" id="marcaF1" form="f1">
-                                    <?php
-                                    if($sMarca->getValidador()){
-                                        foreach ($sMarca->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                    }else{
-                                       echo '<option value="0" selected="">--</option>'; 
-                                    }
-                                    ?>
+<?php
+if ($sMarca->getValidador()) {
+    foreach ($sMarca->mConexao->getRetorno() as $value) {
+        echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
                                 </select>
                             </div>
                         </div>   
@@ -229,12 +226,12 @@ if (isset($_GET['campo'])) {
                         </div>
                     </div>
                 </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaCategoriaF2)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaCategoriaF2)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -246,9 +243,9 @@ if (isset($_GET['campo'])) {
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
+    }
+}
+?>
                 <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" id="f1" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
@@ -285,12 +282,12 @@ HTML;
                         </div>
                     </div>
                 </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaCategoriaF2)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaCategoriaF2)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -302,9 +299,9 @@ HTML;
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
+    }
+}
+?>
                 <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f2" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -328,21 +325,92 @@ HTML;
                     </div>
                     <!-- /.card-tools -->
                 </div>
-                <!-- form start -->                
-                <div class="card-body">
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="marca">Marca</label>
-                            <input class="form-control<?php echo isset($alertaMarcaF3) ? $alertaMarcaF3 : ''; ?>" type="text" name="marcaF3" id="marcaF3" placeholder="Ex.: Dell" form="f3" required="">
+                <!-- form start -->        
+                     
+                    <div class="card-body">
+                        <div class="row">                      
+                            <div class="form-group col-md-12">
+                                <label for="marca">Marca</label>
+                                <input class="form-control<?php echo isset($alertaMarcaF3) ? $alertaMarcaF3 : ''; ?>" type="text" name="marcaF3" id="marcaF3" placeholder="Ex.: Dell" form="f3" required="">
+                            </div>
                         </div>
                     </div>
+                        <?php
+                        if (isset($tipo) &&
+                                isset($titulo) &&
+                                isset($mensagem)) {
+                            if (isset($alertaMarcaF3)) {
+                                echo <<<HTML
+                                            <div class="col-mb-3">
+                                                <div class="card card-outline card-{$tipo}">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">{$titulo}</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        {$mensagem}
+                                                    </div>
+                                                </div>
+                                            </div>
+                        HTML;
+                            }
+                        }
+                        ?>
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f3" enctype="multipart/form-data">
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="hidden" value="f3" name="formulario" form="f3">
+                            <input type="hidden" value="inserir" name="acaoF3" form="f3">
+                            <input type="hidden" value="menu3_1" name="paginaF3" form="f3">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
                 </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaMarcaF3)) {
-                        echo <<<HTML
+            </div>
+            <div class="col-md-2">
+                <!-- general form elements -->
+                <div class="card card-outline card-primary <?php echo isset($alertaModeloF4) ? '' : 'collapsed-card' ?>">
+                    <div class="card-header">
+                        <h3 class="card-title">Modelo</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas <?php echo isset($alertaModeloF4) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- form start -->                
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Marca</label>
+                                    <select class="form-control" name="marcaF4" id="marcaF4" form="f4">
+<?php
+if ($sMarca->getValidador()) {
+    foreach ($sMarca->mConexao->getRetorno() as $value) {
+        echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+    }
+} else {
+    echo '<option value="0" selected="">--</option>';
+}
+?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">                      
+                            <div class="form-group col-md-12">
+                                <label for="modelo">Modelo</label>
+                                <input class="form-control<?php echo isset($alertaModeloF4) ? $alertaModeloF4 : ''; ?>" type="text" name="modeloF4" id="modeloF4" placeholder="Ex.: OptiPlex 3000" form="f4" required="">
+                            </div>
+                        </div>
+                    </div>
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaModeloF4)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -354,65 +422,47 @@ HTML;
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f3" enctype="multipart/form-data">
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <input type="hidden" value="f3" name="formulario" form="f3">
-                        <input type="hidden" value="inserir" name="acaoF3" form="f3">
-                        <input type="hidden" value="menu3_1" name="paginaF3" form="f3">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <!-- general form elements -->
-            <div class="card card-outline card-primary <?php echo isset($alertaModeloF4) ? '' : 'collapsed-card' ?>">
-                <div class="card-header">
-                    <h3 class="card-title">Modelo</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaModeloF4) ? 'fa-minus' : 'fa-plus' ?>"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+    }
+}
+?>
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f4" enctype="multipart/form-data">
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="hidden" value="f4" name="formulario" form="f4">
+                            <input type="hidden" value="inserir" name="acaoF4" form="f4">
+                            <input type="hidden" value="menu3_1" name="paginaF4" form="f4">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
                 </div>
-                <!-- form start -->                
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Marca</label>
-                                <select class="form-control" name="marcaF4" id="marcaF4" form="f4">
-                                    <?php
-                                    if($sMarca->getValidador()){
-                                        foreach ($sMarca->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                    }else{
-                                       echo '<option value="0" selected="">--</option>'; 
-                                    }
-                                    ?>
-                                </select>
+            </div>
+            <div class="col-md-2">
+                <!-- general form elements -->
+                <div class="card card-outline card-primary <?php echo isset($alertaTensaoF5) ? '' : 'collapsed-card' ?>">
+                    <div class="card-header">
+                        <h3 class="card-title">Tensão</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas <?php echo isset($alertaTensaoF5) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- form start -->                
+                    <div class="card-body">
+                        <div class="row">                      
+                            <div class="form-group col-md-12">
+                                <label for="tensao">Tensão</label>
+                                <input class="form-control<?php echo isset($alertaTensaoF5) ? $alertaTensaoF5 : ''; ?>" type="text" name="tensaoF5" id="tensaoF5" placeholder="Ex.: 19.5v" form="f5" required="">
                             </div>
                         </div>
                     </div>
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="modelo">Modelo</label>
-                            <input class="form-control<?php echo isset($alertaModeloF4) ? $alertaModeloF4 : ''; ?>" type="text" name="modeloF4" id="modeloF4" placeholder="Ex.: OptiPlex 3000" form="f4" required="">
-                        </div>
-                    </div>
-                </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaModeloF4)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaTensaoF5)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -424,47 +474,47 @@ HTML;
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f4" enctype="multipart/form-data">
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <input type="hidden" value="f4" name="formulario" form="f4">
-                        <input type="hidden" value="inserir" name="acaoF4" form="f4">
-                        <input type="hidden" value="menu3_1" name="paginaF4" form="f4">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <!-- general form elements -->
-            <div class="card card-outline card-primary <?php echo isset($alertaTensaoF5) ? '' : 'collapsed-card' ?>">
-                <div class="card-header">
-                    <h3 class="card-title">Tensão</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaTensaoF5) ? 'fa-minus' : 'fa-plus' ?>"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+    }
+}
+?>
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f5" enctype="multipart/form-data">
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="hidden" value="f5" name="formulario" form="f5">
+                            <input type="hidden" value="inserir" name="acaoF5" form="f5">
+                            <input type="hidden" value="menu3_1" name="paginaF5" form="f5">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
                 </div>
-                <!-- form start -->                
-                <div class="card-body">
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="tensao">Tensão</label>
-                            <input class="form-control<?php echo isset($alertaTensaoF5) ? $alertaTensaoF5 : ''; ?>" type="text" name="tensaoF5" id="tensaoF5" placeholder="Ex.: 19.5v" form="f5" required="">
+            </div>
+            <div class="col-md-2">
+                <!-- general form elements -->
+                <div class="card card-outline card-primary <?php echo isset($alertaCorrenteF6) ? '' : 'collapsed-card' ?>">
+                    <div class="card-header">
+                        <h3 class="card-title">Corrente</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas <?php echo isset($alertaCorrenteF6) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- form start -->                
+                    <div class="card-body">
+                        <div class="row">                      
+                            <div class="form-group col-md-12">
+                                <label for="corrente">Corrente</label>
+                                <input class="form-control<?php echo isset($alertaCorrenteF6) ? $alertaCorrenteF6 : ''; ?>" type="text" name="correnteF6" id="correnteF6" placeholder="Ex.: 3.42a" form="f6" required="">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaTensaoF5)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaCorrenteF6)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -476,47 +526,47 @@ HTML;
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f5" enctype="multipart/form-data">
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <input type="hidden" value="f5" name="formulario" form="f5">
-                        <input type="hidden" value="inserir" name="acaoF5" form="f5">
-                        <input type="hidden" value="menu3_1" name="paginaF5" form="f5">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <!-- general form elements -->
-            <div class="card card-outline card-primary <?php echo isset($alertaCorrenteF6) ? '' : 'collapsed-card' ?>">
-                <div class="card-header">
-                    <h3 class="card-title">Corrente</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaCorrenteF6) ? 'fa-minus' : 'fa-plus' ?>"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+    }
+}
+?>
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f6" enctype="multipart/form-data">
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="hidden" value="f6" name="formulario" form="f6">
+                            <input type="hidden" value="inserir" name="acaoF6" form="f6">
+                            <input type="hidden" value="menu3_1" name="paginaF6" form="f6">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
                 </div>
-                <!-- form start -->                
-                <div class="card-body">
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="corrente">Corrente</label>
-                            <input class="form-control<?php echo isset($alertaCorrenteF6) ? $alertaCorrenteF6 : ''; ?>" type="text" name="correnteF6" id="correnteF6" placeholder="Ex.: 3.42a" form="f6" required="">
+            </div>
+            <div class="col-md-2">
+                <!-- general form elements -->
+                <div class="card card-outline card-primary <?php echo isset($alertaSistemaOperacionalF7) ? '' : 'collapsed-card' ?>">
+                    <div class="card-header">
+                        <h3 class="card-title">Sistema Operacional</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas <?php echo isset($alertaSistemaOperacionalF7) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- form start -->                
+                    <div class="card-body">
+                        <div class="row">                      
+                            <div class="form-group col-md-12">
+                                <label for="sistemaOperacional">Sistema Operacional</label>
+                                <input class="form-control<?php echo isset($alertaSistemaOperacionalF7) ? $alertaSistemaOperacionalF7 : ''; ?>" type="text" name="sistemaOperacionalF7" id="sistemaOperacionalF7" placeholder="Ex.: Windows 11 Professional Edition" form="f7" required="">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaCorrenteF6)) {
-                        echo <<<HTML
+<?php
+if (isset($tipo) &&
+        isset($titulo) &&
+        isset($mensagem)) {
+    if (isset($alertaSistemaOperacionalF7)) {
+        echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
                             <div class="card-header">
@@ -528,72 +578,40 @@ HTML;
                         </div>
                     </div>
 HTML;
-                    }
-                }
-                ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f6" enctype="multipart/form-data">
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <input type="hidden" value="f6" name="formulario" form="f6">
-                        <input type="hidden" value="inserir" name="acaoF6" form="f6">
-                        <input type="hidden" value="menu3_1" name="paginaF6" form="f6">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <!-- general form elements -->
-            <div class="card card-outline card-primary <?php echo isset($alertaSistemaOperacionalF7) ? '' : 'collapsed-card' ?>">
-                <div class="card-header">
-                    <h3 class="card-title">Sistema Operacional</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaSistemaOperacionalF7) ? 'fa-minus' : 'fa-plus' ?>"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
-                </div>
-                <!-- form start -->                
-                <div class="card-body">
-                    <div class="row">                      
-                        <div class="form-group col-md-12">
-                            <label for="sistemaOperacional">Sistema Operacional</label>
-                            <input class="form-control<?php echo isset($alertaSistemaOperacionalF7) ? $alertaSistemaOperacionalF7 : ''; ?>" type="text" name="sistemaOperacionalF7" id="sistemaOperacionalF7" placeholder="Ex.: Windows 11 Professional Edition" form="f7" required="">
+    }
+}
+?>
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f7" enctype="multipart/form-data">
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="hidden" value="f7" name="formulario" form="f7">
+                            <input type="hidden" value="inserir" name="acaoF7" form="f7">
+                            <input type="hidden" value="menu3_1" name="paginaF7" form="f7">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <?php
-                if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
-                    if (isset($alertaSistemaOperacionalF7)) {
-                        echo <<<HTML
-                    <div class="col-mb-3">
-                        <div class="card card-outline card-{$tipo}">
-                            <div class="card-header">
-                                <h3 class="card-title">{$titulo}</h3>
-                            </div>
-                            <div class="card-body">
-                                {$mensagem}
-                            </div>
-                        </div>
-                    </div>
-HTML;
-                    }
-                }
-                ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" method="post" id="f7" enctype="multipart/form-data">
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <input type="hidden" value="f7" name="formulario" form="f7">
-                        <input type="hidden" value="inserir" name="acaoF7" form="f7">
-                        <input type="hidden" value="menu3_1" name="paginaF7" form="f7">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
             </div>
+            <!-- /.card -->
         </div>
-        <!-- /.card -->
     </div>
-</div>
+    <script>
+        $(document).ready(function () {
+            //traz os departamentos de acordo com a secretaria selecionada   
+            $('#categoriaF1').on('change', function () {
+                var idCategoria = $(this).val();
+
+                //mostra somente os departamentos da secretaria escolhida
+                $.ajax({
+                    url: 'https://itapoa.app.br/App/sistema/suporte/ajaxMarca.php',
+                    type: 'POST',
+                    data: {
+                        'idCategoria': idCategoria
+                    },
+                    success: function (html) {
+                        $('#marca').html(html);
+                    }
+                });
+            });
+        });
+    </script>

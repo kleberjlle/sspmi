@@ -7,7 +7,8 @@ use App\sistema\acesso\{
     sEmail,
     sSenha,
     sUsuario,
-    sSair
+    sSair,
+    sTratamentoDados
 };
 
 //Objetos instanciados
@@ -23,6 +24,8 @@ if(isset($_GET['validador'])){
         $email = $sSair->sNotificacao->getMensagem();  
     }   
 }
+$sTratamentoDados = new sTratamentoDados('');
+    $sTratamentoDados->coletarNavegador();
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
@@ -31,6 +34,8 @@ if(isset($_POST) && !empty($_POST)){
     $sSenha->criptografar($_POST['senha']);
     
     //Etapa 1 - registrar histórico
+    //coletar dados do navegador
+    
     //instancia sHistorico para alimentar a tabela de log
     $tratarDados = [
         'pagina' => basename($_SERVER['PHP_SELF']),
