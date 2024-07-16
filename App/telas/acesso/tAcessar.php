@@ -24,8 +24,6 @@ if(isset($_GET['validador'])){
         $email = $sSair->sNotificacao->getMensagem();  
     }   
 }
-$sTratamentoDados = new sTratamentoDados('');
-    $sTratamentoDados->coletarNavegador();
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){

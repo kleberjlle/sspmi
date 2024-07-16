@@ -4,42 +4,54 @@ namespace App\sistema\acesso;
 
 class sTratamentoDados {
 
-    private string $nomenclatura;
+    private string $dados;
 
-    public function __construct(string $nomenclatura) {
-        $this->nomenclatura = $nomenclatura;
+    public function __construct(string $dados) {
+        $this->dados = $dados;
     }
 
     public function tratarNomenclatura() {
-        $minuscula = mb_strtolower($this->getNomenclatura());
-        $palavras = explode(" ", $minuscula);
+        //converte tudo para minúscula
+        $minuscula = mb_strtolower($this->getDados());
+        $nomenclatura = explode(" ", $minuscula);
 
-        $palavrasTratadas = '';
-        $j = count($palavras) - 1;
-        for ($i = 0; $i < count($palavras); $i++) {
-            if (strlen($palavras[$i]) < 3) {
+        $nomenclaturaTratada = '';
+        $j = count($nomenclatura) - 1;
+        for ($i = 0; $i < count($nomenclatura); $i++) {
+            if (strlen($nomenclatura[$i]) < 3) {
                 if($j == 0){
-                    $palavrasTratadas .= $palavras[$i];
+                    $nomenclaturaTratada .= $nomenclatura[$i];
                 }else{
-                    $palavrasTratadas .= $palavras[$i] . ' ';
+                    $nomenclaturaTratada .= $nomenclatura[$i] . ' ';
                 }
                 
             } else {
                 if ($j == $i) {
-                    $palavrasTratadas .= ucfirst($palavras[$i]);
+                    $nomenclaturaTratada .= ucfirst($nomenclatura[$i]);
                 } else {
-                    $palavrasTratadas .= ucfirst($palavras[$i]) . ' ';
+                    $nomenclaturaTratada .= ucfirst($nomenclatura[$i]) . ' ';
                 }
             }
         }
-        return $palavrasTratadas;
+        return $nomenclaturaTratada;
     }
     
-    public function getNomenclatura(): string {
-        return $this->nomenclatura;
+    public function tratarPatrimonio() {
+        //converte todas para maiúsculas
+        $maiuscula = mb_strtoupper($this->getDados());
+        if(strlen($maiuscula) < 1){
+            $patrimonioTratado = 'Indefinido';
+        }else{
+            $patrimonioTratado = $maiuscula;
+        }
+        return $patrimonioTratado;
+    }
+    
+    public function getDados(): string {
+        return $this->dados;
     }
 
-    public function setNomenclatura(string $nomenclatura): void {
-        $this->nomenclatura = $nomenclatura;
+    public function setDados(string $dados): void {
+        $this->dados = $dados;
     }
 }

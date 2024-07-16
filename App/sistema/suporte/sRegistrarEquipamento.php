@@ -15,7 +15,8 @@ use App\sistema\suporte\{
     sModelo,
     sTensao,
     sCorrente,
-    sSistemaOperacional
+    sSistemaOperacional,
+    sMarca
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -31,29 +32,40 @@ if (isset($_POST['formulario'])) {
         $pagina = $_POST['paginaF1'];
         $acao = $_POST['acaoF1'];
         $idUsuario = $_SESSION['credencial']['idUsuario'];
-        $patrimonio = $_POST['patrimonioF1'];
+        isset($_POST['patrimonioF1']) ? $patrimonio = $_POST['patrimonioF1'] : $patrimonio = '';
         $idCategoria = $_POST['categoriaF1'];
         $idMarca = $_POST['marcaF1'];
         $modelo = $_POST['modeloF1'];
-        $serviceTag = $_POST['serviceTagF1'];
-        $numeroDeSerie = $_POST['numeroDeSerieF1'];
+        $etiqueta = $_POST['etiquetaF1'];
+        $serie = $_POST['serieF1'];
         $tensao = $_POST['tensaoF1'];
         $corrente = $_POST['correnteF1'];
         $sistemaOperacional = $_POST['sistemaOperacionalF1'];
         $atualizar = [];
-        
-        $sTratamentoPatrimonio = new sTratamentoDados($patrimonio);
-        $patrimonioTratado = $sTratamentoPatrimonio->tratarNomenclatura();
-        
+                
         //alimenta a tabela de histórico
-        alimentaHistorico($pagina, $acao, 'patrimonio', null, $patrimonioTratado, $idUsuario);
-        alimentaHistorico($pagina, $acao, 'categoria_idcategoria', null, $idCategoria, $idUsuario);
-        alimentaHistorico($pagina, $acao, 'marca_idmarca', null, $idMarca, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'patrimonio', null, $patrimonio, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'idcategoria', null, $idCategoria, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'idmarca', null, $idMarca, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'modelo', null, $modelo, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'etiquetaDeServico', null, $etiqueta, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'numeroDeSerie', null, $serie, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'tensao', null, $tensao, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'corrente', null, $corrente, $idUsuario);
+        //alimentaHistorico($pagina, $acao, 'sistemaOperacional', null, $sistemaOperacional, $idUsuario);
+        
+        //tratar dados para armzenamento
+        $sTratamentoPatrimonio = new sTratamentoDados($patrimonio);
+        $patrimonioTratado = $sTratamentoPatrimonio->tratarPatrimonio();
+        
+        //alimentando os dados que passaram na validação
+        $atualizar['patrimonio'] = $patrimonioTratado;
         
         //verifica se os dados atendem aos requisitos
         $atualizar['patrimonio'] = $patrimonioTratado;
-        $atualizar['categoria_idcategoria'] = $idCategoria;
-        
+        $atualizar['idcategoria'] = $idCategoria;
+        exit();
+       
     }
     //registrar categoria
     if ($_POST['formulario'] == 'f2') {
@@ -96,44 +108,46 @@ if (isset($_POST['formulario'])) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=categoriaF2&codigo=S4");
         exit();
     }
-    //registrar tensao
+    //registrar marca
     if ($_POST['formulario'] == 'f3') {
         $pagina = $_POST['paginaF3'];
         $acao = $_POST['acaoF3'];
         $idUsuario = $_SESSION['credencial']['idUsuario'];
-        $tensao = $_POST['tensaoF3'];
+        $marca = $_POST['marcaF3'];
 
         //alimenta a tabela de histórico
-        alimentaHistorico($pagina, $acao, 'tensao', null, $tensao, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'marca', null, $marca, $idUsuario);
 
         //tratamento de dados
-        $tratamentoTensao = new sTratamentoDados($tensao);
-        $tensaoTratada = $tratamentoTensao->tratarNomenclatura();
+        $tratamentoMarca = new sTratamentoDados($marca);
+        $marcaTratada = $tratamentoMarca->tratarNomenclatura();
         
         //instancia classe
-        $sTensao = new sTensao();
-        $sTensao->setNomeCampo('nomenclatura');
-        $sTensao->setValorCampo($tensaoTratada);
-        $sTensao->consultar('tMenu3_1.php');
+        $sMarca = new sMarca();
+        $sMarca->setNomeCampo('nomenclatura');
+        $sMarca->setValorCampo($marcaTratada);
+        $sMarca->consultar('tMenu3_1.php');
 
         //compara os registros do BD com a nova solicitação
-        if ($sTensao->getValidador()) {
+        if ($sMarca->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=A10");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=A15");
             exit();
         }
         
-        if(strlen($tensaoTratada) < 5){
+        if(strlen($marcaTratada) < 2){
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=A16");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=A10");
             exit();
         }
         
         //inserir novo registro no BD
-        $sTensao->inserir('tMenu3_1.php');
+        $sMarca->setNomeCampo('nomenclatura');
+        $sMarca->setValorCampo($marcaTratada);        
+        $sMarca->inserir('tMenu3_1.php');
         
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF3&codigo=S4");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF3&codigo=S4");
         exit();
     }    
     //registrar modelo
@@ -141,10 +155,11 @@ if (isset($_POST['formulario'])) {
         $pagina = $_POST['paginaF4'];
         $acao = $_POST['acaoF4'];
         $idUsuario = $_SESSION['credencial']['idUsuario'];
+        $idMarca = $_POST['marcaF4'];
         $modelo = $_POST['modeloF4'];
-        $idTensao = $_POST['tensaoF4'];
 
         //alimenta a tabela de histórico
+        alimentaHistorico($pagina, $acao, 'marca_idmarca', null, $idMarca, $idUsuario);
         alimentaHistorico($pagina, $acao, 'modelo', null, $modelo, $idUsuario);
 
         //tratamento de dados
@@ -153,27 +168,27 @@ if (isset($_POST['formulario'])) {
         
         //instancia classe
         $sModelo = new sModelo();
-        $sModelo->setNomeCampo('nomenclatura', 'tensao_idtensao');
-        $sModelo->setValorCampo($modeloTratado, $idTensao);
+        $sModelo->setNomeCampo('nomenclatura');
+        $sModelo->setValorCampo($modeloTratado);
         $sModelo->consultar('tMenu3_1.php');
 
         //compara os registros do BD com a nova solicitação
         if ($sModelo->getValidador()) {
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF4&codigo=A10");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF4&codigo=A15");
             exit();
         }
         
-        if(strlen($modeloTratado) < 5){
+        if(strlen($modeloTratado) < 2){
             $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF4&codigo=A16");
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF4&codigo=A10");
             exit();
         }
         
         //inserir novo registro no BD
         $dados = [
             'nomenclatura' => $modeloTratado,
-            'tensao_idtensao' => $idTensao
+            'marca_idmarca' => $idMarca
         ];
         $sModelo->inserir('tMenu3_1.php', $dados);
         

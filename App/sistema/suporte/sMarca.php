@@ -10,8 +10,8 @@ use App\sistema\acesso\{
 };
 
 class sMarca {
-    private string $nomeCampo;
-    private string $valorCampo;
+    private mixed $nomeCampo;
+    private mixed $valorCampo;
     private string $validador;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
@@ -29,11 +29,6 @@ class sMarca {
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null//caso não tenha, colocar como null
             ];
-            //envia os dados para elaboração da query
-            $this->mConexao->CRUD($dados);
-
-            //atualiza o validador da classe de acordo com o validador da conexão
-            $this->setValidador($this->mConexao->getValidador());
         }
         
         if ($pagina == 'tMenu3_1.php-f4') {
@@ -46,13 +41,15 @@ class sMarca {
                 'valoresCondicionados' => '',
                 'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
                 'ordem' => 'ASC'//caso não tenha, colocar como null
-            ];
-            //envia os dados para elaboração da query
-            $this->mConexao->CRUD($dados);
-
-            //atualiza o validador da classe de acordo com o validador da conexão
-            $this->setValidador($this->mConexao->getValidador());
+            ];            
         }
+        
+        //envia os dados para elaboração da query
+        $this->mConexao->CRUD($dados);
+
+        //atualiza o validador da classe de acordo com o validador da conexão
+        $this->setValidador($this->mConexao->getValidador());
+        
     }
 
     public function inserir($pagina) {
@@ -63,21 +60,27 @@ class sMarca {
             $dados = [
                 'comando' => 'INSERT INTO',
                 'tabela' => 'marca',
-                'camposInsercao' => [$this->getNomeCampo()],
-                'valoresInsercao' => [$this->getValorCampo()]
+                'camposInsercao' => [
+                    $this->getNomeCampo()
+                ],
+                'valoresInsercao' => [
+                    $this->getValorCampo()
+                ]
             ];
         }
-        $this->mConexao->CRUD($dados);
+        
+        $this->mConexao->CRUD($dados);       
+        
     }
     
-    public function getNomeCampo(): string {
+    public function getNomeCampo(): mixed {
         return $this->nomeCampo;
     }
 
-    public function getValorCampo(): string {
+    public function getValorCampo(): mixed {
         return $this->valorCampo;
     }
-    
+
     public function getValidador(): string {
         return $this->validador;
     }
@@ -90,11 +93,11 @@ class sMarca {
         return $this->sNotificacao;
     }
 
-    public function setNomeCampo(string $nomeCampo): void {
+    public function setNomeCampo(mixed $nomeCampo): void {
         $this->nomeCampo = $nomeCampo;
     }
 
-    public function setValorCampo(string $valorCampo): void {
+    public function setValorCampo(mixed $valorCampo): void {
         $this->valorCampo = $valorCampo;
     }
 
@@ -109,4 +112,6 @@ class sMarca {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

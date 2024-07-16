@@ -301,6 +301,7 @@ class mConexao {
                     $this->setValidador(false);
                 }
                 break;
+            
             default:
                 break;
         }
@@ -397,7 +398,10 @@ class mConexao {
           echo '<pre>';
           echo $query;
           echo '</pre>';
-          exit();
+          if($dados['tabela'] == 'categoria_has_marca'){
+              exit();
+          }
+          
           // */
         //QA - fim da área de testes
     }
