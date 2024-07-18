@@ -56,7 +56,8 @@ class sSetor {
             
             $this->mConexao->CRUD($dados);
         }
-        if ($pagina == 'tMenu4_1.php') {
+        if ($pagina == 'tMenu4_1.php' ||
+            $pagina == 'tMenu2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -64,9 +65,8 @@ class sSetor {
                 'camposCondicionados' => '',
                 'valoresCondicionados' => '',
                 'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
-                'ordem' => 'ASC'
-            ];
-            
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];            
             $this->mConexao->CRUD($dados);
         }
     }

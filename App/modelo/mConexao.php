@@ -398,9 +398,7 @@ class mConexao {
           echo '<pre>';
           echo $query;
           echo '</pre>';
-          if($dados['tabela'] == 'categoria_has_marca'){
-              exit();
-          }
+          exit();
           
           // */
         //QA - fim da área de testes

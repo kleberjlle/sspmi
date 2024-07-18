@@ -91,6 +91,9 @@ class sNotificacao{
             case '16':
                 $this->setMensagem('O campo deve conter de 5 a 100 caracteres');
                 break;
+            case '17':
+                $this->setMensagem('Você deve escolher uma das opções do campo');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

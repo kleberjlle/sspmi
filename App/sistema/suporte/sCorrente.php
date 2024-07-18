@@ -29,12 +29,28 @@ class sCorrente {
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null//caso não tenha, colocar como null
             ];
-            //envia os dados para elaboração da query
-            $this->mConexao->CRUD($dados);
-
-            //atualiza o validador da classe de acordo com o validador da conexão
-            $this->setValidador($this->mConexao->getValidador());
         }
+        
+        if ($pagina == 'tMenu3_1.php-f1' ||
+            $pagina == 'tMenu2_1.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'corrente',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];            
+        }
+        
+        //envia os dados para elaboração da query
+        $this->mConexao->CRUD($dados);
+
+        //atualiza o validador da classe de acordo com o validador da conexão
+        $this->setValidador($this->mConexao->getValidador());
+        
     }
 
     public function inserir($pagina) {

@@ -7,14 +7,14 @@ use App\sistema\suporte\{
     sModelo
 };
 
-$sModelo = new sModelo($_POST['idCategoria']);
+$sModelo = new sModelo();
+$sModelo->setNomeCampo('marca_idmarca');
+$sModelo->setValorCampo($_POST['idMarca']);
 $sModelo->consultar('ajaxModelo.php');
-
-$sModelo->consultar($pagina);
 
 if ($sModelo->mConexao->getValidador()) {
     foreach ($sModelo->mConexao->getRetorno() as $value) {
-        echo '<option value="' . $value['modelo_idmodelo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+        echo '<option value="' . $value['idmodelo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
     }
 } else {
     echo '<option value="" selected>--</option>';

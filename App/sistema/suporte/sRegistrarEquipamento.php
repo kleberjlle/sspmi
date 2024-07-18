@@ -16,7 +16,8 @@ use App\sistema\suporte\{
     sTensao,
     sCorrente,
     sSistemaOperacional,
-    sMarca
+    sMarca,
+    sEquipamento
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -35,37 +36,97 @@ if (isset($_POST['formulario'])) {
         isset($_POST['patrimonioF1']) ? $patrimonio = $_POST['patrimonioF1'] : $patrimonio = '';
         $idCategoria = $_POST['categoriaF1'];
         $idMarca = $_POST['marcaF1'];
-        $modelo = $_POST['modeloF1'];
-        $etiqueta = $_POST['etiquetaF1'];
-        $serie = $_POST['serieF1'];
-        $tensao = $_POST['tensaoF1'];
-        $corrente = $_POST['correnteF1'];
-        $sistemaOperacional = $_POST['sistemaOperacionalF1'];
-        $atualizar = [];
-                
+        $idModelo = $_POST['modeloF1'];
+        isset($_POST['etiquetaF1']) ? $etiqueta = $_POST['etiquetaF1'] : $etiqueta = '';
+        isset($_POST['serieF1']) ? $serie = $_POST['serieF1'] : $serie = '';
+        $idTensao = $_POST['tensaoF1'];
+        $idCorrente = $_POST['correnteF1'];
+        $idSistemaOperacional = $_POST['sistemaOperacionalF1'];
+        $idAmbiente = $_POST['ambienteF1'];
+        
         //alimenta a tabela de histórico
         alimentaHistorico($pagina, $acao, 'patrimonio', null, $patrimonio, $idUsuario);
         alimentaHistorico($pagina, $acao, 'idcategoria', null, $idCategoria, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'idmarca', null, $idMarca, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'modelo', null, $modelo, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'etiquetaDeServico', null, $etiqueta, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'numeroDeSerie', null, $serie, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'tensao', null, $tensao, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'corrente', null, $corrente, $idUsuario);
-        //alimentaHistorico($pagina, $acao, 'sistemaOperacional', null, $sistemaOperacional, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'idmarca', null, $idMarca, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'idmodelo', null, $idModelo, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'etiquetaDeServico', null, $etiqueta, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'numeroDeSerie', null, $serie, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'idtensao', null, $idTensao, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'idcorrente', null, $idCorrente, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'ambiente_idambiente', null, $idAmbiente, $idUsuario);
         
-        //tratar dados para armzenamento
+        //tratar dados para armazenamento
         $sTratamentoPatrimonio = new sTratamentoDados($patrimonio);
         $patrimonioTratado = $sTratamentoPatrimonio->tratarPatrimonio();
         
-        //alimentando os dados que passaram na validação
-        $atualizar['patrimonio'] = $patrimonioTratado;
+        $sTratamentoDeEtiqueta = new sTratamentoDados($etiqueta);
+        $etiquetaTratada = $sTratamentoDeEtiqueta->tratarEtiquetaDeServico();
         
-        //verifica se os dados atendem aos requisitos
-        $atualizar['patrimonio'] = $patrimonioTratado;
-        $atualizar['idcategoria'] = $idCategoria;
+        $sTratamentoDeNumeroDeSerie = new sTratamentoDados($serie);
+        $serieTratada = $sTratamentoDeNumeroDeSerie->tratarNumeroDeSerie();
+        
+        //se não escolheu uma opção retorne erro
+        if($idCategoria == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=categoriaF1&codigo=A17");
+            exit();
+        }
+        
+        if($idMarca == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=marcaF1&codigo=A17");
+            exit();
+        }
+        
+        if($idModelo == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=modeloF1&codigo=A17");
+            exit();
+        }
+        
+        if($idTensao == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=tensaoF1&codigo=A17");
+            exit();
+        }
+        
+        if($idCorrente == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=correnteF1&codigo=A17");
+            exit();
+        }
+        
+        if($idSistemaOperacional == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=sistemaOperacionalF1&codigo=A17");
+            exit();
+        }
+        
+        if($idAmbiente == 0){
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=ambienteF1&codigo=A17");
+            exit();
+        }
+        
+        //inserir novo registro no BD
+        $dados = [
+            'patrimonio' => $patrimonioTratado,
+            'categoria_idcategoria' => $idCategoria,            
+            'tensao_idtensao' => $idTensao,
+            'corrente_idcorrente' => $idCorrente,
+            'ambiente_idambiente' => $idAmbiente,
+            'sistemaOperacional_idsistemaOperacional' => $idSistemaOperacional,
+            'numeroDeSerie' => $serieTratada,
+            'etiquetaDeServico' => $etiquetaTratada,
+            'modelo_idmodelo' => $idModelo
+        ];
+        
+        $sEquipamento = new sEquipamento();
+        $sEquipamento->inserir('tMenu3_1.php-f1', $dados);
+        
+        $sConfiguracao = new sConfiguracao();
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=patrimonioF1&codigo=S4");
         exit();
-       
     }
     //registrar categoria
     if ($_POST['formulario'] == 'f2') {

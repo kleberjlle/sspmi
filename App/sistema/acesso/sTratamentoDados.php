@@ -47,6 +47,14 @@ class sTratamentoDados {
         return $patrimonioTratado;
     }
     
+    public function tratarEtiquetaDeServico() {
+        return $this->tratarPatrimonio();
+    }
+    
+    public function tratarNumeroDeSerie() {
+        return $this->tratarPatrimonio();
+    }
+    
     public function getDados(): string {
         return $this->dados;
     }

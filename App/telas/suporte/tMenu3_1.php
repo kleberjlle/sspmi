@@ -2,11 +2,16 @@
 
 use App\sistema\acesso\{
     sConfiguracao,
-    sNotificacao,
+    sNotificacao
 };
 use App\sistema\suporte\{
     sMarca,
-    sCategoria
+    sCategoria,
+    sTensao,
+    sCorrente,
+    sSistemaOperacional,
+    sLocal,
+    sAmbiente
 };
 
 //instancia classes para manipulação dos dados
@@ -17,6 +22,21 @@ $sMarca->consultar('tMenu3_1.php-f4');
 
 $sCategoria = new sCategoria();
 $sCategoria->consultar('tMenu3_1.php-f1');
+
+$sTensao = new sTensao();
+$sTensao->consultar('tMenu3_1.php-f1');
+
+$sCorrente = new sCorrente();
+$sCorrente->consultar('tMenu3_1.php-f1');
+
+$sSistemaOperacional = new sSistemaOperacional();
+$sSistemaOperacional->consultar('tMenu3_1.php-f1');
+
+$sAmbiente = new sAmbiente();
+$sAmbiente->consultar('tMenu3_1.php');
+
+$sLocal = new sLocal(0);
+$sLocal->consultar('tMenu3_1.php');
 
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
@@ -83,6 +103,20 @@ if (isset($_GET['campo'])) {
                 $alertaSistemaOperacionalF1 = ' is-valid';
             } else {
                 $alertaSistemaOperacionalF1 = ' is-warning';
+            }
+            break;
+        case 'ambienteF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaAmbienteF1 = ' is-valid';
+            } else {
+                $alertaAmbienteF1 = ' is-warning';
+            }
+            break;
+        case 'localF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaLocalF1 = ' is-valid';
+            } else {
+                $alertaLocalF1 = ' is-warning';
             }
             break;
         case 'categoriaF2':
@@ -152,13 +186,25 @@ if (isset($_GET['campo'])) {
                 isset($alertaNumeroSerieF1) ||
                 isset($alertaTensaoF1) ||
                 isset($alertaCorrenteF1) ||
-                isset($alertaSistemaOperacionalF1) ? '' : 'collapsed-card' ?>
+                isset($alertaSistemaOperacionalF1) ||
+                isset($alertaAmbienteF1) ||
+                isset($alertaLocalF1) ? '' : 'collapsed-card' ?>
             ">
                 <div class="card-header">
                     <h3 class="card-title">Etapa 1 - Equipamento</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaPatrimonioF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                            <i class="fas <?php echo isset($alertaPatrimonioF1) ||
+                                            isset($alertaCategoriaF1) ||
+                                            isset($alertaMarcaF1) ||
+                                            isset($alertaModeloF1) ||
+                                            isset($alertaServiceTagF1) ||
+                                            isset($alertaNumeroSerieF1) ||
+                                            isset($alertaTensaoF1) ||
+                                            isset($alertaCorrenteF1) ||
+                                            isset($alertaSistemaOperacionalF1) ||
+                                            isset($alertaAmbienteF1) ||
+                                            isset($alertaLocalF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
@@ -170,17 +216,16 @@ if (isset($_GET['campo'])) {
                             <label for="Patrimonio">Patrimônio</label> <a href="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
                             <input class="form-control <?php echo isset($alertaPatrimonioF1) ? $alertaPatrimonioF1 : ''; ?>" type="text" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 20580" form="f1">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label>Categoria</label>
-                                <select class="form-control" name="categoriaF1" id="categoriaF1" form="f1">
+                                <select class="form-control <?php echo isset($alertaCategoriaF1) ? $alertaCategoriaF1 : ''; ?>" name="categoriaF1" id="categoriaF1" form="f1" required="">
+                                <option value="0" selected="">--</option>
                                 <?php
                                 if ($sCategoria->getValidador()) {
                                     foreach ($sCategoria->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['idcategoria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                     }
-                                } else {
-                                    echo '<option value="0" selected="">--</option>';
                                 }
                                 ?>
                                 </select>
@@ -189,14 +234,13 @@ if (isset($_GET['campo'])) {
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Marca</label>
-                                <select class="form-control" name="marcaF1" id="marcaF1" form="f1">
+                                <select class="form-control<?php echo isset($alertaMarcaF1) ? $alertaMarcaF1 : ''; ?>" name="marcaF1" id="marcaF1" form="f1" required="">
+                                    <option value="0" selected="">--</option>
                                 <?php
                                 if ($sMarca->getValidador()) {
                                     foreach ($sMarca->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['idmarca'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                     }
-                                } else {
-                                    echo '<option value="0" selected="">--</option>';
                                 }
                                 ?>
                                 </select>
@@ -205,17 +249,12 @@ if (isset($_GET['campo'])) {
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Modelo</label>
-                                <select class="form-control" name="modeloF1" id="modeloF1" form="f1">
-                                    <option value="" selected="" >--</option>
-                                    <option value="optilex3000">OptiLex 3000</option>
-                                    <option value="masterd40">Master D40</option>
-                                    <option value="ideapad3">IdeaPad 3</option>
-                                    <option value="hero27">Hero 27</option>
-                                    <option value="24mk430h">24MK430H</option>
+                                <select class="form-control<?php echo isset($alertaModeloF1) ? $alertaModeloF1 : ''; ?>" name="modeloF1" id="modeloF1" form="f1">
+                                    <option value="0" selected="">--</option>
                                 </select>
                             </div>
                         </div>  
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-2">
                             <label for="etiquetaF1">Etiqueta de Serviço</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
                             <input class="form-control" type="text" name="etiquetaF1" id="etiquetaF1" placeholder="Ex.: 5VPMLY3" form="f1">
                         </div>
@@ -223,24 +262,72 @@ if (isset($_GET['campo'])) {
                             <label for="serieF1">Número de Série</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
                             <input class="form-control" type="text" name="serieF1" id="serieF1" placeholder="Ex.: 8498732518" form="f1">
                         </div>
-                        <div class="form-group col-md-1">
-                            <label for="tensaoF1">Tensão de Entrada</label>
-                            <input class="form-control" type="text" name="tensaoF1" id="tensaoF1" placeholder="Ex.: 19V" form="f1">
-                        </div>
-                        <div class="form-group col-md-1">
-                            <label for="correnteF1">Corrente de Entrada</label>
-                            <input class="form-control" type="text" name="correnteF1" id="correnteF1" placeholder="Ex.: 3.42A" form="f1">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="sistemaOperacionalF1">Sistema Operacional</label>
-                            <input class="form-control" type="text" name="sistemaOperacionalF1" id="sistemaOperacionalF1" placeholder="Ex.: Windows 11" form="f1">
-                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Tensão</label>
+                                <select class="form-control<?php echo isset($alertaTensaoF1) ? $alertaTensaoF1 : ''; ?>" name="tensaoF1" id="tensaoF1" form="f1" required="">
+                                    <option value="0" selected="">--</option>
+                                    <?php
+                                    if ($sTensao->getValidador()) {
+                                        foreach ($sTensao->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idtensao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>  
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Corrente</label>
+                                <select class="form-control<?php echo isset($alertaCorrenteF1) ? $alertaCorrenteF1 : ''; ?>" name="correnteF1" id="correnteF1" form="f1" required="">
+                                    <option value="0" selected="">--</option>
+                                    <?php
+                                    if ($sCorrente->getValidador()) {
+                                        foreach ($sCorrente->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idcorrente'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>  
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Sistema Operacional</label>
+                                <select class="form-control<?php echo isset($alertaSistemaOperacionalF1) ? $alertaSistemaOperacionalF1 : ''; ?>" name="sistemaOperacionalF1" id="sistemaOperacionalF1" form="f1" required="">
+                                    <option value="0" selected="">--</option>
+                                    <?php
+                                    if ($sSistemaOperacional->getValidador()) {
+                                        foreach ($sSistemaOperacional->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idsistemaOperacional'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div> 
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Ambiente</label>
+                                <select class="form-control<?php echo isset($alertaAmbienteF1) ? $alertaAmbienteF1 : ''; ?>" name="ambienteF1" id="ambienteF1" form="f1" required="">
+                                    <option value="0" selected="">--</option>
+                                    <?php
+                                    if ($sAmbiente->getValidador()) {
+                                        foreach ($sAmbiente->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idambiente'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>  
                     </div>
                 </div>
 <?php
 if (isset($tipo) &&
-        isset($titulo) &&
-        isset($mensagem)) {
+    isset($titulo) &&
+    isset($mensagem)) {
     if (isset($alertaPatrimonioF1) ||
         isset($alertaCategoriaF1) ||
         isset($alertaMarcaF1) ||
@@ -249,7 +336,9 @@ if (isset($tipo) &&
         isset($alertaNumeroSerieF1) ||
         isset($alertaTensaoF1) ||
         isset($alertaCorrenteF1) ||
-        isset($alertaSistemaOperacionalF1)) {
+        isset($alertaSistemaOperacionalF1) ||
+        isset($alertaAmbienteF1) ||
+        isset($alertaLocalF1)) {
     echo <<<HTML
                 <div class="col-mb-3">
                     <div class="card card-outline card-{$tipo}">
@@ -284,7 +373,7 @@ HTML;
             <!-- general form elements -->
             <div class="card card-outline card-primary <?php echo isset($alertaCategoriaF2) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
-                    <h3 class="card-title">Categoria</h3>
+                    <h3 class="card-title">Registrar Categoria</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas <?php echo isset($alertaCategoriaF2) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -336,7 +425,7 @@ HTML;
             <!-- general form elements -->
             <div class="card card-outline card-primary <?php echo isset($alertaMarcaF3) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
-                    <h3 class="card-title">Marca</h3>
+                    <h3 class="card-title">Registrar Marca</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas <?php echo isset($alertaMarcaF3) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -388,7 +477,7 @@ HTML;
                 <!-- general form elements -->
                 <div class="card card-outline card-primary <?php echo isset($alertaModeloF4) ? '' : 'collapsed-card' ?>">
                     <div class="card-header">
-                        <h3 class="card-title">Modelo</h3>
+                        <h3 class="card-title">Registrar Modelo</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas <?php echo isset($alertaModeloF4) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -458,7 +547,7 @@ HTML;
                 <!-- general form elements -->
                 <div class="card card-outline card-primary <?php echo isset($alertaTensaoF5) ? '' : 'collapsed-card' ?>">
                     <div class="card-header">
-                        <h3 class="card-title">Tensão</h3>
+                        <h3 class="card-title">Registrar Tensão</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas <?php echo isset($alertaTensaoF5) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -510,7 +599,7 @@ HTML;
                 <!-- general form elements -->
                 <div class="card card-outline card-primary <?php echo isset($alertaCorrenteF6) ? '' : 'collapsed-card' ?>">
                     <div class="card-header">
-                        <h3 class="card-title">Corrente</h3>
+                        <h3 class="card-title">Registrar Corrente</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas <?php echo isset($alertaCorrenteF6) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -562,7 +651,7 @@ HTML;
                 <!-- general form elements -->
                 <div class="card card-outline card-primary <?php echo isset($alertaSistemaOperacionalF7) ? '' : 'collapsed-card' ?>">
                     <div class="card-header">
-                        <h3 class="card-title">Sistema Operacional</h3>
+                        <h3 class="card-title">Registrar Sistema Operacional</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas <?php echo isset($alertaSistemaOperacionalF7) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -621,7 +710,7 @@ HTML;
 
                 //mostra somente os departamentos da secretaria escolhida
                 $.ajax({
-                    url: 'https://itapoa.app.br/App/sistema/suporte/ajaxMarca.php',
+                    url: 'https://itapoa.app.br/App/sistema/suporte/ajaxModelo.php',
                     type: 'POST',
                     data: {
                         'idMarca': idMarca

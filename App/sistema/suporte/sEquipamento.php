@@ -7,15 +7,90 @@ use App\sistema\acesso\{
 };
 
 class sEquipamento {
+    private string $patrimonio;
     private string $categoria;
+    private string $modelo;
+    private string $etiqueta;
+    private string $serie;
+    private string $tensao;
+    private string $corrente;
+    private string $sistemaOperacional;
     private string $nomeCampo;
     private string $valorCampo;
     private string $validador;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;    
     
+    public function inserir($pagina, $dadosTratados) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu3_1.php-f1') {
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'equipamento',
+                'camposInsercao' => [
+                    'patrimonio',
+                    'categoria_idcategoria',
+                    'tensao_idtensao',
+                    'corrente_idcorrente',
+                    'ambiente_idambiente',
+                    'sistemaOperacional_idsistemaOperacional',
+                    'numeroDeSerie',
+                    'etiquetaDeServico',
+                    'modelo_idmodelo',
+                ],
+                'valoresInsercao' => [
+                    $dadosTratados['patrimonio'],
+                    $dadosTratados['categoria_idcategoria'],
+                    $dadosTratados['tensao_idtensao'],
+                    $dadosTratados['corrente_idcorrente'],
+                    $dadosTratados['ambiente_idambiente'],
+                    $dadosTratados['sistemaOperacional_idsistemaOperacional'],
+                    $dadosTratados['numeroDeSerie'],                    
+                    $dadosTratados['etiquetaDeServico'],
+                    $dadosTratados['modelo_idmodelo'],
+                ]
+            ];
+            $this->mConexao->CRUD($dados);
+            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S4'));
+            }
+        }
+    }
+    
+    public function getPatrimonio(): string {
+        return $this->patrimonio;
+    }
+
     public function getCategoria(): string {
         return $this->categoria;
+    }
+
+    public function getModelo(): string {
+        return $this->modelo;
+    }
+
+    public function getEtiqueta(): string {
+        return $this->etiqueta;
+    }
+
+    public function getSerie(): string {
+        return $this->serie;
+    }
+
+    public function getTensao(): string {
+        return $this->tensao;
+    }
+
+    public function getCorrente(): string {
+        return $this->corrente;
+    }
+
+    public function getSistemaOperacional(): string {
+        return $this->sistemaOperacional;
     }
 
     public function getNomeCampo(): string {
@@ -38,8 +113,36 @@ class sEquipamento {
         return $this->sNotificacao;
     }
 
+    public function setPatrimonio(string $patrimonio): void {
+        $this->patrimonio = $patrimonio;
+    }
+
     public function setCategoria(string $categoria): void {
         $this->categoria = $categoria;
+    }
+
+    public function setModelo(string $modelo): void {
+        $this->modelo = $modelo;
+    }
+
+    public function setEtiqueta(string $etiqueta): void {
+        $this->etiqueta = $etiqueta;
+    }
+
+    public function setSerie(string $serie): void {
+        $this->serie = $serie;
+    }
+
+    public function setTensao(string $tensao): void {
+        $this->tensao = $tensao;
+    }
+
+    public function setCorrente(string $corrente): void {
+        $this->corrente = $corrente;
+    }
+
+    public function setSistemaOperacional(string $sistemaOperacional): void {
+        $this->sistemaOperacional = $sistemaOperacional;
     }
 
     public function setNomeCampo(string $nomeCampo): void {
@@ -61,4 +164,6 @@ class sEquipamento {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

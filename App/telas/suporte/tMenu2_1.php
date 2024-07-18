@@ -1,3 +1,29 @@
+<?php
+
+use App\sistema\acesso\{
+    sConfiguracao,
+    sNotificacao,
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor
+};
+
+//instancia classes para manipulação dos dados
+$sConfiguracao = new sConfiguracao();
+
+$sSecretaria = new sSecretaria(0);
+$sSecretaria->consultar('tMenu2_1.php');
+
+$sDepartamento = new sDepartamento(0);
+$sDepartamento->consultar('tMenu2_1.php');
+
+$sCoordenacao = new sCoordenacao(0);
+$sCoordenacao->consultar('tMenu2_1.php');
+
+$sSetor = new sSetor(0);
+$sSetor->consultar('tMenu2_1.php');
+?>
 <div class="container-fluid">
     <div class="row">
         <!-- left column -->
@@ -25,63 +51,52 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control" id="secretaria" required="" disabled="">
-                                        <option value="" selected="" disabled="">--</option>
-                                        <option value="administracao">Administração</option>
-                                        <option value="agricultura">Agricultura e Pesca</option>
-                                        <option value="assistencia">Assistência Social</option>
-                                        <option value="chefiaDeGabinete">Chefia de Gabinete do Prefeito</option>
-                                        <option value="controladoria">Controladoria Interna</option>
-                                        <option value="desenvolvimento">Desenvolvimento Social e Econômico</option>
-                                        <option value="educacao">Educação</option>
-                                        <option value="esporte">Esporte e Lazer</option>
-                                        <option value="fazenda">Fazenda</option>
-                                        <option value="infraestrutura">Infraestrutura</option>
-                                        <option value="meioAmbiente">Meio Ambiente</option>
-                                        <option value="planejamento">Planejamento Urbano</option>
-                                        <option value="procuradoria">Procuradoria Jurídica</option>
-                                        <option value="saude">Saúde</option>
-                                        <option value="segurancaPublica">Segurança Pública e Trânsito</option>
-                                        <option value="turismo">Turismo e Cultura</option>
-                                        <option value="ouvidoria">Ouvidoria</option>
+                                    <select class="form-control" name="secretaria" id="secretaria" disabled="">
+                                        <option value="0" selected="">--</option>
+                                        <?php
+                                        foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>Departamento/ Unidade</label>
-                                    <select class="form-control" id="departamentoUnidade" required="" disabled="">
-                                        <option value="" selected="" disabled="">--</option>
-                                        <option value="licitacao">Licitações, Contratos e Compras</option>
-                                        <option value="patrimonio">Patrimônio e Frotas</option>
-                                        <option value="rh">Recursos Humanos</option>
-                                        <option value="tecnologia">Tecnologia da Informação</option>
+                                    <label>Departamento</label>
+                                    <select class="form-control" name="departamento" id="departamento" disabled="">
+                                         <option value="0" selected="">--</option>
+                                        <?php
+                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Coordenação</label>
-                                    <select class="form-control" name="coordenacao" id="coordenacao" required="" disabled="">
-                                        <option value="" selected="" >--</option>
-                                        <option value="Informática e Sistemas">Informática e Sistemas</option>
-                                        <option value="Pessoal e Recursos Humanos">Pessoal e Recursos Humanos</option>
-                                        <option value="Compras e Almoxarifado">Compras e Almoxarifado</option>
-                                        <option value="Contratos e Licitacões">Contratos e Licitações</option>
-                                        <option value="Patrimônio Público">Patrimônio Público</option>
+                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="">
+                                         <option value="0" selected="">--</option>
+                                        <?php
+                                        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Setor</label>
-                                    <select class="form-control" name="setor" id="setor" required="" disabled="">
-                                        <option value="" selected="">--</option>
-                                        <option value="Informática">Informática</option>
-                                        <option value="Captacão e Recursos">Captação de Recursos</option>
-                                        <option value="Gestão de Convênios">Gestão de Convênios</option>
-                                        <option value="Pessoal">Pessoal</option>
-                                        <option value="Recursos Humanos">Recursos Humanos</option>
+                                    <select class="form-control" name="setor" id="setor" disabled="">
+                                        <option value="0" selected="">--</option>
+                                        <?php
+                                        foreach ($sSetor->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -124,7 +139,7 @@
     function habilitar() {
         if (document.getElementById('meusDados').checked) {
             document.getElementById('secretaria').disabled = true;
-            document.getElementById('departamentoUnidade').disabled = true;
+            document.getElementById('departamento').disabled = true;
             document.getElementById('coordenacao').disabled = true;
             document.getElementById('setor').disabled = true;
             document.getElementById('nome').disabled = true;
@@ -134,7 +149,7 @@
             document.getElementById('emailPessoal').disabled = true;
         } else {
             document.getElementById('secretaria').disabled = false;
-            document.getElementById('departamentoUnidade').disabled = false;
+            document.getElementById('departamento').disabled = false;
             document.getElementById('coordenacao').disabled = false;
             document.getElementById('setor').disabled = false;
             document.getElementById('nome').disabled = false;
@@ -144,4 +159,53 @@
             document.getElementById('emailPessoal').disabled = false;
         }
     }
+    
+    $(document).ready(function () {
+        //traz os departamentos de acordo com a secretaria selecionada   
+        $('#secretaria').on('change', function () {
+            var idSecretaria = $(this).val();
+
+            //mostra somente os departamentos da secretaria escolhida
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxDepartamento.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#departamento').html(html);
+                }
+            });
+
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var idSecretaria = $(this).val();
+            //mostra as coordenações do departamento escolhido
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxCoordenacao.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#coordenacao').html(html);
+                }
+            });
+
+            //mostra somente as coordenações de acordo com a secretaria selecionada
+            var idSecretaria = $(this).val();
+            //mostra as coordenações do departamento escolhido
+            $.ajax({
+                url: 'https://itapoa.app.br/App/sistema/acesso/ajaxSetor.php',
+                type: 'POST',
+                data: {
+                    'idSecretaria': idSecretaria
+                },
+                success: function (html) {
+                    $('#setor').html(html);
+                }
+            });
+        });
+    });
+    
+    
 </script>
