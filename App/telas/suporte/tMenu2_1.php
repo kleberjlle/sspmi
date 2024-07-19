@@ -34,14 +34,12 @@ $sSetor->consultar('tMenu2_1.php');
                     <h3 class="card-title">Etapa 1 - Solicitante</h3>
                 </div>
                 <!-- form start -->
-                <form action="../../sistema/suporte/sSolicitarSuporte.php" method="post" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="hidden" value="menu2_1" name="pagina">
-                                        <input type="checkbox" class="custom-control-input" id="meusDados" checked="checked" name="meusDados" value="1" onclick="habilitar();">
+                                        <input type="checkbox" class="custom-control-input" id="meusDados" name="meusDados" checked="checked" value="1" onclick="habilitar();" form="f1">
                                         <label class="custom-control-label" for="meusDados">Utilizar meus dados para a solicitação do suporte</label>
                                     </div>
                                 </div>
@@ -51,7 +49,7 @@ $sSetor->consultar('tMenu2_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control" name="secretaria" id="secretaria" disabled="">
+                                    <select class="form-control" name="secretaria" id="secretaria" disabled="" form="f1">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
@@ -63,8 +61,8 @@ $sSetor->consultar('tMenu2_1.php');
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>Departamento</label>
-                                    <select class="form-control" name="departamento" id="departamento" disabled="">
+                                    <label for="departamento">Departamento</label>
+                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f1">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sDepartamento->mConexao->getRetorno() as $value) {
@@ -77,7 +75,7 @@ $sSetor->consultar('tMenu2_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Coordenação</label>
-                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="">
+                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f1">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
@@ -89,8 +87,8 @@ $sSetor->consultar('tMenu2_1.php');
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>Setor</label>
-                                    <select class="form-control" name="setor" id="setor" disabled="">
+                                    <label for="setor">Setor</label>
+                                    <select class="form-control" name="setor" id="setor" disabled="" form="f1">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {
@@ -103,29 +101,38 @@ $sSetor->consultar('tMenu2_1.php');
                         </div>
                         <div class="row">
                             <div class="form-group col-md-1">
-                                <label for="nome">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="">
+                                <label>Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f1">
                             </div>
                             <div class="form-group col-md-1">
-                                <label for="sobrenome">Sobrenome</label>
-                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="">
+                                <label>Sobrenome</label>
+                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f1">
                             </div>
                             <div class="form-group col-md-2">
-                                <label for="telefonePessoal">Telefone</label>
-                                <input type="text" class="form-control" id="telefonePessoal" name="telefonePessoal" placeholder="(XX) X XXXX-XXXX" required="" disabled="">
+                                <label>Telefone</label>
+                                <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f1">
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Whatsapp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="habilitar();" disabled="" form="f1">
+                                        <label class="custom-control-label" for="whatsApp">Sim</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group col-md-2">
-                                <label for="whatsappPessoal">WhatsApp</label>
-                                <input type="text" class="form-control" id="whatsappPessoal" name="whatsappPessoal" placeholder="(XX) X XXXX-XXXX" disabled="">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="emailPessoal">Email</label>
-                                <input type="text" class="form-control" id="emailPessoal" name="emailPessoal" placeholder="Email" disabled="">
+                                <label>E-mail</label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="E-mail" disabled="" form="f1">
                             </div>
                         </div>
                     </div>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sSolicitarSuporte.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <!-- /.card-body -->
                     <div class="card-footer">
+                        <input type="hidden" value="f1" name="formulario" form="f1">
+                        <input type="hidden" value="inserir" name="acaoF1" form="f1">
+                        <input type="hidden" value="menu2_1" name="paginaF1" form="f1">
                         <button type="submit" class="btn btn-primary">Próxima</button>
                     </div>
                 </form>
@@ -144,9 +151,9 @@ $sSetor->consultar('tMenu2_1.php');
             document.getElementById('setor').disabled = true;
             document.getElementById('nome').disabled = true;
             document.getElementById('sobrenome').disabled = true;
-            document.getElementById('telefonePessoal').disabled = true;
-            document.getElementById('whatsappPessoal').disabled = true;
-            document.getElementById('emailPessoal').disabled = true;
+            document.getElementById('telefone').disabled = true;
+            document.getElementById('whatsApp').disabled = true;
+            document.getElementById('email').disabled = true;
         } else {
             document.getElementById('secretaria').disabled = false;
             document.getElementById('departamento').disabled = false;
@@ -154,9 +161,9 @@ $sSetor->consultar('tMenu2_1.php');
             document.getElementById('setor').disabled = false;
             document.getElementById('nome').disabled = false;
             document.getElementById('sobrenome').disabled = false;
-            document.getElementById('telefonePessoal').disabled = false;
-            document.getElementById('whatsappPessoal').disabled = false;
-            document.getElementById('emailPessoal').disabled = false;
+            document.getElementById('telefone').disabled = false;
+            document.getElementById('whatsApp').disabled = false;
+            document.getElementById('email').disabled = false;
         }
     }
     

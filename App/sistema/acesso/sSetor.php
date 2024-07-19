@@ -142,6 +142,4 @@ class sSetor {
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
-
-
 }

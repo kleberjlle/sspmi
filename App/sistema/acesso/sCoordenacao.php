@@ -56,7 +56,8 @@ class sCoordenacao {
             $this->mConexao->CRUD($dados);
         }
         
-        if ($pagina == 'tMenu4_1.php') {
+        if ($pagina == 'tMenu4_1.php' ||
+            $pagina == 'tMenu2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

@@ -6,7 +6,7 @@ use App\sistema\acesso\{
     sSecretaria,
     sDepartamento,
     sCoordenacao,
-    sSetor
+    sAmbiente
 };
 
 //instancia classes para manipulação dos dados
@@ -20,6 +20,9 @@ $sDepartamento->consultar('tMenu4_1.php');
 
 $sCoordenacao = new sCoordenacao(0);
 $sCoordenacao->consultar('tMenu4_1.php');
+
+$sAmbiente = new sAmbiente(0);
+$sAmbiente->consultar('tMenu4_1.php');
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
@@ -50,6 +53,13 @@ if (isset($_GET['campo'])) {
                 $alertaTelefoneF1 = ' is-valid';
             } else {
                 $alertaTelefoneF1 = ' is-warning';
+            }
+            break;
+        case 'ambienteF1':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaAmbienteF1 = ' is-valid';
+            } else {
+                $alertaAmbienteF1 = ' is-warning';
             }
             break;
         case 'departamentoF2':
@@ -154,7 +164,7 @@ if (isset($_GET['campo'])) {
             <!-- general form elements -->
             <div class="card card-outline card-primary <?php echo isset($alertaSecretariaF1) || isset($alertaEnderecoF1) || isset($alertaTelefoneF1) || isset($alertaEmailF1) ? '' : 'collapsed-card' ?>">
                 <div class="card-header">
-                    <h3 class="card-title">Secretaria</h3>
+                    <h3 class="card-title">Registrar Secretaria</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas <?php echo isset($alertaSecretariaF1) || isset($alertaEnderecoF1) || isset($alertaTelefoneF1) || isset($alertaEmailF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
@@ -188,24 +198,40 @@ if (isset($_GET['campo'])) {
                             <input class="form-control <?php echo isset($alertaTelefoneF1) ? $alertaTelefoneF1 : ''; ?>" type="text" name="telefoneF1" id="telefoneF1" placeholder="Ex.: 47 3443-8832" form="f1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                         </div>
                     </div>
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <label>WhatsApp</label>
-                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input class="custom-control-input" type="checkbox" name="whatsAppF1" id="whatsAppF1" form="f1">
-                                <label class="custom-control-label" for="whatsAppF1">Não</label>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                    <input class="custom-control-input" type="checkbox" name="whatsAppF1" id="whatsAppF1" form="f1">
+                                    <label class="custom-control-label" for="whatsAppF1">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Ambiente</label>
+                                <select class="form-control<?php echo isset($alertaAmbienteF1) ? $alertaAmbienteF1 : ''; ?>" name="ambienteF1" id="ambienteF1" form="f1">
+                                    <?php
+                                    foreach ($sAmbiente->mConexao->getRetorno() as $value) {
+                                        echo '<option value="' . $value['idambiente'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php
                 if (isset($tipo) &&
-                        isset($titulo) &&
-                        isset($mensagem)) {
+                    isset($titulo) &&
+                    isset($mensagem)) {
                     if (isset($alertaSecretariaF1) ||
-                            isset($alertaEnderecoF1) ||
-                            isset($alertaTelefoneF1) ||
-                            isset($alertaEmailF1)) {
+                        isset($alertaEnderecoF1) ||
+                        isset($alertaTelefoneF1) ||
+                        isset($alertaEmailF1)) {
                         echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
@@ -491,12 +517,12 @@ HTML;
                 </div>
                 <?php
                 if (isset($tipo) &&
-                    isset($titulo) &&
-                    isset($mensagem)) {
+                        isset($titulo) &&
+                        isset($mensagem)) {
                     if (isset($alertaSetorF4) ||
-                        isset($alertaEnderecoF4) ||
-                        isset($alertaTelefoneF4) ||
-                        isset($alertaEmailF4)) {
+                            isset($alertaEnderecoF4) ||
+                            isset($alertaTelefoneF4) ||
+                            isset($alertaEmailF4)) {
                         echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
