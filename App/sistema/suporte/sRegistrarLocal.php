@@ -35,7 +35,7 @@ if (isset($_POST['formulario'])) {
         $email = $_POST['emailF1'];
         $telefone = $_POST['telefoneF1'];
         isset($_POST['whatsAppF1']) ? $whatsApp = 1 : $whatsApp = 0;
-        $ambiente = $_POST['ambienteF1'];
+        $idAmbiente = $_POST['ambienteF1'];
 
         //alimenta a tabela de histórico
         alimentaHistorico($pagina, $acao, 'secretaria', null, $secretaria, $idUsuario);
@@ -43,7 +43,7 @@ if (isset($_POST['formulario'])) {
         alimentaHistorico($pagina, $acao, 'email', null, $email, $idUsuario);
         alimentaHistorico($pagina, $acao, 'telefone', null, $telefone, $idUsuario);
         alimentaHistorico($pagina, $acao, 'whatsApp', null, $whatsApp, $idUsuario);
-        alimentaHistorico($pagina, $acao, 'ambiente', null, $ambiente, $idUsuario);
+        alimentaHistorico($pagina, $acao, 'ambiente_idambiente', null, $idAmbiente, $idUsuario);
 
         //tratamento de dados
         $tratamentoSecretaria = new sTratamentoDados($secretaria);
@@ -102,7 +102,8 @@ if (isset($_POST['formulario'])) {
         //inserir novo registro no BD
         $dadosSecretaria = [
             'nomenclatura' => $secretariaTratada,
-            'endereco' => $enderecoTratado
+            'endereco' => $enderecoTratado,
+            'ambiente_idambiente' => $idAmbiente
         ];
         $sSecretaria->inserir('tMenu4_1.php', $dadosSecretaria);
 

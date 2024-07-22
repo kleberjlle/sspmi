@@ -2,7 +2,6 @@
 
 use App\sistema\acesso\{
     sConfiguracao,
-    sNotificacao,
     sSecretaria,
     sDepartamento,
     sCoordenacao,
@@ -127,7 +126,7 @@ $sSetor->consultar('tMenu2_1.php');
                             </div>
                         </div>
                     </div>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sSolicitarSuporte.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>tPainel.php?menu=2_1_1" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="f1" name="formulario" form="f1">

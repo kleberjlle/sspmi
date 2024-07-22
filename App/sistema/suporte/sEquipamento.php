@@ -38,7 +38,7 @@ class sEquipamento {
                     'sistemaOperacional_idsistemaOperacional',
                     'numeroDeSerie',
                     'etiquetaDeServico',
-                    'modelo_idmodelo',
+                    'modelo_idmodelo'
                 ],
                 'valoresInsercao' => [
                     $dadosTratados['patrimonio'],
@@ -49,7 +49,7 @@ class sEquipamento {
                     $dadosTratados['sistemaOperacional_idsistemaOperacional'],
                     $dadosTratados['numeroDeSerie'],                    
                     $dadosTratados['etiquetaDeServico'],
-                    $dadosTratados['modelo_idmodelo'],
+                    $dadosTratados['modelo_idmodelo']
                 ]
             ];
             $this->mConexao->CRUD($dados);

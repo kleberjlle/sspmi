@@ -57,19 +57,20 @@ class sSecretaria {
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu4_1.php') {
-            
+        if ($pagina == 'tMenu4_1.php') {            
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
                 'tabela' => 'secretaria',
                 'camposInsercao' => [
                     'nomenclatura',
-                    'endereco'
+                    'endereco',
+                    'ambiente_idambiente'
                 ],
                 'valoresInsercao' => [
                     $tratarDados['nomenclatura'],
                     $tratarDados['endereco'],
+                    $tratarDados['ambiente_idambiente']
                 ]
             ];            
         }
