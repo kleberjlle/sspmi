@@ -42,7 +42,8 @@ class sCategoria {
             }
         }
         
-        if ($pagina == 'tMenu3_1.php-f1') {
+        if ($pagina == 'tMenu3_1.php-f1' ||
+            $pagina == 'tMenu2_1_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

@@ -4,8 +4,7 @@ require_once '../../../vendor/autoload.php';
 use App\sistema\acesso\{
     sConfiguracao,
     sUsuario,
-    sSair
-    
+    sSair    
 };
 
 //verifica se tem credencial para acessar o sistema

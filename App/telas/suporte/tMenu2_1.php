@@ -8,6 +8,11 @@ use App\sistema\acesso\{
     sSetor
 };
 
+use App\sistema\suporte\{
+    sPrioridade,
+    sLocal
+};
+
 //instancia classes para manipulação dos dados
 $sConfiguracao = new sConfiguracao();
 
@@ -22,6 +27,12 @@ $sCoordenacao->consultar('tMenu2_1.php');
 
 $sSetor = new sSetor(0);
 $sSetor->consultar('tMenu2_1.php');
+
+$sLocal = new sLocal();
+$sLocal->consultar('tMenu2_1.php');
+
+$sPrioridade = new sPrioridade();        
+$sPrioridade->consultar('tMenu2_1_1.php');
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -97,13 +108,25 @@ $sSetor->consultar('tMenu2_1.php');
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="local">Local</label>
+                                    <select class="form-control" name="local" id="local" form="f1">
+                                        <?php
+                                        foreach ($sLocal->mConexao->getRetorno() as $value) {
+                                            echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label>Nome</label>
                                 <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f1">
                             </div>
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label>Sobrenome</label>
                                 <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f1">
                             </div>
@@ -125,8 +148,59 @@ $sSetor->consultar('tMenu2_1.php');
                                 <input class="form-control" type="email" id="email" name="email" placeholder="E-mail" disabled="" form="f1">
                             </div>
                         </div>
+                        <div class="row">                     
+                            <div class="form-group col-md-2">
+                                <label for="acessoRemoto">Acesso remoto</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                                <input class="form-control" type="text" id="acessoRemotoF1" name="acessoRemotoF1" placeholder="Ex.: 1505389456" form="f1">
+                            </div>   
+                            <div class="form-group col-md-2">
+                                <label for="patrimonio">Patrimônio</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                                <input class="form-control" type="text" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 30800" form="f1">
+                            </div> 
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Prioridade</label>
+                                    <select class="form-control<?php echo isset($alertaPrioridadeF2) ? $alertaPrioridadeF2 : ''; ?>" name="prioridadeF1" id="prioridadeF1" form="f1" required="">
+                                        <?php
+                                        if ($sPrioridade->getValidador()) {
+                                            foreach ($sPrioridade->mConexao->getRetorno() as $value) {
+                                                $value['nomenclatura'] == 'Normal' ? $atributo = 'selected=""' : $atributo = '';
+                                                if($value['nomenclatura'] == 'Normal' || $value['nomenclatura'] == 'Alta'){
+                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }else if($_SESSION['credencial']['nivelPermissao'] >= $value['idprioridade']){
+                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }
+                                                
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="col-sm-6">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <textarea class="form-control" rows="3" name="descricaoF1" id="descricaoF1" placeholder="Descrição..." required="" form="f1"></textarea>
+                                </div>
+                            </div>
+                            <!-- próxima build
+                            <div class="form-group col-md-3">
+                                <label for="print">Print</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="print">
+                                        <label class="custom-file-label" for="print">Caminho do diretório</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">Enviar</span>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                        </div>
                     </div>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>tPainel.php?menu=2_1_1" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sSolicitarSuporte.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="f1" name="formulario" form="f1">

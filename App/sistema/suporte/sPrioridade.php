@@ -1,5 +1,4 @@
 <?php
-
 namespace App\sistema\suporte;
 
 use App\modelo\{
@@ -9,7 +8,7 @@ use App\sistema\acesso\{
     sNotificacao
 };
 
-class sLocal {
+class sPrioridade {
     private string $validador;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
@@ -17,13 +16,12 @@ class sLocal {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         
-        if ($pagina == 'tMenu3_1.php' ||
-            $pagina == 'tMenu2_1.php') {
+        if ($pagina == 'tMenu2_1_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
-                'tabelas' => 'local',
+                'tabelas' => 'prioridade',
                 'camposCondicionados' => '',
                 'valoresCondicionados' => '',
                 'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
@@ -62,6 +60,4 @@ class sLocal {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }
