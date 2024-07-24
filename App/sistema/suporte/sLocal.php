@@ -18,7 +18,7 @@ class sLocal {
         $this->setMConexao(new mConexao());
         
         if ($pagina == 'tMenu3_1.php' ||
-            $pagina == 'tMenu2_1.php') {
+            $pagina == 'tMenu2_1.php-f1') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

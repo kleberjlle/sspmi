@@ -20,7 +20,8 @@ class sSetor {
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php'){
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php'){
                            
             $dados = [
                 'comando' => 'SELECT',
@@ -57,7 +58,7 @@ class sSetor {
             $this->mConexao->CRUD($dados);
         }
         if ($pagina == 'tMenu4_1.php' ||
-            $pagina == 'tMenu2_1.php') {
+            $pagina == 'tMenu2_1.php-f1') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

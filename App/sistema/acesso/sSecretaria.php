@@ -17,7 +17,8 @@ class sSecretaria {
         $this->setMConexao(new mConexao());
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_3.php'){                            
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php'){                            
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -40,7 +41,7 @@ class sSecretaria {
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu4_1.php' ||
             $pagina == 'tMenu3_1.php'||
-            $pagina == 'tMenu2_1.php'){
+            $pagina == 'tMenu2_1.php-f1'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

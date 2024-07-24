@@ -31,7 +31,11 @@ class sProtocolo {
                     'telefoneDoRequerente',
                     'whatsAppDoRequerente',
                     'emailDoRequerente',
-                    'usuario_idusuario'
+                    'usuario_idusuario',
+                    'secretaria',
+                    'departamento',
+                    'coordenacao',
+                    'setor'
                 ],
                 'valoresInsercao' => [
                     $dadosTratados['nomeDoRequerente'],
@@ -39,7 +43,11 @@ class sProtocolo {
                     $dadosTratados['telefoneDoRequerente'],
                     $dadosTratados['whatsAppDoRequerente'],
                     $dadosTratados['emailDoRequerente'],
-                    $dadosTratados['usuario_idusuario']
+                    $dadosTratados['usuario_idusuario'],
+                    $dadosTratados['secretaria'],
+                    $dadosTratados['departamento'],
+                    $dadosTratados['coordenacao'],
+                    $dadosTratados['setor']
                 ]
             ]; 
             
