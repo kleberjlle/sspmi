@@ -59,7 +59,7 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control" name="secretaria" id="secretaria" disabled="" form="f1">
+                                    <select class="form-control" name="secretariaF1" id="secretariaF1" disabled="" form="f1">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
@@ -72,7 +72,7 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="departamento">Departamento</label>
-                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f1">
+                                    <select class="form-control" name="departamentoF1" id="departamentoF1" disabled="" form="f1">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sDepartamento->mConexao->getRetorno() as $value) {
@@ -85,7 +85,7 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Coordenação</label>
-                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f1">
+                                    <select class="form-control" name="coordenacaoF1" id="coordenacaoF1" disabled="" form="f1">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
@@ -98,7 +98,7 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="setor">Setor</label>
-                                    <select class="form-control" name="setor" id="setor" disabled="" form="f1">
+                                    <select class="form-control" name="setorF1" id="setorF1" disabled="" form="f1">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {
@@ -111,10 +111,16 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="local">Local</label>
-                                    <select class="form-control" name="local" id="local" form="f1">
+                                    <select class="form-control" name="localF1" id="localF1" form="f1">
                                         <?php
                                         foreach ($sLocal->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            $value['nomenclatura'] == 'Solicitante' ? $atributo = 'selected=""' : $atributo = '';
+                                            if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['nomenclatura'] == 'Solicitante'){
+                                                echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else if($_SESSION['credencial']['nivelPermissao'] > 1){
+                                                echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
+                                            
                                         }
                                         ?>
                                     </select>
@@ -177,7 +183,7 @@ $sPrioridade->consultar('tMenu2_1_1.php');
                                     </select>
                                 </div>
                             </div>  
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <!-- textarea -->
                                 <div class="form-group">
                                     <label>Descrição</label>

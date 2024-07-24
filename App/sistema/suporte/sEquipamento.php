@@ -68,7 +68,7 @@ class sEquipamento {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
-                'tabelas' => 'idequipamento',
+                'tabelas' => 'equipamento',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => 'patrimonio', //caso não tenha, colocar como null

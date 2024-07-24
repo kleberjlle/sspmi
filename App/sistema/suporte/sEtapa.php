@@ -9,7 +9,7 @@ use App\sistema\acesso\{
     sNotificacao
 };
 
-class sProtocolo {
+class sEtapa {
 
     private string $nomeCampo;
     private string $valorCampo;
@@ -17,6 +17,30 @@ class sProtocolo {
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
     
+    public function consultar($pagina) {
+        //cria conexão com bd
+        $this->setMConexao(new mConexao());
+        
+        if ($pagina == 'tMenu2_1.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'etapa',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => 'numero', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];            
+        }
+        
+        //envia os dados para elaboração da query
+        $this->mConexao->CRUD($dados);
+
+        //atualiza o validador da classe de acordo com o validador da conexão
+        $this->setValidador($this->mConexao->getValidador());
+    }
+
     public function inserir($pagina, $dadosTratados) {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
@@ -24,22 +48,24 @@ class sProtocolo {
         if ($pagina == 'tMenu2_1.php') {
             $dados = [
                 'comando' => 'INSERT INTO',
-                'tabela' => 'protocolo',
+                'tabela' => 'etapa',
                 'camposInsercao' => [
-                    'nomeDoRequerente',
-                    'sobrenomeDoRequerente',
-                    'telefoneDoRequerente',
-                    'whatsAppDoRequerente',
-                    'emailDoRequerente',
-                    'usuario_idusuario'
+                    'numero',
+                    'acessoRemoto',
+                    'descricao',
+                    'equipamento_idequipamento',
+                    'protocolo_idprotocolo',
+                    'local_idlocal',
+                    'prioridade_idprioridade'
                 ],
                 'valoresInsercao' => [
-                    $dadosTratados['nomeDoRequerente'],
-                    $dadosTratados['sobrenomeDoRequerente'],
-                    $dadosTratados['telefoneDoRequerente'],
-                    $dadosTratados['whatsAppDoRequerente'],
-                    $dadosTratados['emailDoRequerente'],
-                    $dadosTratados['usuario_idusuario']
+                    $dadosTratados['numero'],
+                    $dadosTratados['acessoRemoto'],
+                    $dadosTratados['descricao'],
+                    $dadosTratados['equipamento_idequipamento'],
+                    $dadosTratados['protocolo_idprotocolo'],
+                    $dadosTratados['local_idlocal'],
+                    $dadosTratados['prioridade_idprioridade'],
                 ]
             ]; 
             
