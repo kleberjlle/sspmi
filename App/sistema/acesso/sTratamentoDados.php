@@ -4,7 +4,7 @@ namespace App\sistema\acesso;
 
 class sTratamentoDados {
 
-    private string $dados;
+    private mixed $dados;
 
     public function __construct(string $dados) {
         $this->dados = $dados;
@@ -48,16 +48,16 @@ class sTratamentoDados {
     }
     
     public function tratarData() {
-        $dataTratada = date("d/m/Y H:i:s", strtotime(str_replace('-', '/', $data)));
+        $dataTratada = date("d/m/Y H:i:s", strtotime(str_replace('-', '/', $this->getDados())));
 
         return $dataTratada;
     }
     
     public function tratarTelefone() {
-        if (!ctype_alnum($telefone)) {
-            $telefoneTratado = str_replace(['(', ')', '-', '_', ' '], '', $telefone);
+        if (!ctype_alnum($this->getDados())) {
+            $telefoneTratado = str_replace(['(', ')', '-', '_', ' '], '', $this->getDados());
         } else {
-            $telefoneTratado = str_replace(" ", "", $telefone);
+            $telefoneTratado = str_replace(" ", "", $this->getDados());
             //se for número de telefone fixo
             if (strlen($telefoneTratado) == 10) {
                 $mascara = "(##) ####-####";                
@@ -89,11 +89,13 @@ class sTratamentoDados {
         }
     }
     
-    public function getDados(): string {
+    public function getDados(): mixed {
         return $this->dados;
     }
 
-    public function setDados(string $dados): void {
+    public function setDados(mixed $dados): void {
         $this->dados = $dados;
     }
+
+
 }

@@ -55,7 +55,7 @@ if (isset($_POST['formulario'])) {
         $nome = $_POST['nomeF1'];
         $sobrenome = $_POST['sobrenomeF1'];
         $telefone = $_POST['telefoneF1'];
-        $whatsApp = $_POST['whatsAppF1'];
+        isset($_POST['whatsAppF1']) ? $whatsApp = $_POST['whatsAppF1'] : $whatsApp = 0;
         $email = $_POST['emailF1'];
         $idSecretaria = $_POST['secretariaF1'];
         $idDepartamento = $_POST['departamentoF1'];
@@ -75,8 +75,13 @@ if (isset($_POST['formulario'])) {
     $sobreNomeTratado = $sTratamentoSobreNome->tratarNomenclatura();
 
     //trata os dados para inserção no bd
-    $sTratamentoTelefone = new sTratamentoDados($telefone);
-    $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
+    if(!$meusDados){
+        $sTratamentoTelefone = new sTratamentoDados($telefone);
+        $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
+    }else{
+        $telefoneTratado = $telefone;
+    }
+    
     
     //trata os dados para inserção no bd
     $sTratamentoEmail = new sTratamentoDados($email);
@@ -127,13 +132,9 @@ if (isset($_POST['formulario'])) {
 
     if ($sEquipamento->getValidador()) {
         foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-            if ($linha['patrimonio'] == $patrimonio) {
+            if ($linha['patrimonio'] == $patrimonioTratado) {
                 $idEquipamento = $linha['idequipamento'];
-            }
-        }
-    } else {
-        foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-            if ($linha['patrimonio'] == 'Indefinido') {
+            }else if ($linha['patrimonio'] == 'Indefinido') {
                 $idEquipamento = $linha['idequipamento'];
             }
         }

@@ -60,6 +60,31 @@ class sProtocolo {
         }
     }
     
+    public function consultar($pagina) {
+        //cria conexão com o bd
+        $this->setMConexao(new mConexao());
+        
+        if ($pagina == 'tMenu2_2.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'protocolo',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'idprotocolo', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];
+        }
+                
+        //envia os dados para elaboração da query
+        $this->mConexao->CRUD($dados);
+
+        //atualiza o validador da classe de acordo com o validador da conexão
+        $this->setValidador($this->mConexao->getValidador());
+        
+    }
+    
     public function getNomeCampo(): string {
         return $this->nomeCampo;
     }

@@ -324,7 +324,8 @@ class sUsuario {
             $this->setValidador($this->mConexao->getValidador());
         }
 
-        if ($pagina == 'tMenu1_2_1.php') {
+        if ($pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu2_2.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
