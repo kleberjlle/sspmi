@@ -354,7 +354,7 @@ HTML;
     }
 }
 ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" id="f1" method="post" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sRegistrarEquipamento.php" id="f1" name="f1" method="post" enctype="multipart/form-data">
                     <!-- /.card-body-->
                     <div class="card-footer">
                         <input type="hidden" value="f1" name="formulario" form="f1">

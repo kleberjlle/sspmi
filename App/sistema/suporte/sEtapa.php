@@ -30,7 +30,7 @@ class sEtapa {
                 'tabelas' => 'etapa',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => 'numero', //caso não tenha, colocar como null
+                'camposOrdenados' => 'idetapa', //caso não tenha, colocar como null
                 'ordem' => 'ASC'//caso não tenha, colocar como null
             ];            
         }

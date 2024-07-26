@@ -17,6 +17,6 @@ if ($sModelo->mConexao->getValidador()) {
         echo '<option value="' . $value['idmodelo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
     }
 } else {
-    echo '<option value="" selected>--</option>';
+    echo '<option value="0" selected>--</option>';
 }
 ?>

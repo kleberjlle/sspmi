@@ -35,7 +35,7 @@ if (isset($_POST['formulario'])) {
     $valorCampoAnterior = '';
     isset($_POST['meusDados']) ? $meusDados = $_POST['meusDados'] : $meusDados = false;
     $acessoRemoto = $_POST['acessoRemotoF1'];
-    isset($_POST['patrimonioF1']) ? $patrimonio = 'Indefinido' : $patrimonio = $_POST['patrimonioF1'];
+    isset($_POST['patrimonioF1']) ? $patrimonio = $_POST['patrimonioF1'] : $patrimonio = 'Indefinido';
     $idLocal = $_POST['localF1'];
     $idPrioridade = $_POST['prioridadeF1'];
     $descricao = $_POST['descricaoF1'];
@@ -80,8 +80,7 @@ if (isset($_POST['formulario'])) {
         $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
     }else{
         $telefoneTratado = $telefone;
-    }
-    
+    }    
     
     //trata os dados para inserção no bd
     $sTratamentoEmail = new sTratamentoDados($email);

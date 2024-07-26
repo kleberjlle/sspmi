@@ -8,7 +8,7 @@ use App\sistema\suporte\{
     sProtocolo,
     sEtapa,
     sEquipamento,
-    sLocal
+    sCategoria,
 };
 
 //consulta os dados para apresentar na tabela
@@ -70,22 +70,48 @@ HTML;
                             $nome = $nomeSolicitante;
                         }else{
                             $requerente = true;
-                            $nome = $nomeRequerente.'<br />por <i>'.$nomeSolicitante.'</i></td>';                            
+                            $nome = $nomeRequerente.'<br />por <i>'.$nomeSolicitante.'</i>';                            
                         }
                         
                         //campo telefone
                         $sTratamentoTelefone = new sTratamentoDados($value['telefoneDoRequerente']);
                         $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
                         
+                        //campos da tabela etapa
+                        $idProtocolo = $value['idprotocolo'];
+                        $sEtapa = new sEtapa();
+                        $sEtapa->setNomeCampo('protocolo_idprotocolo');
+                        $sEtapa->setValorCampo($idProtocolo);
+                        $sEtapa->consultar('tMenu2_2.php');
+                        
+                        foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
+                            $idEquipamento = $value['equipamento_idequipamento'];
+                        }
+                        
+                        
+                        //campo patrimônio                        
+                        $sEquipamento = new sEquipamento();
+                        $sEquipamento->setNomeCampo('idequipamento');
+                        $sEquipamento->setValorCampo($idEquipamento);
+                        $sEquipamento->consultar('tMenu2_2.php');
+                        
+                        foreach ($sEquipamento->mConexao->getRetorno() as $key => $value) {
+                            $patrimonio = $value['patrimonio'];
+                            $idCategoria = $value['categoria_idcategoria'];
+                            $idModelo = $value['modelo_idmodelo'];
+                        }
+                        
+                        //campo categoria
+                        $sCategoria = new sCategoria();
+                        $sCategoria->consultar('tMenu2_2.php');
+                        
                         echo <<<HTML
                         <tr>
                             <td>$protocolo</td>
                             <td>$dataTratada</td>
-                            <td>
-                                $nome
-                            <td>
-                                $telefoneTratado
-                            <td>P19844</td>
+                            <td>$nome</td>
+                            <td>$telefoneTratado</td>
+                            <td>$patrimonio</td>
                             <td>Computador Dell OptPlex Micro 7010</td>
                             <td>Sem conexão</td>
                             <td>Interno</td>
@@ -117,13 +143,13 @@ HTML;
                     <th>Data e Hora</th>
                     <th>Solicitante</th>
                     <th>Telefone</th>
-                    <th>Patrimônio/ Identificação</th>
+                    <th>Identificação</th>
                     <th>Categoria/ Marca/ Modelo</th>
                     <th>Descrição</th>
                     <th>Ambiente</th>
                     <th>Local</th>
                     <?php    
-                    if($_SESSION['credencial']['permissao'] > 2){
+                    if($_SESSION['credencial']['permissao'] > 1){
                     echo <<<HTML
                         <th>Prioridade</th>
 HTML;
