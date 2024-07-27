@@ -1,6 +1,14 @@
 <?php
+//necessário para chamar headers(Location) após linhas html (caso contrário gera erro de output)
+ob_start();
+
+//inicia as sessões do sistema
 session_start();
+
+//chama o caminho do autoload para carregamento dos arquivos
 require_once '../../../vendor/autoload.php';
+
+//chama os arquivos para instanciá-los
 use App\sistema\acesso\{
     sConfiguracao,
     sUsuario,

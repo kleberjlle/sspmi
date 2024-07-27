@@ -128,17 +128,32 @@ if (isset($_POST['formulario'])) {
     $sEquipamento->setNomeCampo('patrimonio');
     $sEquipamento->setValorCampo($patrimonioTratado);
     $sEquipamento->consultar('tMenu2_1.php');
-
-    if ($sEquipamento->getValidador()) {
-        foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-            if ($linha['patrimonio'] == $patrimonioTratado) {
-                $idEquipamento = $linha['idequipamento'];
-            }else if ($linha['patrimonio'] == 'Indefinido') {
-                $idEquipamento = $linha['idequipamento'];
+    
+    if($patrimonioTratado == 'Indefinido'){
+        if ($sEquipamento->getValidador()) {
+            foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
+                if ($linha['patrimonio'] == 'Indefinido') {
+                    $idEquipamento = $linha['idequipamento'];
+                }   
             }
+        }else{
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=patrimonioF1&codigo=A18");
+            exit();
         }
+    }else{
+        if ($sEquipamento->getValidador()) {
+            foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
+                if ($linha['patrimonio'] == $patrimonioTratado) {
+                    $idEquipamento = $linha['idequipamento'];
+                }
+            }
+        }else{
+            $patrimonioTratado = 'Indefinido';
+            
+            
+        }        
     }
-
+    
     //gerar histórico dos campos do solicitante ou requerente
     alimentaHistorico($pagina, $acao, 'nomeDoRequerente', $valorCampoAnterior, $nome, $idUsuario);
     alimentaHistorico($pagina, $acao, 'sobrenomeDoRequerente', $valorCampoAnterior, $sobrenome, $idUsuario);
@@ -192,7 +207,9 @@ if (isset($_POST['formulario'])) {
     }
 
     //gerar histórico dos campos da etapa
-    alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
+    if ($sEquipamento->getValidador()) {
+        alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
+    }
     alimentaHistorico($pagina, $acao, 'protocolo_idprotocolo', $valorCampoAnterior, $idProtocolo, $idUsuario);
     alimentaHistorico($pagina, $acao, 'local_idlocal', $valorCampoAnterior, $idLocal, $idUsuario);
 
@@ -206,6 +223,8 @@ if (isset($_POST['formulario'])) {
         'local_idlocal' => $idLocal,
         'prioridade_idprioridade' => $idPrioridade
     ];
+    
+    
     $sEtapa->inserir('tMenu2_1.php', $dadosEtapa);
 
     //redireciona para o formulário com mensagem de sucesso

@@ -19,7 +19,8 @@ class sCategoria {
 
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu3_1.php') {
+        if ($pagina == 'tMenu3_1.php' ||
+            $pagina == 'tMenu2_1.php-tabela') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -43,7 +44,7 @@ class sCategoria {
         }
         
         if ($pagina == 'tMenu3_1.php-f1' ||
-            $pagina == 'tMenu2_1_1.php') {
+            $pagina == 'tMenu2_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

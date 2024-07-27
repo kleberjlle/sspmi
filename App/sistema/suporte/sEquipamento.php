@@ -21,6 +21,43 @@ class sEquipamento {
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;    
     
+    public function consultar($pagina) {
+        //cria conexão com o bd
+        $this->setMConexao(new mConexao());
+        
+        if ($pagina == 'tMenu2_1.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'equipamento',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'patrimonio', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];
+        }
+        
+        if ($pagina == 'tMenu2_2.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'equipamento',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => 'patrimonio', //caso não tenha, colocar como null
+                'ordem' => 'ASC'//caso não tenha, colocar como null
+            ];
+        }
+        
+        //envia os dados para elaboração da query
+        $this->mConexao->CRUD($dados);
+
+        //atualiza o validador da classe de acordo com o validador da conexão
+        $this->setValidador($this->mConexao->getValidador());
+    }
+    
     public function inserir($pagina, $dadosTratados) {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
@@ -59,29 +96,6 @@ class sEquipamento {
                 $this->setSNotificacao(new sNotificacao('S4'));
             }
         }
-    }
-    
-    public function consultar($pagina) {
-        $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu2_2.php') {
-            //monta os dados há serem passados na query               
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'equipamento',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => 'patrimonio', //caso não tenha, colocar como null
-                'ordem' => 'ASC'//caso não tenha, colocar como null
-            ];
-        }
-        
-        //envia os dados para elaboração da query
-        $this->mConexao->CRUD($dados);
-
-        //atualiza o validador da classe de acordo com o validador da conexão
-        $this->setValidador($this->mConexao->getValidador());
     }
     
     public function getPatrimonio(): string {

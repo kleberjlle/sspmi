@@ -94,6 +94,14 @@ class sNotificacao{
             case '17':
                 $this->setMensagem('Você deve escolher uma das opções do campo');
                 break;
+            case '18':
+                //falta um equipamento com patrimônio indefinido
+                $this->setMensagem('Se você não localizou o "Patrimônio" na lista abaixo, então você deve escolher uma das opções do campo "Categoria"');
+                break;
+            case '19':
+                //falta um equipamento com patrimônio indefinido
+                $this->setMensagem('Se você localizou o Patrimônio na lista abaixo, então deve "Escolher" e clicar em "Próximo".');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');
