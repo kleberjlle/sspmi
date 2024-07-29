@@ -18,7 +18,6 @@ use App\sistema\acesso\{
 };
 
 use App\sistema\suporte\{
-    sEquipamento,
     sProtocolo,
     sEtapa
 };

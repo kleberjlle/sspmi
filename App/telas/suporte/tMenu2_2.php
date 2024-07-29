@@ -7,8 +7,8 @@ use App\sistema\acesso\{
 use App\sistema\suporte\{
     sProtocolo,
     sEtapa,
-    sEquipamento,
     sCategoria,
+    sEquipamento
 };
 
 //consulta os dados para apresentar na tabela
@@ -78,19 +78,19 @@ HTML;
                         $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
                         
                         //campos da tabela etapa
+                        //se não estiver etapa para um protocolo não será impressa gerará um erro
+                        //verifique se há algum protocolo sem etapa vinculada
                         $idProtocolo = $value['idprotocolo'];
                         $sEtapa = new sEtapa();
                         $sEtapa->setNomeCampo('protocolo_idprotocolo');
                         $sEtapa->setValorCampo($idProtocolo);
                         $sEtapa->consultar('tMenu2_2.php');
+                                               
                         
                         //var_dump($sEtapa->mConexao->getRetorno());
-                        /*
                         foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
                             $idEquipamento = $value['equipamento_idequipamento'];
                         }
-                        
-                        
                         
                         //campo patrimônio                        
                         $sEquipamento = new sEquipamento();
@@ -103,8 +103,7 @@ HTML;
                             $idCategoria = $value['categoria_idcategoria'];
                             $idModelo = $value['modelo_idmodelo'];
                         }
-                         * 
-                         */
+                        
                         //campo categoria
                         $sCategoria = new sCategoria();
                         $sCategoria->consultar('tMenu2_2.php');

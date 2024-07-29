@@ -70,6 +70,7 @@ class mConexao {
         //QA - fim da área de testes
 
         $resultado = $this->conexao->query($query);
+        
         //tomada de decisão de acordo com o(s) campo(s)
         switch ($dados['tabelas']) {
             case 'email':
@@ -210,6 +211,18 @@ class mConexao {
                 }
                 break;
             case 'categoria':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
+            case 'etapa':
                 if ($dados['busca'] == '*') {
                     if ($resultado->num_rows > 0) {
                         foreach ($resultado as $linha) {

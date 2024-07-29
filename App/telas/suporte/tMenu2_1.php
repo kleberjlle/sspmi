@@ -28,6 +28,13 @@ if (isset($_GET['campo'])) {
                 $alertaEquipamento = ' is-warning';
             }
             break;
+        case 'sistema':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaSistema = ' is-valid';
+            } else {
+                $alertaSistema = ' is-warning';
+            }
+            break;
     }
     //cria as variáveis da notificação
     $tipo = $sNotificacao->getTipo();
@@ -83,7 +90,8 @@ $sCategoria->consultar('tMenu2_1.php');
                             isset($titulo) &&
                             isset($mensagem)) {
                             if (isset($alertaCategoria) ||
-                                isset($alertaEquipamento)) {
+                                isset($alertaEquipamento) ||
+                                isset($alertaSistema)) {
                             echo <<<HTML
                             <div class="col-mb-3">
                                 <div class="card card-outline card-{$tipo}">

@@ -10,7 +10,8 @@ use App\sistema\acesso\{
 
 use App\sistema\suporte\{
     sPrioridade,
-    sLocal
+    sLocal,
+    sEquipamento
 };
 
 isset($_POST['patrimonio']) ? $patrimonio = true : $patrimonio = false;
@@ -56,6 +57,30 @@ $sLocal->consultar('tMenu2_1.php-f1');
 $sPrioridade = new sPrioridade();        
 $sPrioridade->consultar('tMenu2_1.php-f1');
 
+if(!$idEquipamento){
+    $sEquipamento = new sEquipamento();
+    $sEquipamento->setNomeCampo('patrimonio');
+    $sEquipamento->setValorCampo('INDEFINIDO');
+    $sEquipamento->consultar('tMenu2_1_1.php');
+    
+    if(!$sEquipamento->getValidador()){
+        $sConfiguracao = new sConfiguracao;
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=sistema&codigo=E12");
+        exit();
+        //finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
+        ob_clean();
+    }else{
+        foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
+            if ($linha['patrimonio'] == 'INDEFINIDO') {
+                $idEquipamento = $linha['idequipamento'];
+            }
+        }
+    }
+}
+
+
+
+        
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);

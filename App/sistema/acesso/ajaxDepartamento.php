@@ -15,8 +15,8 @@ if ($sDepartamento->mConexao->getValidador()) {
         $_SESSION['credencial']['idSecretaria'] == $value['secretaria_idsecretaria'] ? $atributo = ' selected' : $atributo = '';
         echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
     }
-    echo '<option value="0">--</option>';
+    echo '<option value="0" selected="">--</option>';
 } else {
-    echo '<option value="" selected>--</option>';
+    echo '<option value="" selected="">--</option>';
 }
 ?>
