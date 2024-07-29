@@ -30,7 +30,7 @@ class sEtapa {
                 'tabelas' => 'etapa',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => 'idetapa', //caso não tenha, colocar como null
+                'camposOrdenados' => 'numero', //caso não tenha, colocar como null
                 'ordem' => 'ASC'//caso não tenha, colocar como null
             ];            
         }
@@ -46,7 +46,7 @@ class sEtapa {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
 
-        if ($pagina == 'tMenu2_1.php') {
+        if ($pagina == 'tMenu2_1_1.php') {
             $dados = [
                 'comando' => 'INSERT INTO',
                 'tabela' => 'etapa',

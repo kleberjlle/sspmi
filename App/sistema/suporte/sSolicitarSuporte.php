@@ -1,9 +1,11 @@
 <?php
-
+//inicia as sessões do sistema
 session_start();
 
+//carrega os diretórios via autoload
 require_once '../../../vendor/autoload.php';
 
+//carrega os arquivos para instanciá-los
 use App\sistema\acesso\{
     sSair,
     sHistorico,
@@ -14,6 +16,7 @@ use App\sistema\acesso\{
     sSetor,
     sTratamentoDados
 };
+
 use App\sistema\suporte\{
     sEquipamento,
     sProtocolo,
@@ -29,16 +32,17 @@ if (!isset($_SESSION['credencial'])) {
 
 if (isset($_POST['formulario'])) {
     //verifica se é para abrir o chamado com os dados do solicitante ou do representante
-    $pagina = $_POST['paginaF1'];
-    $acao = $_POST['acaoF1'];
+    $pagina = $_POST['pagina'];
+    $acao = $_POST['acao'];
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $valorCampoAnterior = '';
     isset($_POST['meusDados']) ? $meusDados = $_POST['meusDados'] : $meusDados = false;
-    $acessoRemoto = $_POST['acessoRemotoF1'];
-    isset($_POST['patrimonioF1']) ? $patrimonio = $_POST['patrimonioF1'] : $patrimonio = 'Indefinido';
-    $idLocal = $_POST['localF1'];
-    $idPrioridade = $_POST['prioridadeF1'];
-    $descricao = $_POST['descricaoF1'];
+    $acessoRemoto = $_POST['acessoRemoto'];
+    $idLocal = $_POST['local'];
+    $idPrioridade = $_POST['prioridade'];
+    $descricao = $_POST['descricao'];
+    $categoria = $_POST['categoria'];
+    $idEquipamento = $_POST['idEquipamento'];
     
     //verifica se serão passados os dados do solicitante ou do requerente
     if ($meusDados) {
@@ -52,15 +56,15 @@ if (isset($_POST['formulario'])) {
         $idCoordenacao = $_SESSION['credencial']['idCoordenacao'];
         $idSetor = $_SESSION['credencial']['idSetor'];
     } else {
-        $nome = $_POST['nomeF1'];
-        $sobrenome = $_POST['sobrenomeF1'];
-        $telefone = $_POST['telefoneF1'];
-        isset($_POST['whatsAppF1']) ? $whatsApp = $_POST['whatsAppF1'] : $whatsApp = 0;
-        $email = $_POST['emailF1'];
-        $idSecretaria = $_POST['secretariaF1'];
-        $idDepartamento = $_POST['departamentoF1'];
-        $idCoordenacao = $_POST['coordenacaoF1'];
-        $idSetor = $_POST['setorF1'];
+        $nome = $_POST['nome'];
+        $sobrenome = $_POST['sobrenome'];
+        $telefone = $_POST['telefone'];
+        isset($_POST['whatsApp']) ? $whatsApp = $_POST['whatsApp'] : $whatsApp = 0;
+        $email = $_POST['email'];
+        $idSecretaria = $_POST['secretaria'];
+        $idDepartamento = $_POST['departamento'];
+        $idCoordenacao = $_POST['coordenacao'];
+        $idSetor = $_POST['setor'];
     }
     
     //instancia as configurações do sistema
@@ -85,10 +89,6 @@ if (isset($_POST['formulario'])) {
     //trata os dados para inserção no bd
     $sTratamentoEmail = new sTratamentoDados($email);
     $emailTratado = $sTratamentoEmail->tratarEmail();
-    
-    //trata os dados para inserção no bd
-    $sTratamentoPatrimonio = new sTratamentoDados($patrimonio);
-    $patrimonioTratado = $sTratamentoPatrimonio->tratarPatrimonio();
 
     //buscar nomenclatura dos locais
     if ($idSecretaria == 0) {
@@ -122,37 +122,6 @@ if (isset($_POST['formulario'])) {
         $sSetor->consultar('tMenu2_1.php');
         $setor = $sSetor->getNomenclatura();
     }
-
-    //busca id do equipamento
-    $sEquipamento = new sEquipamento();
-    $sEquipamento->setNomeCampo('patrimonio');
-    $sEquipamento->setValorCampo($patrimonioTratado);
-    $sEquipamento->consultar('tMenu2_1.php');
-    
-    if($patrimonioTratado == 'Indefinido'){
-        if ($sEquipamento->getValidador()) {
-            foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-                if ($linha['patrimonio'] == 'Indefinido') {
-                    $idEquipamento = $linha['idequipamento'];
-                }   
-            }
-        }else{
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=patrimonioF1&codigo=A18");
-            exit();
-        }
-    }else{
-        if ($sEquipamento->getValidador()) {
-            foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-                if ($linha['patrimonio'] == $patrimonioTratado) {
-                    $idEquipamento = $linha['idequipamento'];
-                }
-            }
-        }else{
-            $patrimonioTratado = 'Indefinido';
-            
-            
-        }        
-    }
     
     //gerar histórico dos campos do solicitante ou requerente
     alimentaHistorico($pagina, $acao, 'nomeDoRequerente', $valorCampoAnterior, $nome, $idUsuario);
@@ -161,7 +130,8 @@ if (isset($_POST['formulario'])) {
     alimentaHistorico($pagina, $acao, 'whatsAppDoRequerente', $valorCampoAnterior, $whatsApp, $idUsuario);
     alimentaHistorico($pagina, $acao, 'emailDoRequerente', $valorCampoAnterior, $email, $idUsuario);
     alimentaHistorico($pagina, $acao, 'acessoRemoto', $valorCampoAnterior, $acessoRemoto, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'patrimonio', $valorCampoAnterior, $patrimonio, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'categoria', $valorCampoAnterior, $categoria, $idUsuario);
     alimentaHistorico($pagina, $acao, 'prioridade', $valorCampoAnterior, $idPrioridade, $idUsuario);
     alimentaHistorico($pagina, $acao, 'descricao', $valorCampoAnterior, $descricao, $idUsuario);
     alimentaHistorico($pagina, $acao, 'secretaria', $valorCampoAnterior, $secretaria, $idUsuario);
@@ -207,9 +177,6 @@ if (isset($_POST['formulario'])) {
     }
 
     //gerar histórico dos campos da etapa
-    if ($sEquipamento->getValidador()) {
-        alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
-    }
     alimentaHistorico($pagina, $acao, 'protocolo_idprotocolo', $valorCampoAnterior, $idProtocolo, $idUsuario);
     alimentaHistorico($pagina, $acao, 'local_idlocal', $valorCampoAnterior, $idLocal, $idUsuario);
 
@@ -223,12 +190,11 @@ if (isset($_POST['formulario'])) {
         'local_idlocal' => $idLocal,
         'prioridade_idprioridade' => $idPrioridade
     ];
-    
-    
-    $sEtapa->inserir('tMenu2_1.php', $dadosEtapa);
+        
+    $sEtapa->inserir('tMenu2_1_1.php', $dadosEtapa);
 
     //redireciona para o formulário com mensagem de sucesso
-    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=secretariaF1&codigo=S4");
+    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=secretaria&codigo=S4");
     exit();
 } else {
     //solicitar saída com tentativa de violação

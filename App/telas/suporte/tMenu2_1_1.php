@@ -1,6 +1,4 @@
 <?php
-//finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
-ob_clean();
 use App\sistema\acesso\{
     sConfiguracao,
     sSecretaria,
@@ -19,18 +17,22 @@ isset($_POST['patrimonio']) ? $patrimonio = true : $patrimonio = false;
 $categoria = $_POST['categoria'];
 isset($_POST['idEquipamento']) ? $idEquipamento = $_POST['idEquipamento'] : $idEquipamento = false;
 
-if(!$patrimonio){
+if($patrimonio == false){
     if($categoria == 0){
         $sConfiguracao = new sConfiguracao;
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=categoria&codigo=A18");
         exit();
+        //finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
+        ob_clean();
     }
 }
 
-if(!$idEquipamento){
+if(!$idEquipamento && $patrimonio){
     $sConfiguracao = new sConfiguracao;
     header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=equipamento&codigo=A19");
     exit();
+    //finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
+    ob_clean();
 }
 
 //instancia classes para manipulação dos dados
@@ -58,18 +60,11 @@ $sPrioridade->consultar('tMenu2_1.php-f1');
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
-        case 'secretariaF1':
+        case 'secretaria':
             if ($_GET['codigo'] == 'S4') {
-                $alertaSecretariaF1 = ' is-valid';
+                $alertaSecretaria = ' is-valid';
             } else {
-                $alertaSecretariaF1 = ' is-warning';
-            }
-            break;
-        case 'patrimonioF1':
-            if ($_GET['codigo'] == 'A18') {
-                $alertaPatrimonioF1 = ' is-valid';
-            } else {
-                $alertaPatrimonioF1 = ' is-warning';
+                $alertaSecretaria = ' is-warning';
             }
             break;
     }
@@ -95,7 +90,7 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="meusDados" name="meusDados" checked="checked" value="1" onclick="habilitar();" form="f1">
+                                        <input type="checkbox" class="custom-control-input" id="meusDados" name="meusDados" checked="checked" value="1" onclick="habilitar();" form="f2">
                                         <label class="custom-control-label" for="meusDados">Utilizar meus dados para a solicitação do suporte</label>
                                     </div>
                                 </div>
@@ -105,7 +100,7 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control<?php echo isset($alertaSecretariaF1) ? $alertaSecretariaF1 : ''; ?>" name="secretariaF1" id="secretariaF1" disabled="" form="f1">
+                                    <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" disabled="" form="f2">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
@@ -118,7 +113,7 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="departamento">Departamento</label>
-                                    <select class="form-control" name="departamentoF1" id="departamentoF1" disabled="" form="f1">
+                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sDepartamento->mConexao->getRetorno() as $value) {
@@ -131,7 +126,7 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Coordenação</label>
-                                    <select class="form-control" name="coordenacaoF1" id="coordenacaoF1" disabled="" form="f1">
+                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
                                          <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
@@ -144,7 +139,7 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="setor">Setor</label>
-                                    <select class="form-control" name="setorF1" id="setorF1" disabled="" form="f1">
+                                    <select class="form-control" name="setor" id="setor" disabled="" form="f2">
                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {
@@ -156,8 +151,28 @@ if (isset($_GET['campo'])) {
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
+                                    <label>Prioridade</label>
+                                    <select class="form-control" name="prioridade" id="prioridade" form="f2" required="">
+                                        <?php
+                                        if ($sPrioridade->getValidador()) {
+                                            foreach ($sPrioridade->mConexao->getRetorno() as $value) {
+                                                $value['nomenclatura'] == 'Normal' ? $atributo = 'selected=""' : $atributo = '';
+                                                if($value['nomenclatura'] == 'Normal' || $value['nomenclatura'] == 'Alta'){
+                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }else if($_SESSION['credencial']['nivelPermissao'] >= $value['idprioridade']){
+                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }
+                                                
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <label for="local">Local</label>
-                                    <select class="form-control" name="localF1" id="localF1" form="f1">
+                                    <select class="form-control" name="local" id="local" form="f2">
                                         <?php
                                         foreach ($sLocal->mConexao->getRetorno() as $value) {
                                             $value['nomenclatura'] == 'Solicitante' ? $atributo = 'selected=""' : $atributo = '';
@@ -176,64 +191,40 @@ if (isset($_GET['campo'])) {
                         <div class="row">
                             <div class="form-group col-md-2">
                                 <label>Nome</label>
-                                <input type="text" class="form-control" id="nomeF1" name="nomeF1" placeholder="Nome" required="" disabled="" form="f1">
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f2">
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Sobrenome</label>
-                                <input type="text" class="form-control" id="sobrenomeF1" name="sobrenomeF1" placeholder="Sobrenome" required="" disabled="" form="f1">
+                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f2">
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Telefone</label>
-                                <input type="text" class="form-control" id="telefoneF1" name="telefoneF1" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f1">
+                                <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f2">
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Whatsapp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="whatsAppF1" name="whatsAppF1" value="1" onclick="habilitar();" disabled="" form="f1">
-                                        <label class="custom-control-label" for="whatsAppF1">Sim</label>
+                                        <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="habilitar();" disabled="" form="f2">
+                                        <label class="custom-control-label" for="whatsApp">Sim</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
                                 <label>E-mail</label>
-                                <input class="form-control" type="email" id="emailF1" name="emailF1" placeholder="E-mail" required="" disabled="" form="f1">
+                                <input class="form-control" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
                             </div>
-                        </div>
-                        <div class="row">                     
                             <div class="form-group col-md-2">
                                 <label for="acessoRemoto">Acesso remoto</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                                <input class="form-control" type="text" id="acessoRemotoF1" name="acessoRemotoF1" placeholder="Ex.: 1505389456" form="f1">
-                            </div>   
-                            <div class="form-group col-md-2">
-                                <label for="patrimonio">Patrimônio</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                                <input class="form-control<?php echo isset($alertaPatrimonioF1) ? $alertaPatrimonioF1 : ''; ?>" type="text" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 30800" form="f1">
+                                <input class="form-control" type="text" id="acessoRemoto" name="acessoRemoto" placeholder="Ex.: 1505389456" form="f2">
                             </div> 
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Prioridade</label>
-                                    <select class="form-control<?php echo isset($alertaPrioridadeF2) ? $alertaPrioridadeF2 : ''; ?>" name="prioridadeF1" id="prioridadeF1" form="f1" required="">
-                                        <?php
-                                        if ($sPrioridade->getValidador()) {
-                                            foreach ($sPrioridade->mConexao->getRetorno() as $value) {
-                                                $value['nomenclatura'] == 'Normal' ? $atributo = 'selected=""' : $atributo = '';
-                                                if($value['nomenclatura'] == 'Normal' || $value['nomenclatura'] == 'Alta'){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }else if($_SESSION['credencial']['nivelPermissao'] >= $value['idprioridade']){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }
-                                                
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>  
-                            <div class="col-sm-4">
+                        </div>
+                        <div class="row">                     
+                            <div class="col-sm-6">
                                 <!-- textarea -->
                                 <div class="form-group">
                                     <label>Descrição</label>
-                                    <textarea class="form-control" rows="3" name="descricaoF1" id="descricaoF1" placeholder="Descrição..." required="" form="f1"></textarea>
+                                    <textarea class="form-control" rows="3" name="descricao" id="descricao" placeholder="Descrição..." required="" form="f2"></textarea>
                                 </div>
                             </div>
                             <!-- próxima build
@@ -256,8 +247,7 @@ if (isset($_GET['campo'])) {
                         if (isset($tipo) &&
                             isset($titulo) &&
                             isset($mensagem)) {
-                            if (isset($alertaSecretariaF1) ||
-                                isset($alertaPatrimonioF1)) {
+                            if (isset($alertaSecretaria)) {
                             echo <<<HTML
                             <div class="col-mb-3">
                                 <div class="card card-outline card-{$tipo}">
@@ -273,12 +263,14 @@ HTML;
                             }
                         }
                     ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sSolicitarSuporte.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sSolicitarSuporte.php" method="post" enctype="multipart/form-data" name="f2" id="f2">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" value="f1" name="formulario" form="f1">
-                        <input type="hidden" value="inserir" name="acaoF1" form="f1">
-                        <input type="hidden" value="menu2_1" name="paginaF1" form="f1">
+                        <input type="hidden" value="f2" name="formulario" form="f2">
+                        <input type="hidden" value="inserir" name="acao" form="f2">
+                        <input type="hidden" value="menu2_1_1" name="pagina" form="f2">
+                        <input type="hidden" value="<?php echo $categoria ?>" name="categoria" form="f2">
+                        <input type="hidden" value="<?php echo $idEquipamento ?>" name="idEquipamento" form="f2">
                         <button type="submit" class="btn btn-primary">Próxima</button>
                     </div>
                 </form>
@@ -291,31 +283,31 @@ HTML;
 <script type="text/javascript">
     function habilitar() {
         if (document.getElementById('meusDados').checked) {
-            document.getElementById('secretariaF1').disabled = true;
-            document.getElementById('departamentoF1').disabled = true;
-            document.getElementById('coordenacaoF1').disabled = true;
-            document.getElementById('setorF1').disabled = true;
-            document.getElementById('nomeF1').disabled = true;
-            document.getElementById('sobrenomeF1').disabled = true;
-            document.getElementById('telefoneF1').disabled = true;
-            document.getElementById('whatsAppF1').disabled = true;
-            document.getElementById('emailF1').disabled = true;
+            document.getElementById('secretaria').disabled = true;
+            document.getElementById('departamento').disabled = true;
+            document.getElementById('coordenacao').disabled = true;
+            document.getElementById('setor').disabled = true;
+            document.getElementById('nome').disabled = true;
+            document.getElementById('sobrenome').disabled = true;
+            document.getElementById('telefone').disabled = true;
+            document.getElementById('whatsApp').disabled = true;
+            document.getElementById('email').disabled = true;
         } else {
-            document.getElementById('secretariaF1').disabled = false;
-            document.getElementById('departamentoF1').disabled = false;
-            document.getElementById('coordenacaoF1').disabled = false;
-            document.getElementById('setorF1').disabled = false;
-            document.getElementById('nomeF1').disabled = false;
-            document.getElementById('sobrenomeF1').disabled = false;
-            document.getElementById('telefoneF1').disabled = false;
-            document.getElementById('whatsAppF1').disabled = false;
-            document.getElementById('emailF1').disabled = false;
+            document.getElementById('secretaria').disabled = false;
+            document.getElementById('departamento').disabled = false;
+            document.getElementById('coordenacao').disabled = false;
+            document.getElementById('setor').disabled = false;
+            document.getElementById('nome').disabled = false;
+            document.getElementById('sobrenome').disabled = false;
+            document.getElementById('telefone').disabled = false;
+            document.getElementById('whatsApp').disabled = false;
+            document.getElementById('email').disabled = false;
         }
     }
     
     $(document).ready(function () {
         //traz os departamentos de acordo com a secretaria selecionada   
-        $('#secretariaF1').on('change', function () {
+        $('#secretaria').on('change', function () {
             var idSecretaria = $(this).val();
 
             //mostra somente os departamentos da secretaria escolhida
@@ -326,7 +318,7 @@ HTML;
                     'idSecretaria': idSecretaria
                 },
                 success: function (html) {
-                    $('#departamentoF1').html(html);
+                    $('#departamento').html(html);
                 }
             });
 
@@ -340,7 +332,7 @@ HTML;
                     'idSecretaria': idSecretaria
                 },
                 success: function (html) {
-                    $('#coordenacaoF1').html(html);
+                    $('#coordenacao').html(html);
                 }
             });
 
@@ -354,7 +346,7 @@ HTML;
                     'idSecretaria': idSecretaria
                 },
                 success: function (html) {
-                    $('#setorF1').html(html);
+                    $('#setor').html(html);
                 }
             });
         });

@@ -84,9 +84,12 @@ HTML;
                         $sEtapa->setValorCampo($idProtocolo);
                         $sEtapa->consultar('tMenu2_2.php');
                         
+                        //var_dump($sEtapa->mConexao->getRetorno());
+                        /*
                         foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
                             $idEquipamento = $value['equipamento_idequipamento'];
                         }
+                        
                         
                         
                         //campo patrimônio                        
@@ -100,7 +103,8 @@ HTML;
                             $idCategoria = $value['categoria_idcategoria'];
                             $idModelo = $value['modelo_idmodelo'];
                         }
-                        
+                         * 
+                         */
                         //campo categoria
                         $sCategoria = new sCategoria();
                         $sCategoria->consultar('tMenu2_2.php');
