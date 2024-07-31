@@ -1,7 +1,30 @@
+<?php
+use App\sistema\acesso\{
+    sTratamentoDados,
+    sUsuario,
+    sConfiguracao
+};
+use App\sistema\suporte\{
+    sProtocolo,
+    sEtapa,
+    sCategoria,
+    sEquipamento,
+    sMarca,
+    sModelo,
+    sAmbiente,
+    sLocal,
+    sPrioridade
+};
+
+//consulta os dados para apresentar na tabela
+$sProtocolo = new sProtocolo();
+$sProtocolo->consultar('tMenu2_2.php');
+?>
 <div class="container-fluid">
     <div class="row">
+        <!--
         <div class="col-md-4">
-            <!-- Profile Image -->
+            <!-- Profile Image
             <div class="card card-orange card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
@@ -58,15 +81,15 @@
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>
-                <!-- /.card-body -->
+                <!-- /.card-body
             </div>
         </div>
-        <!-- /.col -->
+        <!-- /.col
         <div class="col-md-4">
             <div class="card card-orange card-outline">
                 <div class="card-header">
                     <h3 class="card-title">Bem</h3>
-                    <!-- /.card-tools -->
+                    <!-- /.card-tools
                 </div>
                 <div class="card-body box-profile">
                     <ul class="list-group list-group-unbordered mb-4">
@@ -112,10 +135,45 @@ HTML;
                 }
                 ?>
 
-                <!-- /.card-body -->
+                <!-- /.card-body
             </div>
 
         </div>
+        -->
+        <?php
+        
+        foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {
+            
+            
+            
+        //altera a cor das marcações da prioridade
+        switch ($prioridade) {
+            case 'Normal':
+                $cor = 'text-blue';
+                $posicao = 1;
+                break;
+            case 'Alta':
+                $cor = 'text-green';
+                $posicao = 2;
+                break;
+            case 'Urgente':
+                $cor = 'text-yellow';
+                $posicao = 3;
+                break;
+            case 'Muito Urgente':
+                $cor = 'text-orange';
+                $posicao = 4;
+                break;
+            case 'Emergente':
+                $cor = 'text-red';
+                $posicao = 5;
+                break;
+            default:
+                break;
+        }
+        
+        
+        echo <<<HTML
         <div class="col-md-4">
             <div class="card card-orange card-outline collapsed-card">
                 <div class="card-header">
@@ -187,6 +245,10 @@ HTML;
             </div>
             <!-- /.card -->
         </div>
+HTML;
+        }
+        ?>
+        
     </div>
     <!-- /.row -->
 </div>

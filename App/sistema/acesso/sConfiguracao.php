@@ -71,7 +71,7 @@ class sConfiguracao{
         $this->letra = true;
         $this->numero = true;
         //sistema
-        $this->versao = '3.12.0-dev';
+        $this->versao = '2.8.0-beta';//2 módulos(perfil, suporte) - 8.0 (versão do BD) - beta (ambiente de execução)
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
     }

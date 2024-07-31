@@ -122,7 +122,7 @@ if(isset($_GET['campo'])){
                                 <label for="nome">Nome</label>
                                 <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $_SESSION['credencial']['nome']; ?>" required="">
                             </div>
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label for="sobrenome">Sobrenome</label>
                                 <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $_SESSION['credencial']['sobrenome']; ?>" required="">
                             </div>

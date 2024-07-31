@@ -19,7 +19,8 @@ class sMarca {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu3_1.php' ||
-            $pagina == 'tMenu2_1.php') {
+            $pagina == 'tMenu2_1.php' ||
+            $pagina == 'tMenu2_2.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

@@ -1,3 +1,4 @@
+<!--
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 col-6">
@@ -36,31 +37,5 @@
                 <a href="#" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-        
-        
-        
     </div>
-    <div class="row">
-        <div class="col-lg-12 col-12">
-        <?php
-        require_once '../../sistema/acesso/sNotificacao.php';
-
-        if (isset($codigo)) {
-            $mensagem = explode('|', $codigo);
-                echo <<<HTML
-                <div class="col-mb-3">
-                    <div class="card card-outline card-{$mensagem[0]}">
-                        <div class="card-header">
-                            <h3 class="card-title">{$mensagem[1]}</h3>
-                        </div>
-                        <div class="card-body">
-                            {$mensagem[2]}
-                        </div>
-                    </div>
-                </div>
-HTML;
-        }
-        ?>
-        </div>
-    </div>
-</div>
+    -->

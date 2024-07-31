@@ -27,6 +27,13 @@ $sUsuario = new sUsuario();
 $sUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
 $sUsuario->consultar('tAcessar.php');
 
+//define a foto com base no sexo
+if($_SESSION['credencial']['sexo'] == 'Masculino'){
+    $imagem = 'user2-160x160.jpg';
+}else{
+    $imagem = 'user7-128x128.jpg';
+}
+
 $sConfiguracao = new sConfiguracao();
 
 //verifica a opção de menu
@@ -147,7 +154,7 @@ echo "</pre>";
                     <!-- Sidebar user (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                            <img src="<?php echo $sConfiguracao->getDiretorioPrincipal(); ?>vendor/almasaeed2010/adminlte/dist/img/<?php echo $imagem; ?>" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
                             <a href="tPainel.php?menu=0" class="d-block">
@@ -696,6 +703,11 @@ HTML;
                 $("#tabelaMenu1_2").DataTable({
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
+                $("#tabelaMenu2_2").DataTable({
+                    "responsive": true, "lengthChange": false, "autoWidth": false,
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                    "aaSorting": [9, "desc"]
                 }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
                 $("#tabelaMenu1_3").DataTable({
                     "responsive": true, "lengthChange": false, "autoWidth": false,
