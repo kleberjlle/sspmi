@@ -26,8 +26,20 @@ if (isset($_POST['pagina'])) {
         $sSair->verificar('0');
     }
     
-    $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
-    $sWhatsAppUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
+    //se existir um telefone registrado
+    if($_SESSION['credencial']['idTelefoneUsuario']){
+        $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');         
+    }else{
+        $sTelefoneUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
+    }
+       
+    //se existir um telefone registrado
+    if($_SESSION['credencial']['idTelefoneUsuario']){
+        $sWhatsAppUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
+    }else{
+        $sWhatsAppUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
+    }
+    
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
@@ -35,7 +47,11 @@ if (isset($_POST['pagina'])) {
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $sexo = $_POST['sexo'];
-    $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($_POST['telefoneUsuario']);
+    $telefone = $_POST['telefone'];
+    
+    //se existir um telefone registrado
+    $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($telefone);
+    
     isset($_POST['whatsAppUsuario']) ? $whatsAppUsuario = 1 : $whatsAppUsuario = 0;
     $emailUsuario = $_POST['emailUsuario'];
     //isset($_POST['permissao']) ? $idPermissao = $_POST['permissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
@@ -94,22 +110,26 @@ if (isset($_POST['pagina'])) {
         $alteracao = true;
         $atualizar['sexo'] = $sexo;
     }
+    
+    //se existir um telefone registrado
+    if($_SESSION['credencial']['idTelefoneUsuario']){
+        if ($_SESSION['credencial']['telefoneUsuario'] != $telefoneUsuario) {
+            //insere dados na tabela histórico
+            $valorCampoAnterior = $_SESSION['credencial']['telefoneUsuario'];
+            alimentaHistorico($pagina, $acao, 'telefoneUsuario', $valorCampoAnterior, $telefoneUsuario, $idUsuario);
 
-    if ($_SESSION['credencial']['telefoneUsuario'] != $telefoneUsuario) {
-        //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['telefoneUsuario'];
-        alimentaHistorico($pagina, $acao, 'telefoneUsuario', $valorCampoAnterior, $telefoneUsuario, $idUsuario);
-        
-        //etapa2 - validação do conteúdo
-        $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
-        if (!$sTelefoneUsuario->getValidador()) {
-            $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
-            exit();
-        } else {
-            //etapa3 - atualizar os dados
-            $alteracao = true;
-            $atualizar['telefoneUsuario'] = $telefoneUsuario;
+            //etapa2 - validação do conteúdo
+
+            $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
+            if (!$sTelefoneUsuario->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+                exit();
+            } else {
+                //etapa3 - atualizar os dados
+                $alteracao = true;
+                $atualizar['telefoneUsuario'] = $telefoneUsuario;
+            }
         }
     }
 
