@@ -493,7 +493,8 @@ HTML;
                                 //abre os menus da condição
                                 if($_SESSION['credencial']['nivelPermissao'] > 4){
                                 $menu == '6_1' ||
-                                $menu == '6_2'?
+                                $menu == '6_2' ||
+                                $menu == '6_3' ?
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
                                 
@@ -540,7 +541,25 @@ HTML;
                                     </li>
                                 </ul>
                                 <!--FINAL SUBMENU 6_2-->
-                                <!--FINAL DO MENU 6-->
+                                <!--SUBMENU 6_3-->
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+HTML;                                       
+                                
+                                //abre os menus da condição
+                                $menu == '6_3' ?
+                                $atributo = ' active' :
+                                $atributo = '';
+                                
+                                echo <<<HTML
+                                        <a href="tPainel.php?menu=6_3" class="nav-link $atributo">
+                                            <p>Gerador de Senhas</p>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <!--FINAL SUBMENU 6_3-->
+                                <!--FINAL MENU-->
 HTML;
                                 }
                             ?>            
@@ -642,6 +661,9 @@ HTML;
                             break;
                         case "6_2":
                             require_once '../suporte/tMenu6_2.php';
+                            break;
+                        case "6_3":
+                            require_once '../suporte/tMenu6_3.php';
                             break;
                         //padrão
                         default:
