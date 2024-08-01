@@ -253,7 +253,7 @@ if (isset($_GET['campo'])) {
     //cria as variáveis da notificação
     $tipo = $sNotificacao->getTipo();
     $titulo = $sNotificacao->getTitulo();
-    $email = $sNotificacao->getMensagem();
+    $mensagem = $sNotificacao->getMensagem();
 }
 ?>
 <div class="container-fluid">
@@ -429,22 +429,24 @@ if (isset($_GET['campo'])) {
                         </div>
                     </div>
                     <?php
-                    if (isset($tipo) &&
-                        isset($titulo) &&
-                        isset($email)) {
-                        echo <<<HTML
-                    <div class="col-mb-3">
-                        <div class="card card-outline card-{$tipo}">
-                            <div class="card-header">
-                                <h3 class="card-title">{$titulo}</h3>
+                        if (isset($tipo) &&
+                            isset($titulo) &&
+                            isset($mensagem)) {
+                            if (isset($alertaSistema)) {
+                            echo <<<HTML
+                            <div class="col-mb-3">
+                                <div class="card card-outline card-{$tipo}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">{$titulo}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        {$mensagem}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                {$email}
-                            </div>
-                        </div>
-                    </div>
 HTML;
-                    }
+                            }
+                        }
                     ?>
                     <!-- /.card-body -->
                     <div class="card-footer">

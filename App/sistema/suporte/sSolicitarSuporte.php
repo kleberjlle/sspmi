@@ -193,7 +193,7 @@ if (isset($_POST['formulario'])) {
     $sEtapa->inserir('tMenu2_1_1.php', $dadosEtapa);
 
     //redireciona para o formulário com mensagem de sucesso
-    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=secretaria&codigo=S4");
+    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=sistema&codigo=S4");
     exit();
 } else {
     //solicitar saída com tentativa de violação

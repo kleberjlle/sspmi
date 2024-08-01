@@ -220,7 +220,7 @@ $sUsuario->consultar('tMenu1_3.php');
                                 {$situacao}
                             </td>
                             <td>
-                                <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&id=2">
+                                <a href="#">
                                     <i class="fas fa-edit mr-1"></i>
                                 </a>
                             </td>

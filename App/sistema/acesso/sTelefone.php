@@ -132,7 +132,8 @@ class sTelefone {
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu4_1.php') {
+        if ($pagina == 'tMenu4_1.php' ||
+            $pagina == 'tMenu1_1_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -168,6 +169,10 @@ class sTelefone {
         }
         
         $this->mConexao->CRUD($dados);
+        
+        if($this->mConexao->getValidador()){
+            $this->setSNotificacao(new sNotificacao('S1'));
+        }
     }
 
     public function getNomeCampo(): string {

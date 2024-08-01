@@ -31,7 +31,7 @@
                     <td>3.34A</td>
                     <td>Windows 10</td>
                     <td>
-                        <a href="tPainel.php?menu=3_2_1&id=2">
+                        <a href="#">
                             <i class="fas fa-search mr-1"></i>
                         </a>
                     </td>
@@ -47,7 +47,7 @@
                     <td>10A</td>
                     <td>N/A</td>
                     <td>
-                        <a href="tPainel.php?menu=3_2_1&id=2">
+                        <a href="#">
                             <i class="fas fa-search mr-1"></i>
                         </a>
                     </td>

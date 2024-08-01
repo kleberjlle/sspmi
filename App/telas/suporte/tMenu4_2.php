@@ -63,7 +63,7 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sAlterarLocal.php" method="post" id="secretaria" enctype="multipart/form-data">
+                <form action="#" method="post" id="secretaria" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="menu4_2" name="pagina" form="secretaria">
@@ -139,7 +139,7 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sAlterarLocal.php" id="departamentoUnidade" method="post" enctype="multipart/form-data">
+                <form action="#" id="departamentoUnidade" method="post" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="menu4_2" name="pagina" form="departamentoUnidade">
@@ -230,7 +230,7 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sAlterarLocal.php" id="coordenacao" method="post" enctype="multipart/form-data">
+                <form action="#" id="coordenacao" method="post" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="menu4_2" name="pagina" form="coordenacao">
@@ -336,7 +336,7 @@ if (isset($_GET['notificacao'])) {
                         </div>
                     </div>
                 </div>
-                <form action="../../sistema/suporte/sAlterarLocal.php" id="setor" method="post" enctype="multipart/form-data">
+                <form action="#" id="setor" method="post" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="menu4_2" name="pagina" form="setor">

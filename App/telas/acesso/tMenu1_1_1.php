@@ -130,8 +130,8 @@ if(isset($_GET['campo'])){
                                 <div class="form-group">
                                     <label>Sexo</label>
                                     <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="">
-                                        <option value="Masculino" <?php echo $_SESSION['credencial']['sexo'] == 'Masculino' ? 'selected=\"\"' : ''; ?>>Masculino</option>
-                                        <option value="Feminino" <?php echo $_SESSION['credencial']['sexo'] == 'Feminino' ? 'selected=\"\"' : ''; ?>>Feminino</option>
+                                        <option value="M" <?php echo $_SESSION['credencial']['sexo'] == 'Masculino' ? 'selected=""' : ''; ?>>Masculino</option>
+                                        <option value="F" <?php echo $_SESSION['credencial']['sexo'] == 'Feminino' ? 'selected=""' : ''; ?>>Feminino</option>
                                     </select>
                                 </div>
                             </div>

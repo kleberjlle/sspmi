@@ -9,7 +9,8 @@ use App\sistema\acesso\{
     sHistorico,
     sUsuario,
     sTelefone,
-    sEmail
+    sEmail,
+    sTratamentoDados
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -26,20 +27,6 @@ if (isset($_POST['pagina'])) {
         $sSair->verificar('0');
     }
     
-    //se existir um telefone registrado
-    if($_SESSION['credencial']['idTelefoneUsuario']){
-        $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');         
-    }else{
-        $sTelefoneUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
-    }
-       
-    //se existir um telefone registrado
-    if($_SESSION['credencial']['idTelefoneUsuario']){
-        $sWhatsAppUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
-    }else{
-        $sWhatsAppUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
-    }
-    
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
@@ -47,26 +34,39 @@ if (isset($_POST['pagina'])) {
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $sexo = $_POST['sexo'];
-    $telefone = $_POST['telefone'];
-    
-    //se existir um telefone registrado
-    $telefoneUsuario = $sTelefoneUsuario->tratarTelefone($telefone);
-    
+    $telefone = $_POST['telefoneUsuario'];
     isset($_POST['whatsAppUsuario']) ? $whatsAppUsuario = 1 : $whatsAppUsuario = 0;
     $emailUsuario = $_POST['emailUsuario'];
-    //isset($_POST['permissao']) ? $idPermissao = $_POST['permissao'] : $idPermissao = $_SESSION['credencial']['idPermissao'];
-    //isset($_POST['situacao']) ? $situacao = 'Ativo' : $situacao = 'Inativo';
     $atualizar = [];
-    $alteracao = false;
-
+    $alteracao = false;    
+    
+    //se existir um telefone registrado
+    if($_SESSION['credencial']['idTelefoneUsuario']){
+        $sTelefoneUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');  
+        $sWhatsAppUsuario = new sTelefone($_SESSION['credencial']['idTelefoneUsuario'], 0, 'tMenu1_1_1.php');
+    }else{
+        $sTelefoneUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
+        $sWhatsAppUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
+    }  
+    
+    alimentaHistorico($pagina, $acao, 'nome', $_SESSION['credencial']['nome'], $nome, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'sobrenome', $_SESSION['credencial']['sobrenome'], $sobrenome, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'sexo', $_SESSION['credencial']['sexo'], $sexo, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'telefone', $_SESSION['credencial']['telefoneUsuario'], $telefone, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'whatsApp', $_SESSION['credencial']['whatsAppUsuario'], $whatsAppUsuario, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'nomenclatura', $_SESSION['credencial']['emailUsuario'], $emailUsuario, $idUsuario);
+    
+    //se existir um telefone registrado
+    $sTratamentoTelefone = new sTratamentoDados($telefone);
+    $telefoneUsuario = $sTratamentoTelefone->tratarTelefone();
+    
     //etapa1 - verificar campos alterados
     if ($_SESSION['credencial']['nome'] != $nome) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['nome'];
-        alimentaHistorico($pagina, $acao, 'nome', $valorCampoAnterior, $nome, $idUsuario);
         $sNomeUsuario = new sUsuario();
         $sNomeUsuario->verificarNome($nome);
-
+        
         //etapa2 - validação do conteúdo
         if (!$sNomeUsuario->getValidador()) {
             $sConfiguracao = new sConfiguracao();
@@ -81,8 +81,6 @@ if (isset($_POST['pagina'])) {
 
     if ($_SESSION['credencial']['sobrenome'] != $sobrenome) {
         //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['sobrenome'];
-        alimentaHistorico($pagina, $acao, 'sobrenome', $valorCampoAnterior, $sobrenome, $idUsuario);
         $sSobrenomeUsuario = new sUsuario();
         $sSobrenomeUsuario->verificarSobrenome($sobrenome);
         
@@ -98,56 +96,34 @@ if (isset($_POST['pagina'])) {
         }
     }
 
-    if ($_SESSION['credencial']['sexo'] != $sexo) {
-        $_POST['sexo'] == 'Masculino' ? $sexo = 'M' : $sexo = 'F';
-        //insere dados na tabela histórico
-        $_SESSION['credencial']['sexo'] == 'Masculino' ? $valorCampoAnterior = 'M' : $valorCampoAnterior = 'F';
-        alimentaHistorico($pagina, $acao, 'sexo', $valorCampoAnterior, $sexo, $idUsuario);
-        
+    $sexo == 'M' ? $sexoSessao = 'Masculino' : $sexoSessao = 'Feminino';
+    if ($_SESSION['credencial']['sexo'] != $sexoSessao) {
         $sSexoUsuario = new sUsuario();
-
-        //etapa3 - atualizar os dados
         $alteracao = true;
         $atualizar['sexo'] = $sexo;
     }
     
-    //se existir um telefone registrado
-    if($_SESSION['credencial']['idTelefoneUsuario']){
-        if ($_SESSION['credencial']['telefoneUsuario'] != $telefoneUsuario) {
-            //insere dados na tabela histórico
-            $valorCampoAnterior = $_SESSION['credencial']['telefoneUsuario'];
-            alimentaHistorico($pagina, $acao, 'telefoneUsuario', $valorCampoAnterior, $telefoneUsuario, $idUsuario);
-
-            //etapa2 - validação do conteúdo
-
-            $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
-            if (!$sTelefoneUsuario->getValidador()) {
-                $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
-                exit();
-            } else {
-                //etapa3 - atualizar os dados
-                $alteracao = true;
-                $atualizar['telefoneUsuario'] = $telefoneUsuario;
-            }
+    $_SESSION['credencial']['telefoneUsuario'] == '--' ? $telefoneSessao = '' : $telefoneSessao = $_SESSION['credencial']['telefoneUsuario'];
+    if ($telefoneSessao != $telefoneUsuario) {
+        //validação do conteúdo
+        $sTelefoneUsuario->verificarTelefone($telefoneUsuario);
+        if (!$sTelefoneUsuario->getValidador()) {
+            $sConfiguracao = new sConfiguracao();
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+            exit();
+        } else {
+            //etapa3 - atualizar os dados
+            $alteracao = true;
+            $atualizar['telefoneUsuario'] = $telefoneUsuario;
         }
     }
 
     if ($_SESSION['credencial']['whatsAppUsuario'] != $whatsAppUsuario) {
-        //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['whatsAppUsuario'];
-        alimentaHistorico($pagina, $acao, 'whatsApp', $valorCampoAnterior, $whatsAppUsuario, $idUsuario);
-
-        //etapa3 - atualizar os dados
         $alteracao = true;
         $atualizar['whatsAppUsuario'] = $whatsAppUsuario;
     }
 
     if ($_SESSION['credencial']['emailUsuario'] != $emailUsuario) {
-        //insere dados na tabela histórico
-        $valorCampoAnterior = $_SESSION['credencial']['emailUsuario'];
-        alimentaHistorico($pagina, $acao, 'nomenclatura', $valorCampoAnterior, $emailUsuario, $idUsuario);
-        
         //etapa2 - validação de conteúdo
         $sEmailUsuario = new sEmail($emailUsuario, 'tMenu1_1_1.php');
         $sEmailUsuario->verificar('tMenu1_1_1.php');
@@ -163,19 +139,6 @@ if (isset($_POST['pagina'])) {
         }
     }
     
-    //QA - início da área de testes
-    /* verificar o que tem no objeto
-
-      echo "<pre>";
-      echo var_dump($_SESSION['credencial']);
-      echo "</pre>";
-      
-      echo "<pre>";
-      echo var_dump($alteracao);
-      echo "</pre>";
-      exit();
-      // */
-    //QA - fim da área de testes
     if ($alteracao == false) {
         //se não tem campo para validar
         $sConfiguracao = new sConfiguracao();
@@ -231,17 +194,37 @@ if (isset($_POST['pagina'])) {
         }
         
         if (array_key_exists('telefoneUsuario', $atualizar)) {
-            //atualize o campo nome
-            $sTelefoneUsuario->setNomeCampo('numero');
-            $sTelefoneUsuario->setValorCampo($telefoneUsuario);
-            $sTelefoneUsuario->alterar('tMenu1_1_1.php');
+            //se existir id atualize o campo telefone, senão insere
             
-            //atualize a sessão nome
-            $_SESSION['credencial']['telefoneUsuario'] = $telefoneUsuario;
+            if(!is_null($_SESSION['credencial']['idTelefoneUsuario'])){   
+                $sTelefoneUsuario->setNomeCampo('numero');
+                $sTelefoneUsuario->setValorCampo($telefoneUsuario);
+                $sTelefoneUsuario->alterar('tMenu1_1_1.php');
+
+                //atualize a sessão nome
+                $_SESSION['credencial']['telefoneUsuario'] = $telefoneUsuario;
+            }else{
+                $dados = [
+                    'whatsApp' => $whatsAppUsuario,
+                    'numero' => $telefoneUsuario
+                ];
+                $sTelefoneUsuario->inserir('tMenu1_1_1.php', $dados);
+
+                //altera na sessão
+                $idTelefoneUsuario = $sTelefoneUsuario->mConexao->getRegistro();
+                $_SESSION['credencial']['idTelefoneUsuario'] = $idTelefoneUsuario;
+                $sUsuario = new sUsuario();
+                $sUsuario->setIdUsuario($idUsuario);
+                $sUsuario->setNomeCampo('telefone_idtelefone');
+                $sUsuario->setValorCampo($idTelefoneUsuario);
+                $sUsuario->alterar('tMenu1_1_1.php');
+                
+            }
             
             if ($sTelefoneUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sTelefoneUsuario->getSNotificacao()->getCodigo()}");
+                exit();
             }
         }
         
@@ -256,7 +239,8 @@ if (isset($_POST['pagina'])) {
             
             if ($sWhatsAppUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=whatsApp&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=telefone&codigo={$sWhatsAppUsuario->getSNotificacao()->getCodigo()}");
+                exit();
             }
         }
         

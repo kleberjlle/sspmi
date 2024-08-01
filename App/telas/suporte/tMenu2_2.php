@@ -27,7 +27,7 @@ $sProtocolo->consultar('tMenu2_2.php');
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        <table id="tabelaMenu2_2" class="table table-bordered table-striped">
+        <table name="tabelaMenu2_2" id="tabelaMenu2_2" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Protocolo n.º</th>
@@ -47,8 +47,8 @@ HTML;
                     <th>Local</th>
                     <?php
                     if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                        echo <<<HTML
-                        <th>Prioridade</th>
+                    echo <<<HTML
+                    <th>Prioridade</th>
 HTML;
                     }
                     ?>
@@ -248,12 +248,14 @@ HTML;
                                 <a href="#">
                                     Visualizar
                                 </a><br />
+                                <!--
                                 <i class="fas fa-hands-helping mr-1"></i>
                                 Em Andamento<br />
+                                -->
                             </td>
                         </tr>
 HTML;
-                        } else if($_SESSION['credencial']['nivelPermissao'] < 1) {
+                        } else if($_SESSION['credencial']['nivelPermissao'] > 1) {
                             //tratar os dados para imprimir na tabela dinâmica
                             //campo data e hora da abertura
                             $sTratamentoData = new sTratamentoDados($value['dataHoraAbertura']);
@@ -439,12 +441,14 @@ HTML;
                                 <a href="#">
                                     Visualizar
                                 </a><br />
+                                <!--
                                 <i class="fas fa-receipt mr-1"></i>
                                 <a href="#">
                                     Atribuir
                                 </a><br />
                                 <i class="fas fa-hands-helping mr-1"></i>
                                 Em Andamento<br />
+                                -->
                             </td>
                         </tr>
 HTML;
@@ -453,30 +457,30 @@ HTML;
                 }
                     ?>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Protocolo n.º</th>
-                        <th>Data e Hora</th>
-                        <th>Solicitante</th>
-                        <th>Telefone</th>
-                        <th>Patrimônio</th>
-                        <th>Categoria/ Marca/ Modelo</th>
-                        <th>Descrição</th>
-                        <?php
-                        if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                            echo <<<HTML
+            <tfoot>
+                <tr>
+                    <th>Protocolo n.º</th>
+                    <th>Data e Hora</th>
+                    <th>Solicitante</th>
+                    <th>Telefone</th>
+                    <th>Patrimônio</th>
+                    <th>Categoria/ Marca/ Modelo</th>
+                    <th>Descrição</th>
+                    <?php
+                    if ($_SESSION['credencial']['nivelPermissao'] > 1) {
+                    echo <<<HTML
                     <th>Ambiente</th>
 HTML;
-                        }
-                        ?>
-                        <th>Local</th>
-                        <?php
-                        if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                            echo <<<HTML
-                        <th>Prioridade</th>
+                    }
+                    ?>
+                    <th>Local</th>
+                    <?php
+                    if ($_SESSION['credencial']['nivelPermissao'] > 1) {
+                    echo <<<HTML
+                    <th>Prioridade</th>
 HTML;
-                        }
-                        ?>
+                    }
+                    ?>
                     <th>Atribuir/ Visualizar</th>
                 </tr>
             </tfoot>
