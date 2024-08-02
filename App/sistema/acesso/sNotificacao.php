@@ -102,6 +102,10 @@ class sNotificacao{
                 //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Se você localizou o Patrimônio na lista abaixo, então deve "Escolher" e clicar em "Próximo".');
                 break;
+            case '20':
+                //falta um equipamento com patrimônio indefinido
+                $this->setMensagem('Essa solicitação já foi aprovada, caso esteja com problemas de acesso contate o administrador');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

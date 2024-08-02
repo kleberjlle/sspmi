@@ -31,7 +31,7 @@ class sEmail {
         if ($pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tSolicitarAcesso.php'||
+            $pagina == 'tSolicitarAcesso.php' ||
             $pagina == 'tMenu4_1.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
@@ -71,35 +71,37 @@ class sEmail {
                     }
                 }
 
-                if ($pagina == 'tSolicitarAcesso.php' ||
-                    $pagina == 'tMenu4_1.php') {
+                if ($pagina == 'tSolicitarAcesso.php') {
+                    //verifica se consta o email no BD 
+                    $dados = [
+                        'comando' => 'SELECT',
+                        'busca' => '*',
+                        'tabelas' => 'solicitacao',
+                        'camposCondicionados' => 'email',
+                        'valoresCondicionados' => $this->getNomenclatura(),
+                        'camposOrdenados' => 'idsolicitacao', //caso não tenha, colocar como null
+                        'ordem' => 'ASC' //ASC ou DESC
+                    ];
+                    $this->mConexao->CRUD($dados);
+
                     //se localizou o registro do no BD
-                    if ($this->mConexao->getValidador()) {
-                        $this->setValidador(false);
-                        $this->setSNotificacao(new sNotificacao('A12'));
+                    if ($this->getMConexao()->getRetorno()) {
+                        foreach ($this->getMConexao()->getRetorno() as $value) {
+                            if ($value['situacao']) {
+                                $this->setValidador(false);
+                                $this->setSNotificacao(new sNotificacao('A20'));
+                            } else if (!$value['situacao'] && !$value['dataHoraExaminador']) {
+                                $this->setValidador(false);
+                                $this->setSNotificacao(new sNotificacao('A14'));
+                            }else{
+                                $this->setValidador(true);
+                            }
+                        }                        
                     } else {
-                        //senão verifique se o já não tem uma solicitação para esse email
-                        $dados = [
-                            'comando' => 'SELECT',
-                            'busca' => '*',
-                            'tabelas' => 'solicitacao',
-                            'camposCondicionados' => 'email',
-                            'valoresCondicionados' => $this->getNomenclatura(),
-                            'camposOrdenados' => null, //caso não tenha, colocar como null
-                            'ordem' => null //ASC ou DESC
-                        ];
-                        $this->mConexao->CRUD($dados);
-                        
-                        if($this->mConexao->getValidador()){
-                            $this->setValidador(false);
-                            $this->setSNotificacao(new sNotificacao('A14'));
-                        }else{
-                            $this->setValidador(true);
-                        }
-                        
+                        $this->setValidador(true);
                     }
                 }
-                
+
                 if ($pagina == 'tMenu1_2_1.php') {
                     //se localizou o registro do no BD e o registro for diferento do email atual
                     if ($this->mConexao->getValidador()) {
@@ -109,22 +111,22 @@ class sEmail {
                         $this->setValidador(true);
                     }
                 }
-            } else {
-                //retornar notificação
-                $this->setValidador(false);
-                $this->setSNotificacao(new sNotificacao('A2'));
+                } else {
+                    //retornar notificação
+                    $this->setValidador(false);
+                    $this->setSNotificacao(new sNotificacao('A2'));
+                }
             }
         }
-    }
 
     public function consultar($pagina) {
-        $this->setMConexao(new mConexao());        
+        $this->setMConexao(new mConexao());
         //encaminha as buscas de acordo com a origem 
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php') {
-           
+                $pagina == 'tMenu1_2.php' ||
+                $pagina == 'tMenu1_2_1.php' ||
+                $pagina == 'tMenu1_3.php') {
+
             if ($this->getNomenclaturaLocal() == 'email') {
                 //organiza os dados nos devidos campos
                 $this->setIdEmail($this->getNomenclatura());
@@ -140,11 +142,11 @@ class sEmail {
                     'ordem' => null //ASC ou DESC
                 ];
             }
-            
+
             if ($this->getNomenclaturaLocal() == 'setor' ||
-                $this->getNomenclaturaLocal() == 'coordenacao' ||
-                $this->getNomenclaturaLocal() == 'departamento' ||
-                $this->getNomenclaturaLocal() == 'secretaria') {
+                    $this->getNomenclaturaLocal() == 'coordenacao' ||
+                    $this->getNomenclaturaLocal() == 'departamento' ||
+                    $this->getNomenclaturaLocal() == 'secretaria') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['email.idemail', 'email.nomenclatura'],
@@ -155,17 +157,16 @@ class sEmail {
                     'ordem' => null //ASC ou DESC
                 ];
             }
-            
+
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
-            
-            if($this->getValidador()){
+
+            if ($this->getValidador()) {
                 foreach ($this->mConexao->getRetorno() as $linha) {
                     $this->setIdEmail($linha['idemail']);
                     $this->setNomenclatura($linha['nomenclatura']);
                 }
             }
-            
         }
     }
 
@@ -174,7 +175,7 @@ class sEmail {
         $this->setMConexao(new mConexao());
 
         if ($pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_2_1.php') {
+                $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'email',
@@ -184,7 +185,7 @@ class sEmail {
                 'valoresCondicionados' => $this->getIdEmail(),
             ];
             $this->mConexao->CRUD($dados);
-            
+
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
             if ($this->mConexao->getValidador()) {
                 $this->setValidador(true);
@@ -192,7 +193,7 @@ class sEmail {
             }
         }
     }
-    
+
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
@@ -209,26 +210,26 @@ class sEmail {
                 ]
             ];
         }
-        
+
         if ($pagina == 'tMenu4_1-email_has_secretaria.php' ||
-            $pagina == 'tMenu4_1-email_has_departamento.php' ||
-            $pagina == 'tMenu4_1-email_has_coordenacao.php' ||
-            $pagina == 'tMenu4_1-email_has_setor.php') {
+                $pagina == 'tMenu4_1-email_has_departamento.php' ||
+                $pagina == 'tMenu4_1-email_has_coordenacao.php' ||
+                $pagina == 'tMenu4_1-email_has_setor.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
-                'tabela' => 'email_has_'.$this->getNomeCampo(),
+                'tabela' => 'email_has_' . $this->getNomeCampo(),
                 'camposInsercao' => [
                     'email_idemail',
-                    $this->getNomeCampo().'_id'.$this->getNomeCampo()
+                    $this->getNomeCampo() . '_id' . $this->getNomeCampo()
                 ],
                 'valoresInsercao' => [
                     $tratarDados['idemail'],
-                    $tratarDados['id'.$this->getNomeCampo()],
+                    $tratarDados['id' . $this->getNomeCampo()],
                 ]
             ];
         }
-        
+
         $this->mConexao->CRUD($dados);
     }
 

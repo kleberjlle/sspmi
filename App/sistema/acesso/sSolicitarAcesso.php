@@ -83,7 +83,7 @@ if (isset($_POST['pagina'])) {
     //verifica se o email já não está registrado
     $sEmail = new sEmail($email, '');
     $sEmail->verificar('tSolicitarAcesso.php');
-    var_dump($sEmail->getValidador());
+    
     if (!$sEmail->getValidador()) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tSolicitarAcesso.php?campo=email&codigo={$sEmail->getSNotificacao()->getCodigo()}");
         exit();

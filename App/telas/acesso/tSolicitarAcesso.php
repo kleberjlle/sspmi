@@ -131,7 +131,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="departamento" id="departamento" required="">
+                            <select class="form-control" name="departamento" id="departamento">
                                 <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">
@@ -141,7 +141,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="coordenacao" id="coordenacao" required="">
+                            <select class="form-control" name="coordenacao" id="coordenacao">
                                 <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">
@@ -151,7 +151,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <select class="form-control" name="setor" id="setor" required="">
+                            <select class="form-control" name="setor" id="setor">
                                 <option selected="" value="0">--</option>
                             </select>
                             <div class="input-group-append">

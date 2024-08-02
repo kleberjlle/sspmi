@@ -60,7 +60,7 @@ $sPrioridade->consultar('tMenu2_1.php-f1');
 if(!$idEquipamento){
     $sEquipamento = new sEquipamento();
     $sEquipamento->setNomeCampo('patrimonio');
-    $sEquipamento->setValorCampo('INDEFINIDO');
+    $sEquipamento->setValorCampo('Indefinido');
     $sEquipamento->consultar('tMenu2_1_1.php');
     
     if(!$sEquipamento->getValidador()){
@@ -71,7 +71,7 @@ if(!$idEquipamento){
         ob_clean();
     }else{
         foreach ($sEquipamento->mConexao->getRetorno() as $linha) {
-            if ($linha['patrimonio'] == 'INDEFINIDO') {
+            if ($linha['patrimonio'] == 'Indefinido') {
                 $idEquipamento = $linha['idequipamento'];
             }
         }
