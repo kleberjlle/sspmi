@@ -76,6 +76,19 @@ class sProtocolo {
                 'ordem' => 'ASC'//caso não tenha, colocar como null
             ];
         }
+        
+        if ($pagina == 'tMenu2_2_2.php') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'protocolo',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null//caso não tenha, colocar como null
+            ];
+        }
                 
         //envia os dados para elaboração da query
         $this->mConexao->CRUD($dados);

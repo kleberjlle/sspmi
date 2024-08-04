@@ -1,34 +1,62 @@
 <?php
+
 use App\sistema\acesso\{
     sTratamentoDados,
-    sUsuario,
     sConfiguracao
 };
 use App\sistema\suporte\{
     sProtocolo,
-    sEtapa,
-    sCategoria,
-    sEquipamento,
-    sMarca,
-    sModelo,
-    sAmbiente,
-    sLocal,
-    sPrioridade
 };
+
+if (isset($_GET)) {
+    //verifica se o id do usuário via GET é o mesmo da sessão
+    if ($_GET['idUsuario'] != $_SESSION['credencial']['idUsuario'] && $_SESSION['credencial']['nivelPermissao'] < 2) {
+        //solicitar saída com tentativa de violação
+        $sSair = new sSair();
+        $sSair->verificar('0');
+    }
+    $idProtocolo = $_GET['id'];
+}
 
 //consulta os dados para apresentar na tabela
 $sProtocolo = new sProtocolo();
-$sProtocolo->consultar('tMenu2_2.php');
+$sProtocolo->setNomeCampo('idprotocolo');
+$sProtocolo->setValorCampo($idProtocolo);
+$sProtocolo->consultar('tMenu2_2_2.php');
+
+$sConfiguracao = new sConfiguracao();
+
+if ($sProtocolo->getValidador()) {
+    foreach ($sProtocolo->mConexao->getRetorno() as $value) {
+        //tratamento da data de abertura
+        $sTratamentoDataAbertura = new sTratamentoDados($value['dataHoraAbertura']);
+        $dataAberturaTratada = $sTratamentoDataAbertura->tratarData();
+
+        //campo protocolo
+        $ano = date("Y", strtotime(str_replace('-', '/', $value['dataHoraAbertura'])));
+        $protocolo = str_pad($value['idprotocolo'], 5, 0, STR_PAD_LEFT);
+        $protocolo = $ano . $protocolo;
+
+        //tratamento da data de encerramento
+        if (!is_null($value['dataHoraEncerramento'])) {
+            $sTratamentoDataEncerramento = new sTratamentoDados($value['dataHoraEncerramento']);
+            $dataEncerramentoTratada = $sTratamentoDataEncerramento->tratarData();
+        } else {
+            $dataEncerramentoTratada = '--/--/---- --:--:--';
+        }
+    }
+} else {
+    //notificar erro 
+}
 ?>
 <div class="container-fluid">
     <div class="row">
-        <!--
         <div class="col-md-4">
-            <!-- Profile Image
+            <!-- Profile Image -->
             <div class="card card-orange card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src="../../../vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
+                        <img class="profile-user-img img-fluid img-circle" src="<?php echo $sConfiguracao->getDiretorioPrincipal() ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
                     </div>
                     <h3 class="profile-username text-center">João Fictício</h3>
                     <p class="text-muted text-center">aberto por <i>Kleber Pereira de Almeida</i></p>
@@ -81,15 +109,15 @@ $sProtocolo->consultar('tMenu2_2.php');
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>
-                <!-- /.card-body
+                <!-- /.card-body -->
             </div>
         </div>
-        <!-- /.col
+        <!-- /.col 
         <div class="col-md-4">
             <div class="card card-orange card-outline">
                 <div class="card-header">
                     <h3 class="card-title">Bem</h3>
-                    <!-- /.card-tools
+                    <!-- /.card-tools 
                 </div>
                 <div class="card-body box-profile">
                     <ul class="list-group list-group-unbordered mb-4">
@@ -137,9 +165,7 @@ HTML;
 
                 <!-- /.card-body
             </div>
-
         </div>
-        -->
         <?php
         
         foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {
@@ -184,9 +210,9 @@ HTML;
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <!-- /.card-tools -->
+                    <!-- /.card-tools 
                 </div>
-                <!-- /.card-header -->
+                <!-- /.card-header 
                 <div class="card-body box-profile">
                     <ul class="list-group list-group-unbordered mb-4">
                         <li class="list-group-item">
@@ -226,10 +252,10 @@ HTML;
                         <li class="list-group-item">
                             <i class="fas far fa-file-alt mr-1"></i><b> Solução</b> <a class="float-right">--</a>
                         </li>
-                        <!-- /.card-body -->
+                        <!-- /.card-body
                     </ul>
                 </div>
-                <!-- /.card-body -->
+                <!-- /.card-body 
 
 
                 <div class="card-footer">
@@ -243,16 +269,16 @@ HTML;
                     </form>
                 </div>
             </div>
-            <!-- /.card -->
+            <!-- /.card 
         </div>
 HTML;
         }
         ?>
         
     </div>
-    <!-- /.row -->
+    <!-- /.row 
 </div>
-<!-- /.container-fluid -->
+<!-- /.container-fluid 
 <div class="modal fade" id="modal-xl">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -264,15 +290,14 @@ HTML;
             </div>
             <div class="modal-body">
                 <p><img src="http://localhost/SSPMI/App/telas/suporte/img/2023000101.png" width="1024px" height="640px" alt="..."></p>
-            </div>
+            </div>            
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
-
     </div>
-
 </div>
+-->
 <!-- /.container-fluid -->
 <div class="modal fade" id="modal2">
     <div class="modal-dialog modal-xl card-orange card-outline">

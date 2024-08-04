@@ -438,7 +438,7 @@ HTML;
                             echo <<<HTML
                             <td>
                                 <i class="fas fa-search mr-1"></i>
-                                <a href="#">
+                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocolo}&idUsuario={$_SESSION['credencial']['idUsuario']}">
                                     Visualizar
                                 </a><br />
                                 <!--
