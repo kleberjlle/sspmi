@@ -39,6 +39,8 @@ class sConfiguracao{
     private $versao;
     private $empresa;
     private $siteDaEmpresa;
+    private bool $manutencao;
+    private string $prazoManutencao;
     
     public function __construct() {
         //Diretórios
@@ -74,6 +76,8 @@ class sConfiguracao{
         $this->versao = '2.8.0-beta';//2 módulos(perfil, suporte) - 8.0 (versão do BD) - beta (ambiente de execução)
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
+        $this->manutencao = false;     
+        $this->prazoManutencao = '08/08/2024 às 11:30';
     }
     public function getDiretorioPrincipal() {
         return $this->diretorioPrincipal;
@@ -299,6 +303,20 @@ class sConfiguracao{
         $this->siteDaEmpresa = $siteDaEmpresa;
     }
 
+    public function getManutencao(): bool {
+        return $this->manutencao;
+    }
 
+    public function setManutencao(bool $manutencao): void {
+        $this->manutencao = $manutencao;
+    }
+
+    public function getPrazoManutencao(): string {
+        return $this->prazoManutencao;
+    }
+
+    public function setPrazoManutencao(string $prazoManutencao): void {
+        $this->prazoManutencao = $prazoManutencao;
+    }
 }
 ?>

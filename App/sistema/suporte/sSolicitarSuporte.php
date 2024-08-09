@@ -87,11 +87,16 @@ if (isset($_POST['formulario'])) {
     
     //trata os dados para inserção no bd
     $sTratamentoEmail = new sTratamentoDados($email);
-    $emailTratado = $sTratamentoEmail->tratarEmail();
+    if($sTratamentoEmail->tratarEmail()){
+        $emailTratado = $email;
+    }else{
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1_1&campo=email&codigo=A2");
+        exit();
+    }    
 
     //buscar nomenclatura dos locais
     if ($idSecretaria == 0) {
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=secretariaF1&codigo=A17");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1_1&campo=secretaria&codigo=A17");
         exit();
     }
     $sSecretaria = new sSecretaria($idSecretaria);

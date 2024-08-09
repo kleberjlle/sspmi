@@ -325,7 +325,8 @@ class sUsuario {
         }
 
         if ($pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu2_2.php') {
+            $pagina == 'tMenu2_2.php' ||
+            $pagina == 'tMenu2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

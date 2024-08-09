@@ -25,13 +25,13 @@ use App\sistema\acesso\{
 //QA - fim da área de testes
 
 //verifica se está recebendo $_GET['id'] ou $_GET['campo']
-if (isset($_GET['id']) ||
+if (isset($_GET['seguranca']) ||
     isset($_GET['campo']) ||
     isset($_GET['codigo'])) {
-    if (isset($_GET['id'])) {
-        $idUsuario = $_GET['id'];
+    if (isset($_GET['seguranca'])) {
+        $idUsuario = $_GET['seguranca'];
     } else if (isset($_GET['campo'])) {
-        $idUsuario = $_GET['id'];
+        $idUsuario = $_GET['idseguranca'];
         $sNotificacao = new sNotificacao($_GET['codigo']);
         switch ($_GET['campo']) {
             case 'nome':

@@ -8,7 +8,7 @@ use App\sistema\acesso\{
     sSenha,
     sUsuario,
     sSair,
-    sTratamentoDados
+    sNotificacao    
 };
 
 //Objetos instanciados
@@ -21,8 +21,17 @@ if(isset($_GET['validador'])){
         //cria as variáveis da notificação
         $tipo = $sSair->sNotificacao->getTipo();
         $titulo = $sSair->sNotificacao->getTitulo();
-        $email = $sSair->sNotificacao->getMensagem();  
+        $mensagem = $sSair->sNotificacao->getMensagem();  
     }   
+}
+
+//se o sistema estiver em manutenção prevista
+if(isset($_GET['seguranca'])){
+    //cria as variáveis da notificação
+    $sNotificacao = new sNotificacao('I1');
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();  
 }
 
 //Dados do form enviados via POST
@@ -172,7 +181,7 @@ if(isset($_POST) && !empty($_POST)){
                 <!-- /.login-card-body -->
             </div>
             <?php
-            if(isset($tipo) && isset($titulo) && isset($email)){
+            if(isset($tipo) && isset($titulo) && isset($mensagem)){
                     echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">
@@ -180,7 +189,7 @@ if(isset($_POST) && !empty($_POST)){
                                 <h3 class="card-title">{$titulo}</h3>
                             </div>
                             <div class="card-body">
-                                {$email}
+                                {$mensagem}
                             </div>
                         </div>
                     </div>

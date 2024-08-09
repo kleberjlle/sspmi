@@ -15,6 +15,15 @@ use App\sistema\acesso\{
     sSair    
 };
 
+//configurações do sistema
+$sConfiguracao = new sConfiguracao();
+//verifica se o sistema entrou em manutenção
+if($sConfiguracao->getManutencao()){
+    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tAcessar.php?seguranca={$sConfiguracao->getManutencao()}");
+    exit();
+}
+
+
 //verifica se tem credencial para acessar o sistema
 if(!isset($_SESSION['credencial'])){
     //solicitar saída com tentativa de violação
@@ -33,8 +42,6 @@ if($_SESSION['credencial']['sexo'] == 'Masculino'){
 }else{
     $imagem = 'user7-128x128.jpg';
 }
-
-$sConfiguracao = new sConfiguracao();
 
 //verifica a opção de menu
 if(isset($_GET['menu'])){

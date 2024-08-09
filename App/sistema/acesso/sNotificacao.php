@@ -169,10 +169,14 @@ class sNotificacao{
     } 
     
     private function tipoInformacao() {
-        $this->setTipo('success');
-        $this->setTitulo('Sucesso!');
+        $this->setTipo('info');
+        $this->setTitulo('Informativo!');        
+        $this->setSConfiguracao(new sConfiguracao());
         
         switch ($this->getNumero()) {
+            case '1':
+                $this->setMensagem('O sistema está em manutenção. Previsão de retorno: '.$this->sConfiguracao->getPrazoManutencao());
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

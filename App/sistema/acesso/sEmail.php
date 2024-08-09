@@ -36,18 +36,17 @@ class sEmail {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
                 //verifica se consta o email no BD               
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'email',
-                    'camposCondicionados' => 'nomenclatura',
-                    'valoresCondicionados' => $this->getNomenclatura(),
-                    'camposOrdenados' => null, //caso não tenha, colocar como null
-                    'ordem' => null //ASC ou DESC
-                ];
-                $this->mConexao->CRUD($dados);
-
                 if ($pagina == 'tAcessar.php') {
+                    $dados = [
+                        'comando' => 'SELECT',
+                        'busca' => '*',
+                        'tabelas' => 'email',
+                        'camposCondicionados' => 'nomenclatura',
+                        'valoresCondicionados' => $this->getNomenclatura(),
+                        'camposOrdenados' => null, //caso não tenha, colocar como null
+                        'ordem' => null //ASC ou DESC
+                    ];
+                    $this->mConexao->CRUD($dados);
                     //se não localizou o registro do no BD
                     if (!$this->mConexao->getValidador()) {
                         $this->setValidador(false);
@@ -62,6 +61,17 @@ class sEmail {
                 }
 
                 if ($pagina == 'tMenu1_1_1.php') {
+                     $dados = [
+                        'comando' => 'SELECT',
+                        'busca' => '*',
+                        'tabelas' => 'email',
+                        'camposCondicionados' => 'nomenclatura',
+                        'valoresCondicionados' => $this->getNomenclatura(),
+                        'camposOrdenados' => null, //caso não tenha, colocar como null
+                        'ordem' => null //ASC ou DESC
+                    ];
+                    $this->mConexao->CRUD($dados);
+                    
                     //se localizou o registro do no BD e o registro for diferento do email atual
                     if ($this->mConexao->getValidador() && $_SESSION['credencial']['emailUsuario'] != $this->getNomenclatura()) {
                         $this->setValidador(false);
@@ -85,8 +95,8 @@ class sEmail {
                     $this->mConexao->CRUD($dados);
 
                     //se localizou o registro do no BD
-                    if ($this->getMConexao()->getRetorno()) {
-                        foreach ($this->getMConexao()->getRetorno() as $value) {
+                    if ($this->mConexao->getValidador()) {
+                        foreach ($this->mConexao->getRetorno() as $value) {
                             if ($value['situacao']) {
                                 $this->setValidador(false);
                                 $this->setSNotificacao(new sNotificacao('A20'));
@@ -123,9 +133,9 @@ class sEmail {
         $this->setMConexao(new mConexao());
         //encaminha as buscas de acordo com a origem 
         if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_2.php' ||
-                $pagina == 'tMenu1_2_1.php' ||
-                $pagina == 'tMenu1_3.php') {
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php') {
 
             if ($this->getNomenclaturaLocal() == 'email') {
                 //organiza os dados nos devidos campos

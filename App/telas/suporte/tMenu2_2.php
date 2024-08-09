@@ -23,7 +23,7 @@ $sProtocolo->consultar('tMenu2_2.php');
 ?>
 <div class="card card-primary card-outline">
     <div class="card-header">
-        <h3 class="card-title">Etapa1 - Acompanhar Suporte</h3>
+        <h3 class="card-title">Etapa 1 - Acompanhar Suporte</h3>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -58,7 +58,10 @@ HTML;
             <tbody>
                 <?php
                 if ($sProtocolo->getValidador()) {
-                    foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {
+                    foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {                        
+                        //armazena o id do solicitante para criptografia
+                        $seguranca = base64_encode($value['usuario_idusuario']);
+                        
                         //se não tiver permissão visualiza somente os chamados abertos pelo próprio usuário
                         if ($_SESSION['credencial']['nivelPermissao'] < 2 &&
                             $_SESSION['credencial']['idUsuario'] == $value['usuario_idusuario']) {
@@ -101,7 +104,6 @@ HTML;
                             $sEtapa->setValorCampo($idProtocolo);
                             $sEtapa->consultar('tMenu2_2.php');
 
-                            //var_dump($sEtapa->mConexao->getRetorno());
                             foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
                                 $idEquipamento = $value['equipamento_idequipamento'];
                                 $descricao = $value['descricao'];
@@ -188,31 +190,14 @@ HTML;
                             $diretorio = $sConfiguracao->getDiretorioVisualizacaoAcesso();
 
                             //altera a cor das marcações da prioridade
-                            switch ($prioridade) {
-                                case 'Normal':
-                                    $cor = 'text-blue';
-                                    $posicao = 1;
-                                    break;
-                                case 'Alta':
-                                    $cor = 'text-green';
-                                    $posicao = 2;
-                                    break;
-                                case 'Urgente':
-                                    $cor = 'text-yellow';
-                                    $posicao = 3;
-                                    break;
-                                case 'Muito Urgente':
-                                    $cor = 'text-orange';
-                                    $posicao = 4;
-                                    break;
-                                case 'Emergente':
-                                    $cor = 'text-red';
-                                    $posicao = 5;
-                                    break;
-                                default:
-                                    break;
-                            }
-
+                            $sTratamentoPrioridade = new sTratamentoDados($prioridade);
+                            $dadosPrioridade = $sTratamentoPrioridade->corPrioridade();
+                            $posicao = $dadosPrioridade[0];
+                            $cor = $dadosPrioridade[1];
+                            
+                            //cria uma hash para o id do protocolo
+                            $idProtocoloCriptografado = base64_encode($idProtocolo);
+                            
                             echo <<<HTML
                         <tr>
                             <td>{$protocolo}</td>
@@ -238,14 +223,14 @@ HTML;
                             if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                                 echo <<<HTML
                             <td>
-                                <i class="nav-icon fas fa-flag {$cor}"></i> {$posicao} - {$prioridade}
+                                <i class="nav-icon fas fa-flag text-{$cor}"></i> {$posicao} - {$prioridade}
                             </td>
 HTML;
                             }
                             echo <<<HTML
                             <td>
                                 <i class="fas fa-search mr-1"></i>
-                                <a href="#">
+                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocoloCritptografado}&seguranca={$seguranca}">
                                     Visualizar
                                 </a><br />
                                 <!--
@@ -293,6 +278,9 @@ HTML;
                             $sEtapa->setNomeCampo('protocolo_idprotocolo');
                             $sEtapa->setValorCampo($idProtocolo);
                             $sEtapa->consultar('tMenu2_2.php');
+                            
+                            //cria uma hash para o id do protocolo
+                            $idProtocoloCriptografado = base64_encode($idProtocolo);
 
                             //var_dump($sEtapa->mConexao->getRetorno());
                             foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
@@ -381,30 +369,10 @@ HTML;
                             $diretorio = $sConfiguracao->getDiretorioVisualizacaoAcesso();
 
                             //altera a cor das marcações da prioridade
-                            switch ($prioridade) {
-                                case 'Normal':
-                                    $cor = 'text-blue';
-                                    $posicao = 1;
-                                    break;
-                                case 'Alta':
-                                    $cor = 'text-green';
-                                    $posicao = 2;
-                                    break;
-                                case 'Urgente':
-                                    $cor = 'text-yellow';
-                                    $posicao = 3;
-                                    break;
-                                case 'Muito Urgente':
-                                    $cor = 'text-orange';
-                                    $posicao = 4;
-                                    break;
-                                case 'Emergente':
-                                    $cor = 'text-red';
-                                    $posicao = 5;
-                                    break;
-                                default:
-                                    break;
-                            }
+                            $sTratamentoPrioridade = new sTratamentoDados($prioridade);
+                            $dadosPrioridade = $sTratamentoPrioridade->corPrioridade();
+                            $posicao = $dadosPrioridade[0];
+                            $cor = $dadosPrioridade[1];
 
                             echo <<<HTML
                         <tr>
@@ -431,14 +399,14 @@ HTML;
                             if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                                 echo <<<HTML
                             <td>
-                                <i class="nav-icon fas fa-flag {$cor}"></i> {$posicao} - {$prioridade}
+                                <i class="nav-icon fas fa-flag text-{$cor}"></i> {$posicao} - {$prioridade}
                             </td>
 HTML;
                             }
                             echo <<<HTML
                             <td>
                                 <i class="fas fa-search mr-1"></i>
-                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocolo}&idUsuario={$_SESSION['credencial']['idUsuario']}">
+                                <a href="{$diretorio}tPainel.php?menu=2_2_1&protocolo={$idProtocoloCriptografado}&seguranca={$seguranca}">
                                     Visualizar
                                 </a><br />
                                 <!--

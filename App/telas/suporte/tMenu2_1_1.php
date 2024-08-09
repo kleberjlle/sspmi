@@ -77,9 +77,6 @@ if(!$idEquipamento){
         }
     }
 }
-
-
-
         
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
@@ -90,6 +87,13 @@ if (isset($_GET['campo'])) {
                 $alertaSecretaria = ' is-valid';
             } else {
                 $alertaSecretaria = ' is-warning';
+            }
+            break;
+        case 'email':
+            if ($_GET['codigo'] == 'S4') {
+                $alertaEmail = ' is-valid';
+            } else {
+                $alertaEmail = ' is-warning';
             }
             break;
     }
@@ -237,7 +241,7 @@ if (isset($_GET['campo'])) {
                             </div>
                             <div class="form-group col-md-2">
                                 <label>E-mail</label>
-                                <input class="form-control" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="acessoRemoto">Acesso remoto</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
@@ -272,7 +276,8 @@ if (isset($_GET['campo'])) {
                         if (isset($tipo) &&
                             isset($titulo) &&
                             isset($mensagem)) {
-                            if (isset($alertaSecretaria)) {
+                            if (isset($alertaSecretaria) ||
+                                isset($alertaEmail)) {
                             echo <<<HTML
                             <div class="col-mb-3">
                                 <div class="card card-outline card-{$tipo}">
