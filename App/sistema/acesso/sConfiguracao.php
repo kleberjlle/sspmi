@@ -77,7 +77,7 @@ class sConfiguracao{
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
         $this->manutencao = false;     
-        $this->prazoManutencao = '08/08/2024 às 11:30';
+        $this->prazoManutencao = '11/08/2024 às 14:30';
     }
     public function getDiretorioPrincipal() {
         return $this->diretorioPrincipal;
