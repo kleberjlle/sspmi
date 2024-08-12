@@ -2,8 +2,11 @@
 use App\sistema\acesso\{
     sTratamentoDados,
     sConfiguracao,
-    sSair,
-    sUsuario
+    sUsuario,
+    sSecretaria,
+    sDepartamento,
+    sCoordenacao,
+    sSetor
 };
 use App\sistema\suporte\{
     sProtocolo,
@@ -31,8 +34,30 @@ $sProtocolo->consultar('tMenu2_2_2.php');
 
 $sConfiguracao = new sConfiguracao();
 
+//consulta os dados da secretaria
+$sSecretaria = new sSecretaria(0);
+$sSecretaria->consultar('tMenu2_2_2.php');
+
+//dados do departamento
+$sDepartamento = new sDepartamento(0);
+$sDepartamento->consultar('tMenu2_2_2.php');
+
+//dados do departamento
+$sCoordenacao = new sCoordenacao(0);
+$sCoordenacao->consultar('tMenu2_2_2.php');
+
+//dados do departamento
+$sSetor = new sSetor(0);
+$sSetor->consultar('tMenu2_2_2.php');
+
 if ($sProtocolo->getValidador()) {
     foreach ($sProtocolo->mConexao->getRetorno() as $value) {
+        //dados do protocolo
+        $secretaria = $value['secretaria'];
+        $departamento = $value['departamento'];
+        $coordenacao = $value['coordenacao'];
+        $setor = $value['setor'];
+        
         //dados do usuario
         $sUsuario = new sUsuario();
         $sUsuario->setNomeCampo('idusuario');
@@ -215,15 +240,15 @@ if ($sProtocolo->getValidador()) {
 }
 
 if($_POST['formulario'] == 'f1'){
-echo <<<HTML
+?>
 <div class="container-fluid">
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <!-- general form elements -->
-            <div class="card card-{$cor} card-outline">
+            <div class="card card-<?php echo $cor; ?> card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">Protocolo n.º: {$protocolo}</h3>
+                    <h3 class="card-title">Protocolo n.º: <?php echo $protocolo; ?></h3>
                 </div>
                 <!-- form start -->
                 <div class="card-body">
@@ -231,56 +256,84 @@ echo <<<HTML
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Secretaria</label>
-                                <select class="form-control" name="secretaria" id="secretaria" disabled="" form="f2">
-                                    <option value="0" selected="">--</option>
-HTML;
+                                <select class="form-control" name="secretaria" id="secretaria" form="f1">
+<?php
                                     foreach ($sSecretaria->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($secretaria == $value['nomenclatura']){
+                                            echo '<option value="'.$value['idsecretaria'].'" selected="">'.$value['nomenclatura'].'</option>';
+                                        }
                                     }
-                                echo <<<HTML
+?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="departamento">Departamento</label>
-                                <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">
-                                     <option value="0" selected="">--</option>
-HTML;
+                                <select class="form-control" name="departamento" id="departamento" form="f1">
+                                    <option value="0" selected="">--</option>
+<?php
                                     foreach ($sDepartamento->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($departamento == $value['nomenclatura']){
+                                            echo '<option value="'.$value['iddepartamento'].'" selected="">'.$value['nomenclatura'].'</option>';
+                                        }
                                     }
-                                echo <<<HTML
-                                </select>
+?>
+                                    </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Coordenação</label>
-                                <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
+                                <select class="form-control" name="coordenacao" id="coordenacao" form="f1">
                                      <option value="0" selected="">--</option>
-HTML;
+<?php
                                     foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($coordenacao == $value['nomenclatura']){
+                                            echo '<option value="'.$value['idcoordenacao'].'" selected="">'.$value['nomenclatura'].'</option>';
+                                        }
                                     }
-                                    echo <<<HTML
+?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="setor">Setor</label>
-                                <select class="form-control" name="setor" id="setor" disabled="" form="f2">
+                                <select class="form-control" name="setor" id="setor" form="f1">
                                     <option value="0" selected="">--</option>
-HTML;
+<?php
                                     foreach ($sSetor->mConexao->getRetorno() as $value) {
                                         echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($setor == $value['nomenclatura']){
+                                            echo '<option value="'.$value['idsetor'].'" selected="">'.$value['nomenclatura'].'</option>';
+                                        }
                                     }
-                                    echo <<<HTML
+?>
                                 </select>
                             </div>
                         </div>
-                    
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <label for="email">E-mail</label>
+                            <input type="email" class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" name="email" id="email" value="<?php echo $email ?>" required="" form="f1">                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="telefone">Telefone</label>
+                            <input type="telefone" class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" name="telefone" id="telefone" value="<?php echo $telefone ?>" required="" form="f1">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                    <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo $whatsApp ? 'checked=""' : '';?> form="f1">
+                                    <label class="custom-control-label" for="whatsApp"><?php echo $whatsApp ? 'Sim' : 'Não'; ?></label>
+                                </div>
+                            </div>
+                        </div>
                         <!-- próxima build
                         <div class="form-group col-md-4">
                             <i class="far fa-images mr-1"></i><b> Print</b>
@@ -293,22 +346,23 @@ HTML;
                     </div>
 
                 </div>
-                <!-- /.card-body -->
+                <!-- /.card-body
                 <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1_1" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <input type="hidden" value="f1" name="formulario" id="formulario" form="f1">
                     <input type="hidden" value="inserir" name="acao" id="inserir" form="f1">
                     <input type="hidden" value="menu2_1" name="pagina" id="menu2_1" form="f1">
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Próximo</button>
+                        <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>
+                -->
             </div>
             <!-- /.card -->
         </div>
     </div>
 </div>
-HTML;
+<?php
 }
 ?>
 <script type="text/javascript">
