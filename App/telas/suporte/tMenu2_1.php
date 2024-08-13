@@ -64,8 +64,10 @@ $sCategoria->consultar('tMenu2_1.php');
                             <div class="form-group">
                                 <label>Localizou o equipamento?</label>
                                 <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                    <input class="custom-control-input" type="checkbox" name="patrimonio" id="patrimonio" <?php echo isset($alertaCategoria) ? '' : 'checked=""' ?> form="f1">
-                                    <label class="custom-control-label" for="patrimonio">Sim</label>
+                                    <input class="custom-control-input" type="checkbox" name="patrimonio" id="patrimonio" <?php echo isset($alertaCategoria) ? '' : 'checked=""' ?> onclick="decisao();" form="f1">
+                                    <label class="custom-control-label" for="patrimonio">
+                                        <div class="conteudo" name="conteudo" id="conteudo">Sim</div>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -239,4 +241,11 @@ HTML;
             $("#ocultarCategoria").toggle(!this.checked);
         });
     });
+    function decisao(){
+       if (document.getElementById('patrimonio').checked) {
+            document.getElementById('conteudo').innerHTML = 'Sim';
+        } else {
+            document.getElementById('conteudo').innerHTML = 'Não';
+        }
+    }
 </script>

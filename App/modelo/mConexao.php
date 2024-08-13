@@ -222,6 +222,18 @@ class mConexao {
                     }
                 }
                 break;
+            case 'protocolo':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
             case 'etapa':
                 if ($dados['busca'] == '*') {
                     if ($resultado->num_rows > 0) {

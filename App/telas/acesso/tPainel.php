@@ -736,7 +736,7 @@ HTML;
                 $("#tabelaMenu2_2").DataTable({
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                    "aaSorting": [9, "desc"]
+                    "aaSorting": [10, "desc"]
                 }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
                 $("#tabelaMenu1_3").DataTable({
                     "responsive": true, "lengthChange": false, "autoWidth": false,

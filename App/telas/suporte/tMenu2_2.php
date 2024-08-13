@@ -26,12 +26,24 @@ $sProtocolo->consultar('tMenu2_2.php');
         <h3 class="card-title">Etapa 1 - Acompanhar Suporte</h3>
     </div>
     <!-- /.card-header -->
-    <div class="card-body">
+    <div class="card-body">        
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Mostrar suportes encerrados</label>
+                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                    <input class="custom-control-input" type="checkbox" name="suportesEncerrados" id="suportesEncerrados" onclick="decisao();">
+                    <label class="custom-control-label" for="suportesEncerrados">
+                        <div class="conteudo" name="conteudo" id="conteudo"> Não</div>
+                    </label>
+                </div>
+            </div>
+        </div>
         <table name="tabelaMenu2_2" id="tabelaMenu2_2" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Protocolo n.º</th>
-                    <th>Data e Hora</th>
+                    <th>Abertura</th>
+                    <th>Encerramento</th>
                     <th>Solicitante</th>
                     <th>Telefone</th>
                     <th>Patrimônio</th>
@@ -58,6 +70,14 @@ HTML;
             <tbody>
                 <?php
                 if ($sProtocolo->getValidador()) {
+                    //contador para identificar cada linha da tabela
+                    $i = 1;
+                    
+                    //contador para identificar cada linha da tabela
+                    $quantidadeRegistro = 0;                    
+                    foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {
+                        $quantidadeRegistro++;
+                    }
                     foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {                        
                         //armazena o id do solicitante para criptografia
                         $seguranca = base64_encode($value['usuario_idusuario']);
@@ -68,8 +88,16 @@ HTML;
                             
                             //tratar os dados para imprimir na tabela dinâmica
                             //campo data e hora da abertura
-                            $sTratamentoData = new sTratamentoDados($value['dataHoraAbertura']);
-                            $dataTratada = $sTratamentoData->tratarData();
+                            $sTratamentoDataAbertura = new sTratamentoDados($value['dataHoraAbertura']);
+                            $dataAberturaTratada = $sTratamentoDataAbertura->tratarData();
+                            
+                            //campo data e hora da abertura
+                            if(!is_null($value['dataHoraEncerramento'])){
+                                $sTratamentoDataEncerramento = new sTratamentoDados($value['dataHoraEncerramento']);
+                                $dataEncerramentoTratada = $sTratamentoDataEncerramento->tratarData();
+                            }else{
+                                $dataEncerramentoTratada = '--/--/---- --:--:--';
+                            }
 
                             //campo protocolo
                             $ano = date("Y", strtotime(str_replace('-', '/', $value['dataHoraAbertura'])));
@@ -198,10 +226,19 @@ HTML;
                             //cria uma hash para o id do protocolo
                             $idProtocoloCriptografado = base64_encode($idProtocolo);
                             
+                            //caso o suporte tenha sido encerrado
+                            if($dataEncerramentoTratada == '--/--/---- --:--:--'){
+                                $ocultarLinha = '';
+                            }else{
+                                $ocultarLinha = ' id="ocultar'.$i.'" style="display: none;"';
+                            }
+                            
+                            
                             echo <<<HTML
-                        <tr>
+                        <tr $ocultarLinha>
                             <td>{$protocolo}</td>
-                            <td>{$dataTratada}</td>
+                            <td>{$dataAberturaTratada}</td>
+                            <td>{$dataEncerramentoTratada}</td>
                             <td>{$nome}</td>
                             <td>{$telefoneTratado}</td>
                             <td>{$patrimonio}</td>
@@ -230,7 +267,7 @@ HTML;
                             echo <<<HTML
                             <td>
                                 <i class="fas fa-search mr-1"></i>
-                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocoloCritptografado}&seguranca={$seguranca}">
+                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocoloCriptografado}&seguranca={$seguranca}">
                                     Visualizar
                                 </a><br />
                                 <!--
@@ -243,8 +280,16 @@ HTML;
                         } else if($_SESSION['credencial']['nivelPermissao'] > 1) {
                             //tratar os dados para imprimir na tabela dinâmica
                             //campo data e hora da abertura
-                            $sTratamentoData = new sTratamentoDados($value['dataHoraAbertura']);
-                            $dataTratada = $sTratamentoData->tratarData();
+                            $sTratamentoDataAbertura = new sTratamentoDados($value['dataHoraAbertura']);
+                            $dataAberturaTratada = $sTratamentoDataAbertura->tratarData();
+                            
+                            //campo data e hora da abertura
+                            if(!is_null($value['dataHoraEncerramento'])){
+                                $sTratamentoDataEncerramento = new sTratamentoDados($value['dataHoraEncerramento']);
+                                $dataEncerramentoTratada = $sTratamentoDataEncerramento->tratarData();
+                            }else{
+                                $dataEncerramentoTratada = '--/--/---- --:--:--';
+                            }                            
 
                             //campo protocolo
                             $ano = date("Y", strtotime(str_replace('-', '/', $value['dataHoraAbertura'])));
@@ -373,11 +418,19 @@ HTML;
                             $dadosPrioridade = $sTratamentoPrioridade->corPrioridade();
                             $posicao = $dadosPrioridade[0];
                             $cor = $dadosPrioridade[1];
-
-                            echo <<<HTML
-                        <tr>
+                            
+                            //caso o suporte tenha sido encerrado
+                            if($dataEncerramentoTratada == '--/--/---- --:--:--'){
+                                $ocultarLinha = '';
+                            }else{
+                                $ocultarLinha = 'display: none;';
+                            }             
+                        
+                        echo <<<HTML
+                        <tr id="ocultar$i" style="$ocultarLinha">
                             <td>{$protocolo}</td>
-                            <td>{$dataTratada}</td>
+                            <td>{$dataAberturaTratada}</td>
+                            <td>{$dataEncerramentoTratada}</td>
                             <td>{$nome}</td>
                             <td>{$telefoneTratado}</td>
                             <td>{$patrimonio}</td>
@@ -420,15 +473,17 @@ HTML;
                             </td>
                         </tr>
 HTML;
+                                $i++;
                         }
                     }
                 }
-                    ?>
+                ?>
                 </tbody>
             <tfoot>
                 <tr>
                     <th>Protocolo n.º</th>
-                    <th>Data e Hora</th>
+                    <th>Abertura</th>
+                    <th>Encerramento</th>
                     <th>Solicitante</th>
                     <th>Telefone</th>
                     <th>Patrimônio</th>
@@ -456,3 +511,22 @@ HTML;
     </div>
     <!-- /.card-body -->
 </div>
+<input type="hidden" id="quantidadeRegistro" value="<?php echo $quantidadeRegistro; ?>">
+<script>
+    $(document).ready(function () {
+        var quantidadeRegistro = document.getElementById('quantidadeRegistro').value;
+        $('#suportesEncerrados').on('click', function () {
+            for(var i = 0; i < quantidadeRegistro; i++){
+                var alerta = $("#ocultar"+i).toggle(this.checked);
+            }
+            document.write(alerta);
+        });
+    });
+    function decisao(){
+       if (document.getElementById('suportesEncerrados').checked) {
+            document.getElementById('conteudo').innerHTML = 'Sim';
+        } else {
+            document.getElementById('conteudo').innerHTML = 'Não';
+        }
+    }
+</script>
