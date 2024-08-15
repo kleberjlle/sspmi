@@ -75,7 +75,7 @@ if(isset($_POST) && !empty($_POST)){
     $sHistorico->inserir('tAcessar.php', $tratarDados);
        
     //Etapa2 - validar o campo e-mail
-    $sEmail->verificar(basename($_SERVER['PHP_SELF']));
+    $sEmail->verificar('tAcessar.php');
     
     //Etapa3 - validar o campo senha
     
@@ -93,19 +93,19 @@ if(isset($_POST) && !empty($_POST)){
                 //cria as variáveis da notificação
                 $tipo = $sUsuario->sNotificacao->getTipo();
                 $titulo = $sUsuario->sNotificacao->getTitulo();
-                $email = $sUsuario->sNotificacao->getMensagem();
+                $mensagem = $sUsuario->sNotificacao->getMensagem();
             }
         }else{
             //cria as variáveis da notificação
             $tipo = $sSenha->sNotificacao->getTipo();
             $titulo = $sSenha->sNotificacao->getTitulo();
-            $email = $sSenha->sNotificacao->getMensagem();
+            $mensagem = $sSenha->sNotificacao->getMensagem();
         }
     }else{
         //cria as variáveis da notificação
         $tipo = $sEmail->sNotificacao->getTipo();
         $titulo = $sEmail->sNotificacao->getTitulo();
-        $email = $sEmail->sNotificacao->getMensagem();
+        $mensagem = $sEmail->sNotificacao->getMensagem();
     }
         
     //QA - início da área de testes

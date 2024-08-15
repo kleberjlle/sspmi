@@ -19,6 +19,8 @@ use App\sistema\suporte\{
 
 //consulta os dados para apresentar na tabela
 $sProtocolo = new sProtocolo();
+$sProtocolo->setNomeCampo('dataHoraEncerramento');
+$sProtocolo->setValorCampo('IS NULL');
 $sProtocolo->consultar('tMenu2_2.php');
 ?>
 <div class="card card-primary card-outline">
@@ -27,6 +29,7 @@ $sProtocolo->consultar('tMenu2_2.php');
     </div>
     <!-- /.card-header -->
     <div class="card-body">        
+        <!--
         <div class="col-md-4">
             <div class="form-group">
                 <label>Mostrar suportes encerrados</label>
@@ -38,6 +41,7 @@ $sProtocolo->consultar('tMenu2_2.php');
                 </div>
             </div>
         </div>
+        -->
         <table name="tabelaMenu2_2" id="tabelaMenu2_2" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -69,15 +73,7 @@ HTML;
             </thead>
             <tbody>
                 <?php
-                if ($sProtocolo->getValidador()) {
-                    //contador para identificar cada linha da tabela
-                    $i = 1;
-                    
-                    //contador para identificar cada linha da tabela
-                    $quantidadeRegistro = 0;                    
-                    foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {
-                        $quantidadeRegistro++;
-                    }
+                if ($sProtocolo->getValidador()) {           
                     foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {                        
                         //armazena o id do solicitante para criptografia
                         $seguranca = base64_encode($value['usuario_idusuario']);
@@ -417,17 +413,10 @@ HTML;
                             $sTratamentoPrioridade = new sTratamentoDados($prioridade);
                             $dadosPrioridade = $sTratamentoPrioridade->corPrioridade();
                             $posicao = $dadosPrioridade[0];
-                            $cor = $dadosPrioridade[1];
-                            
-                            //caso o suporte tenha sido encerrado
-                            if($dataEncerramentoTratada == '--/--/---- --:--:--'){
-                                $ocultarLinha = '';
-                            }else{
-                                $ocultarLinha = 'display: none;';
-                            }             
+                            $cor = $dadosPrioridade[1];          
                         
                         echo <<<HTML
-                        <tr id="ocultar$i" style="$ocultarLinha">
+                        <tr>
                             <td>{$protocolo}</td>
                             <td>{$dataAberturaTratada}</td>
                             <td>{$dataEncerramentoTratada}</td>
@@ -473,7 +462,6 @@ HTML;
                             </td>
                         </tr>
 HTML;
-                                $i++;
                         }
                     }
                 }
@@ -513,15 +501,7 @@ HTML;
 </div>
 <input type="hidden" id="quantidadeRegistro" value="<?php echo $quantidadeRegistro; ?>">
 <script>
-    $(document).ready(function () {
-        var quantidadeRegistro = document.getElementById('quantidadeRegistro').value;
-        $('#suportesEncerrados').on('click', function () {
-            for(var i = 0; i < quantidadeRegistro; i++){
-                var alerta = $("#ocultar"+i).toggle(this.checked);
-            }
-            document.write(alerta);
-        });
-    });
+    //função para alterar texto da checkbox
     function decisao(){
        if (document.getElementById('suportesEncerrados').checked) {
             document.getElementById('conteudo').innerHTML = 'Sim';

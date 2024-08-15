@@ -47,6 +47,7 @@ class sEmail {
                         'ordem' => null //ASC ou DESC
                     ];
                     $this->mConexao->CRUD($dados);
+                    
                     //se não localizou o registro do no BD
                     if (!$this->mConexao->getValidador()) {
                         $this->setValidador(false);

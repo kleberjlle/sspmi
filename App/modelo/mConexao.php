@@ -345,11 +345,20 @@ class mConexao {
             if ($key == 'busca' && $value) {
                 $query .= $value . ' FROM ';
             } else if ($key == 'camposCondicionados' && $value) {
-                $query .= 'WHERE ' . $value . '=';
+                if($dados['valoresCondicionados'] =="IS NULL"){
+                    $query .= 'WHERE ' . $value . ' ';
+                }else{
+                    $query .= 'WHERE ' . $value . '=';
+                }                
             } else if ($key == 'valoresCondicionados' && $value) {
                 $valoresCondicionados = true;
-                $n1 = "'$value' ";
-                $n2 = "'$value'";
+                if($value == "IS NULL"){
+                    $n1 = "$value ";
+                    $n2 = "$value";
+                }else{
+                    $n1 = "'$value' ";
+                    $n2 = "'$value'";
+                }
             } else if ($key == 'camposOrdenados' && $value) {
                 $ordem = true;
                 $query .= $n1 . 'ORDER BY ' . $value . ' ';
@@ -367,6 +376,7 @@ class mConexao {
                 }
             }
         }
+        
         return $query;
     }
 

@@ -12,3 +12,4 @@ ok - 7 - Alterar instância do sHistorico no arquivo tAcessar.php
 10 - Remover número de série e service tag da tabela modelo e inserir na tabela equipamento;
 11 - Alterar ordem das Solicitação de Acesso para data DESC;
 12 - Limitar caracteres no campo descrição ddo menu2_1_1.php;
+13 - Criar botão para mostrar/ ocultar tickets encerrados na página menu2_2
