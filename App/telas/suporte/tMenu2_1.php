@@ -249,3 +249,16 @@ HTML;
         }
     }
 </script>
+<script>
+    $(function () {
+        $("#tabelaMenu2_1").DataTable({
+            language:{
+                url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
+            },
+            "responsive": true, 
+            "lengthChange": false, 
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#tabelaMenu2_1_wrapper .col-md-6:eq(0)');        
+    });
+</script>

@@ -42,14 +42,21 @@ $sProtocolo->consultar('tMenu2_2.php');
             </div>
         </div>
         -->
+        
         <table name="tabelaMenu2_2" id="tabelaMenu2_2" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>Protocolo n.º</th>
                     <th>Abertura</th>
                     <th>Encerramento</th>
-                    <th>Solicitante</th>
-                    <th>Telefone</th>
+                    <?php 
+                    if($_SESSION['credencial']['nivelPermissao'] > 1){
+                        echo <<<HTML
+                        <th>Solicitante</th>
+                        <th>Telefone</th>
+HTML;
+                    }
+                    ?>
                     <th>Patrimônio</th>
                     <th>Categoria/ Marca/ Modelo</th>
                     <th>Descrição</th>
@@ -68,6 +75,7 @@ HTML;
 HTML;
                     }
                     ?>
+                    <th>Responsável</th>
                     <th>Atribuir/ Visualizar</th>
                 </tr>
             </thead>
@@ -133,6 +141,7 @@ HTML;
                                 $descricao = $value['descricao'];
                                 $idLocal = $value['local_idlocal'];
                                 $idPrioridade = $value['prioridade_idprioridade'];
+                                $numero = $value['numero'];
                             }
 
                             //dados do equipamento                        
@@ -229,14 +238,18 @@ HTML;
                                 $ocultarLinha = ' id="ocultar'.$i.'" style="display: none;"';
                             }
                             
+                            //verifica se já possui responsável agregado
+                            if($numero < 2){
+                                $atribuirTicket = '<i class="fas fa-business-time"></i> Aguardando<br />';
+                            }else{
+                                $atribuirTicket = '<i class="fas fa-hands-helping mr-1"></i> Em Andamento<br />';
+                            }
                             
                             echo <<<HTML
                         <tr $ocultarLinha>
                             <td>{$protocolo}</td>
                             <td>{$dataAberturaTratada}</td>
                             <td>{$dataEncerramentoTratada}</td>
-                            <td>{$nome}</td>
-                            <td>{$telefoneTratado}</td>
                             <td>{$patrimonio}</td>
                             <td>
                                 {$categoria}<br />
@@ -261,18 +274,17 @@ HTML;
 HTML;
                             }
                             echo <<<HTML
+                            <td>--</td>
                             <td>
                                 <i class="fas fa-search mr-1"></i>
-                                <a href="{$diretorio}tPainel.php?menu=2_2_1&id={$idProtocoloCriptografado}&seguranca={$seguranca}">
+                                <a href="{$diretorio}tPainel.php?menu=2_2_1&protocolo={$idProtocoloCriptografado}&seguranca={$seguranca}">
                                     Visualizar
                                 </a><br />
-                                <!--
-                                <i class="fas fa-hands-helping mr-1"></i>
-                                Em Andamento<br />
-                                -->
+                                {$atribuirTicket}
                             </td>
                         </tr>
 HTML;
+//-----------------------------------------------tabela com nivel de permissão superior a 1-----------------------------------------------//
                         } else if($_SESSION['credencial']['nivelPermissao'] > 1) {
                             //tratar os dados para imprimir na tabela dinâmica
                             //campo data e hora da abertura
@@ -329,6 +341,7 @@ HTML;
                                 $descricao = $value['descricao'];
                                 $idLocal = $value['local_idlocal'];
                                 $idPrioridade = $value['prioridade_idprioridade'];
+                                $numero = $value['numero'];
                             }
 
                             //dados do equipamento                        
@@ -413,7 +426,14 @@ HTML;
                             $sTratamentoPrioridade = new sTratamentoDados($prioridade);
                             $dadosPrioridade = $sTratamentoPrioridade->corPrioridade();
                             $posicao = $dadosPrioridade[0];
-                            $cor = $dadosPrioridade[1];          
+                            $cor = $dadosPrioridade[1];   
+                            
+                            //verifica se já possui responsável agregado
+                            if($numero < 2){
+                                $atribuirTicket = '<i class="fas fa-receipt mr-1"></i><a href="#"> Atribuir</a><br />';
+                            }else{
+                                $atribuirTicket = '<i class="fas fa-hands-helping mr-1"></i> Em Andamento<br />';
+                            }
                         
                         echo <<<HTML
                         <tr>
@@ -429,36 +449,19 @@ HTML;
                                 {$modelo}<br />
                             </td>
                             <td>{$descricao}</td>
-HTML;
-                            if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                                echo <<<HTML
-                            <td>{$ambiente}</td>                            
-HTML;
-                            }
-                            echo <<<HTML
+                            <td>{$ambiente}</td> 
                             <td>{$local}</td>
-HTML;
-                            if ($_SESSION['credencial']['nivelPermissao'] > 1) {
-                                echo <<<HTML
                             <td>
                                 <i class="nav-icon fas fa-flag text-{$cor}"></i> {$posicao} - {$prioridade}
                             </td>
-HTML;
-                            }
-                            echo <<<HTML
+                            <td>--</td>
                             <td>
                                 <i class="fas fa-search mr-1"></i>
                                 <a href="{$diretorio}tPainel.php?menu=2_2_1&protocolo={$idProtocoloCriptografado}&seguranca={$seguranca}">
                                     Visualizar
-                                </a><br />
-                                <!--
-                                <i class="fas fa-receipt mr-1"></i>
-                                <a href="#">
-                                    Atribuir
-                                </a><br />
-                                <i class="fas fa-hands-helping mr-1"></i>
-                                Em Andamento<br />
-                                -->
+                                </a><br />                                
+                                {$atribuirTicket}
+                                
                             </td>
                         </tr>
 HTML;
@@ -472,8 +475,14 @@ HTML;
                     <th>Protocolo n.º</th>
                     <th>Abertura</th>
                     <th>Encerramento</th>
-                    <th>Solicitante</th>
-                    <th>Telefone</th>
+                    <?php 
+                    if($_SESSION['credencial']['nivelPermissao'] > 1){
+                        echo <<<HTML
+                        <th>Solicitante</th>
+                        <th>Telefone</th>
+HTML;
+                    }
+                    ?>
                     <th>Patrimônio</th>
                     <th>Categoria/ Marca/ Modelo</th>
                     <th>Descrição</th>
@@ -492,6 +501,7 @@ HTML;
 HTML;
                     }
                     ?>
+                    <th>Responsável</th>
                     <th>Atribuir/ Visualizar</th>
                 </tr>
             </tfoot>
@@ -509,4 +519,17 @@ HTML;
             document.getElementById('conteudo').innerHTML = 'Não';
         }
     }
+</script>
+<script>
+    $(function () {
+        $("#tabelaMenu2_2").DataTable({
+            language:{
+                url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
+            },
+            "responsive": true, 
+            "lengthChange": false, 
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#tabelaMenu2_2_wrapper .col-md-6:eq(0)');        
+    });
 </script>

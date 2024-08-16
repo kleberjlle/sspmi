@@ -245,3 +245,16 @@ HTML;
     </div>
     <!-- /.card-body -->
 </div>
+<script>
+    $(function () {
+        $("#tabelaMenu1_3").DataTable({
+            language:{
+                url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
+            },
+            "responsive": true, 
+            "lengthChange": false, 
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#tabelaMenu1_3_wrapper .col-md-6:eq(0)');        
+    });
+</script>

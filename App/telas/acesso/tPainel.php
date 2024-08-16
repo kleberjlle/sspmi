@@ -726,39 +726,6 @@ HTML;
         $(function(){
            $('[data-mask]').inputmask();
         });
-        </script>
-        <script>
-            $(function () {
-                $("#tabelaMenu1_2").DataTable({
-                    language:{
-                        url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
-                    },
-                    "responsive": true, "lengthChange": false, "autoWidth": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
-                $("#tabelaMenu2_2").DataTable({
-                    language:{
-                        url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
-                    },
-                    "responsive": true, "lengthChange": false, "autoWidth": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                    "aaSorting": [10, "desc"]
-                }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
-                $("#tabelaMenu1_3").DataTable({
-                    language:{
-                        url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
-                    },
-                    "responsive": true, "lengthChange": false, "autoWidth": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#tabelaMenu1_2_wrapper .col-md-6:eq(0)');
-                $("#tabelaMenu2_1").DataTable({
-                    language:{
-                        url: "https://itapoa.app.br/vendor/dataTable_pt_br/dataTable_pt_br.json"
-                    },
-                    "responsive": true, "lengthChange": false, "autoWidth": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                }).buttons().container().appendTo('#tabelaMenu2_1_wrapper .col-md-6:eq(0)');
-            });
-        </script>
+        </script>        
     </body>
 </html>

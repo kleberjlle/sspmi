@@ -261,13 +261,7 @@ echo <<<HTML
                         </li>
                     </ul>
                 </div>
-                <div class="card-footer">   
-                    <form name="f1" id="f1" action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_2" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="seguranca" id="seguranca" value="{$seguranca}" form="f1">
-                        <input type="hidden" name="idProtocolo" id="idProtocolo" value="{$idProtocolo}" form="f1">
-                        <input type="hidden" name="formulario" id="formulario" value="f1" form="f1">
-                        <button type="submit" class="btn btn-primary">Alterar</button>  
-                    </form>
+                <div class="card-footer">  
                 </div>
                 
                 <!-- /.card-body -->
@@ -314,12 +308,13 @@ echo <<<HTML
                         </li>
                     </ul>
                 </div>
-                    <form action="{$sConfiguracao->getDiretorioVisualizacaoSuporte()}sAlterarEquipamento.php" method="post">
+                <div class="card-footer"> 
+                    <!--
+                    <form action="../../sistema/suporte/sFinalizarSuporte.php" id="finalizarSuporte" method="post">
                         <input type="hidden" name="pagina" value="2_2_1">
-                        <div class="card-footer">
-                            <!--<button type="submit" class="btn btn-primary">Alterar</button>-->
-                        </div>
                     </form>
+                    -->
+                </div>  
                 <!-- /.card-body -->
             </div>
         </div>        

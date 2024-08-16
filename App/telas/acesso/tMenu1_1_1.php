@@ -20,11 +20,11 @@ use App\sistema\acesso\{
 
 $sConfiguracao = new sConfiguracao();
 
-$sSecretaria = new sSecretaria(0); //id zero apenas para construir o objeto
-$sSecretaria->consultar('tMenu1_1_1.php');
+//$sSecretaria = new sSecretaria(0); //id zero apenas para construir o objeto
+//$sSecretaria->consultar('tMenu1_1_1.php');
 
-$sCargo = new sCargo($_SESSION['credencial']['idCargo']);
-$sCargo->consultar('tMenu1_1_1.php');
+//$sCargo = new sCargo($_SESSION['credencial']['idCargo']);
+//$sCargo->consultar('tMenu1_1_1.php');
 
 $sPermissao = new sPermissao($_SESSION['credencial']['idPermissao']);
 $sPermissao->consultar('tMenu1_1_1.php');
