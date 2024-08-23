@@ -3,7 +3,8 @@
 use App\sistema\acesso\{
     sTratamentoDados,
     sUsuario,
-    sConfiguracao
+    sConfiguracao,
+    sNotificacao
 };
 use App\sistema\suporte\{
     sProtocolo,
@@ -22,6 +23,22 @@ $sProtocolo = new sProtocolo();
 $sProtocolo->setNomeCampo('dataHoraEncerramento');
 $sProtocolo->setValorCampo('IS NULL');
 $sProtocolo->consultar('tMenu2_2.php');
+
+//retorno de campo inválidos para notificação
+if(isset($_GET['campo'])){
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'atribuir':
+            if($_GET['codigo'] == 'S6'){
+                $alertaAtribuir = ' is-valid';
+            }
+    }
+    
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();
+}
 ?>
 <div class="card card-primary card-outline">
     <div class="card-header">
@@ -42,6 +59,22 @@ $sProtocolo->consultar('tMenu2_2.php');
             </div>
         </div>
         -->
+        <?php
+        if(isset($tipo) && isset($titulo) && isset($mensagem)){
+        echo <<<HTML
+        <div class="col-mb-3">
+            <div class="card card-outline card-{$tipo}">
+                <div class="card-header">
+                    <h3 class="card-title">{$titulo}</h3>
+                </div>
+                <div class="card-body">
+                    {$mensagem}
+                </div>
+            </div>
+        </div>
+HTML;
+        }       
+        ?>
         
         <table name="tabelaMenu2_2" id="tabelaMenu2_2" class="table table-bordered table-striped">
             <thead>
@@ -142,6 +175,7 @@ HTML;
                                 $idLocal = $value['local_idlocal'];
                                 $idPrioridade = $value['prioridade_idprioridade'];
                                 $numero = $value['numero'];
+                                $idResponsavel = $value['usuario_idusuario'];
                             }
 
                             //dados do equipamento                        
@@ -216,6 +250,22 @@ HTML;
 
                             foreach ($sPrioridade->mConexao->getRetorno() as $key => $value) {
                                 $prioridade = $value['nomenclatura'];
+                            }
+                            
+                            //obter dados do responsável pelo suporte
+                            if($idResponsavel){
+                                $sResponsavel = new sUsuario();
+                                $sResponsavel->setNomeCampo('idusuario');
+                                $sResponsavel->setValorCampo($idResponsavel);
+                                $sResponsavel->consultar('tMenu2_2.php');                            
+                            
+                                foreach ($sResponsavel->mConexao->getRetorno() as $value) {
+                                    $nomeResponsavel = $value['nome'];
+                                    $sobrenomeResponsavel = $value['sobrenome'];
+                                    $responsavel = $nomeResponsavel.' '.$sobrenomeResponsavel;
+                                }
+                            }else{
+                                $responsavel = '--';
                             }
 
                             //instancia as configurações do sistema
@@ -274,7 +324,7 @@ HTML;
 HTML;
                             }
                             echo <<<HTML
-                            <td>--</td>
+                            <td>{$responsavel}</td>
                             <td>
                                 <i class="fas fa-search mr-1"></i>
                                 <a href="{$diretorio}tPainel.php?menu=2_2_1&protocolo={$idProtocoloCriptografado}&seguranca={$seguranca}">
@@ -332,17 +382,18 @@ HTML;
                             $sEtapa->setValorCampo($idProtocolo);
                             $sEtapa->consultar('tMenu2_2.php');
                             
-                            //cria uma hash para o id do protocolo
-                            $idProtocoloCriptografado = base64_encode($idProtocolo);
-
-                            //var_dump($sEtapa->mConexao->getRetorno());
                             foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
                                 $idEquipamento = $value['equipamento_idequipamento'];
                                 $descricao = $value['descricao'];
                                 $idLocal = $value['local_idlocal'];
                                 $idPrioridade = $value['prioridade_idprioridade'];
                                 $numero = $value['numero'];
+                                $idResponsavel = $value['usuario_idusuario'];
                             }
+                            
+                            //cria uma hash para o id do protocolo
+                            $idProtocoloCriptografado = base64_encode($idProtocolo);
+
 
                             //dados do equipamento                        
                             $sEquipamento = new sEquipamento();
@@ -417,6 +468,23 @@ HTML;
                             foreach ($sPrioridade->mConexao->getRetorno() as $key => $value) {
                                 $prioridade = $value['nomenclatura'];
                             }
+                            
+                            //obter dados do responsável pelo suporte
+                            if($idResponsavel){
+                                $sResponsavel = new sUsuario();
+                                $sResponsavel->setNomeCampo('idusuario');
+                                $sResponsavel->setValorCampo($idResponsavel);
+                                $sResponsavel->consultar('tMenu2_2.php');                            
+                            
+                                foreach ($sResponsavel->mConexao->getRetorno() as $value) {
+                                    $nomeResponsavel = $value['nome'];
+                                    $sobrenomeResponsavel = $value['sobrenome'];
+                                    $responsavel = $nomeResponsavel.' '.$sobrenomeResponsavel;
+                                }
+                            }else{
+                                $responsavel = '--';
+                            }
+                            
 
                             //instancia as configurações do sistema
                             $sConfiguracao = new sConfiguracao();
@@ -430,7 +498,7 @@ HTML;
                             
                             //verifica se já possui responsável agregado
                             if($numero < 2){
-                                $atribuirTicket = '<i class="fas fa-receipt mr-1"></i><a href="#"> Atribuir</a><br />';
+                                $atribuirTicket = '<i class="fas fa-receipt mr-1"></i><a href="'.$sConfiguracao->getDiretorioVisualizacaoAcesso().'tPainel.php?menu=2_2_3&protocolo='.$idProtocoloCriptografado.'"> Atribuir</a><br />';
                             }else{
                                 $atribuirTicket = '<i class="fas fa-hands-helping mr-1"></i> Em Andamento<br />';
                             }
@@ -454,7 +522,7 @@ HTML;
                             <td>
                                 <i class="nav-icon fas fa-flag text-{$cor}"></i> {$posicao} - {$prioridade}
                             </td>
-                            <td>--</td>
+                            <td>{$responsavel}</td>
                             <td>
                                 <i class="fas fa-search mr-1"></i>
                                 <a href="{$diretorio}tPainel.php?menu=2_2_1&protocolo={$idProtocoloCriptografado}&seguranca={$seguranca}">
@@ -529,7 +597,8 @@ HTML;
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            "aaSorting": [10, "desc"]
         }).buttons().container().appendTo('#tabelaMenu2_2_wrapper .col-md-6:eq(0)');        
     });
 </script>

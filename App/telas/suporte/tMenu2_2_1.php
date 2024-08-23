@@ -228,36 +228,36 @@ echo <<<HTML
     <div class="row">
         <div class="col-md-4">
             <!-- Profile Image -->
-            <div class="card card-$cor card-outline">
+            <div class="card card-{$cor} card-outline">
                 <div class="card-body box-profile">
                     <!--
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src="{$sConfiguracao->getDiretorioPrincipal()}vendor/almasaeed2010/adminlte/dist/img/$imagem" alt="User profile picture">
+                        <img class="profile-user-img img-fluid img-circle" src="{$sConfiguracao->getDiretorioPrincipal()}vendor/almasaeed2010/adminlte/dist/img/{$imagem}" alt="User profile picture">
                     </div>
                     -->
-                    $nome
+                    {$nome}
                     <ul class="list-group list-group-unbordered mb-4">
                         <li class="list-group-item">
-                            <i class="fas fa-building mr-1"></i><b> Secretaria</b><a class="float-right">$secretaria</a>
+                            <i class="fas fa-building mr-1"></i><b> Secretaria</b><a class="float-right">{$secretaria}</a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-house-user mr-1"></i><b> Departamento/ Unidade</b><a class="float-right">$departamento</a>
+                            <i class="fas fa-house-user mr-1"></i><b> Departamento/ Unidade</b><a class="float-right">{$departamento}</a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-house-user mr-1"></i><b> Coordenação</b> <a class="float-right">$coordenacao</a>
+                            <i class="fas fa-house-user mr-1"></i><b> Coordenação</b> <a class="float-right">{$coordenacao}</a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-house-user mr-1"></i><b> Setor</b> <a class="float-right">$setor</a>
+                            <i class="fas fa-house-user mr-1"></i><b> Setor</b> <a class="float-right">{$setor}</a>
                         </li>
                         <li class="list-group-item">
                             <i class="fas fa-phone mr-1"></i><b> Telefone</b>
                             <a class="float-right">
-                            $whatsApp
-                            $telefoneTratado                              
+                            {$whatsApp}
+                            {$telefoneTratado}
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-envelope-open-text mr-1"></i><b> Email</b> <a class="float-right">$email</a>
+                            <i class="fas fa-envelope-open-text mr-1"></i><b> Email</b> <a class="float-right">{$email}</a>
                         </li>
                     </ul>
                 </div>
@@ -269,7 +269,7 @@ echo <<<HTML
         </div>
         <!-- /.col -->
         <div class="col-md-4">
-            <div class="card card-$cor card-outline">
+            <div class="card card-{$cor} card-outline">
                 <div class="card-header">
                     <h3 class="card-title">Equipamento</h3>
                     <!-- /.card-tools -->
@@ -309,11 +309,11 @@ echo <<<HTML
                     </ul>
                 </div>
                 <div class="card-footer"> 
-                    <!--
-                    <form action="../../sistema/suporte/sFinalizarSuporte.php" id="finalizarSuporte" method="post">
-                        <input type="hidden" name="pagina" value="2_2_1">
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_2_1" name="f2" id="f2" method="post">
+                        <input type="hidden" name="menu" value="3_2_1" form="f2">
+                        <input type="hidden" name="idEquipamento" value="{$idEquipamento}" form="f2">
+                        <button type="submit" class="btn btn-primary float-left" form="f2">Alterar</button>
                     </form>
-                    -->
                 </div>  
                 <!-- /.card-body -->
             </div>

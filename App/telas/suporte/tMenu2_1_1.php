@@ -130,9 +130,9 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Secretaria</label>
                                     <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" disabled="" form="f2">
-                                        <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                                            $_SESSION['credencial']['idSecretaria'] == $value['idsecretaria'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -142,10 +142,10 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="departamento">Departamento</label>
-                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">
-                                         <option value="0" selected="">--</option>
+                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">                                        
                                         <?php
-                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {    
+                                            $_SESSION['credencial']['idDepartamento'] == $value['iddepartamento'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -156,9 +156,9 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label>Coordenação</label>
                                     <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
-                                         <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+                                            $_SESSION['credencial']['idCoordenacao'] == $value['idcoordenacao'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -169,9 +169,9 @@ if (isset($_GET['campo'])) {
                                 <div class="form-group">
                                     <label for="setor">Setor</label>
                                     <select class="form-control" name="setor" id="setor" disabled="" form="f2">
-                                        <option value="0" selected="">--</option>
                                         <?php
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {
+                                            $_SESSION['credencial']['idSetor'] == $value['idsetor'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -190,8 +190,7 @@ if (isset($_GET['campo'])) {
                                                     echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                                 }else if($_SESSION['credencial']['nivelPermissao'] >= $value['idprioridade']){
                                                     echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }
-                                                
+                                                }                                                
                                             }
                                         }
                                         ?>
@@ -209,8 +208,7 @@ if (isset($_GET['campo'])) {
                                                 echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                             }else if($_SESSION['credencial']['nivelPermissao'] > 1){
                                                 echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                            
+                                            }                                            
                                         }
                                         ?>
                                     </select>
@@ -253,7 +251,8 @@ if (isset($_GET['campo'])) {
                                 <!-- textarea -->
                                 <div class="form-group">
                                     <label>Descrição</label>
-                                    <textarea class="form-control" rows="3" name="descricao" id="descricao" placeholder="Descrição..." required="" form="f2"></textarea>
+                                    <textarea class="form-control" rows="3" name="descricao" id="descricao" placeholder="Descrição..." required="" maxlength="254"  onkeyup="limite_textarea(this.value)" form="f2"></textarea>
+                                    <span id="cont">254</span> Caracteres restantes <br>
                                 </div>
                             </div>
                             <!-- próxima build
@@ -311,6 +310,7 @@ HTML;
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript">
+    //habilita/ desabilita campos ao ativar/ desativar checkbox
     function habilitar() {
         if (document.getElementById('meusDados').checked) {
             document.getElementById('secretaria').disabled = true;
@@ -335,6 +335,7 @@ HTML;
         }
     }
     
+    //preenche os campos do departamento, coordenação e setor de acordo com a secretaria selecionada
     $(document).ready(function () {
         //traz os departamentos de acordo com a secretaria selecionada   
         $('#secretaria').on('change', function () {
@@ -381,4 +382,16 @@ HTML;
             });
         });
     });
+    
+    //contador de caracteres para o campo descrição
+    function limite_textarea(valor) {
+        quant = 254;
+        total = valor.length;
+        if(total <= quant) {
+            resto = quant - total;
+            document.getElementById('cont').innerHTML = resto;
+        } else {
+            document.getElementById('descricao').value = valor.substr(0,quant);
+        }
+    }
 </script>

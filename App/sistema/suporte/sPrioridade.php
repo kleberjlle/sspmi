@@ -18,7 +18,8 @@ class sPrioridade {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         
-        if ($pagina == 'tMenu2_1.php-f1') {
+        if ($pagina == 'tMenu2_1.php-f1' ||
+            $pagina == 'tMenu2_2_3.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -26,7 +27,7 @@ class sPrioridade {
                 'tabelas' => 'prioridade',
                 'camposCondicionados' => '',
                 'valoresCondicionados' => '',
-                'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
+                'camposOrdenados' => 'idprioridade', //caso não tenha, colocar como null
                 'ordem' => 'ASC'//caso não tenha, colocar como null
             ];            
         }

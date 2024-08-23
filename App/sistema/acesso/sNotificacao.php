@@ -146,7 +146,7 @@ class sNotificacao{
         
         switch ($this->getNumero()) {
             case '1':
-                $this->setMensagem('As alterações realizadas foram registradas');
+                $this->setMensagem('Alterações realizadas.');
                 break;
             case '2':
                 $this->setMensagem('Verifique seu e-mail para finalizar a recuperação de acesso.');
@@ -159,6 +159,9 @@ class sNotificacao{
                 break;
             case '5':
                 $this->setMensagem('Suporte finalizado.');
+                break;
+            case '6':
+                $this->setMensagem('Ticket atribuído para '.$_SESSION['credencial']['nome'].' '.$_SESSION['credencial']['sobrenome']);
                 break;
             default:
                 $this->setTipo('danger');

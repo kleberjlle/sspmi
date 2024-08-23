@@ -35,11 +35,12 @@ class sHistorico {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu1_1_1.php' ||
-                $pagina == 'tSolicitarAcesso.php' ||
-                $pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu5_1.php' ||
-                $pagina == 'tMenu5_2_1.php' ||
-                $pagina == 'tMenu4_1.php') {
+            $pagina == 'tSolicitarAcesso.php' ||
+            $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu5_1.php' ||
+            $pagina == 'tMenu5_2_1.php' ||
+            $pagina == 'tMenu4_1.php' ||
+            $pagina == 'tMenu2_2_3.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

@@ -13,11 +13,11 @@ if(isset($_POST['idSecretaria'])){
     $sCoordenacao->consultar('ajaxCoordenacao.php');
 
     if($sCoordenacao->mConexao->getValidador()){
+        echo '<option value="0" selected="">--</option>';
         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
             $_SESSION['credencial']['idSecretaria'] == $value['departamento_secretaria_idsecretaria'] ? $atributo = ' selected' : $atributo = '';
             echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-        }
-        echo '<option value="0" selected="">--</option>';
+        }        
     }else{
         echo '<option value="0" selected="">--</option>';
     }

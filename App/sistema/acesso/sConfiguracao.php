@@ -41,7 +41,8 @@ class sConfiguracao{
     private $siteDaEmpresa;
     private bool $manutencao;
     private string $prazoManutencao;
-    
+    private string $timeZone;
+
     public function __construct() {
         //Diretórios
         $this->diretorioPrincipal = 'https://itapoa.app.br/';
@@ -78,6 +79,7 @@ class sConfiguracao{
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
         $this->manutencao = false;     
         $this->prazoManutencao = '11/08/2024 às 14:30';
+        $this->timeZone = date_default_timezone_set('America/Sao_Paulo');
     }
     public function getDiretorioPrincipal() {
         return $this->diretorioPrincipal;
@@ -189,6 +191,18 @@ class sConfiguracao{
 
     public function getSiteDaEmpresa() {
         return $this->siteDaEmpresa;
+    }
+
+    public function getManutencao(): bool {
+        return $this->manutencao;
+    }
+
+    public function getPrazoManutencao(): string {
+        return $this->prazoManutencao;
+    }
+
+    public function getTimeZone(): string {
+        return $this->timeZone;
     }
 
     public function setDiretorioPrincipal($diretorioPrincipal): void {
@@ -303,20 +317,18 @@ class sConfiguracao{
         $this->siteDaEmpresa = $siteDaEmpresa;
     }
 
-    public function getManutencao(): bool {
-        return $this->manutencao;
-    }
-
     public function setManutencao(bool $manutencao): void {
         $this->manutencao = $manutencao;
-    }
-
-    public function getPrazoManutencao(): string {
-        return $this->prazoManutencao;
     }
 
     public function setPrazoManutencao(string $prazoManutencao): void {
         $this->prazoManutencao = $prazoManutencao;
     }
+
+    public function setTimeZone(string $timeZone): void {
+        $this->timeZone = $timeZone;
+    }
+
+
 }
 ?>

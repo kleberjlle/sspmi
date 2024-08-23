@@ -10,9 +10,9 @@ use App\sistema\acesso\{
 };
 
 class sEtapa {
-
-    private string $nomeCampo;
-    private string $valorCampo;
+    private int $idEtapa;
+    private mixed $nomeCampo;
+    private mixed $valorCampo;
     private string $validador;
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
@@ -23,7 +23,8 @@ class sEtapa {
         
         if ($pagina == 'tMenu2_1.php' ||
             $pagina == 'tMenu2_2.php' ||
-            $pagina == 'tMenu2_2_1.php') {
+            $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu2_2_3.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -78,16 +79,77 @@ class sEtapa {
                 $this->setSNotificacao(new sNotificacao('S4'));
             }
         }
+        if ($pagina == 'tMenu2_2_3.php') {
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'etapa',
+                'camposInsercao' => [
+                    'numero',
+                    'acessoRemoto',
+                    'descricao',
+                    'equipamento_idequipamento',
+                    'protocolo_idprotocolo',
+                    'local_idlocal',
+                    'prioridade_idprioridade',
+                    'usuario_idusuario'
+                ],
+                'valoresInsercao' => [
+                    $dadosTratados['numero'],
+                    $dadosTratados['acessoRemoto'],
+                    $dadosTratados['descricao'],
+                    $dadosTratados['equipamento_idequipamento'],
+                    $dadosTratados['protocolo_idprotocolo'],
+                    $dadosTratados['local_idlocal'],
+                    $dadosTratados['prioridade_idprioridade'],
+                    $dadosTratados['usuario_idusuario']
+                ]
+            ]; 
+            
+            $this->mConexao->CRUD($dados);
+            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S4'));
+            }
+        }
     }
     
-    public function getNomeCampo(): string {
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu2_2_3.php') {
+            
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'etapa',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idetapa',
+                'valoresCondicionados' => $this->getIdEtapa()
+            ];
+            
+            $this->mConexao->CRUD($dados);
+            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S4'));
+            }
+        }
+    }
+    
+    public function getIdEtapa(): int {
+        return $this->idEtapa;
+    }
+
+    public function getNomeCampo(): mixed {
         return $this->nomeCampo;
     }
 
-    public function getValorCampo(): string {
+    public function getValorCampo(): mixed {
         return $this->valorCampo;
     }
-    
+
     public function getValidador(): string {
         return $this->validador;
     }
@@ -100,11 +162,15 @@ class sEtapa {
         return $this->sNotificacao;
     }
 
-    public function setNomeCampo(string $nomeCampo): void {
+    public function setIdEtapa(int $idEtapa): void {
+        $this->idEtapa = $idEtapa;
+    }
+
+    public function setNomeCampo(mixed $nomeCampo): void {
         $this->nomeCampo = $nomeCampo;
     }
 
-    public function setValorCampo(string $valorCampo): void {
+    public function setValorCampo(mixed $valorCampo): void {
         $this->valorCampo = $valorCampo;
     }
 
@@ -119,4 +185,7 @@ class sEtapa {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
+
 }

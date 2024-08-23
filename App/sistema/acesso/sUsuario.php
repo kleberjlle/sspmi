@@ -18,7 +18,6 @@ use App\sistema\acesso\{
 };
 
 class sUsuario {
-
     private int $idUsuario;
     private int $idEmail;
     private string $email;
@@ -460,7 +459,7 @@ class sUsuario {
                 'camposAtualizar' => $this->getNomeCampo(),
                 'valoresAtualizar' => $this->getValorCampo(),
                 'camposCondicionados' => 'idusuario',
-                'valoresCondicionados' => $this->getIdUsuario(),
+                'valoresCondicionados' => $this->getIdUsuario()
             ];
             $this->mConexao->CRUD($dados);
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 

@@ -25,7 +25,8 @@ class sEquipamento {
         //cria conexão com o bd
         $this->setMConexao(new mConexao());
         
-        if ($pagina == 'tMenu2_1.php') {
+        if ($pagina == 'tMenu2_1.php' ||
+            $pagina == 'tMenu3_2.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -40,7 +41,8 @@ class sEquipamento {
         
         if ($pagina == 'tMenu2_1_1.php' ||
             $pagina == 'tMenu2_2.php' ||
-            $pagina == 'tMenu2_2_1.php') {
+            $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu3_2_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -48,8 +50,8 @@ class sEquipamento {
                 'tabelas' => 'equipamento',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => 'patrimonio', //caso não tenha, colocar como null
-                'ordem' => 'ASC'//caso não tenha, colocar como null
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null//caso não tenha, colocar como null
             ];
         }
         

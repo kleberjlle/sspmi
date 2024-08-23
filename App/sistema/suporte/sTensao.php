@@ -19,7 +19,8 @@ class sTensao {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu3_1.php' ||
-            $pagina == 'tMenu2_2_1.php') {
+            $pagina == 'tMenu2_2_1.php'||
+            $pagina == 'tMenu3_2.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -32,7 +33,8 @@ class sTensao {
             ];            
         }
         
-        if ($pagina == 'tMenu3_1.php-f1') {
+        if ($pagina == 'tMenu3_1.php-f1' ||
+            $pagina == 'tMenu3_2_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

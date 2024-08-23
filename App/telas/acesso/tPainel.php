@@ -265,7 +265,8 @@ HTML;
                                 $menu == '2_1_2' ||
                                 $menu == '2_2' ||
                                 $menu == '2_2_1' ||
-                                $menu == '2_2_2' ?
+                                $menu == '2_2_2' ||
+                                $menu == '2_2_3' ?
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';           
                                 
@@ -306,7 +307,8 @@ HTML;
                                 //abre os menus da condição
                                 $menu == '2_2' ||
                                 $menu == '2_2_1' ||
-                                $menu == '2_2_2' ?
+                                $menu == '2_2_2' ||
+                                $menu == '2_2_3' ?
                                 $atributo = ' active' :
                                 $atributo = '';
                                 
@@ -628,6 +630,9 @@ HTML;
                             break;
                         case "2_2_2":
                             require_once '../suporte/tMenu2_2_2.php';
+                            break;
+                        case "2_2_3":
+                            require_once '../suporte/tMenu2_2_3.php';
                             break;
                         case "3_1":
                             require_once '../suporte/tMenu3_1.php';
