@@ -18,6 +18,7 @@ isset($_POST['patrimonio']) ? $patrimonio = true : $patrimonio = false;
 $categoria = $_POST['categoria'];
 isset($_POST['idEquipamento']) ? $idEquipamento = $_POST['idEquipamento'] : $idEquipamento = false;
 
+
 if($patrimonio == false){
     if($categoria == 0){
         $sConfiguracao = new sConfiguracao;
@@ -131,8 +132,8 @@ if (isset($_GET['campo'])) {
                                     <label>Secretaria</label>
                                     <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" disabled="" form="f2">
                                         <?php
-                                        foreach ($sSecretaria->mConexao->getRetorno() as $value) {
-                                            $_SESSION['credencial']['idSecretaria'] == $value['idsecretaria'] ? $atributo = 'selected=""' : $atributo = '';
+                                        echo '<option value="0" selected="">--</option>';
+                                        foreach ($sSecretaria->mConexao->getRetorno() as $value) {                                            
                                             echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -145,7 +146,6 @@ if (isset($_GET['campo'])) {
                                     <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">                                        
                                         <?php
                                         foreach ($sDepartamento->mConexao->getRetorno() as $value) {    
-                                            $_SESSION['credencial']['idDepartamento'] == $value['iddepartamento'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -158,7 +158,6 @@ if (isset($_GET['campo'])) {
                                     <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
                                         <?php
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
-                                            $_SESSION['credencial']['idCoordenacao'] == $value['idcoordenacao'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
@@ -171,7 +170,6 @@ if (isset($_GET['campo'])) {
                                     <select class="form-control" name="setor" id="setor" disabled="" form="f2">
                                         <?php
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {
-                                            $_SESSION['credencial']['idSetor'] == $value['idsetor'] ? $atributo = 'selected=""' : $atributo = '';
                                             echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>

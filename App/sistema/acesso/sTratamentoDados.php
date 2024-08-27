@@ -39,7 +39,7 @@ class sTratamentoDados {
         //converte todas para maiúsculas
         $maiuscula = mb_strtoupper($this->getDados());
         if (strlen($maiuscula) < 1) {
-            $patrimonioTratado = 'Indefinido';
+            $patrimonioTratado = '';
         } else {
             $patrimonioTratado = $maiuscula;
         }

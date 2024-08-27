@@ -42,6 +42,7 @@ if (isset($_POST['formulario'])) {
     $descricao = $_POST['descricao'];
     $categoria = $_POST['categoria'];
     $idEquipamento = $_POST['idEquipamento'];
+    exit();
     
     //verifica se serão passados os dados do solicitante ou do requerente
     if ($meusDados) {

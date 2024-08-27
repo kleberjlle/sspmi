@@ -106,6 +106,10 @@ class sNotificacao{
                 //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Essa solicitação já foi aprovada, caso esteja com problemas de acesso contate o administrador');
                 break;
+            case '21':
+                //falta um equipamento com patrimônio indefinido
+                $this->setMensagem('Esse equipamento já foi registrado.');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

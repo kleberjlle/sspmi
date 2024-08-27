@@ -17,24 +17,23 @@ use App\sistema\acesso\{
 
 //configurações do sistema
 $sConfiguracao = new sConfiguracao();
-//verifica se o sistema entrou em manutenção
-if($sConfiguracao->getManutencao()){
+//verifica se o sistema entrou em manutenção e se o usuário não tem permissão para acessar durante a manutenção
+if($sConfiguracao->getManutencao() && $_SESSION['credencial']['nivelPermissao'] < 5){
     header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tAcessar.php?seguranca={$sConfiguracao->getManutencao()}");
     exit();
-}
-
-
-//verifica se tem credencial para acessar o sistema
-if(!isset($_SESSION['credencial'])){
-    //solicitar saída com tentativa de violação
-    $sSair = new sSair();
-    $sSair->verificar('0');
 }
 
 //atualizar dados do usuário sem realizar logoff
 $sUsuario = new sUsuario();
 $sUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
 $sUsuario->consultar('tAcessar.php');
+
+//verifica se tem credencial para acessar o sistema
+if(!isset($_SESSION['credencial']) || !$sUsuario->getValidador()){
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
+}
 
 //define a foto com base no sexo
 if($_SESSION['credencial']['sexo'] == 'Masculino'){

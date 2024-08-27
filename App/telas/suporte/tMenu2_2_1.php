@@ -370,8 +370,12 @@ HTML;
         if (!is_null($dataEncerramentoEtapa)) {
             $sTratamentoDataEncerramentoEtapa = new sTratamentoDados($dataEncerramentoEtapa);
             $dataEncerramentoEtapaTratada = $sTratamentoDataEncerramentoEtapa->tratarData();
+            $icone = 'plus';
+            $expandirCartao = 'collapsed-card';
         } else {
-            $dataEncerramentoEtapaTratada = '--/--/---- --:--:--';
+            $dataEncerramentoEtapaTratada = '--/--/---- --:--:--';            
+            $icone = 'minus';
+            $expandirCartao = '';
         }
         
         //buscar dados da local
@@ -397,12 +401,12 @@ HTML;
         
         
         echo <<<HTML
-            <div class="card card-$cor card-outline collapsed-card">
+            <div class="card card-$cor card-outline $expandirCartao">
                 <div class="card-header">
                     <h3 class="card-title">Protocolo n.º: $protocolo - Etapa $numero $recente</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-$icone"></i>
                         </button>
                     </div>
                     <!-- /.card-tools -->
@@ -451,8 +455,20 @@ HTML;
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer"> 
-                <!--
-                    <button type="submit" class="btn btn-primary float-left" form="alterarSuporte">Alterar</button>                    
+HTML;
+            if($numero < 2){
+                echo <<<HTML
+                <button type="submit" class="btn btn-primary" form="f1">Alterar</button>
+                <button type="submit" class="btn btn-primary float-right" form="f1">Encerrar</button>
+HTML;
+                if($_SESSION['credencial']['nivelPermissao'] > 2){
+                    echo <<<HTML
+                    <button type="submit" class="btn btn-primary" form="f1">Reatribuir</button>
+HTML;
+                }
+            }
+        echo <<<HTML
+                    <!--                    
                     <button type="submit" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal2">Finalizar Suporte</button>
                     <form action="../../sistema/suporte/sAlterarSuporte.php" id="alterarSuporte" method="post">
                         <input type="hidden" name="pagina" value="2_2_1">
@@ -460,7 +476,7 @@ HTML;
                     <form action="../../sistema/suporte/sFinalizarSuporte.php" id="finalizarSuporte" method="post">
                         <input type="hidden" name="pagina" value="2_2_1">
                     </form>
-                -->
+                    -->
                 </div>
             </div>
 HTML;

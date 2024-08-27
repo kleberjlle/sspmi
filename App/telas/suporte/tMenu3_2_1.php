@@ -18,8 +18,6 @@ if(isset($_POST['idEquipamento'])){
     $idEquipamento = $_POST['idEquipamento'];
     
     $sEquipamento = new sEquipamento();
-    $sEquipamento->setNomeCampo('idequipamento');
-    $sEquipamento->setValorCampo($idEquipamento);
     $sEquipamento->consultar('tMenu3_2_1.php');
     
     foreach ($sEquipamento->mConexao->getRetorno() as $value) {
@@ -83,10 +81,19 @@ if(isset($_POST['idEquipamento'])){
                 
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-md-1">
-                            <label for="patrimonio">Patrimônio</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <input type="text" value="<?php echo $patrimonio; ?>" class="form-control" id="patrimonio" name="patrimonio" disabled="" form="f1">
-                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Patrimônio</label>
+                                <select class="form-control" name="equipamento" id="equipamento" form="f1">
+                                    <?php
+                                    foreach ($sEquipamento->mConexao->getRetorno() as $value) {
+                                        $idEquipamento == $value['idequipamento'] ? $atributo = 'selected=""' : $atributo = '';
+                                        echo '<option value="' . $value['idequipamento'] . '"' . $atributo . ' >' . $value['patrimonio'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>          
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Categoria</label>

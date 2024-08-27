@@ -103,7 +103,7 @@ class sUsuario {
             } else {
                 //tratamento dos dados buscados
                 $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
-                $situacao ? $situacao = 'Ativo' : $situacao = 'Inativo';
+                $situacao == true ? $situacao = 'Ativo' : $situacao = 'Inativo';
 
                 if (!is_null($idSetor)) {
                     $this->setSSetor(new sSetor($idSetor));
