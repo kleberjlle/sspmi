@@ -77,7 +77,7 @@ class sConfiguracao{
         $this->versao = '2.8.0-beta';//2 módulos(perfil, suporte) - 8.0 (versão do BD) - beta (ambiente de execução)
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
-        $this->manutencao = true;     
+        $this->manutencao = false;     
         $this->prazoManutencao = '28/08/2024 às 08:00';
         $this->timeZone = date_default_timezone_set('America/Sao_Paulo');
     }

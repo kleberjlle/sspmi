@@ -39,7 +39,7 @@ class sTratamentoDados {
         //converte todas para maiúsculas
         $maiuscula = mb_strtoupper($this->getDados());
         if (strlen($maiuscula) < 1) {
-            $patrimonioTratado = '';
+            $patrimonioTratado = 'Não Consta';
         } else {
             $patrimonioTratado = $maiuscula;
         }
@@ -73,11 +73,21 @@ class sTratamentoDados {
     }
 
     public function tratarEtiquetaDeServico() {
-        return $this->tratarPatrimonio();
+        if(empty($this->getDados())){
+            $etiquetaDeServico = 'Indefinida';
+        }else{
+            $etiquetaDeServico = $this->getDados();
+        }
+        return $etiquetaDeServico;
     }
 
     public function tratarNumeroDeSerie() {
-        return $this->tratarPatrimonio();
+        if(empty($this->getDados())){
+            $numeroDeSerie = 'Indefinida';
+        }else{
+            $numeroDeSerie = $this->getDados();
+        }
+        return $numeroDeSerie;
     }
 
     public function tratarEmail() {

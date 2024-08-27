@@ -18,6 +18,8 @@ if(isset($_POST['idEquipamento'])){
     $idEquipamento = $_POST['idEquipamento'];
     
     $sEquipamento = new sEquipamento();
+    $sEquipamento->setNomeCampo('idequipamento');
+    $sEquipamento->setValorCampo($idEquipamento);
     $sEquipamento->consultar('tMenu3_2_1.php');
     
     foreach ($sEquipamento->mConexao->getRetorno() as $value) {

@@ -374,8 +374,16 @@ HTML;
                             $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
 
                             //campos da tabela etapa
-                            //se não estiver etapa para um protocolo não será impressa gerará um erro
-                            //verifique se há algum protocolo sem etapa vinculada
+                            /*ATENÇÃO-------------------------------------//
+                            * se não tiver etapa para um protocolo, não será impressa gerará o seguinte erro:
+                            * Fatal error: Uncaught Error: Typed property App\modelo\mConexao::$retorno must 
+                            * not be accessed before initialization in /home/itapoaap/public_html/App/modelo/mConexao.php:476
+                            * Stack trace: #0 /home/itapoaap/public_html/App/telas/suporte/tMenu2_2.php(385):
+                            * App\modelo\mConexao->getRetorno() #1 /home/itapoaap/public_html/App/telas/acesso/tPainel.php(625):
+                            * require_once('/home/itapoaap/...') #2 {main} thrown in /home/itapoaap/public_html/App/modelo/mConexao.php on line 476
+                            * verifique se há algum protocolo sem etapa vinculada
+                            * 
+                            */
                             $idProtocolo = $value['idprotocolo'];
                             $sEtapa = new sEtapa();
                             $sEtapa->setNomeCampo('protocolo_idprotocolo');

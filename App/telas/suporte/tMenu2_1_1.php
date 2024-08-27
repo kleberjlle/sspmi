@@ -66,7 +66,7 @@ if(!$idEquipamento){
     
     if(!$sEquipamento->getValidador()){
         $sConfiguracao = new sConfiguracao;
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=sistema&codigo=E12");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=sistema&codigo=E4");
         exit();
         //finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
         ob_clean();
