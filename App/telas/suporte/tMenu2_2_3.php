@@ -35,6 +35,14 @@ $sEtapa->consultar('tMenu2_2_3.php');
 foreach ($sEtapa->mConexao->getRetorno() as $value) {
     $idPrioridade = $value['prioridade_idprioridade'];
     $idLocal = $value['local_idlocal'];
+    $numero = $value['numero'];
+}
+
+//caso alguém já tenha atribuído o ticket, retornar mensagem informando
+if($numero > 1){
+    $sConfiguracao = new sConfiguracao();
+    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2&campo=atribuir&codigo=A22");
+    exit();
 }
 
 //consulta todas as prioridades

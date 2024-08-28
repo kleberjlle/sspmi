@@ -110,6 +110,10 @@ class sNotificacao{
                 //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Esse equipamento já foi registrado.');
                 break;
+            case '22':
+                //falta um equipamento com patrimônio indefinido
+                $this->setMensagem('Esse suporte está atribuído a outro responsável.');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

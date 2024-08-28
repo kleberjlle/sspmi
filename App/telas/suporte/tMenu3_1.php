@@ -204,7 +204,8 @@ if (isset($_GET['campo'])) {
                                             isset($alertaCorrenteF1) ||
                                             isset($alertaSistemaOperacionalF1) ||
                                             isset($alertaAmbienteF1) ||
-                                            isset($alertaLocalF1) ? 'fa-minus' : 'fa-plus' ?>"></i>
+                                            isset($alertaLocalF1) ? 'fa-minus' : 'fa-plus' ?>">
+                            </i>
                         </button>
                     </div>
                     <!-- /.card-tools -->

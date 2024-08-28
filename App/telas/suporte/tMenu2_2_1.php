@@ -312,7 +312,14 @@ echo <<<HTML
                     <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_2_1" name="f2" id="f2" method="post">
                         <input type="hidden" name="menu" value="3_2_1" form="f2">
                         <input type="hidden" name="idEquipamento" value="{$idEquipamento}" form="f2">
-                        <button type="submit" class="btn btn-primary float-left" form="f2">Alterar</button>
+HTML;
+                        if($_SESSION['credencial']['nivelPermissao'] > 1){
+                            echo <<<HTML
+                            <button type="submit" class="btn btn-primary float-left" form="f2">Alterar</button>
+HTML;
+                        }
+                        echo <<<HTML
+                        
                     </form>
                 </div>  
                 <!-- /.card-body -->
@@ -456,7 +463,7 @@ HTML;
                 <!-- /.card-body -->
                 <div class="card-footer"> 
 HTML;
-            if($numero < 2){
+            if($dataEncerramentoEtapaTratada == '--/--/---- --:--:--'){
                 echo <<<HTML
                 <button type="submit" class="btn btn-primary" form="f1">Alterar</button>
                 <button type="submit" class="btn btn-primary float-right" form="f1">Encerrar</button>

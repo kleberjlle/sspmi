@@ -4,12 +4,13 @@ Pendências para serem verificadas
 ok - 2 - Criar nova versão do BD que altere usuario.situacao de char para bool;
 3 - Fechar conexão do BD mysqli_close(mConexao);
 4 - Implementar tratamento de gênero para os cargos;
-ok - 5 - Implementar tratamento de máscara para números de telefones;
+OK - 5 - Implementar tratamento de máscara para números de telefones;
 6 - Verificar mecanismo de captura do navegador, IP e Host do dispositivo;
-ok - 7 - Alterar instância do sHistorico no arquivo tAcessar.php
+OK - 7 - Alterar instância do sHistorico no arquivo tAcessar.php
 8 - Campos telefone e email do menu outros usuários não atualizam após alteração dos dados do usuário;
-9 - Atualizar os dados da sessão sempre que o tPainel.php for carregado;
-10 - Remover número de série e service tag da tabela modelo e inserir na tabela equipamento;
+OK 9 - Atualizar os dados da sessão sempre que o tPainel.php for carregado;
+OK 10 - Remover número de série e service tag da tabela modelo e inserir na tabela equipamento;
 11 - Alterar ordem das Solicitação de Acesso para data DESC;
-12 - Limitar caracteres no campo descrição ddo menu2_1_1.php;
-13 - Criar botão para mostrar/ ocultar tickets encerrados na página menu2_2
+OK 12 - Limitar caracteres no campo descrição ddo menu2_1_1.php;
+13 - Criar botão para mostrar/ ocultar tickets encerrados na página menu2_2;
+14 - Mudar a cor da borda da etapa de acordo com sua prioridade tMenu2_2_1.php;

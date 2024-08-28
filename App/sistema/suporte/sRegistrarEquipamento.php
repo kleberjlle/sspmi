@@ -65,13 +65,6 @@ if (isset($_POST['formulario'])) {
         $sTratamentoDeNumeroDeSerie = new sTratamentoDados($serie);
         $serieTratada = $sTratamentoDeNumeroDeSerie->tratarNumeroDeSerie();
         
-        //verifica se possui mais que 2 caracteres
-        if($patrimonioTratado == ''){            
-            $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=patrimonioF1&codigo=A8");
-            exit();
-        }
-        
         //verifica se já possui registro no bd
         $sEquipamento = new sEquipamento();
         $sEquipamento->setNomeCampo('patrimonio');
@@ -79,10 +72,12 @@ if (isset($_POST['formulario'])) {
         $sEquipamento->consultar('tMenu3_1.php');
 
         //caso já exista, notificar
-        if($sEquipamento->mConexao->getValidador()){
-            $sConfiguracao = new sConfiguracao();
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=patrimonioF1&codigo=A21");
-            exit();
+        if($patrimonioTratado != 'Não Consta'){
+            if($sEquipamento->mConexao->getValidador()){
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_1&campo=patrimonioF1&codigo=A21");
+                exit();
+            }
         }
         
         //se não escolheu uma opção retorne erro

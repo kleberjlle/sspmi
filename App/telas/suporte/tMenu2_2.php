@@ -31,6 +31,8 @@ if(isset($_GET['campo'])){
         case 'atribuir':
             if($_GET['codigo'] == 'S6'){
                 $alertaAtribuir = ' is-valid';
+            }else{
+                $alertaAtribuir = ' is-warning';
             }
     }
     
@@ -161,7 +163,7 @@ HTML;
                             $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
 
                             //campos da tabela etapa
-                            //se não estiver etapa para um protocolo não será impressa gerará um erro
+                            //se não tiver etapa para um protocolo não será impressa gerará um erro
                             //verifique se há algum protocolo sem etapa vinculada
                             $idProtocolo = $value['idprotocolo'];
                             $sEtapa = new sEtapa();

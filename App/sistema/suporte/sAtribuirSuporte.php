@@ -110,7 +110,7 @@ if (isset($_POST['pagina'])) {
     $sEtapa->inserir('tMenu2_2_3.php', $dadosTratados);
     
     //gera notificação e redireciona para a página
-    $sNotificacao = new sNotificacao('S1');    
+    $sNotificacao = new sNotificacao('S6');    
     header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2&campo=atribuir&codigo={$sNotificacao->getCodigo()}");
     exit();
 }
