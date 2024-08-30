@@ -15,6 +15,13 @@ use App\sistema\acesso\{
     sSair    
 };
 
+//verifica se tem credencial para acessar o sistema
+if(!isset($_SESSION['credencial'])){
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
+}
+
 //configurações do sistema
 $sConfiguracao = new sConfiguracao();
 //verifica se o sistema entrou em manutenção e se o usuário não tem permissão para acessar durante a manutenção
@@ -28,8 +35,8 @@ $sUsuario = new sUsuario();
 $sUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
 $sUsuario->consultar('tAcessar.php');
 
-//verifica se tem credencial para acessar o sistema
-if(!isset($_SESSION['credencial']) || !$sUsuario->getValidador()){
+//caso o usuário esteja inativo faça logoff
+if(!$sUsuario->getValidador()){
     //solicitar saída com tentativa de violação
     $sSair = new sSair();
     $sSair->verificar('0');
@@ -264,6 +271,7 @@ HTML;
                                 $menu == '2_1_2' ||
                                 $menu == '2_2' ||
                                 $menu == '2_2_1' ||
+                                $menu == '2_2_1_3' ||
                                 $menu == '2_2_2' ||
                                 $menu == '2_2_3' ?
                                 $atributo = ' menu-is-opening menu-open' :
@@ -306,6 +314,7 @@ HTML;
                                 //abre os menus da condição
                                 $menu == '2_2' ||
                                 $menu == '2_2_1' ||
+                                $menu == '2_2_1_3' ||
                                 $menu == '2_2_2' ||
                                 $menu == '2_2_3' ?
                                 $atributo = ' active' :
@@ -626,6 +635,9 @@ HTML;
                             break;
                         case "2_2_1":
                             require_once '../suporte/tMenu2_2_1.php';
+                            break;
+                        case "2_2_1_3":
+                            require_once '../suporte/tMenu2_2_1_3.php';
                             break;
                         case "2_2_2":
                             require_once '../suporte/tMenu2_2_2.php';

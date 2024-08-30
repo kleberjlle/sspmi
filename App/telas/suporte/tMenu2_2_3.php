@@ -74,36 +74,21 @@ $sLocal->consultar('tMenu2_2_3.php');
                                     <label>Prioridade</label>
                                     <select class="form-control" name="prioridade" id="prioridade" form="f1">
                                         <?php
+                                         //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
                                         foreach ($sPrioridade->mConexao->getRetorno() as $value) {
                                             $idPrioridade == $value['idprioridade'] ? $atributo = 'selected=""' : $atributo = '';
-                                            
-                                            if( $_SESSION['credencial']['nivelPermissao'] == 1){
-                                                if($value['nomenclatura'] == 'Normal' || 
-                                                    $value['nomenclatura'] == 'Alta'){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }                                                
-                                            }else if($_SESSION['credencial']['nivelPermissao'] == 2){
-                                                if($value['nomenclatura'] == 'Normal' || 
-                                                    $value['nomenclatura'] == 'Alta' ||
-                                                    $value['nomenclatura'] == 'Urgente'){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }                                                
-                                            }else if($_SESSION['credencial']['nivelPermissao'] == 3){
-                                                if( $value['nomenclatura'] == 'Normal' || 
-                                                    $value['nomenclatura'] == 'Alta' ||
-                                                    $value['nomenclatura'] == 'Urgente' ||
-                                                    $value['nomenclatura'] == 'Muito Urgente'){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';                                                    
-                                                }                                                
+
+                                            if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['idprioridade'] < 3){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else if($_SESSION['credencial']['nivelPermissao'] == 2 && $value['idprioridade'] < 4){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else if($_SESSION['credencial']['nivelPermissao'] == 3 && $value['idprioridade'] < 5){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                             }else if($_SESSION['credencial']['nivelPermissao'] >= 4){
-                                                if( $value['nomenclatura'] == 'Normal' || 
-                                                    $value['nomenclatura'] == 'Alta' ||
-                                                    $value['nomenclatura'] == 'Urgente' ||
-                                                    $value['nomenclatura'] == 'Muito Urgente' ||
-                                                    $value['nomenclatura'] == 'Emergente'){
-                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }                                                
-                                            }                                            
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else{
+                                                echo '<option disabled="" value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>

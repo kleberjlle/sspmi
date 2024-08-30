@@ -24,6 +24,7 @@ class sEtapa {
         if ($pagina == 'tMenu2_1.php' ||
             $pagina == 'tMenu2_2.php' ||
             $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu2_2_1_3.php' ||
             $pagina == 'tMenu2_2_3.php') {
             //monta os dados há serem passados na query               
             $dados = [
@@ -118,7 +119,8 @@ class sEtapa {
         //cria conexão para inserir os dados no BD
         $this->setMConexao(new mConexao());
 
-        if ($pagina == 'tMenu2_2_3.php') {
+        if ($pagina == 'tMenu2_2_3.php' ||
+            $pagina == 'tMenu2_2_1_3.php') {
             
             $dados = [
                 'comando' => 'UPDATE',

@@ -330,9 +330,8 @@ HTML;
        
     //inverte a ordem de ASC para DESC
     $etapaReversa = array_reverse($etapaReversa, true);
-            
+     
     $i = 0;
-    $quantidadeEtapas = count($etapaReversa)-1;
     foreach ($etapaReversa as $value) {
         $numero = $value['numero'];
         $idPrioridadeEtapa = $value['prioridade_idprioridade'];
@@ -349,9 +348,13 @@ HTML;
         
         $solucaoEtapa = $value['solucao'];
         
-        //tratamento do numero da etapa
-        $quantidadeEtapas == $i ? $recente = '' : $recente = '(atual)';
-        $i++;
+        //tratamento do para aparecer o status "atual" na etapa corrente
+        if($i < $numero){
+            $i = $numero;
+            $recente = '(atual)';
+        }else{
+            $recente = '';
+        }
         
         //buscar dados da prioridade
         $sPrioridadeEtapa = new sPrioridade();
@@ -463,14 +466,42 @@ HTML;
                 <!-- /.card-body -->
                 <div class="card-footer"> 
 HTML;
+            //se a etapa não foi encerrada mostre os botões
             if($dataEncerramentoEtapaTratada == '--/--/---- --:--:--'){
-                echo <<<HTML
-                <button type="submit" class="btn btn-primary" form="f1">Alterar</button>
-                <button type="submit" class="btn btn-primary float-right" form="f1">Encerrar</button>
+                //se não for a primeira etapa somente os usuários com permissão maior que 1 poderão acessar os botões
+                if($numero > 1){
+                    if($_SESSION['credencial']['nivelPermissao'] == 2){
+                        echo <<<HTML
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
+                            <input type="hidden" name="etapa" value="$numero" form="f3">
+                            <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
+                            <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button>
+                        </form>
 HTML;
-                if($_SESSION['credencial']['nivelPermissao'] > 2){
+                    }
+                    if($_SESSION['credencial']['nivelPermissao'] > 2){
+                        echo <<<HTML
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
+                            <input type="hidden" name="etapa" value="$numero" form="f3">
+                            <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
+                            <button type="submit" class="btn btn-primary" form="f3">Reatribuir</button>
+                            <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button> 
+                        </form>
+HTML;
+                    }                    
+                }else{
                     echo <<<HTML
-                    <button type="submit" class="btn btn-primary" form="f1">Reatribuir</button>
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
+                        <input type="hidden" name="etapa" value="$numero" form="f3">
+                        <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
+                        <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button>
+                    </form>
 HTML;
                 }
             }
