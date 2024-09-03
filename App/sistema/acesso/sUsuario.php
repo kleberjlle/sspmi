@@ -295,16 +295,9 @@ class sUsuario {
 
                 //aprovado em todas as validações
                 $this->setValidador(true);
-
-                //QA - início da área de testes
-                /* verificar o que tem no objeto
-
-                  echo "<pre>";
-                  var_dump($_SESSION['credencial']);
-                  echo "</pre>";
-
-                  // */
-                //QA - fim da área de testes
+                
+                //encerra a conexão com o bd
+                //$this->conexao->close();
             }
         }
 
@@ -409,6 +402,22 @@ class sUsuario {
 
             $this->setValidador($this->mConexao->getValidador());
         }
+        
+        if ($pagina == 'tMenu2_2_1_3_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'usuario',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
+                'camposOrdenados' => 'nome', //caso não tenha, colocar como null
+                'ordem' => 'ASC' //caso não tenha, colocar como null
+            ];
+            $this->mConexao->CRUD($dados);
+
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
     }
 
     public function acessar($pagina) {

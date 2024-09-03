@@ -95,24 +95,22 @@ class sNotificacao{
                 $this->setMensagem('Você deve escolher uma das opções do campo');
                 break;
             case '18':
-                //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Se você não localizou o "Patrimônio" na lista abaixo, então você deve escolher uma das opções do campo "Categoria"');
                 break;
             case '19':
-                //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Se você localizou o Patrimônio na lista abaixo, então deve "Escolher" e clicar em "Próximo".');
                 break;
             case '20':
-                //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Essa solicitação já foi aprovada, caso esteja com problemas de acesso contate o administrador');
                 break;
             case '21':
-                //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Esse equipamento já foi registrado.');
                 break;
             case '22':
-                //falta um equipamento com patrimônio indefinido
                 $this->setMensagem('Esse suporte está atribuído a outro responsável.');
+                break;
+            case '23':
+                $this->setMensagem('Para reatribuir o chamado você deve escolher um responsável diferente do atual.');
                 break;
             default:
                 $this->setTipo('danger');

@@ -54,12 +54,21 @@ if ($pagina == 'tMenu2_2_1_3.php') {
     }    
     if($idPrioridade){
         alimentaHistorico($pagina, $acao, 'prioridade_idprioridade', $prioridadeAnterior, $idPrioridade, $idUsuario);
+        $sEtapa->setNomeCampo('prioridade_idprioridade');
+        $sEtapa->setValorCampo($idPrioridade);
+        $sEtapa->alterar('tMenu2_2_1_3.php');
     }
-    if($acessoRemoto){
+    if($acessoRemoto || $acessoRemoto == ''){
         alimentaHistorico($pagina, $acao, 'acessoRemoto', $acessoRemotoAnterior, $acessoRemoto, $idUsuario);
+        $sEtapa->setNomeCampo('acessoRemoto');
+        $sEtapa->setValorCampo($acessoRemoto);
+        $sEtapa->alterar('tMenu2_2_1_3.php');
     }
     if($descricao){
         alimentaHistorico($pagina, $acao, 'descricao', $descricaoAnterior, $descricao, $idUsuario);
+        $sEtapa->setNomeCampo('descricao');
+        $sEtapa->setValorCampo($descricao);
+        $sEtapa->alterar('tMenu2_2_1_3.php');
     }
     
     //instancia configurações do sistema
@@ -67,7 +76,7 @@ if ($pagina == 'tMenu2_2_1_3.php') {
     
     //gera notificação e redireciona para a página
     $sNotificacao = new sNotificacao('S1');    
-    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3&campo=alterar&codigo={$sNotificacao->getCodigo()}");
+    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2&&campo=alterar&codigo={$sNotificacao->getCodigo()}");
     exit();
     
 }else{

@@ -34,6 +34,12 @@ if(isset($_GET['campo'])){
             }else{
                 $alertaAtribuir = ' is-warning';
             }
+        case 'alterar':
+            if($_GET['codigo'] == 'S1'){
+                $alertaAlterar = ' is-valid';
+            }else{
+                $alertaAlterar = ' is-warning';
+            }
     }
     
     //cria as variáveis da notificação
@@ -377,7 +383,7 @@ HTML;
 
                             //campos da tabela etapa
                             /*ATENÇÃO-------------------------------------//
-                            * se não tiver etapa para um protocolo, não será impressa gerará o seguinte erro:
+                            * se não tiver etapa para um protocolo, não será impressa e gerará o seguinte erro:
                             * Fatal error: Uncaught Error: Typed property App\modelo\mConexao::$retorno must 
                             * not be accessed before initialization in /home/itapoaap/public_html/App/modelo/mConexao.php:476
                             * Stack trace: #0 /home/itapoaap/public_html/App/telas/suporte/tMenu2_2.php(385):

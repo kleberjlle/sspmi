@@ -3,12 +3,14 @@
 use App\sistema\acesso\{
     sConfiguracao,
     sTratamentoDados,
-    sNotificacao
+    sNotificacao,
+    sUsuario,
+    sPermissao
 };
 use App\sistema\suporte\{
     sPrioridade,
     sEtapa,
-    sLocal
+    sLocal,
     
 };
 
@@ -16,11 +18,11 @@ use App\sistema\suporte\{
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
-        case 'alterar':
+        case 'responsavel':
             if ($_GET['codigo'] == 'S1') {
-                $alertaSecretaria = ' is-valid';
+                $alertaResponsavel = ' is-valid';
             } else {
-                $alertaSecretaria = ' is-warning';
+                $alertaResponsavel = ' is-warning';
             }
             break;
     }
@@ -31,16 +33,16 @@ if (isset($_GET['campo'])) {
     $mensagem = $sNotificacao->getMensagem();
 }
 
-$pagina = $_POST['pagina'];
+isset($_POST['pagina']) ? $pagina = $_POST['pagina'] : $acesso = false;
+isset($_GET['pagina']) ? $pagina = $_GET['pagina'] : $acesso = false;
 
-
-if ($pagina == 'tMenu2_2_1.php') {
-    $idProtocolo = $_POST['idProtocolo'];
-    $numero = $_POST['etapa'];    
+if ($pagina == 'tMenu2_2_1.php' || $pagina == 'tMenu2_2_1_3_1.php') {
+    isset($_POST['idProtocolo']) ? $idProtocolo = $_POST['idProtocolo'] : $idProtocolo = $_GET['idProtocolo'];    
+    isset($_POST['etapa']) ? $numero = $_POST['etapa'] : $numero = $_GET['etapa'];
     $sEtapa = new sEtapa();
     $sEtapa->setNomeCampo('protocolo_idprotocolo');
     $sEtapa->setValorCampo($idProtocolo);
-    $sEtapa->consultar('tMenu2_2_1_3.php');
+    $sEtapa->consultar('tMenu2_2_1_3_1.php');
 
     foreach ($sEtapa->mConexao->getRetorno() as $value) {
         if ($value['numero'] == $numero) {
@@ -75,13 +77,19 @@ if ($pagina == 'tMenu2_2_1.php') {
     $protocolo = str_pad($idProtocolo, 5, 0, STR_PAD_LEFT);
     $protocolo = $ano . $protocolo;
     
-    //busca todas as prioridades para o campo
-    $sPrioridade->consultar('tMenu2_2_1_3.php-f1');
-    
+    //busca os locais no bd
     $sLocal = new sLocal();
-    $sLocal->consultar('tMenu2_2_1_3.php');
+    $sLocal->consultar('tMenu2_2_1_3_1.php');
     
+    //busca os usuários responsáveis
+    $sResponsavel = new sUsuario();
+    $sResponsavel->consultar('tMenu2_2_1_3_1.php');
+    
+    //instancia classe com as configurações do sistema
     $sConfiguracao = new sConfiguracao();
+    
+}else{
+    echo 'expulsar do sistema';
 }
 ?>
 
@@ -112,54 +120,29 @@ if ($pagina == 'tMenu2_2_1.php') {
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Prioridade</label>
-                                <select class="form-control" name="prioridade" id="prioridade" form="f1">
+                                <label for="responsavel">Responsável</label>
+                                <select class="form-control<?php echo isset($alertaResponsavel) ? $alertaResponsavel : ''; ?>" name="responsavel" id="responsavel" form="f1">                                        
                                     <?php
-                                    //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
-                                    foreach ($sPrioridade->mConexao->getRetorno() as $value) {
-                                        $idPrioridade == $value['idprioridade'] ? $atributo = 'selected=""' : $atributo = '';
-                                            
-                                        if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['idprioridade'] < 3){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] == 2 && $value['idprioridade'] < 4){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] == 3 && $value['idprioridade'] < 5){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] >= 4){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else{
-                                            echo '<option disabled="" value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
+                                    foreach ($sResponsavel->mConexao->getRetorno() as $value) {
+                                        $idUsuario == $value['idusuario'] ? $atributo = 'selected=""' : $atributo = '';
+                                        //instancia classe com as permissões para tratamento do campo responsável                                         
+                                        $sPermissao = new sPermissao($value['permissao_idpermissao']);
+                                        $sPermissao->consultar('tMenu2_2_1_3_1.php');
+                                        if($sPermissao->getNivel() > 1){                                            
+                                            echo '<option value="' . $value['idusuario'] . '"' . $atributo . ' >' . $value['nome'].' '.$value['sobrenome'] . '</option>';
+                                        }                                        
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="local">Acesso Remoto</label>
-                                <input class="form-control" name="acessoRemoto" id="acessoRemoto" value="<?php echo $acessoRemoto; ?>" form="f1">                                        
-                            </div>
-                        </div>
-                    </div>
-                        
-                    <div class="row">                     
-                        <div class="col-sm-6">
-                            <!-- textarea -->
-                            <div class="form-group">
-                                <label>Descrição</label>
-                                <textarea class="form-control" rows="3" name="descricao" id="descricao" required="" maxlength="254" onkeyup="limite_textarea(this.value)" form="f1"><?php echo $descricao; ?></textarea>
-                                <span id="cont">254</span> Caracteres restantes <br>
-                            </div>
-                        </div>                        
                     </div>
                 </div>
                 <?php
                 if (isset($tipo) &&
-                        isset($titulo) &&
-                        isset($mensagem)) {
-                    if (isset($alertaSecretaria) ||
-                            isset($alertaEmail)) {
+                    isset($titulo) &&
+                    isset($mensagem)) {
+                    if (isset($alertaResponsavel)) {
                         echo <<<HTML
                             <div class="col-mb-3">
                                 <div class="card card-outline card-{$tipo}">
@@ -175,15 +158,15 @@ HTML;
                     }
                 }
                 ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sAlterarSuporte.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte()."sReatribuir.php"; ?>" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="f1" name="formulario" form="f1">
                         <input type="hidden" value="alterar" name="acao" form="f1">
-                        <input type="hidden" value="tMenu2_2_1_3.php" name="pagina" form="f1">
+                        <input type="hidden" value="tMenu2_2_1_3_1.php" name="pagina" form="f1">
                         <input type="hidden" value="<?php echo $idProtocolo ?>" name="idProtocolo" form="f1">
                         <input type="hidden" value="<?php echo $numero ?>" name="etapa" form="f1">
-                        <button type="submit" class="btn btn-primary">Alterar</button>
+                        <button type="submit" class="btn btn-primary">Reatribuir</button>
                     </div>
                 </form>
             </div>

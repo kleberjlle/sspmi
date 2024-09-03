@@ -330,8 +330,6 @@ class mConexao {
             default:
                 break;
         }
-
-        //mysqli_close($this->conexao);
     }
 
     public function consultarBasico($dados) {
@@ -345,11 +343,11 @@ class mConexao {
             if ($key == 'busca' && $value) {
                 $query .= $value . ' FROM ';
             } else if ($key == 'camposCondicionados' && $value) {
-                if($dados['valoresCondicionados'] =="IS NULL"){
+                if($dados['valoresCondicionados'] == "IS NULL"){
                     $query .= 'WHERE ' . $value . ' ';
                 }else{
                     $query .= 'WHERE ' . $value . '=';
-                }                
+                }               
             } else if ($key == 'valoresCondicionados' && $value) {
                 $valoresCondicionados = true;
                 if($value == "IS NULL"){
@@ -427,16 +425,6 @@ class mConexao {
             $this->setValidador(false);
         }
 
-
-        /* QA - início da área de testes
-
-          echo '<pre>';
-          echo $query;
-          echo '</pre>';
-          exit();
-          
-          // */
-        //QA - fim da área de testes
     }
 
     public function atualizar($dados) {

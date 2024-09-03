@@ -472,35 +472,51 @@ HTML;
                 if($numero > 1){
                     if($_SESSION['credencial']['nivelPermissao'] == 2){
                         echo <<<HTML
-                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
-                            <input type="hidden" name="etapa" value="$numero" form="f3">
-                            <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
-                            <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button>
-                        </form>
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3_1" id="f3_1" method="post" enctype="multipart/form-data"></form>
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_1" name="f3_2" id="f3_2" method="post" enctype="multipart/form-data"></form>
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
+                            <input type="hidden" name="etapa" value="$numero" form="f3_1">
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_2">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_2">
+                            <input type="hidden" name="etapa" value="$numero" form="f3_2">
+HTML;
+                            //caso o protocolo pertença ao responsável
+                            if($idUsuarioEtapa == $_SESSION['credencial']['idUsuario']){
+                            echo <<<HTML
+                            <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>
+HTML;
+                            }                            
+                            echo <<<HTML
+                            <button type="submit" class="btn btn-primary float-right" form="f3_2">Encerrar</button>
+                        
 HTML;
                     }
                     if($_SESSION['credencial']['nivelPermissao'] > 2){
                         echo <<<HTML
-                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
-                            <input type="hidden" name="etapa" value="$numero" form="f3">
-                            <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
-                            <button type="submit" class="btn btn-primary" form="f3">Reatribuir</button>
-                            <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button> 
-                        </form>
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3_1" id="f3_1" method="post" enctype="multipart/form-data"></form>
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_1" name="f3_2" id="f3_2" method="post" enctype="multipart/form-data"></form>
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
+                            <input type="hidden" name="etapa" value="$numero" form="f3_1">
+                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_2">
+                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_2">
+                            <input type="hidden" name="etapa" value="$numero" form="f3_2">
+                            <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>  
+                            <button type="submit" class="btn btn-primary" form="f3_2">Reatribuir</button>    
+                            <button type="submit" class="btn btn-primary float-right" form="f3_1">Encerrar</button> 
+                        
+                            
 HTML;
                     }                    
                 }else{
                     echo <<<HTML
-                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3" id="f3" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3">
-                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3">
-                        <input type="hidden" name="etapa" value="$numero" form="f3">
-                        <button type="submit" class="btn btn-primary" form="f3">Alterar</button>
-                        <button type="submit" class="btn btn-primary float-right" form="f3">Encerrar</button>
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo">
+                        <input type="hidden" name="etapa" value="$numero">
+                        <button type="submit" class="btn btn-primary">Alterar</button>
+                        <button type="submit" class="btn btn-primary float-right">Encerrar</button>
                     </form>
 HTML;
                 }

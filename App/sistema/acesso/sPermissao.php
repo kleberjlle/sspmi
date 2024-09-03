@@ -16,7 +16,8 @@ class sPermissao {
     public function consultar($pagina) {
         //cria conexão para realizar a consulta de acordo com a página requerente
         $this->setMConexao(new mConexao());  
-        if( $pagina == 'tAcessar.php'){                           
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu2_2_1_3_1.php'){                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
