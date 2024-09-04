@@ -17,7 +17,7 @@ class mConexao {
 
     public function __construct() {
         $this->sConfiguracao = new sConfiguracao();
-        $this->setConexao(new \mysqli(
+        $this->setConexao( new \mysqli(
                         $this->sConfiguracao->getHostname(),
                         $this->sConfiguracao->getUsername(),
                         $this->sConfiguracao->getPassword(),
@@ -409,22 +409,24 @@ class mConexao {
         $query .= 'VALUES (';
         for ($i = 0; $i < count($dados['valoresInsercao']); $i++) {
             if ($i == $j) {
-                $query .= "'{$dados['valoresInsercao'][$i]}');";
+                $query .= '?)';
             } else {
-                $query .= "'{$dados['valoresInsercao'][$i]}',";
+                $query .= '?,';
             }
         }
-
-        $resultado = $this->conexao->query($query);
+        
+        //insere os dados no bd com tratamento bind_param
+        $resultado = $this->conexao->execute_query($query, $dados['valoresInsercao']);
+        
+        //pega o último registro inserido no bd
         $id = $this->conexao->insert_id;
         $this->setRegistro($id);
-
+        
         if ($resultado) {
             $this->setValidador(true);
         } else {
             $this->setValidador(false);
         }
-
     }
 
     public function atualizar($dados) {
