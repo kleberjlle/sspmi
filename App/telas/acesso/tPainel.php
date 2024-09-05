@@ -273,6 +273,7 @@ HTML;
                                 $menu == '2_2_1' ||
                                 $menu == '2_2_1_3' ||
                                 $menu == '2_2_1_3_1' ||
+                                $menu == '2_2_1_3_2' ||
                                 $menu == '2_2_2' ||
                                 $menu == '2_2_3' ?
                                 $atributo = ' menu-is-opening menu-open' :
@@ -317,6 +318,7 @@ HTML;
                                 $menu == '2_2_1' ||
                                 $menu == '2_2_1_3' ||
                                 $menu == '2_2_1_3_1' ||
+                                $menu == '2_2_1_3_2' ||
                                 $menu == '2_2_2' ||
                                 $menu == '2_2_3' ?
                                 $atributo = ' active' :
@@ -643,6 +645,9 @@ HTML;
                             break;
                         case "2_2_1_3_1":
                             require_once '../suporte/tMenu2_2_1_3_1.php';
+                            break;
+                        case "2_2_1_3_2":
+                            require_once '../suporte/tMenu2_2_1_3_2.php';
                             break;
                         case "2_2_2":
                             require_once '../suporte/tMenu2_2_2.php';

@@ -35,7 +35,9 @@ class sPrioridade {
         
         if ($pagina == 'tMenu2_2.php' ||
             $pagina == 'tMenu2_2_1.php' ||
-            $pagina == 'tMenu2_2_1_3.php') {
+            $pagina == 'tMenu2_2_1_3.php' ||
+            $pagina == 'tMenu2_2_1_3_1.php' ||
+            $pagina == 'tMenu2_2_1_3_2.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',

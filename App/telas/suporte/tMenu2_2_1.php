@@ -474,21 +474,24 @@ HTML;
                         echo <<<HTML
                         <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3_1" id="f3_1" method="post" enctype="multipart/form-data"></form>
                         <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_1" name="f3_2" id="f3_2" method="post" enctype="multipart/form-data"></form>
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
-                            <input type="hidden" name="etapa" value="$numero" form="f3_1">
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_2">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_2">
-                            <input type="hidden" name="etapa" value="$numero" form="f3_2">
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_2" name="f3_3" id="f3_3" method="post" enctype="multipart/form-data"></form>
+                        
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
+                        <input type="hidden" name="etapa" value="$numero" form="f3_1">
+                                
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_3">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_3">
+                        <input type="hidden" name="etapa" value="$numero" form="f3_3">
 HTML;
-                            //caso o protocolo pertença ao responsável
-                            if($idUsuarioEtapa == $_SESSION['credencial']['idUsuario']){
-                            echo <<<HTML
-                            <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>
+                        //caso o protocolo pertença ao responsável
+                        if($idUsuarioEtapa == $_SESSION['credencial']['idUsuario']){
+                        echo <<<HTML
+                        <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>
 HTML;
-                            }                            
-                            echo <<<HTML
-                            <button type="submit" class="btn btn-primary float-right" form="f3_2">Encerrar</button>
+                        }                            
+                        echo <<<HTML
+                        <button type="submit" class="btn btn-primary float-right" form="f3_3">Encerrar</button>
                         
 HTML;
                     }
@@ -496,29 +499,47 @@ HTML;
                         echo <<<HTML
                         <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3_1" id="f3_1" method="post" enctype="multipart/form-data"></form>
                         <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_1" name="f3_2" id="f3_2" method="post" enctype="multipart/form-data"></form>
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
-                            <input type="hidden" name="etapa" value="$numero" form="f3_1">
-                            <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_2">
-                            <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_2">
-                            <input type="hidden" name="etapa" value="$numero" form="f3_2">
-                            <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>  
-                            <button type="submit" class="btn btn-primary" form="f3_2">Reatribuir</button>    
-                            <button type="submit" class="btn btn-primary float-right" form="f3_1">Encerrar</button> 
-                        
-                            
+                        <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_2" name="f3_3" id="f3_3" method="post" enctype="multipart/form-data"></form>
+                           
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
+                        <input type="hidden" name="etapa" value="$numero" form="f3_1">
+                        <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>  
+                               
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_2">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_2">
+                        <input type="hidden" name="etapa" value="$numero" form="f3_2">
+                        <button type="submit" class="btn btn-primary" form="f3_2">Reatribuir</button>
+                                
 HTML;
+                        //caso o protocolo pertença ao responsável
+                        if($idUsuarioEtapa == $_SESSION['credencial']['idUsuario']){
+                        echo <<<HTML
+                        <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_3">
+                        <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_3">
+                        <input type="hidden" name="etapa" value="$numero" form="f3_3">
+                        <button type="submit" class="btn btn-primary float-right" form="f3_3">Encerrar</button>
+HTML;                            
+                        }
                     }                    
                 }else{
                     echo <<<HTML
-                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="pagina" value="tMenu2_2_1.php">
-                        <input type="hidden" name="idProtocolo" value="$idProtocolo">
-                        <input type="hidden" name="etapa" value="$numero">
-                        <button type="submit" class="btn btn-primary">Alterar</button>
-                        <button type="submit" class="btn btn-primary float-right">Encerrar</button>
-                    </form>
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3" name="f3_1" id="f3_1" method="post" enctype="multipart/form-data"></form>
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_1" name="f3_2" id="f3_2" method="post" enctype="multipart/form-data"></form>
+                    <form action="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2_1_3_2" name="f3_3" id="f3_3" method="post" enctype="multipart/form-data"></form>
+                    
+                    <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_1">
+                    <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_1">
+                    <input type="hidden" name="etapa" value="$numero" form="f3_1">
+                    <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>
 HTML;
+                    //caso o protocolo pertença ao responsável
+                    echo <<<HTML
+                    <input type="hidden" name="pagina" value="tMenu2_2_1.php" form="f3_3">
+                    <input type="hidden" name="idProtocolo" value="$idProtocolo" form="f3_3">
+                    <input type="hidden" name="etapa" value="$numero" form="f3_3">
+                    <button type="submit" class="btn btn-primary float-right" form="f3_3">Encerrar</button>
+HTML;                     
                 }
             }
         echo <<<HTML

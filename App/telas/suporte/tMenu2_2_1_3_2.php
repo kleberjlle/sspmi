@@ -4,13 +4,11 @@ use App\sistema\acesso\{
     sConfiguracao,
     sTratamentoDados,
     sNotificacao,
-    sUsuario,
-    sPermissao
+    sSair
 };
 use App\sistema\suporte\{
     sPrioridade,
-    sEtapa,
-    sLocal,
+    sEtapa
     
 };
 
@@ -18,7 +16,7 @@ use App\sistema\suporte\{
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
-        case 'responsavel':
+        case 'solucao':
             if ($_GET['codigo'] == 'S1') {
                 $alertaResponsavel = ' is-valid';
             } else {
@@ -33,36 +31,29 @@ if (isset($_GET['campo'])) {
     $mensagem = $sNotificacao->getMensagem();
 }
 
-isset($_POST['pagina']) ? $pagina = $_POST['pagina'] : $acesso = false;
-isset($_GET['pagina']) ? $pagina = $_GET['pagina'] : $acesso = false;
 
-if ($pagina == 'tMenu2_2_1.php' || $pagina == 'tMenu2_2_1_3_1.php') {
+if ($_POST['pagina'] == 'tMenu2_2_1.php') {
     isset($_POST['idProtocolo']) ? $idProtocolo = $_POST['idProtocolo'] : $idProtocolo = $_GET['idProtocolo'];    
     isset($_POST['etapa']) ? $numero = $_POST['etapa'] : $numero = $_GET['etapa'];
     $sEtapa = new sEtapa();
     $sEtapa->setNomeCampo('protocolo_idprotocolo');
     $sEtapa->setValorCampo($idProtocolo);
-    $sEtapa->consultar('tMenu2_2_1_3_1.php');
+    $sEtapa->consultar('tMenu2_2_1_3_2.php');
 
     foreach ($sEtapa->mConexao->getRetorno() as $value) {
         if ($value['numero'] == $numero) {
             $idPrioridade = $value['prioridade_idprioridade'];
             $dataAbertura = $value['dataHoraAbertura'];
-            $dataEncerramento = $value['dataHoraEncerramento'];
-            $acessoRemoto = $value['acessoRemoto'];
             $descricao = $value['descricao'];
-            $idLocal = $value['local_idlocal'];
-            !is_null($value['usuario_idusuario']) ? $idUsuario = $value['usuario_idusuario'] : $idUsuario = 0;
-            $solucao = $value['solucao'];
         }
     }
     //buscar dados da prioridade
     $sPrioridade = new sPrioridade();
     $sPrioridade->setNomeCampo('idprioridade');
     $sPrioridade->setValorCampo($idPrioridade);
-    $sPrioridade->consultar('tMenu2_2_1_3_1.php');
+    $sPrioridade->consultar('tMenu2_2_1_3_2.php');
 
-    foreach ($sPrioridade->mConexao->getRetorno() as $value) {
+    foreach ($sPrioridade->mConexao->getRetorno() as $value) {        
         $prioridade = $value['nomenclatura'];
     }
 
@@ -76,15 +67,7 @@ if ($pagina == 'tMenu2_2_1.php' || $pagina == 'tMenu2_2_1_3_1.php') {
     $ano = date("Y", strtotime(str_replace('-', '/', $dataAbertura)));
     $protocolo = str_pad($idProtocolo, 5, 0, STR_PAD_LEFT);
     $protocolo = $ano . $protocolo;
-    
-    //busca os locais no bd
-    $sLocal = new sLocal();
-    $sLocal->consultar('tMenu2_2_1_3_1.php');
-    
-    //busca os usuários responsáveis
-    $sResponsavel = new sUsuario();
-    $sResponsavel->consultar('tMenu2_2_1_3_1.php');
-    
+        
     //instancia classe com as configurações do sistema
     $sConfiguracao = new sConfiguracao();
     
@@ -106,38 +89,22 @@ if ($pagina == 'tMenu2_2_1.php' || $pagina == 'tMenu2_2_1_3_1.php') {
                 </div>
                 <!-- form start -->
                 <div class="card-body">
-                    <div class="row">                        
-                        <div class="col-md-2">
+                    <div class="row">    
+                        <div class="col-sm-6">
+                            <!-- textarea -->
                             <div class="form-group">
-                                <label for="local">Local</label>
-                                <select class="form-control" name="local" id="local" form="f1">                                        
-                                    <?php
-                                    foreach ($sLocal->mConexao->getRetorno() as $value) {
-                                        $idLocal == $value['idlocal'] ? $atributo = 'selected=""' : $atributo = '';
-                                        echo '<option value="' . $value['idlocal'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                    }
-                                    ?>
-                                </select>
+                                <label>Descrição</label>
+                                <textarea class="form-control" rows="3" name="descricao" id="descricao" required="" maxlength="254" disabled=""><?php echo $descricao; ?></textarea>
                             </div>
-                        </div>
-                        <div class="col-md-2">
+                        </div>  
+                        <div class="col-sm-6">
+                            <!-- textarea -->
                             <div class="form-group">
-                                <label for="responsavel">Responsável</label>
-                                <select class="form-control<?php echo isset($alertaResponsavel) ? $alertaResponsavel : ''; ?>" name="responsavel" id="responsavel" form="f1">                                        
-                                    <?php
-                                    foreach ($sResponsavel->mConexao->getRetorno() as $value) {
-                                        $idUsuario == $value['idusuario'] ? $atributo = 'selected=""' : $atributo = '';
-                                        //instancia classe com as permissões para tratamento do campo responsável                                         
-                                        $sPermissao = new sPermissao($value['permissao_idpermissao']);
-                                        $sPermissao->consultar('tMenu2_2_1_3_1.php');
-                                        if($sPermissao->getNivel() > 1){                                            
-                                            echo '<option value="' . $value['idusuario'] . '"' . $atributo . ' >' . $value['nome'].' '.$value['sobrenome'] . '</option>';
-                                        }                                        
-                                    }
-                                    ?>
-                                </select>
+                                <label>Solução</label>
+                                <textarea class="form-control" rows="3" name="solucao" id="solucao" required="" maxlength="254" onkeyup="limite_textarea(this.value)" form="f1" placeholder="Ex.: ATUALIZAÇÃO DO S.O."></textarea>
+                                <span id="cont">254</span> Caracteres restantes <br>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
                 <?php
@@ -160,15 +127,15 @@ HTML;
                     }
                 }
                 ?>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte()."sReatribuir.php"; ?>" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte()."sEncerrar.php"; ?>" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <input type="hidden" value="f1" name="formulario" form="f1">
                         <input type="hidden" value="alterar" name="acao" form="f1">
-                        <input type="hidden" value="tMenu2_2_1_3_1.php" name="pagina" form="f1">
+                        <input type="hidden" value="tMenu2_2_1_3_2.php" name="pagina" form="f1">
                         <input type="hidden" value="<?php echo $idProtocolo ?>" name="idProtocolo" form="f1">
                         <input type="hidden" value="<?php echo $numero ?>" name="etapa" form="f1">
-                        <button type="submit" class="btn btn-primary">Reatribuir</button>
+                        <button type="submit" class="btn btn-primary">Encerrar</button>
                     </div>
                 </form>
             </div>
@@ -176,3 +143,16 @@ HTML;
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    //contador de caracteres para o campo descrição
+    function limite_textarea(valor) {
+        quant = 254;
+        total = valor.length;
+        if (total <= quant) {
+            resto = quant - total;
+            document.getElementById('cont').innerHTML = resto;
+        } else {
+            document.getElementById('descricao').value = valor.substr(0, quant);
+        }
+    }
+</script>

@@ -28,8 +28,8 @@ if(isset($_POST['pagina'])){
     $pagina = $_POST['pagina'];
     $idProtocolo = $_POST['idProtocolo'];
     $numero = $_POST['etapa'];
-    $idLocal = $_POST['local'];  
-    $idResponsavel = $_POST['responsavel'];
+    $local = $_POST['local'];  
+    $responsavel = $_POST['responsavel'];
         
     //buscar dados da etapa
     $sEtapa = new sEtapa();
@@ -39,9 +39,14 @@ if(isset($_POST['pagina'])){
     
     foreach ($sEtapa->mConexao->getRetorno() as $value) {
         $idEtapa = $value['idetapa'];
-        $numero = $value['numero'];
+        $numero = $value['numero'];       
+        $acessoRemoto = $value['acessoRemoto'];
+        $descricao = $value['descricao'];
+        $idProtocolo = $value['protocolo_idprotocolo'];
         $idLocal = $value['local_idlocal'];
-        $responsavel = $value['usuario_idusuario'];
+        $idPrioridade = $value['prioridade_idprioridade'];
+        $idEquipamento = $value['equipamento_idequipamento'];
+        $idResponsavel = $value['usuario_idusuario'];
     }
     
     if($idResponsavel == $responsavel){
@@ -53,7 +58,7 @@ if(isset($_POST['pagina'])){
     
     //variáveis para o histórico
     $acao = $_POST['acao'];
-    $valorCampoAtual = '';
+    $valorCampoAtual = $local;
     $valorCampoAnterior = $idLocal;
     $ip = $_SERVER['REMOTE_ADDR'];
     $navegador = $_SERVER['HTTP_USER_AGENT'];
@@ -61,59 +66,68 @@ if(isset($_POST['pagina'])){
     $nomeDoDispositivo = gethostname();
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     
+    //alimentar o histórico
+    alimentaHistorico($pagina, $acao, 'local_idlocal', $valorCampoAnterior, $valorCampoAtual, $idUsuario);
+    
+    //variáveis para o histórico
+    $valorCampoAtual = $responsavel;
+    $valorCampoAnterior = $idResponsavel;
+    
+    //alimentar o histórico
+    alimentaHistorico($pagina, $acao, 'responsavel', $valorCampoAnterior, $valorCampoAtual, $idUsuario);
+    
     //configura timezone para São Paulo
     $sConfiguracao = new sConfiguracao();
     $sConfiguracao->getTimeZone();
     $dataHoraEncerramento = date("Y-m-d H:i:s");    
     
-    //alimentar o histórico
-    alimentaHistorico($pagina, $acao, 'local_idlocal', $valorCampoAnterior, $idLocal, $idUsuario);
-    exit();
     //encerrar etapa anterior (etapa 1)    
     //altera o campo dataHoraEncerramento
     $sEtapa->setIdEtapa($idEtapa);
     $sEtapa->setNomeCampo('dataHoraEncerramento');
     $sEtapa->setValorCampo($dataHoraEncerramento);
-    $sEtapa->alterar('tMenu2_2_3.php');
+    $sEtapa->alterar('tMenu2_2_1_3_1.php');
     
     //altera o campo usuário
     $sEtapa->setNomeCampo('usuario_idusuario');
-    $sEtapa->setValorCampo($idUsuario);
-    $sEtapa->alterar('tMenu2_2_3.php');
+    $sEtapa->setValorCampo($responsavel);
+    $sEtapa->alterar('tMenu2_2_1_3_1.php');
     
     //altera o campo solucao
+    $solucao = '--';
     $sEtapa->setNomeCampo('solucao');
     $sEtapa->setValorCampo($solucao);
     $sEtapa->alterar('tMenu2_2_3.php');
     
-    //alimentar o histórico
+    //alimentar o histórico de inserção da nova etapa
     $acao = 'inserir';
-    $numero += $numero;
+    $valorCampoAnterior = $numero;
+    $numero++;  
     alimentaHistorico($pagina, $acao, 'numero', $valorCampoAnterior, $numero, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'acessorRemoto', $valorCampoAnterior, $acessoRemoto, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'descricao', $valorCampoAnterior, $descricao, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'protocolo_idprotocolo', $valorCampoAnterior, $idProtocolo, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'local_idlocal', $valorCampoAnterior, $idLocal, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'prioridade_idprioridade', $valorCampoAnterior, $idPrioridade, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'usuario_idusuario', $valorCampoAnterior, $idUsuario, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'acessoRemoto', $acessoRemoto, $acessoRemoto, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'descricao', $descricao, $descricao, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'protocolo_idprotocolo', $idProtocolo, $idProtocolo, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $idEquipamento, $idEquipamento, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'local_idlocal', $idLocal, $local, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'prioridade_idprioridade', $idPrioridade, $idPrioridade, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'usuario_idusuario', $idResponsavel, $responsavel, $idUsuario);
     
     //inserir nova etapa no sistema
     //inserir dados na nova etapa
     $dadosTratados = [
         'numero' => $numero,
         'acessoRemoto' => $acessoRemoto,
-        'descricao' => $descricao,
-        'equipamento_idequipamento' => $idEquipamento,
+        'descricao' => $descricao,        
         'protocolo_idprotocolo' => $idProtocolo,
-        'local_idlocal' => $idLocal,
+        'local_idlocal' => $local,
         'prioridade_idprioridade' => $idPrioridade,
-        'usuario_idusuario' => $idUsuario
+        'equipamento_idequipamento' => $idEquipamento,
+        'usuario_idusuario' => $responsavel
     ];
-    $sEtapa->inserir('tMenu2_2_3.php', $dadosTratados);
+    $sEtapa->inserir('tMenu2_2_1_3_1.php', $dadosTratados);
     
     //gera notificação e redireciona para a página
-    $sNotificacao = new sNotificacao('S6');    
+    $sNotificacao = new sNotificacao('S7');    
     header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_2&campo=atribuir&codigo={$sNotificacao->getCodigo()}");
     exit();
 }

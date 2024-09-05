@@ -126,56 +126,87 @@ if (isset($_GET['campo'])) {
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12" name="ocultarCampos" id="ocultarCampos" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Secretaria</label>
+                                        <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" disabled="" form="f2">
+                                            <?php
+                                            echo '<option value="0" selected="">--</option>';
+                                            foreach ($sSecretaria->mConexao->getRetorno() as $value) {                                            
+                                                echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="departamento">Departamento</label>
+                                        <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">                                        
+                                            <?php
+                                            foreach ($sDepartamento->mConexao->getRetorno() as $value) {    
+                                                echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Coordenação</label>
+                                        <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
+                                            <?php
+                                            foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+                                                echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="setor">Setor</label>
+                                        <select class="form-control" name="setor" id="setor" disabled="" form="f2">
+                                            <?php
+                                            foreach ($sSetor->mConexao->getRetorno() as $value) {
+                                                echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="row">
+                            <div class="form-group col-md-2">
+                                <label>Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f2">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Sobrenome</label>
+                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f2">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Telefone</label>
+                                <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f2">
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Whatsapp</label>
+                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                        <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="habilitar();" disabled="" form="f2">
+                                        <label class="custom-control-label" for="whatsApp">Sim</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>E-mail</label>
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
+                            </div>                            
+                        </div>
+                        </div>
                         <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Secretaria</label>
-                                    <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" disabled="" form="f2">
-                                        <?php
-                                        echo '<option value="0" selected="">--</option>';
-                                        foreach ($sSecretaria->mConexao->getRetorno() as $value) {                                            
-                                            echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="departamento">Departamento</label>
-                                    <select class="form-control" name="departamento" id="departamento" disabled="" form="f2">                                        
-                                        <?php
-                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {    
-                                            echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Coordenação</label>
-                                    <select class="form-control" name="coordenacao" id="coordenacao" disabled="" form="f2">
-                                        <?php
-                                        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="setor">Setor</label>
-                                    <select class="form-control" name="setor" id="setor" disabled="" form="f2">
-                                        <?php
-                                        foreach ($sSetor->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Prioridade</label>
@@ -212,37 +243,10 @@ if (isset($_GET['campo'])) {
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-2">
-                                <label>Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f2">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>Sobrenome</label>
-                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f2">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f2">
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Whatsapp</label>
-                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="habilitar();" disabled="" form="f2">
-                                        <label class="custom-control-label" for="whatsApp">Sim</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>E-mail</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
-                            </div>
                             <div class="form-group col-md-2">
                                 <label for="acessoRemoto">Acesso remoto</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
                                 <input class="form-control" type="text" id="acessoRemoto" name="acessoRemoto" placeholder="Ex.: 1505389456" form="f2">
-                            </div> 
+                            </div>
                         </div>
                         <div class="row">                     
                             <div class="col-sm-6">
@@ -379,6 +383,11 @@ HTML;
                 }
             });
         });
+        
+        $('#meusDados').on('click', function () {
+            $("#ocultarCampos").toggle(!this.checked);
+        });
+    
     });
     
     //contador de caracteres para o campo descrição

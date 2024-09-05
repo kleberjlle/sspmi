@@ -169,6 +169,9 @@ class sNotificacao{
             case '6':
                 $this->setMensagem('Ticket atribuído para '.$_SESSION['credencial']['nome'].' '.$_SESSION['credencial']['sobrenome']);
                 break;
+            case '7':
+                $this->setMensagem('Ticket reatribuído.');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

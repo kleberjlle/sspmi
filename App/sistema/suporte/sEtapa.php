@@ -26,6 +26,7 @@ class sEtapa {
             $pagina == 'tMenu2_2_1.php' ||
             $pagina == 'tMenu2_2_1_3.php' ||
             $pagina == 'tMenu2_2_1_3_1.php' ||
+            $pagina == 'tMenu2_2_1_3_2.php' ||
             $pagina == 'tMenu2_2_3.php') {
             //monta os dados há serem passados na query               
             $dados = [
@@ -81,7 +82,8 @@ class sEtapa {
                 $this->setSNotificacao(new sNotificacao('S4'));
             }
         }
-        if ($pagina == 'tMenu2_2_3.php') {
+        if ($pagina == 'tMenu2_2_3.php' ||
+            $pagina == 'tMenu2_2_1_3_1.php') {
             $dados = [
                 'comando' => 'INSERT INTO',
                 'tabela' => 'etapa',
@@ -121,7 +123,9 @@ class sEtapa {
         $this->setMConexao(new mConexao());
 
         if ($pagina == 'tMenu2_2_3.php' ||
-            $pagina == 'tMenu2_2_1_3.php') {
+            $pagina == 'tMenu2_2_1_3.php' ||
+            $pagina == 'tMenu2_2_1_3_1.php' ||
+            $pagina == 'tMenu2_2_1_3_2.php') {
             
             $dados = [
                 'comando' => 'UPDATE',

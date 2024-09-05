@@ -40,6 +40,12 @@ if(isset($_GET['campo'])){
             }else{
                 $alertaAlterar = ' is-warning';
             }
+        case 'encerrar':
+            if($_GET['codigo'] == 'S5'){
+                $alertaAlterar = ' is-valid';
+            }else{
+                $alertaAlterar = ' is-warning';
+            }
     }
     
     //cria as variáveis da notificação
