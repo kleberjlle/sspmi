@@ -145,6 +145,30 @@ class sTratamentoDados {
                 break;
         }
     }
+    
+    public function tratarSenha() {
+        /*
+         * [RF011] Ao registrar um novo usuário o sistema deverá gerar uma senha
+         * aleatória com os seguintes requisitos, de 7 a 14 caracteres, devendo
+         * conter ao menos uma letra e ao menos um número, não sendo aceito
+         * caracteres especiais.
+         */
+        if(strlen($this->getDados()) < 7 || strlen($this->getDados()) > 14){
+            //caso a senha tenha menos que 7 caracteres ou mais que 14
+            return false;
+        }else{
+            //verifica se NÃO tem caracter especial
+            if(ctype_alnum($this->getDados())){
+                if(ctype_alpha($this->getDados())){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }            
+        }
+    }
 
     public function getDados(): mixed {
         return $this->dados;

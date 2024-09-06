@@ -39,6 +39,7 @@ if (isset($_POST['pagina'])) {
     $emailUsuario = $_POST['emailUsuario'];
     $atualizar = [];
     $alteracao = false;    
+    isset($_POST['senhaUsuario']) ? $senhaUsuario = $_POST['senhaUsuario'] : $senhaUsuario = false;
     
     //se existir um telefone registrado
     if($_SESSION['credencial']['idTelefoneUsuario']){
@@ -49,12 +50,32 @@ if (isset($_POST['pagina'])) {
         $sWhatsAppUsuario = new sTelefone(0, 0, 'tMenu1_1_1.php');
     }  
     
+    //busca os dados do usuário no bd
+    $sNomeUsuario = new sUsuario();
+    $sNomeUsuario->setIdUsuario($idUsuario);
+    $sNomeUsuario->consultar('tMenu1_1_1.php');
+    
+    foreach ($sNomeUsuario->mConexao->getRetorno() as $value) {
+        $idEmail = $value['email_idemail'];
+    }
+    
+    $sEmailUsuario = new sEmail($emailUsuario, 'tMenu1_1_1.php');
+    $sEmailUsuario->setIdEmail($idEmail);
+    $sEmailUsuario->consultar('tMenu1_1_1.php');
+    foreach ($sEmailUsuario->mConexao->getRetorno() as $value) {
+        $senha = $value['senha'];
+        $email = $value['email'];
+    }
+    
     alimentaHistorico($pagina, $acao, 'nome', $_SESSION['credencial']['nome'], $nome, $idUsuario);
     alimentaHistorico($pagina, $acao, 'sobrenome', $_SESSION['credencial']['sobrenome'], $sobrenome, $idUsuario);
     alimentaHistorico($pagina, $acao, 'sexo', $_SESSION['credencial']['sexo'], $sexo, $idUsuario);
     alimentaHistorico($pagina, $acao, 'telefone', $_SESSION['credencial']['telefoneUsuario'], $telefone, $idUsuario);
     alimentaHistorico($pagina, $acao, 'whatsApp', $_SESSION['credencial']['whatsAppUsuario'], $whatsAppUsuario, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'nomenclatura', $_SESSION['credencial']['emailUsuario'], $emailUsuario, $idUsuario);
+    alimentaHistorico($pagina, $acao, 'nomenclatura', $email, $emailUsuario, $idUsuario);
+    if($senhaUsuario){
+        alimentaHistorico($pagina, $acao, 'senha', $senha, $senhaUsuario, $idUsuario);
+    }
     
     //se existir um telefone registrado
     $sTratamentoTelefone = new sTratamentoDados($telefone);
@@ -64,7 +85,6 @@ if (isset($_POST['pagina'])) {
     if ($_SESSION['credencial']['nome'] != $nome) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $_SESSION['credencial']['nome'];
-        $sNomeUsuario = new sUsuario();
         $sNomeUsuario->verificarNome($nome);
         
         //etapa2 - validação do conteúdo
@@ -125,7 +145,6 @@ if (isset($_POST['pagina'])) {
 
     if ($_SESSION['credencial']['emailUsuario'] != $emailUsuario) {
         //etapa2 - validação de conteúdo
-        $sEmailUsuario = new sEmail($emailUsuario, 'tMenu1_1_1.php');
         $sEmailUsuario->verificar('tMenu1_1_1.php');
         
         if (!$sEmailUsuario->getValidador()) {
@@ -137,6 +156,14 @@ if (isset($_POST['pagina'])) {
             $alteracao = true;
             $atualizar['emailUsuario'] = $emailUsuario;
         }
+    }
+    
+    if ($senhaUsuario) {
+        //etapa2 - validação de conteúdo
+        $sTratamentoSenha = new sTratamentoDados($senhaUsuario);
+        $teste = $sTratamentoSenha->tratarSenha();
+        var_dump($teste);
+        exit();
     }
     
     if ($alteracao == false) {

@@ -2,8 +2,6 @@
 
 use App\sistema\acesso\{
     sConfiguracao,
-    sSecretaria,
-    sCargo,
     sPermissao,
     sNotificacao
 };
@@ -19,12 +17,6 @@ use App\sistema\acesso\{
 //QA - fim da área de testes
 
 $sConfiguracao = new sConfiguracao();
-
-//$sSecretaria = new sSecretaria(0); //id zero apenas para construir o objeto
-//$sSecretaria->consultar('tMenu1_1_1.php');
-
-//$sCargo = new sCargo($_SESSION['credencial']['idCargo']);
-//$sCargo->consultar('tMenu1_1_1.php');
 
 $sPermissao = new sPermissao($_SESSION['credencial']['idPermissao']);
 $sPermissao->consultar('tMenu1_1_1.php');
@@ -42,7 +34,7 @@ if(isset($_GET['campo'])){
             break;
         case 'sobrenome':
             if($_GET['codigo'] == 'S1'){
-                $alertaNome = ' is-valid';
+                $alertaSobrenome = ' is-valid';
             }else{
                 $alertaSobrenome = ' is-warning';
             }  
@@ -151,6 +143,10 @@ if(isset($_GET['campo'])){
                             <div class="form-group col-md-2">
                                 <label for="emailUsuario">Email Pessoal</label>
                                 <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $_SESSION['credencial']['emailUsuario']; ?>" required="">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="senhaUsuario">Senha</label>
+                                <input class="form-control<?php echo isset($alertaSenha) ? $alertaSenha : ''; ?>" type="password" name="senhaUsuario" id="senhaUsuario">
                             </div>
                         </div>
                     </div>

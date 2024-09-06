@@ -138,6 +138,7 @@ class sEmail {
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php') {
 
+            //substituir futuramente
             if ($this->getNomenclaturaLocal() == 'email') {
                 //organiza os dados nos devidos campos
                 $this->setIdEmail($this->getNomenclatura());
@@ -178,6 +179,21 @@ class sEmail {
                     $this->setNomenclatura($linha['nomenclatura']);
                 }
             }
+        }
+        
+        if ($pagina == 'tMenu1_1_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email',
+                'camposCondicionados' => 'idemail',
+                'valoresCondicionados' => $this->getIdEmail(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+            
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }
     }
 
