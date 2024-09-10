@@ -316,8 +316,7 @@ class sUsuario {
             $this->setValidador($this->mConexao->getValidador());
         }
 
-        if ($pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu2_2.php' ||
+        if ($pagina == 'tMenu2_2.php' ||
             $pagina == 'tMenu2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
@@ -384,7 +383,8 @@ class sUsuario {
         }
         
         if ($pagina == 'tMenu1_3-examinador.php' ||
-            $pagina == 'tMenu1_1_1.php') {
+            $pagina == 'tMenu1_1_1.php' || 
+            $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -394,7 +394,7 @@ class sUsuario {
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null
             ];
-
+            
             $this->mConexao->CRUD($dados);
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $this->setNome($linha['nome']);

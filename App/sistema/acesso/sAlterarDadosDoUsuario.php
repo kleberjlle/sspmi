@@ -10,7 +10,9 @@ use App\sistema\acesso\{
     sUsuario,
     sTelefone,
     sEmail,
-    sTratamentoDados
+    sTratamentoDados,
+    sNotificacao,
+    sSenha
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -64,7 +66,7 @@ if (isset($_POST['pagina'])) {
     $sEmailUsuario->consultar('tMenu1_1_1.php');
     foreach ($sEmailUsuario->mConexao->getRetorno() as $value) {
         $senha = $value['senha'];
-        $email = $value['email'];
+        $email = $value['nomenclatura'];
     }
     
     alimentaHistorico($pagina, $acao, 'nome', $_SESSION['credencial']['nome'], $nome, $idUsuario);
@@ -161,9 +163,18 @@ if (isset($_POST['pagina'])) {
     if ($senhaUsuario) {
         //etapa2 - validação de conteúdo
         $sTratamentoSenha = new sTratamentoDados($senhaUsuario);
-        $teste = $sTratamentoSenha->tratarSenha();
-        var_dump($teste);
-        exit();
+        $senhaTratada = $sTratamentoSenha->tratarSenha();
+        if(!$senhaTratada){
+            //se não tem campo para validar
+            $sConfiguracao = new sConfiguracao();
+            $sNotificacao = new sNotificacao('A4');
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=senha&codigo={$sNotificacao->getCodigo()}");
+            exit();
+        }else{
+            //etapa3 - atualizar os dados
+            $alteracao = true;
+            $atualizar['senhaUsuario'] = $senhaTratada;
+        }
     }
     
     if ($alteracao == false) {
@@ -272,7 +283,7 @@ if (isset($_POST['pagina'])) {
         }
         
         if (array_key_exists('emailUsuario', $atualizar)) {
-            //atualize o campo nome
+            //atualize o campo email
             $sEmailUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
             $sEmailUsuario->setNomeCampo('nomenclatura');
             $sEmailUsuario->setValorCampo($emailUsuario);
@@ -281,6 +292,23 @@ if (isset($_POST['pagina'])) {
             //atualize a sessão nome
             $_SESSION['credencial']['emailUsuario'] = $emailUsuario;
             
+            if ($sEmailUsuario->mConexao->getValidador()) {
+                $sConfiguracao = new sConfiguracao();
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");
+            }
+        }
+        
+        if (array_key_exists('senhaUsuario', $atualizar)) {            
+            //criptografa a senha para ser alterada no bd
+            $sSenha = new sSenha(true);
+            $sSenha->criptografar($senhaTratada);
+            
+            //altera a senha do email no bd
+            $sEmailUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
+            $sEmailUsuario->setNomeCampo('senha');
+            $sEmailUsuario->setValorCampo($sSenha->getSenhaCriptografada());
+            $sEmailUsuario->alterar('tMenu1_1_1.php');
+                        
             if ($sEmailUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();
                 header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=email&codigo={$sEmailUsuario->getSNotificacao()->getCodigo()}");

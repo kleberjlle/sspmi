@@ -157,17 +157,21 @@ class sTratamentoDados {
             //caso a senha tenha menos que 7 caracteres ou mais que 14
             return false;
         }else{
-            //verifica se NÃO tem caracter especial
+            //verifica se tem somente caracteres alfanuméricos
             if(ctype_alnum($this->getDados())){
-                if(ctype_alpha($this->getDados())){
-                    return true;
+                if(preg_match("/[a-zA-Z]/", $this->getDados())){
+                    if(preg_match("/[0-9]/", $this->getDados())){
+                        return $this->getDados();
+                    }else{
+                        return false;
+                    }
                 }else{
                     return false;
                 }
             }else{
                 return false;
             }            
-        }
+        }        
     }
 
     public function getDados(): mixed {

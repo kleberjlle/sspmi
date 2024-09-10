@@ -53,10 +53,10 @@ class sNotificacao{
                 $this->setMensagem('E-mail já registrado, favor clique na opção <a href="tRecuperarAcesso.php">esqueci minha senha</a>.');
                 break;
             case '4':
-                $this->setMensagem('A senha deve ter de '.$this->sConfiguracao->getCaracterMinimo().' à '.$this->sConfiguracao->getCaracterMaximo().' caracteres.');
+                $this->setMensagem('A senha deve ter de '.$this->sConfiguracao->getCaracterMinimo().' à '.$this->sConfiguracao->getCaracterMaximo().' caracteres e possuir somente letras e números.');
                 break;
             case '5':
-                $this->setMensagem('A senha deve possuir letras e números');
+                $this->setMensagem('A senha deve possuir somente letras e números');
                 break;
             case '6':
                 $this->setMensagem('Senha incorreta, tente novamente.');

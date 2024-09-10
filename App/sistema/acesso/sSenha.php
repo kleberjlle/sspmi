@@ -12,7 +12,7 @@ class sSenha {
     public mConexao $mConexao;
         
     public function __construct(bool $validador) {
-        $this->validador = false;
+        $this->validador = $validador;
     }    
     
     public function criptografar($senha) {

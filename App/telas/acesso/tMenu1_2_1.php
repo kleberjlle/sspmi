@@ -11,27 +11,17 @@ use App\sistema\acesso\{
     sPermissao,
     sNotificacao,
     sTelefone,
-    sEmail
+    sEmail,
+    sTratamentoDados
 };
 
-//QA - início da área de testes
-/* verificar o que tem no objeto
-
-  echo "<pre>";
-  var_dump($_SESSION['credencial']);
-  echo "</pre>";
-
-  // */
-//QA - fim da área de testes
-
-//verifica se está recebendo $_GET['id'] ou $_GET['campo']
 if (isset($_GET['seguranca']) ||
     isset($_GET['campo']) ||
     isset($_GET['codigo'])) {
     if (isset($_GET['seguranca'])) {
         $idUsuario = $_GET['seguranca'];
     } else if (isset($_GET['campo'])) {
-        $idUsuario = $_GET['idseguranca'];
+        $idUsuario = $_GET['seguranca'];
         $sNotificacao = new sNotificacao($_GET['codigo']);
         switch ($_GET['campo']) {
             case 'nome':
@@ -97,74 +87,67 @@ if (isset($_GET['seguranca']) ||
         $sSair->verificar('0');
     }
 }
-
+$idUsuario = base64_decode($idUsuario);
 
 $sConfiguracao = new sConfiguracao();
 
 $sUsuario = new sUsuario();
-$sUsuario->setNomeCampo('idusuario');
-$sUsuario->setValorCampo($idUsuario);
+$sUsuario->setIdUsuario($idUsuario);
 $sUsuario->consultar('tMenu1_2_1.php');
-$nome = $sUsuario->getNome();
-$sobrenome = $sUsuario->getSobrenome();
-$sexo = $sUsuario->getSexo();
-$idTelefone = $sUsuario->getTelefone();
-$idCargo = $sUsuario->getIdCargo();
-$idPermissao = $sUsuario->getIdPermissao();
-if ($idTelefone != 0) {
-    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');
-    $sTelefone->consultar('tMenu1_2_1.php');
-    $telefone = $sTelefone->getNumero();
-    $telefoneTratado = $sTelefone->tratarTelefone($telefone);
-    if ($sTelefone->getWhatsApp()) {
-        $whatsApp = true;
-    } else {
-        $whatsApp = false;
-    }
-} else {
-    $telefoneTratado = '';
-    $whatsApp = false;
+
+foreach ($sUsuario->mConexao->getRetorno() as $value) {
+    $nome = $value['nome'];
+    $sobrenome = $value['sobrenome'];
+    $sexo = $value['sexo'];
+    $idTelefone = $value['telefone_idtelefone'];
+    $idEmail = $value['email_idemail'];
+    $idCargo = $value['cargo_idcargo'];
+    $idPermissao = $value['permissao_idpermissao'];
+    $idSecretaria = $value['secretaria_idsecretaria'];
+    $idDepartamento = $value['departamento_iddepartamento'];
+    $idCoordenacao = $value['coordenacao_idcoordenacao'];
+    $idSetor = $value['setor_idsetor'];
+    $situacao = $value['situacao'];
 }
 
-$sEmail = new sEmail($sUsuario->getIdEmail(), 'email');
-$sEmail->consultar('tMenu1_2_1.php');
-$emailUsuario = $sEmail->getNomenclatura();
+//busca dados do telefone
+$sTelefone = new sTelefone($idTelefone, 0, 'usuario');
+$sTelefone->consultar('tMenu1_2_1.php');
 
+//trata o número do telefone
+$sTratamentoTelefone = new sTratamentoDados($sTelefone->getNumero());
+$telefoneTratado = $sTratamentoTelefone->tratarTelefone();
+$whatsApp = $sTelefone->getWhatsApp();
+
+//busca dados do e-mail
+$sEmail = new sEmail($idEmail, 'email');
+$sEmail->consultar('tMenu1_2_1.php');
+$email = $sEmail->getNomenclatura();
+
+//busca os dados do cargo
 $sCargo = new sCargo($idCargo);
 $sCargo->consultar('tMenu1_2_1.php');
 
+//busca os dados da permissão
 $sPermissao = new sPermissao($idPermissao);
 $sPermissao->consultar('tMenu1_2_1.php');
 
-$sSecretaria = new sSecretaria($sUsuario->getIdSecretaria()); //id zero apenas para construir o objeto
+//busca os dados da secretaria
+$sSecretaria = new sSecretaria($idSecretaria);
 $sSecretaria->consultar('tMenu1_2_1.php');
-$idSecretaria = $sSecretaria->getIdSecretaria();
 
-if ($sUsuario->getIdDepartamento() != 0) {
-    $sDepartamento = new sDepartamento($sUsuario->getIdDepartamento()); //id zero apenas para construir o objeto
-    $sDepartamento->consultar('tMenu1_2_1.php');
-} else {
-    $idDepartamento = '0';
-    $departamento = '--';
-}
+//busca os dados do departamento
+$sDepartamento = new sDepartamento($idDepartamento);
+$sDepartamento->consultar('tMenu1_2_1.php');
 
-if ($sUsuario->getIdCoordenacao() != 0) {
-    $sCoordenacao = new sCoordenacao($sUsuario->getIdCoordenacao()); //id zero apenas para construir o objeto
-    $sCoordenacao->consultar('tMenu1_2_1.php');
-} else {
-    $idCoordenacao = 0;
-    $coordenacao = '--';
-}
+//busca os dados do departamento
+$sCoordenacao = new sCoordenacao($idCoordenacao);
+$sCoordenacao->consultar('tMenu1_2_1.php');
 
-if ($sUsuario->getIdSetor() != 0) {
-    $sSetor = new sSetor($sUsuario->getIdSetor()); //id zero apenas para construir o objeto
-    $sSetor->consultar('tMenu1_2_1.php');
-} else {
-    $idSetor = 0;
-    $setor = '--';
-}
+//busca os dados do departamento
+$sSetor = new sSetor($idSetor);
+$sSetor->consultar('tMenu1_2_1.php');
 
-$situacao = $sUsuario->getSituacao();
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
@@ -266,7 +249,7 @@ if (isset($_GET['campo'])) {
                     <h3 class="card-title">Etapa 2 - Alterar</h3>
                 </div>
                 <!-- form start -->
-                <form name="form1_tMenu1_2_1" id="form1_tMenu1_2_1" action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sAlterarDadosOutrosUsuarios.php" method="post" enctype="multipart/form-data">
+                <form name="f1" id="f1" action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sAlterarDadosOutrosUsuarios.php" method="post" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="row">
                             <!--
@@ -293,7 +276,7 @@ if (isset($_GET['campo'])) {
                                 <label for="nome">Nome</label>
                                 <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $nome; ?>" required="">
                             </div>
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label for="sobrenome">Sobrenome</label>
                                 <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $sobrenome; ?>" required="">
                             </div>
@@ -306,36 +289,24 @@ if (isset($_GET['campo'])) {
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label for="telefoneUsuario">Telefone Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefoneUsuario" id="telefoneUsuario" value="<?php echo $telefoneTratado; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                            <div class="form-group col-md-1">
+                                <label for="telefone">Telefone</label>
+                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" value="<?php echo $telefoneTratado; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $whatsApp ? 'checked=""' : ''; ?>>
-                                        <label class="custom-control-label" for="whatsAppUsuario"><?php echo $whatsApp ? 'Sim' : 'Não'; ?></label>
+                                        <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo $whatsApp ? 'checked=""' : ''; ?>>
+                                        <label class="custom-control-label" for="whatsApp"><?php echo $whatsApp ? 'Sim' : 'Não'; ?></label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
-                                <label for="emailUsuario">Email Pessoal</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="emailUsuario" id="emailUsuario" value="<?php echo $emailUsuario; ?>" required="">
+                                <label for="email">Email</label>
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="email" id="email" value="<?php echo $email; ?>" required="">
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Cargo/ Função</label>
-                                    <select class="form-control<?php echo isset($alertaCargo) ? $alertaCargo : ''; ?>" name="cargo" id="cargo">
-                                        <?php
-                                        foreach ($sCargo->mConexao->getRetorno() as $value) {
-                                            $idCargo == $value['idcargo'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idcargo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>  
+                            
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Permissão</label>
@@ -374,8 +345,6 @@ if (isset($_GET['campo'])) {
                                                 $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
                                                 echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                             }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
                                         }
                                         ?>
                                     </select>

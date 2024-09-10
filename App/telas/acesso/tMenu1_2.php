@@ -1,5 +1,4 @@
 <?php
-
 use App\sistema\acesso\{
     sConfiguracao,
     sUsuario,
@@ -171,9 +170,10 @@ $sUsuario->consultar('tMenu1_2.php');
                             } else {
                                 $situacao = '<span class="bg-red">inativa</span>';
                             }
+                            
+                            $seguranca = base64_encode($idUsuario);
 
-
-                            echo <<<HTML
+                    echo <<<HTML
                     <tr>
                         <td>{$nome}</td>
                         <td>{$cargo}</td>
@@ -199,7 +199,7 @@ $sUsuario->consultar('tMenu1_2.php');
                         </td>
                         <td>{$situacao}</td>
                         <td>
-                            <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&id={$idUsuario}">
+                            <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&seguranca={$seguranca}">
                                 <i class="fas fa-edit mr-1"></i>
                             </a>
                         </td>
