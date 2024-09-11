@@ -27,10 +27,9 @@ class sDepartamento {
         //cria conexão para as opções das páginas abaixo
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_2.php' ||
-                $pagina == 'tMenu1_2_1.php' ||
-                $pagina == 'tMenu1_3.php' ||
-                $pagina == 'tMenu2_1.php') {
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -65,7 +64,7 @@ class sDepartamento {
         }
 
         if ($pagina == 'ajaxDepartamento.php') {
-            //reoordena os IDs corretamente
+            //consulta para busca com id da secretaria
             $this->setIdSecretaria($this->getIdDepartamento());
             $this->setIdDepartamento(0);
 
@@ -75,6 +74,21 @@ class sDepartamento {
                 'tabelas' => 'departamento',
                 'camposCondicionados' => 'secretaria_idsecretaria',
                 'valoresCondicionados' => $this->getIdSecretaria(),
+                'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
+                'ordem' => 'ASC'
+            ];
+            
+            $this->mConexao->CRUD($dados);
+        }
+        
+        if ($pagina == 'tMenu1_2_1.php') {
+            //consulta para busca sem o id da secretaria
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'departamento',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
                 'camposOrdenados' => 'nomenclatura', //caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];

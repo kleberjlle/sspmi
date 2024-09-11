@@ -18,75 +18,72 @@ use App\sistema\acesso\{
 if (isset($_GET['seguranca']) ||
     isset($_GET['campo']) ||
     isset($_GET['codigo'])) {
-    if (isset($_GET['seguranca'])) {
-        $idUsuario = $_GET['seguranca'];
-    } else if (isset($_GET['campo'])) {
-        $idUsuario = $_GET['seguranca'];
-        $sNotificacao = new sNotificacao($_GET['codigo']);
-        switch ($_GET['campo']) {
-            case 'nome':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaNome = ' is-valid';
-                } else {
-                    $alertaNome = ' is-warning';
-                }
-                break;
-            case 'sobrenome':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaNome = ' is-valid';
-                } else {
-                    $alertaSobrenome = ' is-warning';
-                }
-                break;
-            case 'sexo':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaSexo = ' is-valid';
-                } else {
-                    $alertaSexo = ' is-warning';
-                }
-                break;
-            case 'telefone':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaTelefone = ' is-valid';
-                } else {
-                    $alertaTelefone = ' is-warning';
-                }
-                break;
-            case 'email':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaEmail = ' is-valid';
-                } else {
-                    $alertaEmail = ' is-warning';
-                }
-                break;
-            case 'permissao':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaPermissao = ' is-valid';
-                } else {
-                    $alertaPermissao = ' is-warning';
-                }
-                break;
-            case 'secretaria':
-                if ($_GET['codigo'] == 'S1') {
-                    $alertaSecretaria = ' is-valid';
-                } else {
-                    $alertaSecretaria = ' is-warning';
-                }
-                break;
-            default:
-                break;
-        }
-
-        //cria as variáveis da notificação
-        $tipo = $sNotificacao->getTipo();
-        $titulo = $sNotificacao->getTitulo();
-        $email = $sNotificacao->getMensagem();
-    } else {
-        //solicitar saída com tentativa de violação
-        $sSair = new sSair();
-        $sSair->verificar('0');
+    $idUsuario = $_GET['seguranca'];
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'nome':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaNome = ' is-valid';
+            } else {
+                $alertaNome = ' is-warning';
+            }
+            break;
+        case 'sobrenome':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaNome = ' is-valid';
+            } else {
+                $alertaSobrenome = ' is-warning';
+            }
+            break;
+        case 'sexo':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaSexo = ' is-valid';
+            } else {
+                $alertaSexo = ' is-warning';
+            }
+            break;
+        case 'telefone':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaTelefone = ' is-valid';
+            } else {
+                $alertaTelefone = ' is-warning';
+            }
+            break;
+        case 'email':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaEmail = ' is-valid';
+            } else {
+                $alertaEmail = ' is-warning';
+            }
+            break;
+        case 'permissao':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaPermissao = ' is-valid';
+            } else {
+                $alertaPermissao = ' is-warning';
+            }
+            break;
+        case 'secretaria':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaSecretaria = ' is-valid';
+            } else {
+                $alertaSecretaria = ' is-warning';
+            }
+            break;
+        default:
+            break;
     }
+
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();
+} else {
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
 }
+
 $idUsuario = base64_decode($idUsuario);
 
 $sConfiguracao = new sConfiguracao();
@@ -104,9 +101,9 @@ foreach ($sUsuario->mConexao->getRetorno() as $value) {
     $idCargo = $value['cargo_idcargo'];
     $idPermissao = $value['permissao_idpermissao'];
     $idSecretaria = $value['secretaria_idsecretaria'];
-    $idDepartamento = $value['departamento_iddepartamento'];
-    $idCoordenacao = $value['coordenacao_idcoordenacao'];
-    $idSetor = $value['setor_idsetor'];
+    isset($value['departamento_iddepartamento']) ? $idDepartamento = $value['departamento_iddepartamento'] : $idDepartamento = 0;
+    isset($value['coordenacao_idcoordenacao']) ? $idCoordenacao = $value['coordenacao_idcoordenacao'] : $idCoordenacao = 0;
+    isset($value['setor_idsetor']) ? $idSetor = $value['setor_idsetor'] : $idSetor = 0;
     $situacao = $value['situacao'];
 }
 
@@ -147,97 +144,6 @@ $sCoordenacao->consultar('tMenu1_2_1.php');
 //busca os dados do departamento
 $sSetor = new sSetor($idSetor);
 $sSetor->consultar('tMenu1_2_1.php');
-
-//retorno de campo inválidos para notificação
-if (isset($_GET['campo'])) {
-    $sNotificacao = new sNotificacao($_GET['codigo']);
-    switch ($_GET['campo']) {
-        case 'nome':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaNome = ' is-valid';
-            } else {
-                $alertaNome = ' is-warning';
-            }
-            break;
-        case 'sobrenome':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaSobrenome = ' is-valid';
-            } else {
-                $alertaSobrenome = ' is-warning';
-            }
-            break;
-        case 'sexo':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaSexo = ' is-valid';
-            } else {
-                $alertaSexo = ' is-warning';
-            }
-            break;
-        case 'telefone':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaTelefone = ' is-valid';
-            } else {
-                $alertaTelefone = ' is-warning';
-            }
-            break;
-        case 'email':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaEmail = ' is-valid';
-            } else {
-                $alertaEmail = ' is-warning';
-            }
-            break;
-        case 'cargo':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaCargo = ' is-valid';
-            } else {
-                $alertaCargo = ' is-warning';
-            }
-            break;
-        case 'permissao':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaPermissao = ' is-valid';
-            } else {
-                $alertaPermissao = ' is-warning';
-            }
-            break;
-        case 'secretaria':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaSecretaria = ' is-valid';
-            } else {
-                $alertaSecretaria = ' is-warning';
-            }
-            break;
-        case 'departamento':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaDepartamento = ' is-valid';
-            } else {
-                $alertaDepartamento = ' is-warning';
-            }
-            break;
-        case 'coordenacao':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaCoordenacao = ' is-valid';
-            } else {
-                $alertaCoordenacao = ' is-warning';
-            }
-            break;
-        case 'setor':
-            if ($_GET['codigo'] == 'S1') {
-                $alertaSetor = ' is-valid';
-            } else {
-                $alertaSetor = ' is-warning';
-            }
-            break;
-        default:
-            break;
-    }
-
-    //cria as variáveis da notificação
-    $tipo = $sNotificacao->getTipo();
-    $titulo = $sNotificacao->getTitulo();
-    $mensagem = $sNotificacao->getMensagem();
-}
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -256,7 +162,7 @@ if (isset($_GET['campo'])) {
                             //próxima build
                             <div class="form-group col-md-1">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="<?php //echo $sConfiguracao->getDiretorioPrincipal();       ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="<?php //echo $sConfiguracao->getDiretorioPrincipal();        ?>vendor/almasaeed2010/adminlte/dist/img/user2-160x160.jpg" alt="User profile picture">
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
@@ -306,7 +212,6 @@ if (isset($_GET['campo'])) {
                                 <label for="email">Email</label>
                                 <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="email" id="email" value="<?php echo $email; ?>" required="">
                             </div>
-                            
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Permissão</label>
@@ -320,6 +225,19 @@ if (isset($_GET['campo'])) {
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Cargo/ Função</label>
+                                    <select class="form-control<?php echo isset($alertaCargo) ? $alertaCargo : ''; ?>" name="cargo" id="cargo">
+                                        <?php
+                                        foreach ($sCargo->mConexao->getRetorno() as $value) {
+                                            $idCargo == $value['idcargo'] ? $atributo = ' selected' : $atributo = '';
+                                            echo '<option value="' . $value['idcargo'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>  
                         </div>
                         <div class="row">
                             <div class="col-md-2">
@@ -340,28 +258,22 @@ if (isset($_GET['campo'])) {
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control<?php echo isset($alertaDepartamento) ? $alertaDepartamento : ''; ?>" name="departamento" id="departamento">
                                         <?php
-                                        if (!is_numeric($idDepartamento)) {
-                                            foreach ($sDepartamento->mConexao->getRetorno() as $value) {
-                                                $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
+                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+                                            $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
+                                            echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Coordenação</label>
                                     <select class="form-control<?php echo isset($alertaCoordenacao) ? $alertaCoordenacao : ''; ?>" name="coordenacao" id="coordenacao">
                                         <?php
-                                        if (!is_numeric($idCoordenacao)) {
-                                            foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
-                                                $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
+                                        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+                                            $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
+                                            echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -372,21 +284,15 @@ if (isset($_GET['campo'])) {
                                     <label>Setor</label>
                                     <select class="form-control<?php echo isset($alertaSetor) ? $alertaSetor : ''; ?>" name="setor" id="setor">
                                         <?php
-                                        if (!is_numeric($idSetor)) {
-                                            foreach ($sSetor->mConexao->getRetorno() as $value) {
-                                                $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="0" selected="">--</option>';
+                                        foreach ($sSetor->mConexao->getRetorno() as $value) {
+                                            $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
+                                            echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
                                 </div>
-                            </div>    
-                        </div>                            
-                        <div class="row">                               
-                            <div class="col-md-2">
+                            </div>   
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Situação</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
@@ -394,15 +300,14 @@ if (isset($_GET['campo'])) {
                                         <label class="custom-control-label" for="situacao"><?php echo $situacao ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>  
                         </div>
                     </div>
                     <?php
-                        if (isset($tipo) &&
-                            isset($titulo) &&
-                            isset($mensagem)) {
-                            if (isset($alertaSistema)) {
-                            echo <<<HTML
+                    if (isset($tipo) &&
+                        isset($titulo) &&
+                        isset($mensagem)) {
+                        echo <<<HTML
                             <div class="col-mb-3">
                                 <div class="card card-outline card-{$tipo}">
                                     <div class="card-header">
@@ -414,8 +319,7 @@ if (isset($_GET['campo'])) {
                                 </div>
                             </div>
 HTML;
-                            }
-                        }
+                    }
                     ?>
                     <!-- /.card-body -->
                     <div class="card-footer">

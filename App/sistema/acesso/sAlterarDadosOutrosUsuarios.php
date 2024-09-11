@@ -11,6 +11,8 @@ use App\sistema\acesso\{
     sTelefone,
     sEmail,
     sCargo,
+    sTratamentoDados,
+    sNotificacao,
     sSecretaria,
     sDepartamento,
     sCoordenacao,
@@ -31,18 +33,18 @@ if (isset($_POST['pagina'])) {
         $sSair->verificar('0');
     }
     
-    //etapa1 - receber valores
-    $idUsuarioSolicitante = $_SESSION['credencial']['idUsuario'];
-    $idUsuario = $_POST['idUsuario'];
+    //receber valores para alteração
+    $idUsuario = $_SESSION['credencial']['idUsuario'];
+    $idUsuarioAlterar = $_POST['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
     //$imagem = $_POST['imagem']; próxima building
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $sexo = $_POST['sexo'];
-    $telefone = $_POST['telefoneUsuario'];
-    isset($_POST['whatsAppUsuario']) ? $whatsApp = 1 : $whatsApp = 0;
-    $email = $_POST['emailUsuario'];
+    $telefone = $_POST['telefone'];
+    isset($_POST['whatsApp']) ? $whatsApp = 1 : $whatsApp = 0;
+    $email = $_POST['email'];
     $idCargo = $_POST['cargo'];
     $idPermissao = $_POST['permissao'];
     $idSecretaria = $_POST['secretaria'];
@@ -51,30 +53,55 @@ if (isset($_POST['pagina'])) {
     $idSetor = $_POST['setor'];
     isset($_POST['situacao']) ? $situacao = 1 : $situacao = 0;
     $atualizar = [];
-    $alteracao = false;
     
-    //etapa2 - buscando dados anteriores do usuário para posterior comparação com os dados passados
+    //buscando dados anteriores do usuário para posterior comparação com os dados passados
     $sUsuario = new sUsuario();
-    $sUsuario->setNomeCampo('idusuario');
-    $sUsuario->setValorCampo($idUsuario);
+    $sUsuario->setIdUsuario($idUsuarioAlterar);
     $sUsuario->consultar('tMenu1_2_1.php');
     
-    $sTelefone = new sTelefone($sUsuario->getTelefone(), 0, 'usuario');
-    $sTelefone->consultar('tMenu1_2_1.php');
-    $telefoneTratado = $sTelefone->tratarTelefone($telefone);
+    foreach ($sUsuario->mConexao->getRetorno() as $value) {
+        $nome == $value['nome'] ? $nome = false : $atualizar = ['nome' => $nome];
+        $sobrenome == $value['sobrenome'] ? $sobrenome = false : $atualizar = ['sobrenome' => $sobrenome];
+        $sexo == $value['sexo'] ? $sexo = false : $sexo = $value['sexo'];
+        //$imagem = $value['imagem'];
+        $situacao == $value['situacao'] ? $situacao = false : $atualizar = ['situacao' => $situacao];
+        $idSetor == $value['cargo_idcargo'] ? $idSetor = false : $atualizar = ['idSetor' => $idSetor];
+        $idCoordenacao == $value['coordenacao_idcoordenacao'] ? $idCoordenacao = false : $atualizar = ['idCoordenacao' => $idCoordenacao];
+        $idDepartamento == $value['departamento_iddepartamento'] ? $idDepartamento = false : $atualizar = ['idDepartamento' => $idDepartamento];
+        $idSecretaria == $value['secretaria_idsecretaria'] ? $idSecretaria = false : $atualizar = ['idSecretaria' => $idSecretaria];        
+        $idTelefone =$value['telefone_idtelefone'];
+        $idCargo == $value['cargo_idcargo'] ? $idCargo = false : $atualizar = ['idCargo' => $idCargo];
+        $idEmail = $value['email_idemail'];
+        $idPermissao == $value['permissao_idpermissao'] ? $idPermissao = false : $atualizar = ['idPermissao' => $idPermissao];
+    }
     
-    $sEmail = new sEmail($sUsuario->getIdEmail(), 'email');
+    //busca os dados do id do telefone
+    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');
+    $sTelefone->consultar('tMenu1_2_1.php');
+    
+    $sTratamentoTelefone = new sTratamentoDados($telefone);
+    $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
+    
+    foreach ($sTelefone->mConexao->getRetorno() as $value) {
+        $telefoneTratado == $value['numero'] ? $telefoneTratado = false : $atualizar = ['telefone' => $telefoneTratado];
+        if($whatsApp != $value['whatsApp']){
+            $atualizar = [
+                'whatsApp' => $whatsApp
+            ];
+        }
+    }
+        
+    //busca os dados do id do email
+    $sEmail = new sEmail($idEmail, 'email');
     $sEmail->consultar('tMenu1_2_1.php');
     
+    foreach ($sEmail->mConexao->getRetorno() as $value) {
+        $emailTratado == $value['email'] ? $email = false : $atualizar = ['email' => $emailTratado];
+    }
+    
+    //busca os dados do id do cargo
     $sCargo = new sCargo($idCargo);
     $sCargo->consultar('tMenu1_2_1.php');
-    
-    $sEmailSecretariaAnterior = new sEmail($sUsuario->getIdSecretaria(), 'secretaria');
-    $sEmailSecretariaAnterior->consultar('tMenu1_2_1.php');
-    echo $sEmailSecretariaAnterior->getIdEmail();
-    
-    $sEmailSecretariaAtual = new sEmail($idSecretaria, 'email');
-    $sEmailSecretariaAtual->consultar('tMenu1_2_1.php');
     
     
     //etapa3 - verificar campos alterados
@@ -82,6 +109,7 @@ if (isset($_POST['pagina'])) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $sUsuario->getNome();
         alimentaHistorico($pagina, $acao, 'nome', $valorCampoAnterior, $nome, $idUsuarioSolicitante);
+        exit();
         
         //etapa4 - validação do conteúdo
         $sUsuario->verificarNome($nome);
@@ -153,6 +181,21 @@ if (isset($_POST['pagina'])) {
     }
 
     if ($sEmail->getNomenclatura() != $email) {
+        /*
+        $sTratamentoEmail = new sTratamentoDados($email);
+        $validaEmail = $sTratamentoEmail->tratarEmail();
+
+        $seguranca = base64_encode($idUsuario);
+
+        if(!$validaEmail){
+            $sConfiguracao = new sConfiguracao();
+            $sNotificacao = new sNotificacao('A2');
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&seguranca={$seguranca}&campo=email&codigo={$sNotificacao->getCodigo()}");
+            exit();
+        }
+         * 
+         */
+        
         //insere dados na tabela histórico
         $valorCampoAnterior = $sEmail->getNomenclatura();
         alimentaHistorico($pagina, $acao, 'nomenclatura', $valorCampoAnterior, $email, $idUsuarioSolicitante);
