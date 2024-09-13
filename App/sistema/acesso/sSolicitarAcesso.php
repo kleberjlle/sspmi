@@ -12,7 +12,7 @@ use App\sistema\acesso\{
 };
 
 if (isset($_POST['pagina'])) {
-    if ($_POST['pagina'] != 'tSolicitarAcesso.php') {
+    if ($_POST['pagina'] != 'tMenu1_3_1.php') {
         //solicitar saída com tentativa de violação
         $sSair = new sSair();
         $sSair->verificar('0');
@@ -111,6 +111,10 @@ if (isset($_POST['pagina'])) {
              header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tSolicitarAcesso.php?campo=todos&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
         }
     }
+}else{
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
 }
 
 function alimentaHistorico($pagina, $acao, $campo, $valorCampoAnterior, $valorCampoAtual, $idUsuario) {

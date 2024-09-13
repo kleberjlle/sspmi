@@ -12,13 +12,21 @@ use App\sistema\acesso\{
     sNotificacao,
     sTelefone,
     sEmail,
-    sTratamentoDados
+    sTratamentoDados,
+    sSair
 };
 
-if (isset($_GET['seguranca']) ||
-    isset($_GET['campo']) ||
-    isset($_GET['codigo'])) {
+if(isset($_GET['seguranca'])){
     $idUsuario = $_GET['seguranca'];
+    $idUsuario = base64_decode($idUsuario);
+} else {
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
+}
+
+if (isset($_GET['campo']) ||
+    isset($_GET['codigo'])) {    
     $sNotificacao = new sNotificacao($_GET['codigo']);
     switch ($_GET['campo']) {
         case 'nome':
@@ -78,13 +86,7 @@ if (isset($_GET['seguranca']) ||
     $tipo = $sNotificacao->getTipo();
     $titulo = $sNotificacao->getTitulo();
     $mensagem = $sNotificacao->getMensagem();
-} else {
-    //solicitar saída com tentativa de violação
-    $sSair = new sSair();
-    $sSair->verificar('0');
 }
-
-$idUsuario = base64_decode($idUsuario);
 
 $sConfiguracao = new sConfiguracao();
 
@@ -258,9 +260,14 @@ $sSetor->consultar('tMenu1_2_1.php');
                                     <label>Departamento/ Unidade</label>
                                     <select class="form-control<?php echo isset($alertaDepartamento) ? $alertaDepartamento : ''; ?>" name="departamento" id="departamento">
                                         <?php
-                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
-                                            $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($idDepartamento == 0){
+                                            echo '<option value="0" selected="">--</option>';
+                                        }
+                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {                                            
+                                            if($idDepartamento != 0){
+                                                $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
+                                                echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -271,9 +278,14 @@ $sSetor->consultar('tMenu1_2_1.php');
                                     <label>Coordenação</label>
                                     <select class="form-control<?php echo isset($alertaCoordenacao) ? $alertaCoordenacao : ''; ?>" name="coordenacao" id="coordenacao">
                                         <?php
-                                        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
-                                            $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($idCoordenacao == 0){
+                                            echo '<option value="0" selected="">--</option>';
+                                        }
+                                        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {                                            
+                                            if($idCoordenacao != 0){
+                                                $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
+                                                echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>
@@ -284,9 +296,14 @@ $sSetor->consultar('tMenu1_2_1.php');
                                     <label>Setor</label>
                                     <select class="form-control<?php echo isset($alertaSetor) ? $alertaSetor : ''; ?>" name="setor" id="setor">
                                         <?php
-                                        foreach ($sSetor->mConexao->getRetorno() as $value) {
-                                            $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
-                                            echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                        if($idSetor == 0){
+                                            echo '<option value="0" selected="">--</option>';
+                                        }
+                                        foreach ($sSetor->mConexao->getRetorno() as $value) {                                            
+                                            if($idSetor != 0){
+                                                $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
+                                                echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
                                         }
                                         ?>
                                     </select>

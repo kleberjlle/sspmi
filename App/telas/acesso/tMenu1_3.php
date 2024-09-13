@@ -31,14 +31,15 @@ $sUsuario->consultar('tMenu1_3.php');
                     <th>Telefones</th>
                     <th>E-mails</th>
                     <th>Situação</th>
-                    <th>Editar</th>
+                    <th>Verificar</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if ($sUsuario->mConexao->getValidador()) {
                     foreach ($sUsuario->mConexao->getRetorno() as $key => $value) {
-                        //consultar os dados do usuário e armazenar em variáveis locais                    
+                        //consultar os dados do usuário e armazenar em variáveis locais   
+                        $seguranca = base64_encode($value['idsolicitacao']);
                         $nome = $value['nome'] . ' ' . $value['sobrenome'];
                         $idSecretaria = $value['secretaria_idsecretaria'];
                         $emailUsuario = $value['email'];
@@ -69,8 +70,7 @@ $sUsuario->consultar('tMenu1_3.php');
                             $sExaminador->setIdUsuario($idExaminador);
                             $sExaminador->consultar('tMenu1_3-examinador.php');
                             $nomeExaminador = $sExaminador->getNome().' '.$sExaminador->getSobrenome();                            
-                        }
-                        
+                        }                        
                         
                         //verifica se o registro já foi aprovado e por quem
                         if($value['examinador']){
@@ -91,6 +91,7 @@ $sUsuario->consultar('tMenu1_3.php');
                         } else {
                             $departamento = '--';
                         }
+                        
                         //se tiver uma coordenação vinculado, retorna os dados
                         if ($value['coordenacao_idcoordenacao']) {
                             $sCoordenacao = new sCoordenacao($value['coordenacao_idcoordenacao']);
@@ -99,6 +100,7 @@ $sUsuario->consultar('tMenu1_3.php');
                         } else {
                             $coordenacao = '--';
                         }
+                        
                         //se tiver um setor vinculado, retorna os dados
                         if ($value['setor_idsetor']) {
                             $sSetor = new sSetor($value['setor_idsetor']);
@@ -107,6 +109,7 @@ $sUsuario->consultar('tMenu1_3.php');
                         } else {
                             $setor = '--';
                         }
+                        
                         //se tiver telefone na secretaria, retorna os dados
                         $sTelefoneSecretaria = new sTelefone(0, $value['secretaria_idsecretaria'], 'secretaria');
                         $sTelefoneSecretaria->consultar('tMenu1_3.php');
@@ -116,6 +119,7 @@ $sUsuario->consultar('tMenu1_3.php');
                         } else {
                             $telefoneSecretaria = '--';
                         }
+                        
                         //se tiver telefone no departamento, e o usuário pertencer há um departamento retorna os dados
                         $sTelefoneDepartamento = new sTelefone(0, $value['departamento_iddepartamento'], 'departamento');
                         $sTelefoneDepartamento->consultar('tMenu1_3.php');
@@ -126,6 +130,7 @@ $sUsuario->consultar('tMenu1_3.php');
                             $telefoneDepartamento = '--';
                             $whatsAppDepartamento = '';
                         }
+                        
                         //se tiver telefone na coordenação, e o usuário pertencer há uma coordenação retorna os dados
                         $sTelefoneCoordenacao = new sTelefone(0, $value['coordenacao_idcoordenacao'], 'coordenacao');
                         $sTelefoneCoordenacao->consultar('tMenu1_3.php');
@@ -136,6 +141,7 @@ $sUsuario->consultar('tMenu1_3.php');
                             $telefoneCoordenacao = '--';
                             $whatsAppCoordenacao = '';
                         }
+                        
                         //se tiver telefone na setor, e o usuário pertencer há um setor retorna os dados
                         $sTelefoneSetor = new sTelefone(0, $value['setor_idsetor'], 'setor');
                         $sTelefoneSetor->consultar('tMenu1_3.php');
@@ -156,7 +162,6 @@ $sUsuario->consultar('tMenu1_3.php');
                             $telefoneUsuarioTratado = '--';
                             $whatsAppUsuario = '';
                         }
-
 
                         if ($value['secretaria_idsecretaria'] != 0) {
                             $sEmailSecretaria = new sEmail('', 'secretaria');
@@ -193,6 +198,13 @@ $sUsuario->consultar('tMenu1_3.php');
                         }else{
                             $emailSetor = '--';
                         }
+                        
+                        //instancia as configurações do sistema
+                        $sConfiguracao = new sConfiguracao();
+                        $diretorio = $sConfiguracao->getDiretorioVisualizacaoAcesso();
+                        
+                        $pagina = 'tMenu1_3.php';
+                        
                         echo <<<HTML
                         <tr>
                             <td>{$nome}</td>
@@ -220,9 +232,8 @@ $sUsuario->consultar('tMenu1_3.php');
                                 {$situacao}
                             </td>
                             <td>
-                                <a href="#">
-                                    <i class="fas fa-edit mr-1"></i>
-                                </a>
+                                <i class="fas fa-door-open"></i>
+                                <a href="{$diretorio}tPainel.php?menu=1_3_1&seguranca={$seguranca}"> Verificar</a>
                             </td>
                         </tr>
 HTML;
@@ -238,7 +249,7 @@ HTML;
                     <th>Telefones</th>
                     <th>E-mails</th>
                     <th>Situação</th>
-                    <th>Editar</th>
+                    <th>Verificar</th>
                 </tr>
             </tfoot>
         </table>

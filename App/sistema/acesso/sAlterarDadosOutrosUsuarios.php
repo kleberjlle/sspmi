@@ -60,18 +60,29 @@ if (isset($_POST['pagina'])) {
     $sUsuario->consultar('tMenu1_2_1.php');
     
     foreach ($sUsuario->mConexao->getRetorno() as $value) {
+        $nomeAnterior = $value['nome'];
         $nome == $value['nome'] ? $nome = false : $atualizar = ['nome' => $nome];
+        $sobrenomeAnterior = $value['sobrenome'];
         $sobrenome == $value['sobrenome'] ? $sobrenome = false : $atualizar = ['sobrenome' => $sobrenome];
+        $sexoAnterior = $value['sexo'];
         $sexo == $value['sexo'] ? $sexo = false : $sexo = $value['sexo'];
         //$imagem = $value['imagem'];
+        $situacaoAnterior = $value['situacao'];
         $situacao == $value['situacao'] ? $situacao = false : $atualizar = ['situacao' => $situacao];
-        $idSetor == $value['cargo_idcargo'] ? $idSetor = false : $atualizar = ['idSetor' => $idSetor];
+        $setorAnterior = $value['setor_idsetor'];
+        $idSetor == $value['setor_idsetor'] ? $idSetor = false : $atualizar = ['idSetor' => $idSetor];
+        $coordenacaoAnterior = $value['coordenacao_idcoordenacao'];
         $idCoordenacao == $value['coordenacao_idcoordenacao'] ? $idCoordenacao = false : $atualizar = ['idCoordenacao' => $idCoordenacao];
+        $departamentoAnterior = $value['departamento_iddepartamento'];
         $idDepartamento == $value['departamento_iddepartamento'] ? $idDepartamento = false : $atualizar = ['idDepartamento' => $idDepartamento];
-        $idSecretaria == $value['secretaria_idsecretaria'] ? $idSecretaria = false : $atualizar = ['idSecretaria' => $idSecretaria];        
+        $secretariaAnterior = $value['secretaria_idsecretaria'];
+        $idSecretaria == $value['secretaria_idsecretaria'] ? $idSecretaria = false : $atualizar = ['idSecretaria' => $idSecretaria];
         $idTelefone =$value['telefone_idtelefone'];
+        $cargoAnterior = $value['cargo_idcargo'];
         $idCargo == $value['cargo_idcargo'] ? $idCargo = false : $atualizar = ['idCargo' => $idCargo];
+        $emailAnterior = $value['email_idemail'];
         $idEmail = $value['email_idemail'];
+        $permissaoAnterior = $value['permissao_idpermissao'];
         $idPermissao == $value['permissao_idpermissao'] ? $idPermissao = false : $atualizar = ['idPermissao' => $idPermissao];
     }
     
@@ -83,12 +94,10 @@ if (isset($_POST['pagina'])) {
     $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
     
     foreach ($sTelefone->mConexao->getRetorno() as $value) {
+        $telefoneAnterior = $value['numero'];
         $telefoneTratado == $value['numero'] ? $telefoneTratado = false : $atualizar = ['telefone' => $telefoneTratado];
-        if($whatsApp != $value['whatsApp']){
-            $atualizar = [
-                'whatsApp' => $whatsApp
-            ];
-        }
+        $whatsAppAnterior = $value['whatsApp'];
+        $whatsApp == $value['whatsApp'] ? $whatsApp = false : $atualizar = ['whatsApp' => $whatsApp];
     }
         
     //busca os dados do id do email
@@ -96,19 +105,56 @@ if (isset($_POST['pagina'])) {
     $sEmail->consultar('tMenu1_2_1.php');
     
     foreach ($sEmail->mConexao->getRetorno() as $value) {
-        $emailTratado == $value['email'] ? $email = false : $atualizar = ['email' => $emailTratado];
+        $email == $value['nomenclatura'] ? $email = false : $atualizar = ['nomenclatura' => $email];
+    }
+            
+    //alimentar histórico
+    if($nome){
+        alimentaHistorico($pagina, $acao, 'nome', $nomeAnterior, $nome, $idUsuario);
+    }
+    if($sobrenome){
+        alimentaHistorico($pagina, $acao, 'sobrenome', $sobrenomeAnterior, $sobrenome, $idUsuario);
+    }
+    if($sexo){
+        alimentaHistorico($pagina, $acao, 'sexo', $sexoAnterior, $sexo, $idUsuario);
+    }
+    if($telefoneTratado){
+        alimentaHistorico($pagina, $acao, 'numero', $telefoneAnterior, $telefone, $idUsuario);
+    }
+    if($whatsApp){
+        alimentaHistorico($pagina, $acao, 'whatsApp', $whatsAppAnterior, $whatsApp, $idUsuario);
+    }
+    if($email){
+        alimentaHistorico($pagina, $acao, 'email', $emailAnterior, $email, $idUsuario);
+    }
+    if($idPermissao){
+        alimentaHistorico($pagina, $acao, 'permissao_idpermissao', $permissaoAnterior, $idPermissao, $idUsuario);
+    }
+    if($idCargo){
+        alimentaHistorico($pagina, $acao, 'cargo_idcargo', $cargoAnterior, $idCargo, $idUsuario);
+    }
+    if($idSecretaria){
+        alimentaHistorico($pagina, $acao, 'secretaria_idsecretaria', $secretariaAnterior, $idSecretaria, $idUsuario);
+    }
+    if($idDepartamento){
+        alimentaHistorico($pagina, $acao, 'departamento_iddepartamento', $departamentoAnterior, $idDepartamento, $idUsuario);
+    }
+    if($idCoordenacao){
+        alimentaHistorico($pagina, $acao, 'coordenacao_idcoordenacao', $coordenacaoAnterior, $idCoordenacao, $idUsuario);
+    }
+    if($idSetor){
+        alimentaHistorico($pagina, $acao, 'setor_idsetor', $setorAnterior, $idSetor, $idUsuario);
+    }
+    if($situacao){
+        alimentaHistorico($pagina, $acao, 'situacao', $situacaoAnterior, $situacao, $idUsuario);
     }
     
-    //busca os dados do id do cargo
-    $sCargo = new sCargo($idCargo);
-    $sCargo->consultar('tMenu1_2_1.php');
+    exit();
     
-    
-    //etapa3 - verificar campos alterados
-    if ($sUsuario->getNome() != $nome) {
+    if ($nome) {
         //insere dados na tabela histórico
         $valorCampoAnterior = $sUsuario->getNome();
-        alimentaHistorico($pagina, $acao, 'nome', $valorCampoAnterior, $nome, $idUsuarioSolicitante);
+        
         exit();
         
         //etapa4 - validação do conteúdo
