@@ -73,18 +73,18 @@ class sTratamentoDados {
     }
 
     public function tratarEtiquetaDeServico() {
-        if(empty($this->getDados())){
+        if (empty($this->getDados())) {
             $etiquetaDeServico = 'Indefinida';
-        }else{
+        } else {
             $etiquetaDeServico = $this->getDados();
         }
         return $etiquetaDeServico;
     }
 
     public function tratarNumeroDeSerie() {
-        if(empty($this->getDados())){
+        if (empty($this->getDados())) {
             $numeroDeSerie = 'Indefinida';
-        }else{
+        } else {
             $numeroDeSerie = $this->getDados();
         }
         return $numeroDeSerie;
@@ -145,7 +145,7 @@ class sTratamentoDados {
                 break;
         }
     }
-    
+
     public function tratarSenha() {
         /*
          * [RF011] Ao registrar um novo usuário o sistema deverá gerar uma senha
@@ -153,25 +153,54 @@ class sTratamentoDados {
          * conter ao menos uma letra e ao menos um número, não sendo aceito
          * caracteres especiais.
          */
-        if(strlen($this->getDados()) < 7 || strlen($this->getDados()) > 14){
+        if (strlen($this->getDados()) < 7 || strlen($this->getDados()) > 14) {
             //caso a senha tenha menos que 7 caracteres ou mais que 14
             return false;
-        }else{
+        } else {
             //verifica se tem somente caracteres alfanuméricos
-            if(ctype_alnum($this->getDados())){
-                if(preg_match("/[a-zA-Z]/", $this->getDados())){
-                    if(preg_match("/[0-9]/", $this->getDados())){
+            if (ctype_alnum($this->getDados())) {
+                if (preg_match("/[a-zA-Z]/", $this->getDados())) {
+                    if (preg_match("/[0-9]/", $this->getDados())) {
                         return $this->getDados();
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     return false;
                 }
-            }else{
+            } else {
                 return false;
-            }            
-        }        
+            }
+        }
+    }
+
+    public function tratarNavegador() {
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+
+        if (preg_match('/MSIE/i', $u_agent) && !preg_match('/Opera/i', $u_agent) || preg_match('/Trident/i', $u_agent)) {
+            $bname = 'IE';
+            $ub = "MSIE";
+        } elseif (preg_match('/Edge/i', $u_agent)) {
+            $bname = 'EDGE';
+            $ub = "Edge";
+        } elseif (preg_match('/Firefox/i', $u_agent)) {
+            $bname = 'FIREFOX';
+            $ub = "FIREFOX";
+        } elseif (preg_match('/Chrome/i', $u_agent)) {
+            $bname = 'CHROME';
+            $ub = "CHROME";
+        } elseif (preg_match('/AppleWebKit/i', $u_agent)) {
+            $bname = 'OPERA';
+            $ub = "OPERA";
+        } elseif (preg_match('/Safari/i', $u_agent)) {
+            $bname = 'SAFARI';
+            $ub = "SAFARI";
+        } elseif (preg_match('/Netscape/i', $u_agent)) {
+            $bname = 'NETSCAPE';
+            $ub = "NETSCAPE";
+        }
+
+        return $bname;
     }
 
     public function getDados(): mixed {
@@ -181,4 +210,5 @@ class sTratamentoDados {
     public function setDados(mixed $dados): void {
         $this->dados = $dados;
     }
+
 }

@@ -6,13 +6,15 @@ use App\modelo\{
     mConexao
 };
 use App\sistema\acesso\{
-    sNotificacao
+    sNotificacao,
+    sTratamentoDados
 };
 
 class sHistorico {
 
     public mConexao $mConexao;
     public sNotificacao $sNotificacao;
+    public sTratamentoDados $sTratamentoDados;
 
     public function consultar($pagina) {
         //cria conexão para inserir os dados na tabela
@@ -41,7 +43,14 @@ class sHistorico {
             $pagina == 'tMenu5_2_1.php' ||
             $pagina == 'tMenu4_1.php' ||
             $pagina == 'tMenu2_2_3.php') {
-            //insere os dados do histórico no BD            
+            
+            //insere os dados do histórico no BD     
+            //obtèm dados do endereço de ip
+            $tratarDados['ip'] = str_replace(['-'], '.', gethostbyaddr($_SERVER['REMOTE_ADDR']));
+            //obtém dados do navegador
+            $sTratarNavegador = new sTratamentoDados($_SERVER['HTTP_USER_AGENT']);            
+            $tratarDados['navegador'] = $sTratarNavegador->tratarNavegador();
+            
             $dados = [
                 'comando' => 'INSERT INTO',
                 'tabela' => 'historico',

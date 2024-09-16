@@ -15,6 +15,31 @@ class sSenha {
         $this->validador = $validador;
     }    
     
+    public function gerar() {
+        //declara uma variável com todas as letras e outra com todos os números possíveis
+        $letras = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $numeros = '0123456789';
+        
+        //declara variável vazia para ser incrementada posteriormente
+        $letrasSorteadas = '';
+        $numerosSorteados = '';
+        
+        //seleciona randomicamente 5 letras
+        for ($i = 0; $i < 5; $i++) {
+            $indice = rand(0, strlen($letras) - 1);
+            $letrasSorteadas .= $letras[$indice];
+        }
+        
+        //seleciona randomicamente 5 números
+        for ($i = 0; $i < 5; $i++) {
+            $indice = rand(0, strlen($numeros) - 1);
+            $numerosSorteados .= $numeros[$indice];
+        }
+        
+        //concatena e atribui as letras e números
+        $this->setSenha($letrasSorteadas.$numerosSorteados);
+    }
+    
     public function criptografar($senha) {
         $this->setSenha($senha);
         $this->setSenhaCriptografada(password_hash(hash_hmac("sha256", $senha, "sspmi"), PASSWORD_ARGON2ID));
@@ -52,9 +77,7 @@ class sSenha {
                 }
             }
         }
-        
         //verifica se a senha informada está correta
-        
     }
     
     private function verificaRequisitos() {

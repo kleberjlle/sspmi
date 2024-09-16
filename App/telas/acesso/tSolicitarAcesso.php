@@ -60,7 +60,6 @@ if(isset($_GET['campo'])){
             <div class="card">
                 <div class="card-body register-card-body">
                     <p class="login-box-msg">Solicitar Acesso</p>
-
                     <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sSolicitarAcesso.php" method="post">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Nome" name="nome" id="nome" required="">

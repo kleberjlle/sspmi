@@ -29,6 +29,7 @@ class sUsuario {
     private int $idSetor;
     private int $idCargo;
     private int $idPermissao;
+    private int $idTelefone;
     private bool $validador;
     private string $nome;
     private string $sobrenome;
@@ -431,12 +432,12 @@ class sUsuario {
         //verifica se tem letras e espaço
         $caracterValido = !!preg_match('|^[\pL\s]+$|u', $nome);
         if (mb_strlen($nome) < 2 ||
-                mb_strlen($nome) > 20) {
+                mb_strlen($nome) > 20) {            
             $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A8'));
+            $this->setSNotificacao(new sNotificacao('A24'));
         } else if (!$caracterValido) {
             $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A9'));
+            $this->setSNotificacao(new sNotificacao('A25'));
         } else {
             $this->setValidador(true);
         }
@@ -448,10 +449,10 @@ class sUsuario {
         if (mb_strlen($sobrenome) < 2 ||
                 mb_strlen($sobrenome) > 100) {
             $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A8'));
+            $this->setSNotificacao(new sNotificacao('A26'));
         } else if (!$caracterValido) {
             $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A9'));
+            $this->setSNotificacao(new sNotificacao('A27'));
         } else {
             $this->setValidador(true);
         }
@@ -522,6 +523,47 @@ class sUsuario {
                 $this->setSNotificacao(new sNotificacao('S3'));
             }
         }
+        
+        if ($pagina == 'tMenu1_3_1.php') {
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'usuario',
+                'camposInsercao' => [
+                    'nome',
+                    'sobrenome',
+                    'sexo',
+                    'situacao',
+                    'setor_idsetor',
+                    'coordenacao_idcoordenacao',
+                    'departamento_iddepartamento',
+                    'secretaria_idsecretaria',
+                    'telefone_idtelefone',
+                    'cargo_idcargo',
+                    'email_idemail',
+                    'permissao_idpermissao'
+                ],
+                'valoresInsercao' => [
+                    $this->getNome(),
+                    $this->getSobrenome(),
+                    $this->getSexo(),
+                    $this->getSituacao(),
+                    $this->getIdSetor(),
+                    $this->getIdCoordenacao(),
+                    $this->getIdDepartamento(),
+                    $this->getIdSecretaria(),
+                    $this->getIdTelefone(),
+                    $this->getIdCargo(),
+                    $this->getEmail(),
+                    $this->getIdPermissao()
+                ]
+            ];
+            $this->mConexao->CRUD($dados);
+            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+            if ($this->mConexao->getValidador()) {
+                $this->setValidador(true);
+                $this->setSNotificacao(new sNotificacao('S3'));
+            }
+        }
     }
 
     public function tratarData($data) {
@@ -572,6 +614,10 @@ class sUsuario {
 
     public function getIdPermissao(): int {
         return $this->idPermissao;
+    }
+
+    public function getIdTelefone(): int {
+        return $this->idTelefone;
     }
 
     public function getValidador(): bool {
@@ -726,6 +772,10 @@ class sUsuario {
         $this->idPermissao = $idPermissao;
     }
 
+    public function setIdTelefone(int $idTelefone): void {
+        $this->idTelefone = $idTelefone;
+    }
+
     public function setValidador(bool $validador): void {
         $this->validador = $validador;
     }
@@ -833,4 +883,6 @@ class sUsuario {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

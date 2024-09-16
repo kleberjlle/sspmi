@@ -237,6 +237,23 @@ class sEmail {
                 ]
             ];
         }
+        
+        //insere e-mail do usuário
+        if ($pagina == 'tMenu1_3_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'INSERT INTO',
+                'tabela' => 'email',
+                'camposInsercao' => [
+                    'nomenclatura',
+                    'senha'
+                ],
+                'valoresInsercao' => [
+                    $tratarDados['nomenclatura'],
+                    $tratarDados['senha']
+                ]
+            ];
+        }
 
         if ($pagina == 'tMenu4_1-email_has_secretaria.php' ||
                 $pagina == 'tMenu4_1-email_has_departamento.php' ||

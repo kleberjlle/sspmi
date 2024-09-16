@@ -10,11 +10,40 @@ use App\sistema\acesso\{
     sSetor,
     sTelefone,
     sEmail,
+    sNotificacao
 };
 
 $sConfiguracao = new sConfiguracao();
 $sUsuario = new sUsuario();
 $sUsuario->consultar('tMenu1_3.php');
+
+if (isset($_GET['campo']) ||
+    isset($_GET['codigo'])) {    
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'verificar':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaVerificar = ' is-valid';
+            } else {
+                $alertaVerificar = ' is-warning';
+            }
+            break;
+        case 'nome':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaNome = ' is-valid';
+            } else {
+                $alertaNome = ' is-warning';
+            }
+            break;
+        default:
+            break;
+    }
+
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();
+}
 ?>
 <div class="card card-primary card-outline">
     <div class="card-header">
@@ -22,6 +51,25 @@ $sUsuario->consultar('tMenu1_3.php');
     </div>
     <!-- /.card-header -->
     <div class="card-body">
+        <?php
+        if (isset($tipo) &&
+            isset($titulo) &&
+            isset($mensagem)) {
+            echo <<<HTML
+                <div class="col-mb-3">
+                    <div class="card card-outline card-{$tipo}">
+                        <div class="card-header">
+                            <h3 class="card-title">{$titulo}</h3>
+                        </div>
+                        <div class="card-body">
+                            {$mensagem}
+                        </div>
+                    </div>
+                </div>
+HTML;
+        }
+        ?>
+        
         <table id="tabelaMenu1_3" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -232,8 +280,19 @@ $sUsuario->consultar('tMenu1_3.php');
                                 {$situacao}
                             </td>
                             <td>
-                                <i class="fas fa-door-open"></i>
-                                <a href="{$diretorio}tPainel.php?menu=1_3_1&seguranca={$seguranca}"> Verificar</a>
+                                
+HTML;
+                                if(empty($value['dataHoraExaminador'])){
+                                    echo <<<HTML
+                                    <i class="fas fa-door-open"></i>
+                                    <a href="{$diretorio}tPainel.php?menu=1_3_1&seguranca={$seguranca}"> Verificar</a>
+HTML;
+                                } else {
+                                    echo <<<HTML
+                                    <i class="fas fa-check-circle"></i> Verificado
+HTML;
+                                }
+                            echo <<<HTML
                             </td>
                         </tr>
 HTML;
@@ -265,7 +324,8 @@ HTML;
             "responsive": true, 
             "lengthChange": false, 
             "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            "aaSorting": [6, "asc"]
         }).buttons().container().appendTo('#tabelaMenu1_3_wrapper .col-md-6:eq(0)');        
     });
 </script>

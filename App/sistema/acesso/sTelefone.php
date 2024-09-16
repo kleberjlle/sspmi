@@ -133,7 +133,8 @@ class sTelefone {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu4_1.php' ||
-            $pagina == 'tMenu1_1_1.php') {
+            $pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_3_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

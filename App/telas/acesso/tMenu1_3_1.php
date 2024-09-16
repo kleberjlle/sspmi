@@ -38,8 +38,8 @@ $sConfiguracao = new sConfiguracao();
                             <div class="form-group">
                                 <label>Aprovar solicitação?</label>
                                 <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                    <input class="custom-control-input" type="checkbox" name="aprovarSolicitacao" id="aprovarSolicitacao" checked="" onclick="decisao();" form="f1">
-                                    <label class="custom-control-label" for="aprovarSolicitacao">
+                                    <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" checked="" onclick="decisao();" form="f1">
+                                    <label class="custom-control-label" for="situacao">
                                         <div class="conteudo" name="conteudo" id="conteudo">Sim</div>
                                     </label>
                                 </div>
@@ -70,13 +70,14 @@ HTML;
                     ?>
                     
                 </div>
-                <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sSolicitarAcesso.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
+                <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sAprovarAcesso.php" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <input type="hidden" value="f1" name="formulario" id="formulario" form="f1">
-                    <input type="hidden" value="inserir" name="acao" id="alterar" form="f1">
-                    <input type="hidden" value="tMenu1_3_1" name="pagina" id="tMenu1_3_1" form="f1">
+                    <input type="hidden" value="alterar" name="acao" id="acao" form="f1">
+                    <input type="hidden" value="<?php echo $idSolicitacao; ?>" name="idSolicitacao" id="alterar" form="f1">
+                    <input type="hidden" value="tMenu1_3_1.php" name="pagina" id="pagina" form="f1">
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Próximo</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
                 <!-- /.card -->
@@ -86,7 +87,7 @@ HTML;
 </div>
 <script>
     function decisao(){
-       if (document.getElementById('aprovarSolicitacao').checked) {
+       if (document.getElementById('situacao').checked) {
             document.getElementById('conteudo').innerHTML = 'Sim';
         } else {
             document.getElementById('conteudo').innerHTML = 'Não';

@@ -112,6 +112,18 @@ class sNotificacao{
             case '23':
                 $this->setMensagem('Para reatribuir o chamado você deve escolher um responsável diferente do atual.');
                 break;
+            case '24':
+                $this->setMensagem('O nome do usuário não atende os requisitos do sistema. O campo deve conter de 2 a 20 caracteres');
+                break;
+            case '25':
+                $this->setMensagem('O nome do usuário não atende os requisitos do sistema. Só pode conter letras');
+                break;
+            case '26':
+                $this->setMensagem('O sobrenome do usuário não atende os requisitos do sistema. O campo deve conter de 2 a 100 caracteres');
+                break;
+            case '27':
+                $this->setMensagem('O sobrenome do usuário não atende os requisitos do sistema. Só pode conter letras');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');
