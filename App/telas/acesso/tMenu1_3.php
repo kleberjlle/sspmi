@@ -35,6 +35,13 @@ if (isset($_GET['campo']) ||
                 $alertaNome = ' is-warning';
             }
             break;
+        case 'situacao':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaNome = ' is-valid';
+            } else {
+                $alertaNome = ' is-warning';
+            }
+            break;
         default:
             break;
     }

@@ -525,44 +525,59 @@ class sUsuario {
         }
         
         if ($pagina == 'tMenu1_3_1.php') {
-            $dados = [
+            //declara um array que incrementa campos conforme necessário
+            
+            $dados =[
                 'comando' => 'INSERT INTO',
                 'tabela' => 'usuario',
                 'camposInsercao' => [
                     'nome',
                     'sobrenome',
-                    'sexo',
-                    'situacao',
-                    'setor_idsetor',
-                    'coordenacao_idcoordenacao',
-                    'departamento_iddepartamento',
-                    'secretaria_idsecretaria',
-                    'telefone_idtelefone',
-                    'cargo_idcargo',
-                    'email_idemail',
-                    'permissao_idpermissao'
+                    'sexo'
                 ],
                 'valoresInsercao' => [
                     $this->getNome(),
                     $this->getSobrenome(),
                     $this->getSexo(),
-                    $this->getSituacao(),
-                    $this->getIdSetor(),
-                    $this->getIdCoordenacao(),
-                    $this->getIdDepartamento(),
-                    $this->getIdSecretaria(),
-                    $this->getIdTelefone(),
-                    $this->getIdCargo(),
-                    $this->getEmail(),
-                    $this->getIdPermissao()
                 ]
-            ];
-            $this->mConexao->CRUD($dados);
-            //INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
-            if ($this->mConexao->getValidador()) {
-                $this->setValidador(true);
-                $this->setSNotificacao(new sNotificacao('S3'));
+            ];       
+                        
+            if($this->getIdDepartamento()){
+                array_push($dados['camposInsercao'], 'departamento_iddepartamento');
+                array_push($dados['valoresInsercao'], $this->getIdDepartamento());
             }
+            if($this->getIdCoordenacao()){
+                array_push($dados['camposInsercao'], 'coordenacao_idcoordenacao');
+                array_push($dados['valoresInsercao'], $this->getIdCoordenacao());
+            }
+            if($this->getIdSetor()){
+                array_push($dados['camposInsercao'], 'setor_idsetor');
+                array_push($dados['valoresInsercao'], $this->getIdSetor());
+            }
+                     
+            array_push(
+                $dados['camposInsercao'],
+                'secretaria_idsecretaria',
+                'telefone_idtelefone',
+                'cargo_idcargo',
+                'email_idemail',
+                'permissao_idpermissao',
+                'situacao'
+            );
+            
+            array_push(
+                $dados['valoresInsercao'],
+                $this->getIdSecretaria(),
+                $this->getIdTelefone(),
+                $this->getIdCargo(),
+                $this->getIdEmail(),
+                $this->getIdPermissao(),
+                $this->getSituacao()
+            );
+            
+            $this->mConexao->CRUD($dados);
+            
+            $this->setValidador($this->mConexao->getValidador());
         }
     }
 

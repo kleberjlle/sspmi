@@ -98,10 +98,11 @@ if (isset($_POST['formulario'])) {
     if ($idSecretaria == 0) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1_1&campo=secretaria&codigo=A17");
         exit();
+    }else{
+        $sSecretaria = new sSecretaria($idSecretaria);
+        $sSecretaria->consultar('tMenu2_1.php');
+        $secretaria = $sSecretaria->getNomenclatura();
     }
-    $sSecretaria = new sSecretaria($idSecretaria);
-    $sSecretaria->consultar('tMenu2_1.php');
-    $secretaria = $sSecretaria->getNomenclatura();
 
     if ($idDepartamento == 0) {
         $departamento = '--';

@@ -2,7 +2,8 @@
 
 use App\sistema\acesso\{
     sNotificacao,
-    sConfiguracao
+    sConfiguracao,
+    sSair
 };
 use App\sistema\suporte\{
     sEquipamento,

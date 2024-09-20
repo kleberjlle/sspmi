@@ -124,6 +124,9 @@ class sNotificacao{
             case '27':
                 $this->setMensagem('O sobrenome do usuário não atende os requisitos do sistema. Só pode conter letras');
                 break;
+            case '28':
+                $this->setMensagem('Por alguma razão não foi enviado o e-mail para o usuário. Contate o administrador sistema informando o erro e contate o usuário e oriente-o para recuperar a senha.');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

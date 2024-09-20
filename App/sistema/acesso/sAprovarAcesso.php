@@ -10,15 +10,9 @@ use App\sistema\acesso\{
     sUsuario,
     sTelefone,
     sEmail,
-    sCargo,
-    sTratamentoDados,
-    sNotificacao,
-    sSecretaria,
-    sDepartamento,
-    sCoordenacao,
-    sSetor,
     sSolicitacao,
-    sSenha
+    sSenha,
+    sNotificacao
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -55,7 +49,6 @@ if (isset($_POST['pagina'])) {
     $sSolicitacao = new sSolicitacao();
     $sSolicitacao->setIdSolicitacao($idSolicitacao);
     
-    /*
     //altera o campo situação
     $sSolicitacao->setNomeCampo('situacao');
     $sSolicitacao->setValorCampo($situacao);
@@ -70,12 +63,9 @@ if (isset($_POST['pagina'])) {
     $sSolicitacao->setNomeCampo('dataHoraExaminador');
     $sSolicitacao->setValorCampo($dataHoraExaminador);
     $sSolicitacao->alterar($pagina);
-* 
-     */
     
     //consulta dados da solicitação
-    $sSolicitacao->consultar($pagina);
-     
+    $sSolicitacao->consultar($pagina);    
     
     foreach ($sSolicitacao->mConexao->getRetorno() as $value) {
         $nome = $value['nome'];
@@ -85,16 +75,12 @@ if (isset($_POST['pagina'])) {
         $whatsApp = $value['whatsApp'];
         $email = $value['email'];
         $idSecretaria = $value['secretaria_idsecretaria'];
-        $idDepartamento = $value['departamento_iddepartamento'];
-        $idCoordenacao = $value['coordenacao_idcoordenacao'];
-        $idSetor = $value['setor_idsetor'];
+        isset($value['departamento_iddepartamento']) ? $idDepartamento = $value['departamento_iddepartamento'] : $idDepartamento = '';
+        isset($value['coordenacao_idcoordenacao']) ? $idCoordenacao = $value['coordenacao_idcoordenacao'] : $idCoordenacao = '';
+        isset($value['setor_idsetor']) ? $idSetor = $value['setor_idsetor'] : $idSetor = '';
         $idCargo = $value['cargo_idcargo'];
-        $situacao = $value['situacao'];
-        $examinador = $value['examinador'];
-        $dataHoraSolicitacao = $value['dataHoraSolicitacao'];
-        $dataHoraExaminador = $value['dataHoraExaminador'];
-    }
-    
+    }    
+        
     //verifica os dados antes de inserir no bd
     //verifica nome
     $sUsuario = new sUsuario();
@@ -113,12 +99,41 @@ if (isset($_POST['pagina'])) {
         exit();
     }
     
-    //verifica sobrenome
-    $sUsuario->verificarSobrenome($sobrenome);
-    
-    if(!$sUsuario->getValidador()){
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_3&campo=sobrenome&codigo={$sUsuario->getSNotificacao()->getCodigo()}");
-        exit();
+    //reprova a solicitação e retorna com sucesso
+    if(!$situacao){
+        //envia e-mail para o usuário com senha provisória
+        $nomeTratado = $minuscula = mb_strtolower($nome);
+        $nomeTratado = ucfirst($nomeTratado);
+        $sexo == 'M' ? $tratamento = 'o' : $tratamento = 'a';
+        
+        $assunto = 'Reprovação de Acesso';
+        $mensagem = <<<HTML
+        <b>Prezad$tratamento $nomeTratado,</b><br />
+        <p>
+            A sua solicitação para acessar o SSPMI (Sistema de Suporte da Prefeitura Municiapal de Itapoá) foi reprovada por alguma das razões:<br />
+            _ Inconsistência dos dados registrados com o apresentado no RH (IPM);<br />
+            _ Não recebeu treinamento para uso da ferramenta;<br />
+            Caso você entenda que houve um equívoco na decisão, favor contatar o Departamento de Tecnologia da Informação.<br />
+            <br />
+            <b>Obs.:</b> Esse e-mail é somente para mensagens automáticas, favor não respondê-lo.
+        </p>
+HTML;
+
+        $sEmail = new sEmail($email, '');
+        $sEmail->setPara($email);
+        $sEmail->setAssunto(utf8_decode($assunto));
+        $sEmail->setMensagem(utf8_decode($mensagem));
+
+        $sEmail->enviar($pagina);
+
+        if(!$sEmail->getValidador()){
+            $sNotificacao = new sNotificacao('A28');
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_3&campo=situacao&codigo={$sNotificacao->getCodigo()}");
+            exit();
+        }       
+        
+        $sNotificacao = new sNotificacao('S1');
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_3&campo=situacao&codigo={$sNotificacao->getCodigo()}");
     }
     
     //insere dados do telefone
@@ -150,16 +165,44 @@ if (isset($_POST['pagina'])) {
     $sUsuario->setSexo($sexo);
     $sUsuario->setSituacao($situacao);
     $sUsuario->setIdSetor($idSetor);
-    $sUsuario->setIdSetor($idCoordenacao);
-    $sUsuario->setIdSetor($idDepartamento);
-    $sUsuario->setIdSetor($idSecretaria);
-    $sUsuario->setIdTel($idTelefone);
+    $sUsuario->setIdCoordenacao($idCoordenacao);
+    $sUsuario->setIdDepartamento($idDepartamento);
+    $sUsuario->setIdSecretaria($idSecretaria);
+    $sUsuario->setIdTelefone($idTelefone);
     $sUsuario->setIdCargo($idCargo);
     $sUsuario->setIdEmail($idEmail);
     $sUsuario->setIdPermissao(1);
     
-    //$sUsuario->inserir($pagina);
+    //registra os dados do usuário
+    $sUsuario->inserir($pagina);
     
+    //envia e-mail para o usuário com senha provisória
+    $nomeTratado = $minuscula = mb_strtolower($nome);
+    $nomeTratado = ucfirst($nomeTratado);
+    $sexo == 'M' ? $tratamento = 'o' : $tratamento = 'a';
+    
+    $assunto = 'Aprovação de Acesso';
+    $mensagem = <<<HTML
+    <b>Prezad$tratamento $nomeTratado,</b><br />
+    <p>
+        A sua solicitação para acessar o SSPMI (Sistema de Suporte da Prefeitura Municiapal de Itapoá) foi aprovada. Segue abaixo senha temporária.<br />
+        {$sSenha->getSenha()}<br />
+        <br />
+        Obs.: Esse e-mail é somente para mensagens automáticas, não respondê-lo.
+    </p>
+HTML;
+                
+    $sEmail->setPara($email);
+    $sEmail->setAssunto(utf8_decode($assunto));
+    $sEmail->setMensagem(utf8_decode($mensagem));
+    
+    $sEmail->enviar($pagina);
+
+    if(!$sEmail->getValidador()){
+        $sNotificacao = new sNotificacao('A28');
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_3&campo=situacao&codigo={$sNotificacao->getCodigo()}");
+        exit();
+    }
     
     //gera notificação e redireciona para a página
     $sNotificacao = new sNotificacao('S1');    

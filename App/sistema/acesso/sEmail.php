@@ -10,7 +10,12 @@ use App\sistema\acesso\{
 };
 
 class sEmail {
-
+    private string $para;
+    private string $assunto;
+    private string $mensagem;
+    private string $de;
+    private string $responderPara;
+    private array|string $cabecalho;
     private int $idEmail;
     private string $nomeCampo;
     private string $valorCampo;
@@ -24,6 +29,11 @@ class sEmail {
         $this->nomenclatura = $nomenclatura;
         $this->nomenclaturaLocal = $nomenclaturaLocal;
         $this->validador = false;
+        $this->para = '';
+        $this->assunto = '';
+        $this->mensagem = '';
+        $this->de = 'suporte@itapoa.app.br';
+        $this->responderPara = 'suporte@itapoa.app.br';
     }
 
     public function verificar($pagina) {
@@ -276,6 +286,48 @@ class sEmail {
 
         $this->mConexao->CRUD($dados);
     }
+    
+    public function enviar($pagina) {
+        if($pagina == 'tMenu1_3_1.php'){
+            $this->setCabecalho('MIME-Version: 1.0' . "\r\n" .
+            'Content-type: text/html; charset=iso-8859-1;' . "\r\n" .
+            'From: ' . $this->getDe() . "\r\n" .
+            'Reply-To: ' . $this->getResponderPara() . "\r\n" .
+            'X-Mailer: PHP/' . phpversion());
+        }
+        
+        $enviado = mail($this->getPara(), $this->getAssunto(), $this->getMensagem(), $this->getCabecalho());
+        
+        $enviado ? $this->setValidador(true) : $this->setValidador(false);
+    }
+
+    public function getPara(): string {
+        return $this->para;
+    }
+
+    public function getAssunto(): string {
+        return $this->assunto;
+    }
+
+    public function getMensagem(): string {
+        return $this->mensagem;
+    }
+
+    public function getDe(): string {
+        return $this->de;
+    }
+
+    public function getResponderPara(): string {
+        return $this->responderPara;
+    }
+
+    public function getVersao(): string {
+        return $this->versao;
+    }
+
+    public function getCabecalho(): array|string {
+        return $this->cabecalho;
+    }
 
     public function getIdEmail(): int {
         return $this->idEmail;
@@ -309,6 +361,34 @@ class sEmail {
         return $this->sNotificacao;
     }
 
+    public function setPara(string $para): void {
+        $this->para = $para;
+    }
+
+    public function setAssunto(string $assunto): void {
+        $this->assunto = $assunto;
+    }
+
+    public function setMensagem(string $mensagem): void {
+        $this->mensagem = $mensagem;
+    }
+
+    public function setDe(string $de): void {
+        $this->de = $de;
+    }
+
+    public function setResponderPara(string $responderPara): void {
+        $this->responderPara = $responderPara;
+    }
+
+    public function setVersao(string $versao): void {
+        $this->versao = $versao;
+    }
+
+    public function setCabecalho(array|string $cabecalho): void {
+        $this->cabecalho = $cabecalho;
+    }
+
     public function setIdEmail(int $idEmail): void {
         $this->idEmail = $idEmail;
     }
@@ -340,4 +420,6 @@ class sEmail {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }
