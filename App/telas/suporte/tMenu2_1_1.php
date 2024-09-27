@@ -15,19 +15,8 @@ use App\sistema\suporte\{
 };
 
 isset($_POST['patrimonio']) ? $patrimonio = true : $patrimonio = false;
-$categoria = $_POST['categoria'];
+//$categoria = $_POST['categoria'];
 isset($_POST['idEquipamento']) ? $idEquipamento = $_POST['idEquipamento'] : $idEquipamento = false;
-
-
-if($patrimonio == false){
-    if($categoria == 0){
-        $sConfiguracao = new sConfiguracao;
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1&campo=categoria&codigo=A18");
-        exit();
-        //finaliza alteração do cabeçalho para não gerar erro de output, vinculado à instrução da linha 1 do tPainel.
-        ob_clean();
-    }
-}
 
 if(!$idEquipamento && $patrimonio){
     $sConfiguracao = new sConfiguracao;
@@ -212,20 +201,31 @@ if (isset($_GET['campo'])) {
                                     <label>Prioridade</label>
                                     <select class="form-control" name="prioridade" id="prioridade" form="f2" required="">
                                         <?php
-                                        if ($sPrioridade->getValidador()) {
-                                            foreach ($sPrioridade->mConexao->getRetorno() as $value) {
-                                                $value['nomenclatura'] == 'Normal' ? $atributo = 'selected=""' : $atributo = '';
-                                                if($value['nomenclatura'] == 'Normal' || $value['nomenclatura'] == 'Alta'){
+                                        //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
+                                        foreach ($sPrioridade->mConexao->getRetorno() as $value) {
+                                            $value['nomenclatura'] == 'Normal' ? $atributo = 'selected=""' : $atributo = '';
+                                            
+                                            if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['idprioridade'] < 3){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else{                                            
+                                                if($_SESSION['credencial']['nivelPermissao'] == 2 && $value['idprioridade'] < 4){
                                                     echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }else if($_SESSION['credencial']['nivelPermissao'] >= $value['idprioridade']){
+                                                }else if($_SESSION['credencial']['nivelPermissao'] == 3 && $value['idprioridade'] < 5){
                                                     echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                                }                                                
+                                                }else if($_SESSION['credencial']['nivelPermissao'] == 4 || $_SESSION['credencial']['nivelPermissao'] == 5){
+                                                    echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }else if($_SESSION['credencial']['nivelPermissao'] != 1){
+                                                    echo '<option disabled="" value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                }
                                             }
                                         }
                                         ?>
                                     </select>
                                 </div>
                             </div>  
+                            <?php
+                            if($_SESSION['credencial']['nivelPermissao'] > 1){
+                            ?>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="local">Local</label>
@@ -241,8 +241,11 @@ if (isset($_GET['campo'])) {
                                         }
                                         ?>
                                     </select>
-                                </div>
+                                </div>                                
                             </div>
+                            <?php
+                            }
+                            ?>
                             <div class="form-group col-md-2">
                                 <label for="acessoRemoto">Acesso remoto</label> <a href="../acesso/tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
                                 <input class="form-control" type="text" id="acessoRemoto" name="acessoRemoto" placeholder="Ex.: 1505389456" form="f2">

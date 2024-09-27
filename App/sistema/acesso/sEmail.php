@@ -42,9 +42,32 @@ class sEmail {
             $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||
-            $pagina == 'tMenu4_1.php') {
+            $pagina == 'tMenu4_1.php' ||
+            $pagina == 'tEsqueciMinhaSenha.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
+                 //verifica se consta o email no BD               
+                if ($pagina == 'tEsqueciMinhaSenha.php') {
+                    $dados = [
+                        'comando' => 'SELECT',
+                        'busca' => '*',
+                        'tabelas' => 'email',
+                        'camposCondicionados' => 'nomenclatura',
+                        'valoresCondicionados' => $this->getNomenclatura(),
+                        'camposOrdenados' => null, //caso não tenha, colocar como null
+                        'ordem' => null //ASC ou DESC
+                    ];
+                    $this->mConexao->CRUD($dados);
+                    
+                    if($this->mConexao->getValidador()){
+                        $this->setValidador($this->mConexao->getValidador());                        
+                        //retornar notificação
+                        $this->setValidador(true);
+                    }else{
+                        $this->setSNotificacao(new sNotificacao('A1'));
+                    }
+                }
+                
                 //verifica se consta o email no BD               
                 if ($pagina == 'tAcessar.php') {
                     $dados = [
@@ -229,6 +252,20 @@ class sEmail {
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
+        
+        if ($pagina == 'tAlterarSenha.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'email',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'nomenclatura',
+                'valoresCondicionados' => $this->getNomenclatura(),
+            ];
+            $this->mConexao->CRUD($dados);
+
+            $this->setValidador($this->mConexao->getValidador());
+        }
     }
 
     public function inserir($pagina, $tratarDados) {
@@ -288,7 +325,8 @@ class sEmail {
     }
     
     public function enviar($pagina) {
-        if($pagina == 'tMenu1_3_1.php'){
+        if( $pagina == 'tMenu1_3_1.php' ||
+            $pagina == 'tEsqueciMinhaSenha.php'){
             $this->setCabecalho('MIME-Version: 1.0' . "\r\n" .
             'Content-type: text/html; charset=iso-8859-1;' . "\r\n" .
             'From: ' . $this->getDe() . "\r\n" .

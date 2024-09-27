@@ -1,0 +1,1 @@
+[24-Sep-2024 13:11:26 America/Sao_Paulo] PHP Warning:  Undefined property: App\sistema\acesso\sConfiguracao::$getCharset in /home/itapoaap/public_html/App/telas/acesso/tAcessar.php on line 126

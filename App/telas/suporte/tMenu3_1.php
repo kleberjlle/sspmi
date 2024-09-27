@@ -361,7 +361,7 @@ HTML;
                         <input type="hidden" value="f1" name="formulario" form="f1">
                         <input type="hidden" value="inserir" name="acaoF1" form="f1">
                         <input type="hidden" value="menu3_1" name="paginaF1" form="f1">
-                        <button type="submit" class="btn btn-primary">Próxima</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
                     </div>
                 </form>
             </div>

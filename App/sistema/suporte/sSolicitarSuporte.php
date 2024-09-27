@@ -37,10 +37,10 @@ if (isset($_POST['formulario'])) {
     $valorCampoAnterior = '';
     isset($_POST['meusDados']) ? $meusDados = $_POST['meusDados'] : $meusDados = false;
     $acessoRemoto = $_POST['acessoRemoto'];
-    $idLocal = $_POST['local'];
+    isset($_POST['local']) ? $idLocal = $_POST['local'] : $idLocal = 1;
     $idPrioridade = $_POST['prioridade'];
     $descricao = $_POST['descricao'];
-    $categoria = $_POST['categoria'];
+    isset($_POST['categoria']) ? $categoria = $_POST['categoria'] : $categoria = false;
     $idEquipamento = $_POST['idEquipamento'];
     
     //verifica se serão passados os dados do solicitante ou do requerente
@@ -136,7 +136,9 @@ if (isset($_POST['formulario'])) {
     alimentaHistorico($pagina, $acao, 'emailDoRequerente', $valorCampoAnterior, $email, $idUsuario);
     alimentaHistorico($pagina, $acao, 'acessoRemoto', $valorCampoAnterior, $acessoRemoto, $idUsuario);
     alimentaHistorico($pagina, $acao, 'equipamento_idequipamento', $valorCampoAnterior, $idEquipamento, $idUsuario);
-    alimentaHistorico($pagina, $acao, 'categoria', $valorCampoAnterior, $categoria, $idUsuario);
+    if($categoria){
+        alimentaHistorico($pagina, $acao, 'categoria', $valorCampoAnterior, $categoria, $idUsuario);
+    }    
     alimentaHistorico($pagina, $acao, 'prioridade', $valorCampoAnterior, $idPrioridade, $idUsuario);
     alimentaHistorico($pagina, $acao, 'descricao', $valorCampoAnterior, $descricao, $idUsuario);
     alimentaHistorico($pagina, $acao, 'secretaria', $valorCampoAnterior, $secretaria, $idUsuario);

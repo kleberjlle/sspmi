@@ -70,22 +70,7 @@ $sCategoria->consultar('tMenu2_1.php');
                                     </label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-2" name="ocultarCategoria" id="ocultarCategoria" <?php echo isset($alertaCategoria) ? '' : 'style="display: none;"' ?>>
-                            <div class="form-group">
-                                <label>Categoria</label>
-                                <select class="form-control<?php echo isset($alertaCategoria) ? $alertaCategoria : ''; ?>" name="categoria" id="categoria" form="f1">
-                                    <option value="0" selected="">--</option>
-                                    <?php
-                                    if ($sCategoria->getValidador()) {
-                                        foreach ($sCategoria->mConexao->getRetorno() as $value) {
-                                            echo '<option value="' . $value['idcategoria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
+                        </div>                        
                     </div>
                     <?php
                         if (isset($tipo) &&
@@ -131,72 +116,74 @@ HTML;
                                 <?php
                                 if ($sEquipamento->getValidador()) {
                                     foreach ($sEquipamento->mConexao->getRetorno() as $value) {
-                                        $idEquipamento = $value['idequipamento'];
-                                        $patrimonio = $value['patrimonio'];
-                                        $idCategoria = $value['categoria_idcategoria'];
-                                        $idModelo = $value['modelo_idmodelo'];
-                                        $etiqueta = $value['etiquetaDeServico'];
-                                        
-                                        //busca os dados do modelo de acordo com sua id
-                                        $sModelo = new sModelo();
-                                        $sModelo->setNomeCampo('idmodelo');
-                                        $sModelo->setValorCampo($idModelo);
-                                        $sModelo->consultar('tMenu2_1.php');
-                                        
-                                        if ($sModelo->getValidador()) {
-                                            foreach ($sModelo->mConexao->getRetorno() as $value) {
-                                                $modelo = $value['nomenclatura'];
-                                                $idMarca = $value['marca_idmarca'];
-                                            }
-                                        }
-                                        
-                                        //busca os dados da marca de acordo com sua id
-                                        $sMarca = new sMarca();
-                                        $sMarca->setNomeCampo('idmarca');
-                                        $sMarca->setValorCampo($idMarca);
-                                        $sMarca->consultar('tMenu2_1.php');
-                                        
-                                        if ($sMarca->getValidador()) {
-                                            foreach ($sMarca->mConexao->getRetorno() as $value) {
-                                                $marca = $value['nomenclatura'];
-                                            }
-                                        }
-                                        
-                                        //busca os dados da categoria de acordo com sua id
-                                        $sCategoriaTabela = new sCategoria();
-                                        $sCategoriaTabela->setNomeCampo('idcategoria');
-                                        $sCategoriaTabela->setValorCampo($idCategoria);
-                                        $sCategoriaTabela->consultar('tMenu2_1.php-tabela');
-                                        
-                                        if ($sCategoria->getValidador()) {
-                                            foreach ($sCategoria->mConexao->getRetorno() as $value) {
-                                                if($idCategoria == $value['idcategoria']){
-                                                    $categoria = $value['nomenclatura'];
-                                                }                                                
-                                            }
-                                        }
+                                        if($value['patrimonio'] != 'Indefinido'){
+                                            $idEquipamento = $value['idequipamento'];
+                                            $patrimonio = $value['patrimonio'];
+                                            $idCategoria = $value['categoria_idcategoria'];
+                                            $idModelo = $value['modelo_idmodelo'];
+                                            $etiqueta = $value['etiquetaDeServico'];
 
-                                        echo <<<HTML
-                                        <tr>
-                                            <td>$patrimonio</td>
-                                            <td>$categoria</td>  
-                                            <td>$marca</td>
-                                            <td>$modelo</td>
-HTML;
-                                        if($_SESSION['credencial']['nivelPermissao'] > 1){
+                                            //busca os dados do modelo de acordo com sua id
+                                            $sModelo = new sModelo();
+                                            $sModelo->setNomeCampo('idmodelo');
+                                            $sModelo->setValorCampo($idModelo);
+                                            $sModelo->consultar('tMenu2_1.php');
+
+                                            if ($sModelo->getValidador()) {
+                                                foreach ($sModelo->mConexao->getRetorno() as $value) {
+                                                    $modelo = $value['nomenclatura'];
+                                                    $idMarca = $value['marca_idmarca'];
+                                                }
+                                            }
+
+                                            //busca os dados da marca de acordo com sua id
+                                            $sMarca = new sMarca();
+                                            $sMarca->setNomeCampo('idmarca');
+                                            $sMarca->setValorCampo($idMarca);
+                                            $sMarca->consultar('tMenu2_1.php');
+
+                                            if ($sMarca->getValidador()) {
+                                                foreach ($sMarca->mConexao->getRetorno() as $value) {
+                                                    $marca = $value['nomenclatura'];
+                                                }
+                                            }
+
+                                            //busca os dados da categoria de acordo com sua id
+                                            $sCategoriaTabela = new sCategoria();
+                                            $sCategoriaTabela->setNomeCampo('idcategoria');
+                                            $sCategoriaTabela->setValorCampo($idCategoria);
+                                            $sCategoriaTabela->consultar('tMenu2_1.php-tabela');
+
+                                            if ($sCategoria->getValidador()) {
+                                                foreach ($sCategoria->mConexao->getRetorno() as $value) {
+                                                    if($idCategoria == $value['idcategoria']){
+                                                        $categoria = $value['nomenclatura'];
+                                                    }                                                
+                                                }
+                                            }
+
                                             echo <<<HTML
-                                            <td>$etiqueta</td>
+                                            <tr>
+                                                <td>$patrimonio</td>
+                                                <td>$categoria</td>  
+                                                <td>$marca</td>
+                                                <td>$modelo</td>
+HTML;
+                                            if($_SESSION['credencial']['nivelPermissao'] > 1){
+                                                echo <<<HTML
+                                                <td>$etiqueta</td>
+HTML;
+                                            }
+                                            echo <<<HTML
+                                                <td>
+                                                    <div class="custom-control custom-radio">
+                                                        <input class="custom-control-input" type="radio" id="idEquipamento{$idEquipamento}" name="idEquipamento" value="$idEquipamento" form="f1">
+                                                        <label for="idEquipamento{$idEquipamento}" class="custom-control-label"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
 HTML;
                                         }
-                                        echo <<<HTML
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input class="custom-control-input" type="radio" id="idEquipamento{$idEquipamento}" name="idEquipamento" value="$idEquipamento" form="f1">
-                                                    <label for="idEquipamento{$idEquipamento}" class="custom-control-label"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
-    HTML;
                                     }
                                 }
                                 ?>

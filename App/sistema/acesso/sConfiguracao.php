@@ -74,11 +74,11 @@ class sConfiguracao{
         $this->letra = true;
         $this->numero = true;
         //sistema
-        $this->versao = '2.8.0-beta';//2 módulos(perfil, suporte) - 8.0 (versão do BD) - beta (ambiente de execução)
+        $this->versao = '2.8.2-beta';//2 módulos(perfil, suporte) - 8.0 (versão do BD) - beta (ambiente de execução)
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
         $this->manutencao = false;     
-        $this->prazoManutencao = '04/09/2024 às 7:30';
+        $this->prazoManutencao = '24/09/2024 às 9:00';
         $this->timeZone = date_default_timezone_set('America/Sao_Paulo');
     }
     public function getDiretorioPrincipal() {

@@ -77,7 +77,38 @@ class sSenha {
                 }
             }
         }
-        //verifica se a senha informada está correta
+        
+        if($pagina == 'tAlterarSenha.php'){
+            //verifica os requisitos da senha
+            $this->verificaRequisitos();
+            
+            if($this->getValidador()){
+                //pega a senha do BD
+                $this->mConexao = new mConexao();
+
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => 'senha',
+                    'tabelas' => 'email',
+                    'camposCondicionados' => 'nomenclatura',
+                    'valoresCondicionados' => $this->getEmail(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => 'ASC'
+                ];
+
+                //busca a senha do e-mail correspondente
+                $this->mConexao->CRUD($dados);            
+
+                //verifica se a senha informada é a mesma constante no BD
+                if(password_verify(hash_hmac("sha256", $this->getSenha(), "sspmi"), $this->mConexao->getRetorno())){
+                    //permita o acesso ao sistema
+                    $this->setValidador(true);
+                }else{
+                    $this->setValidador(false);
+                    $this->setSNotificacao(new sNotificacao('A6'));
+                }
+            }
+        }
     }
     
     private function verificaRequisitos() {

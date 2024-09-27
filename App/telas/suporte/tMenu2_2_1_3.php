@@ -82,7 +82,22 @@ if ($pagina == 'tMenu2_2_1.php') {
     $sLocal->consultar('tMenu2_2_1_3.php');
     
     $sConfiguracao = new sConfiguracao();
+    
+    //redundância para ocultar o campo, não deletar assinado meu eu do passado
+    foreach ($sPrioridade->mConexao->getRetorno() as $value) {
+        if($idPrioridade == $value['idprioridade']){
+            $verificacaoPrioridade = $value['idprioridade'];
+        }        
+    }
+    
+    //redundância para ocultar o campo, não deletar assinado meu eu do passado
+    foreach ($sLocal->mConexao->getRetorno() as $value) {
+        if($idLocal == $value['idlocal']){
+            $verificacaoLocal = $value['idlocal'];
+        }
+    }
 }
+
 ?>
 
 <div class="container-fluid">
@@ -96,7 +111,10 @@ if ($pagina == 'tMenu2_2_1.php') {
                 </div>
                 <!-- form start -->
                 <div class="card-body">
-                    <div class="row">                        
+                    <div class="row"> 
+                        <?php
+                        if($_SESSION['credencial']['nivelPermissao'] > 1 ){                        
+                        ?>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="local">Local</label>
@@ -110,6 +128,12 @@ if ($pagina == 'tMenu2_2_1.php') {
                                 </select>
                             </div>
                         </div>
+                        <?php
+                        }
+                        if($_SESSION['credencial']['nivelPermissao'] == 1 && $verificacaoPrioridade > 2){
+                            //oculte o campo
+                        }else{
+                        ?>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Prioridade</label>
@@ -118,23 +142,30 @@ if ($pagina == 'tMenu2_2_1.php') {
                                     //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
                                     foreach ($sPrioridade->mConexao->getRetorno() as $value) {
                                         $idPrioridade == $value['idprioridade'] ? $atributo = 'selected=""' : $atributo = '';
-                                            
-                                        if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['idprioridade'] < 3){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] == 2 && $value['idprioridade'] < 4){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] == 3 && $value['idprioridade'] < 5){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else if($_SESSION['credencial']['nivelPermissao'] >= 4){
-                                            echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                        }else{
-                                            echo '<option disabled="" value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                                                               
+                                        if($_SESSION['credencial']['nivelPermissao'] == 1){                                            
+                                            if($value['idprioridade'] < 3){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }                                            
+                                        }else{                                        
+                                            if($_SESSION['credencial']['nivelPermissao'] == 2 && $value['idprioridade'] < 4){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else if($_SESSION['credencial']['nivelPermissao'] == 3 && $value['idprioridade'] < 5){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else if($_SESSION['credencial']['nivelPermissao'] >= 4){
+                                                echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }else{                                            
+                                                echo '<option disabled="" value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                            }
                                         }
                                     }
                                     ?>
                                 </select>
                             </div>
                         </div>
+                        <?php
+                        }
+                        ?>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="local">Acesso Remoto</label>
@@ -183,6 +214,8 @@ HTML;
                         <input type="hidden" value="tMenu2_2_1_3.php" name="pagina" form="f1">
                         <input type="hidden" value="<?php echo $idProtocolo ?>" name="idProtocolo" form="f1">
                         <input type="hidden" value="<?php echo $numero ?>" name="etapa" form="f1">
+                        <input type="hidden" value="<?php echo $verificacaoPrioridade ?>" name="verificacaoPrioridade" form="f1">
+                        <input type="hidden" value="<?php echo $verificacaoLocal ?>" name="verificacaoLocal" form="f1">
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>

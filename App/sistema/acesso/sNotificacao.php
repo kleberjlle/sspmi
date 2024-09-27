@@ -125,7 +125,21 @@ class sNotificacao{
                 $this->setMensagem('O sobrenome do usuário não atende os requisitos do sistema. Só pode conter letras');
                 break;
             case '28':
-                $this->setMensagem('Por alguma razão não foi enviado o e-mail para o usuário. Contate o administrador sistema informando o erro e contate o usuário e oriente-o para recuperar a senha.');
+                $this->setMensagem('Por alguma razão não foi enviado o e-mail para o usuário. Contate o administrador do sistema informando o erro e contate o usuário e oriente-o para recuperar a senha.');
+                break;
+            case '29':
+                $this->setMensagem('Por alguma razão não foi enviado o e-mail de recuperação de senha, contate o administrador e informe o código ('.$this->getCodigo().').');
+                break;
+            case '30':
+                $this->setMensagem('A senha e a confirmação de senha não coincidem.');
+                break;
+            case '31':
+                //não localizou a chave no bd
+                $this->setMensagem('A chave informada não atende os requisitos de segurança do sistema, contate o administrador e informe o código ('.$this->getCodigo().').');
+                break;
+            case '32':
+                //não localizou a chave no bd
+                $this->setMensagem('O prazo da chave de recuperação de senha expirou, solicite uma recuperação de senha novamente.');
                 break;
             default:
                 $this->setTipo('danger');

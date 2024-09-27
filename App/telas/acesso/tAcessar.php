@@ -34,6 +34,16 @@ if(isset($_GET['seguranca'])){
     $mensagem = $sNotificacao->getMensagem();  
 }
 
+//se a senha foi alterada com sucesso
+if(isset($_GET['codigo'])){
+    $codigo = $_GET['codigo'];
+    //cria as variáveis da notificação
+    $sNotificacao = new sNotificacao($codigo);
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();  
+}
+
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
     $sEmail = new sEmail($_POST['email'], '');
@@ -123,7 +133,7 @@ if(isset($_POST) && !empty($_POST)){
 <!DOCTYPE html>
 <html lang="<?php echo $sConfiguracao->getLang(); ?>">
     <head>
-        <meta charset="<?php echo $sConfiguracao->getCharset; ?>">
+        <meta charset="<?php echo $sConfiguracao->getCharset(); ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $sConfiguracao->getTitle(); ?></title>
 
@@ -181,7 +191,9 @@ if(isset($_POST) && !empty($_POST)){
                 <!-- /.login-card-body -->
             </div>
             <?php
-            if(isset($tipo) && isset($titulo) && isset($mensagem)){
+            if( isset($tipo) && 
+                isset($titulo) &&
+                isset($mensagem)){
                     echo <<<HTML
                     <div class="col-mb-3">
                         <div class="card card-outline card-{$tipo}">

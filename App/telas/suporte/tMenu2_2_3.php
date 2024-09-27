@@ -74,9 +74,12 @@ $sLocal->consultar('tMenu2_2_3.php');
                                     <label>Prioridade</label>
                                     <select class="form-control" name="prioridade" id="prioridade" form="f1">
                                         <?php
-                                         //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
+                                        //SE A PRIORIDADE FOR MAIOR QUE A PERMISSÃO DO USUÁRIO ENTÃO DESABILITE O CAMPO
                                         foreach ($sPrioridade->mConexao->getRetorno() as $value) {
                                             $idPrioridade == $value['idprioridade'] ? $atributo = 'selected=""' : $atributo = '';
+                                            if($idPrioridade == $value['idprioridade']){
+                                                $verificacaoPrioridade = $value['idprioridade'];
+                                            }
 
                                             if($_SESSION['credencial']['nivelPermissao'] == 1 && $value['idprioridade'] < 3){
                                                 echo '<option value="' . $value['idprioridade'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
@@ -137,6 +140,7 @@ HTML;
                         <input type="hidden" value="inserir" name="acao" form="f1">
                         <input type="hidden" value="menu2_2_3" name="pagina" form="f1">
                         <input type="hidden" value="<?php echo $idProtocolo ?>" name="protocolo" form="f1">
+                        <input type="hidden" value="<?php echo $verificacaoPrioridade ?>" name="verificacaoPrioridade" form="f1">
                         <button type="submit" class="btn btn-primary">Atribuir</button>
                     </form>
                 </div>

@@ -23,7 +23,8 @@ if (!isset($_SESSION['credencial'])) {
 if (isset($_POST['pagina'])) {
     //cria variáveis locais com os dados recebidos via post
     $idProtocolo = $_POST['protocolo'];
-    $idPrioridade = $_POST['prioridade'];
+    $verificacaoPrioridade = $_POST['verificacaoPrioridade'];
+    isset($_POST['prioridade']) ? $idPrioridade = $_POST['prioridade'] : $idPrioridade = $verificacaoPrioridade;
     $idLocal = $_POST['local'];  
     $solucao = '--';
     

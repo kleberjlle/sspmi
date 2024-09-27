@@ -198,6 +198,8 @@ class sTratamentoDados {
         } elseif (preg_match('/Netscape/i', $u_agent)) {
             $bname = 'NETSCAPE';
             $ub = "NETSCAPE";
+        }else{
+            $bname = 'Indefinido';
         }
 
         return $bname;

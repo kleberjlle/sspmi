@@ -76,7 +76,26 @@ if (isset($_POST['pagina'])) {
     alimentaHistorico($pagina, $acao, 'whatsApp', $_SESSION['credencial']['whatsAppUsuario'], $whatsAppUsuario, $idUsuario);
     alimentaHistorico($pagina, $acao, 'nomenclatura', $email, $emailUsuario, $idUsuario);
     if($senhaUsuario){
-        alimentaHistorico($pagina, $acao, 'senha', $senha, $senhaUsuario, $idUsuario);
+        //etapa2 - validação de conteúdo
+        $sTratamentoSenha = new sTratamentoDados($senhaUsuario);
+        $senhaTratada = $sTratamentoSenha->tratarSenha();
+        if(!$senhaTratada){
+            //se não tem campo para validar
+            $sConfiguracao = new sConfiguracao();
+            $sNotificacao = new sNotificacao('A4');
+            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=senha&codigo={$sNotificacao->getCodigo()}");
+            exit();
+        }else{
+            //etapa3 - atualizar os dados
+            $alteracao = true;
+            $atualizar['senhaTratada'] = $senhaTratada;
+            
+            //criptografa a senha para ser alterada no bd
+            $sSenha = new sSenha(true);
+            $sSenha->criptografar($senhaTratada);
+            $senhaCriptografada = $sSenha->getSenhaCriptografada();
+        }
+        alimentaHistorico($pagina, $acao, 'senha', $senha, $senhaCriptografada, $idUsuario);
     }
     
     //se existir um telefone registrado
@@ -157,23 +176,6 @@ if (isset($_POST['pagina'])) {
             //etapa3 - atualizar os dados
             $alteracao = true;
             $atualizar['emailUsuario'] = $emailUsuario;
-        }
-    }
-    
-    if ($senhaUsuario) {
-        //etapa2 - validação de conteúdo
-        $sTratamentoSenha = new sTratamentoDados($senhaUsuario);
-        $senhaTratada = $sTratamentoSenha->tratarSenha();
-        if(!$senhaTratada){
-            //se não tem campo para validar
-            $sConfiguracao = new sConfiguracao();
-            $sNotificacao = new sNotificacao('A4');
-            header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_1_1&campo=senha&codigo={$sNotificacao->getCodigo()}");
-            exit();
-        }else{
-            //etapa3 - atualizar os dados
-            $alteracao = true;
-            $atualizar['senhaUsuario'] = $senhaTratada;
         }
     }
     
@@ -298,16 +300,12 @@ if (isset($_POST['pagina'])) {
             }
         }
         
-        if (array_key_exists('senhaUsuario', $atualizar)) {            
-            //criptografa a senha para ser alterada no bd
-            $sSenha = new sSenha(true);
-            $sSenha->criptografar($senhaTratada);
-            
+        if (array_key_exists('senhaTratada', $atualizar)) {            
             //altera a senha do email no bd
             $sEmailUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
             $sEmailUsuario->setNomeCampo('senha');
             $sEmailUsuario->setValorCampo($sSenha->getSenhaCriptografada());
-            $sEmailUsuario->alterar('tMenu1_1_1.php');
+            $sEmailUsuario->alterar('tMenu1_1_1.php');                        
                         
             if ($sEmailUsuario->mConexao->getValidador()) {
                 $sConfiguracao = new sConfiguracao();

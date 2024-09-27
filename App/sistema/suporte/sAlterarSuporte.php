@@ -22,6 +22,8 @@ if ($pagina == 'tMenu2_2_1_3.php') {
     $numero = $_POST['etapa'];
     $acao = $_POST['acao'];
     $idUsuario = $_SESSION['credencial']['idUsuario'];
+    $verificacaoPrioridade = $_POST['verificacaoPrioridade'];
+    $verificacaoLocal = $_POST['verificacaoLocal'];
         
     //busca dados da etapa 
     $sEtapa = new sEtapa();
@@ -32,12 +34,18 @@ if ($pagina == 'tMenu2_2_1_3.php') {
     foreach ($sEtapa->mConexao->getRetorno() as $value) {
         if($value['numero'] == $numero){
             $idEtapa = $value['idetapa'];
+            if(!isset($idPrioridade)){
+                $idPrioridade = $verificacaoPrioridade;
+            }
             $value['prioridade_idprioridade'] != $_POST['prioridade'] ? $idPrioridade = $_POST['prioridade'] : $idPrioridade = false;
             $prioridadeAnterior = $value['prioridade_idprioridade'];
             $value['acessoRemoto'] != $_POST['acessoRemoto'] ? $acessoRemoto = $_POST['acessoRemoto'] : $acessoRemoto = false;
             $acessoRemotoAnterior = $value['acessoRemoto'];
             $value['descricao'] != $_POST['descricao'] ? $descricao = $_POST['descricao'] : $descricao = false;
             $descricaoAnterior = $value['descricao'];
+            if(!isset($idLocal)){
+                $idLocal = $verificacaoLocal;
+            }            
             $value['local_idlocal'] != $_POST['local'] ? $idLocal = $_POST['local'] : $idLocal = false;
             $localAnterior = $value['local_idlocal'];
         }
