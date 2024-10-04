@@ -10,6 +10,7 @@ use App\sistema\acesso\{
 };
 
 class sEmail {
+
     private string $para;
     private string $assunto;
     private string $mensagem;
@@ -39,14 +40,14 @@ class sEmail {
     public function verificar($pagina) {
         $this->setMConexao(new mConexao());
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tSolicitarAcesso.php' ||
-            $pagina == 'tMenu4_1.php' ||
-            $pagina == 'tEsqueciMinhaSenha.php') {
+                $pagina == 'tMenu1_1_1.php' ||
+                $pagina == 'tMenu1_2_1.php' ||
+                $pagina == 'tSolicitarAcesso.php' ||
+                $pagina == 'tMenu4_1.php' ||
+                $pagina == 'tEsqueciMinhaSenha.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
-                 //verifica se consta o email no BD               
+                //verifica se consta o email no BD               
                 if ($pagina == 'tEsqueciMinhaSenha.php') {
                     $dados = [
                         'comando' => 'SELECT',
@@ -58,16 +59,16 @@ class sEmail {
                         'ordem' => null //ASC ou DESC
                     ];
                     $this->mConexao->CRUD($dados);
-                    
-                    if($this->mConexao->getValidador()){
-                        $this->setValidador($this->mConexao->getValidador());                        
+
+                    if ($this->mConexao->getValidador()) {
+                        $this->setValidador($this->mConexao->getValidador());
                         //retornar notificação
                         $this->setValidador(true);
-                    }else{
+                    } else {
                         $this->setSNotificacao(new sNotificacao('A1'));
                     }
                 }
-                
+
                 //verifica se consta o email no BD               
                 if ($pagina == 'tAcessar.php') {
                     $dados = [
@@ -80,7 +81,7 @@ class sEmail {
                         'ordem' => null //ASC ou DESC
                     ];
                     $this->mConexao->CRUD($dados);
-                    
+
                     //se não localizou o registro do no BD
                     if (!$this->mConexao->getValidador()) {
                         $this->setValidador(false);
@@ -95,7 +96,7 @@ class sEmail {
                 }
 
                 if ($pagina == 'tMenu1_1_1.php') {
-                     $dados = [
+                    $dados = [
                         'comando' => 'SELECT',
                         'busca' => '*',
                         'tabelas' => 'email',
@@ -105,7 +106,7 @@ class sEmail {
                         'ordem' => null //ASC ou DESC
                     ];
                     $this->mConexao->CRUD($dados);
-                    
+
                     //se localizou o registro do no BD e o registro for diferento do email atual
                     if ($this->mConexao->getValidador() && $_SESSION['credencial']['emailUsuario'] != $this->getNomenclatura()) {
                         $this->setValidador(false);
@@ -137,10 +138,10 @@ class sEmail {
                             } else if (!$value['situacao'] && !$value['dataHoraExaminador']) {
                                 $this->setValidador(false);
                                 $this->setSNotificacao(new sNotificacao('A14'));
-                            }else{
+                            } else {
                                 $this->setValidador(true);
                             }
-                        }                        
+                        }
                     } else {
                         $this->setValidador(true);
                     }
@@ -155,21 +156,21 @@ class sEmail {
                         $this->setValidador(true);
                     }
                 }
-                } else {
-                    //retornar notificação
-                    $this->setValidador(false);
-                    $this->setSNotificacao(new sNotificacao('A2'));
-                }
+            } else {
+                //retornar notificação
+                $this->setValidador(false);
+                $this->setSNotificacao(new sNotificacao('A2'));
             }
         }
+    }
 
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         //encaminha as buscas de acordo com a origem 
         if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php') {
+                $pagina == 'tMenu1_2.php' ||
+                $pagina == 'tMenu1_2_1.php' ||
+                $pagina == 'tMenu1_3.php') {
 
             //substituir futuramente
             if ($this->getNomenclaturaLocal() == 'email') {
@@ -213,7 +214,7 @@ class sEmail {
                 }
             }
         }
-        
+
         if ($pagina == 'tMenu1_1_1.php') {
             $dados = [
                 'comando' => 'SELECT',
@@ -224,7 +225,7 @@ class sEmail {
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null //ASC ou DESC
             ];
-            
+
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
         }
@@ -252,7 +253,7 @@ class sEmail {
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
-        
+
         if ($pagina == 'tAlterarSenha.php') {
             $dados = [
                 'comando' => 'UPDATE',
@@ -284,7 +285,7 @@ class sEmail {
                 ]
             ];
         }
-        
+
         //insere e-mail do usuário
         if ($pagina == 'tMenu1_3_1.php') {
             //insere os dados do histórico no BD            
@@ -323,19 +324,19 @@ class sEmail {
 
         $this->mConexao->CRUD($dados);
     }
-    
+
     public function enviar($pagina) {
-        if( $pagina == 'tMenu1_3_1.php' ||
-            $pagina == 'tEsqueciMinhaSenha.php'){
+        if ($pagina == 'tMenu1_3_1.php' ||
+                $pagina == 'tEsqueciMinhaSenha.php') {
             $this->setCabecalho('MIME-Version: 1.0' . "\r\n" .
-            'Content-type: text/html; charset=iso-8859-1;' . "\r\n" .
-            'From: ' . $this->getDe() . "\r\n" .
-            'Reply-To: ' . $this->getResponderPara() . "\r\n" .
-            'X-Mailer: PHP/' . phpversion());
+                    'Content-type: text/html; charset=iso-8859-1;' . "\r\n" .
+                    'From: ' . $this->getDe() . "\r\n" .
+                    'Reply-To: ' . $this->getResponderPara() . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion());
         }
-        
+
         $enviado = mail($this->getPara(), $this->getAssunto(), $this->getMensagem(), $this->getCabecalho());
-        
+
         $enviado ? $this->setValidador(true) : $this->setValidador(false);
     }
 
@@ -458,6 +459,4 @@ class sEmail {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
-
 }

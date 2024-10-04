@@ -134,6 +134,7 @@ HTML;
         
         $sNotificacao = new sNotificacao('S1');
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_3&campo=situacao&codigo={$sNotificacao->getCodigo()}");
+        exit();
     }
     
     //insere dados do telefone

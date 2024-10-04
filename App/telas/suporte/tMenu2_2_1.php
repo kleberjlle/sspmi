@@ -488,12 +488,9 @@ HTML;
                         if($idUsuarioEtapa == $_SESSION['credencial']['idUsuario']){
                         echo <<<HTML
                         <button type="submit" class="btn btn-primary" form="f3_1">Alterar</button>
-HTML;
-                        }                            
-                        echo <<<HTML
                         <button type="submit" class="btn btn-primary float-right" form="f3_3">Encerrar</button>
-                        
 HTML;
+                        }
                     }
                     if($_SESSION['credencial']['nivelPermissao'] > 2){
                         echo <<<HTML

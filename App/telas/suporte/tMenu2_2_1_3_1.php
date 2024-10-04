@@ -56,6 +56,7 @@ if ($pagina == 'tMenu2_2_1.php' || $pagina == 'tMenu2_2_1_3_1.php') {
             $solucao = $value['solucao'];
         }
     }
+    
     //buscar dados da prioridade
     $sPrioridade = new sPrioridade();
     $sPrioridade->setNomeCampo('idprioridade');

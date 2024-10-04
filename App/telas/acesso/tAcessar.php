@@ -46,9 +46,12 @@ if(isset($_GET['codigo'])){
 
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
-    $sEmail = new sEmail($_POST['email'], '');
-    $sSenha = new sSenha($_POST['senha']);
-    $sSenha->criptografar($_POST['senha']);
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];    
+    
+    $sEmail = new sEmail($email, '');
+    $sSenha = new sSenha($email);
+    $sSenha->criptografar($senha);
     
     //Etapa 1 - registrar histórico
     //coletar dados do navegador
@@ -89,13 +92,14 @@ if(isset($_POST) && !empty($_POST)){
     
     //Etapa3 - validar o campo senha
     
-    if($sEmail->getValidador()){
-        $sSenha->setEmail($_POST['email']);
-        $sSenha->verificar(basename($_SERVER['PHP_SELF']));
+    if( $sEmail->getValidador()){
+        $sSenha->setEmail($email);
+        $sSenha->setSenha($senha);
+        $sSenha->verificar('tAcessar.php');
         if($sSenha->getValidador()){
             $sUsuario = new sUsuario();
             $sUsuario->setIdEmail($sEmail->getIdEmail());            
-            $sUsuario->consultar(basename($_SERVER['PHP_SELF']));
+            $sUsuario->consultar('tAcessar.php');
             if($sUsuario->getValidador()){                
                 //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
                 $sUsuario->acessar(basename($_SERVER['PHP_SELF']));                        

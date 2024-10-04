@@ -17,8 +17,8 @@ use App\sistema\acesso\{
 };
 
 if(isset($_GET['seguranca'])){
-    $idUsuario = $_GET['seguranca'];
-    $idUsuario = base64_decode($idUsuario);
+    $seguranca = $_GET['seguranca'];
+    $idUsuario = base64_decode($seguranca);
 } else {
     //solicitar saída com tentativa de violação
     $sSair = new sSair();
@@ -38,7 +38,7 @@ if (isset($_GET['campo']) ||
             break;
         case 'sobrenome':
             if ($_GET['codigo'] == 'S1') {
-                $alertaNome = ' is-valid';
+                $alertaSobrenome = ' is-valid';
             } else {
                 $alertaSobrenome = ' is-warning';
             }
@@ -182,16 +182,16 @@ $sSetor->consultar('tMenu1_2_1.php');
                             -->
                             <div class="form-group col-md-1">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $nome; ?>" required="">
+                                <input type="text" class="form-control<?php echo isset($alertaNome) ? $alertaNome : ''; ?>" name="nome" id="nome" value="<?php echo $nome; ?>" required="" form="f1">
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="sobrenome">Sobrenome</label>
-                                <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $sobrenome; ?>" required="">
+                                <input class="form-control<?php echo isset($alertaSobrenome) ? $alertaSobrenome : ''; ?>" type="text" name="sobrenome" id="sobrenome" value="<?php echo $sobrenome; ?>" required="" form="f1">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Sexo</label>
-                                    <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="">
+                                    <select class="form-control<?php echo isset($alertaSexo) ? $alertaSexo : ''; ?>" name="sexo" id="sexo" required="" form="f1">
                                         <option value="M" <?php echo $sexo == 'M' ? 'selected=""' : ''; ?>>Masculino</option>
                                         <option value="F" <?php echo $sexo == 'F' ? 'selected=""' : ''; ?>>Feminino</option>
                                     </select>
@@ -199,7 +199,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             </div>
                             <div class="form-group col-md-1">
                                 <label for="telefone">Telefone</label>
-                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" value="<?php echo $telefoneTratado; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
+                                <input class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" type="text" name="telefone" id="telefone" value="<?php echo $telefoneTratado; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f1">
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
@@ -212,12 +212,12 @@ $sSetor->consultar('tMenu1_2_1.php');
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="email">Email</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="email" id="email" value="<?php echo $email; ?>" required="">
+                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" name="email" id="email" value="<?php echo $email; ?>" required="" form="f1">
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Permissão</label>
-                                    <select class="form-control<?php echo isset($alertaPermissao) ? $alertaPermissao : ''; ?>" name="permissao" id="permissao">
+                                    <select class="form-control<?php echo isset($alertaPermissao) ? $alertaPermissao : ''; ?>" name="permissao" id="permissao" form="f1">
                                         <?php
                                         foreach ($sPermissao->mConexao->getRetorno() as $key => $value) {
                                             $idPermissao == $value['idpermissao'] ? $atributo = ' selected' : $atributo = '';
@@ -230,7 +230,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Cargo/ Função</label>
-                                    <select class="form-control<?php echo isset($alertaCargo) ? $alertaCargo : ''; ?>" name="cargo" id="cargo">
+                                    <select class="form-control<?php echo isset($alertaCargo) ? $alertaCargo : ''; ?>" name="cargo" id="cargo" form="f1">
                                         <?php
                                         foreach ($sCargo->mConexao->getRetorno() as $value) {
                                             $idCargo == $value['idcargo'] ? $atributo = ' selected' : $atributo = '';
@@ -245,7 +245,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Secretaria</label>
-                                    <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria">
+                                    <select class="form-control<?php echo isset($alertaSecretaria) ? $alertaSecretaria : ''; ?>" name="secretaria" id="secretaria" form="f1">
                                         <?php
                                         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
                                             $idSecretaria == $value['idsecretaria'] ? $atributo = ' selected' : $atributo = '';
@@ -258,7 +258,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Departamento/ Unidade</label>
-                                    <select class="form-control<?php echo isset($alertaDepartamento) ? $alertaDepartamento : ''; ?>" name="departamento" id="departamento">
+                                    <select class="form-control<?php echo isset($alertaDepartamento) ? $alertaDepartamento : ''; ?>" name="departamento" id="departamento" form="f1">
                                         <?php
                                         if($idDepartamento == 0){
                                             echo '<option value="0" selected="">--</option>';
@@ -276,7 +276,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Coordenação</label>
-                                    <select class="form-control<?php echo isset($alertaCoordenacao) ? $alertaCoordenacao : ''; ?>" name="coordenacao" id="coordenacao">
+                                    <select class="form-control<?php echo isset($alertaCoordenacao) ? $alertaCoordenacao : ''; ?>" name="coordenacao" id="coordenacao" form="f1">
                                         <?php
                                         if($idCoordenacao == 0){
                                             echo '<option value="0" selected="">--</option>';
@@ -294,7 +294,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Setor</label>
-                                    <select class="form-control<?php echo isset($alertaSetor) ? $alertaSetor : ''; ?>" name="setor" id="setor">
+                                    <select class="form-control<?php echo isset($alertaSetor) ? $alertaSetor : ''; ?>" name="setor" id="setor" form="f1">
                                         <?php
                                         if($idSetor == 0){
                                             echo '<option value="0" selected="">--</option>';
@@ -313,7 +313,7 @@ $sSetor->consultar('tMenu1_2_1.php');
                                 <div class="form-group">
                                     <label>Situação</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $situacao ? 'checked=""' : ''; ?>>
+                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $situacao ? 'checked=""' : ''; ?> form="f1">
                                         <label class="custom-control-label" for="situacao"><?php echo $situacao ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
                                     </div>
                                 </div>
@@ -340,9 +340,9 @@ HTML;
                     ?>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" name="idUsuario" id="idUsuario" value="<?php echo $idUsuario; ?>">
-                        <input type="hidden" name="pagina" id="pagina" value="tMenu1_2_1.php">
-                        <input type="hidden" name="acao" id="acao" value="alterar">
+                        <input type="hidden" name="idUsuario" id="idUsuario" value="<?php echo $idUsuario; ?>" form="f1">
+                        <input type="hidden" name="pagina" id="pagina" value="tMenu1_2_1.php" form="f1">
+                        <input type="hidden" name="acao" id="acao" value="alterar" form="f1">
                         <button class="btn btn-primary" type="submit">Alterar</button>
                     </div>
                 </form>

@@ -10,6 +10,7 @@ class sSenha {
     public sNotificacao $sNotificacao;
     public sConfiguracao $sConfiguracao;
     public mConexao $mConexao;
+    public sTratamentoDados $sTratamentoDados;
         
     public function __construct(bool $validador) {
         $this->validador = $validador;
@@ -46,11 +47,12 @@ class sSenha {
     }
     
     public function verificar($pagina) {        
+        //verifica os requisitos da senha
         if($pagina == 'tAcessar.php'){
-            //verifica os requisitos da senha
-            $this->verificaRequisitos();
+            $sTratamentoSenha = new sTratamentoDados($this->getSenha());
+            $sTratamentoSenha->tratarSenha();
             
-            if($this->getValidador()){
+            if($sTratamentoSenha->tratarSenha()){
                 //pega a senha do BD
                 $this->mConexao = new mConexao();
 
@@ -75,14 +77,17 @@ class sSenha {
                     $this->setValidador(false);
                     $this->setSNotificacao(new sNotificacao('A6'));
                 }
+            }else{
+                $this->setValidador(false);
+                 $this->setSNotificacao(new sNotificacao('A6'));
             }
         }
+        
         
         if($pagina == 'tAlterarSenha.php'){
             //verifica os requisitos da senha
-            $this->verificaRequisitos();
-            
-            if($this->getValidador()){
+            $this->sTratamentoDados->setDados($this->getSenha());
+            if($this->sTratamentoDados->tratarSenha()){
                 //pega a senha do BD
                 $this->mConexao = new mConexao();
 
@@ -108,28 +113,6 @@ class sSenha {
                     $this->setSNotificacao(new sNotificacao('A6'));
                 }
             }
-        }
-    }
-    
-    private function verificaRequisitos() {
-        //inicia configuração
-        $this->setSConfiguracao(new sConfiguracao());
-        
-        //verifica os requisitos da senha
-        if( strlen($_POST['senha']) < $this->sConfiguracao->getCaracterMinimo() ||
-            strlen($_POST['senha']) > $this->sConfiguracao->getCaracterMaximo()){
-            $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A4'));
-        }else if(ctype_alnum($_POST['senha'])){
-            if(ctype_alpha($_POST['senha']) || ctype_digit($_POST['senha'])){
-                $this->setValidador(false);
-                $this->setSNotificacao(new sNotificacao('A5'));                    
-            }else{
-                $this->setValidador(true);
-            }
-        }else{
-            $this->setValidador(false);
-            $this->setSNotificacao(new sNotificacao('A5'));
         }
     }
 
@@ -161,6 +144,10 @@ class sSenha {
         return $this->mConexao;
     }
 
+    public function getSTratamentoDados(): sTratamentoDados {
+        return $this->sTratamentoDados;
+    }
+
     public function setEmail(string $email): void {
         $this->email = $email;
     }
@@ -189,6 +176,8 @@ class sSenha {
         $this->mConexao = $mConexao;
     }
 
-
+    public function setSTratamentoDados(sTratamentoDados $sTratamentoDados): void {
+        $this->sTratamentoDados = $sTratamentoDados;
+    }
 
 }

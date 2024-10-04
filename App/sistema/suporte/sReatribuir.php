@@ -83,21 +83,29 @@ if(isset($_POST['pagina'])){
     
     //encerrar etapa anterior (etapa 1)    
     //altera o campo dataHoraEncerramento
-    $sEtapa->setIdEtapa($idEtapa);
-    $sEtapa->setNomeCampo('dataHoraEncerramento');
-    $sEtapa->setValorCampo($dataHoraEncerramento);
-    $sEtapa->alterar('tMenu2_2_1_3_1.php');
+    if($numero == 1){
+        $sEtapa->setIdEtapa($idEtapa);
+        $sEtapa->setNomeCampo('dataHoraEncerramento');
+        $sEtapa->setValorCampo($dataHoraEncerramento);
+        $sEtapa->alterar('tMenu2_2_1_3_1.php');
+
+        //altera o campo usuário
+        $sEtapa->setNomeCampo('usuario_idusuario');
+        $sEtapa->setValorCampo($responsavel);
+        $sEtapa->alterar('tMenu2_2_1_3_1.php');
+
+        //altera o campo solucao
+        $solucao = '--';
+        $sEtapa->setNomeCampo('solucao');
+        $sEtapa->setValorCampo($solucao);
+        $sEtapa->alterar('tMenu2_2_3.php');
+    }else{
+        $sEtapa->setIdEtapa($idEtapa);
+        $sEtapa->setNomeCampo('dataHoraEncerramento');
+        $sEtapa->setValorCampo($dataHoraEncerramento);
+        $sEtapa->alterar('tMenu2_2_1_3_1.php');
+    }
     
-    //altera o campo usuário
-    $sEtapa->setNomeCampo('usuario_idusuario');
-    $sEtapa->setValorCampo($responsavel);
-    $sEtapa->alterar('tMenu2_2_1_3_1.php');
-    
-    //altera o campo solucao
-    $solucao = '--';
-    $sEtapa->setNomeCampo('solucao');
-    $sEtapa->setValorCampo($solucao);
-    $sEtapa->alterar('tMenu2_2_3.php');
     
     //alimentar o histórico de inserção da nova etapa
     $acao = 'inserir';
