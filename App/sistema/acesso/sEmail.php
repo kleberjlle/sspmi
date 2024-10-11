@@ -148,6 +148,17 @@ class sEmail {
                 }
 
                 if ($pagina == 'tMenu1_2_1.php') {
+                    $dados = [
+                        'comando' => 'SELECT',
+                        'busca' => '*',
+                        'tabelas' => 'email',
+                        'camposCondicionados' => 'nomenclatura',
+                        'valoresCondicionados' => $this->getNomenclatura(),
+                        'camposOrdenados' => null, //caso não tenha, colocar como null
+                        'ordem' => null //ASC ou DESC
+                    ];
+                    $this->mConexao->CRUD($dados);
+                    
                     //se localizou o registro do no BD e o registro for diferento do email atual
                     if ($this->mConexao->getValidador()) {
                         $this->setValidador(false);

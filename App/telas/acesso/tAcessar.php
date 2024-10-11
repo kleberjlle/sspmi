@@ -100,7 +100,7 @@ if(isset($_POST) && !empty($_POST)){
             $sUsuario = new sUsuario();
             $sUsuario->setIdEmail($sEmail->getIdEmail());            
             $sUsuario->consultar('tAcessar.php');
-            if($sUsuario->getValidador()){                
+            if($sUsuario->getValidador()){     
                 //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
                 $sUsuario->acessar(basename($_SERVER['PHP_SELF']));                        
             }else{

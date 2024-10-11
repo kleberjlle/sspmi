@@ -61,7 +61,12 @@ if (isset($_POST['pagina'])) {
         $sobrenomeAnterior = $value['sobrenome'];
         $sobrenome == $value['sobrenome'] ? $sobrenome = false : $atualizar = ['sobrenome' => $sobrenome];
         $sexoAnterior = $value['sexo'];
-        $sexo == $value['sexo'] ? $sexo = false : $sexo = $value['sexo'];
+        if($sexo == $value['sexo']){
+            $verificacaoSexo = false;
+        }else{
+            $verificacaoSexo = true;
+            $atualizar = ['sexo' => $sexo];
+        }
         //$imagem = $value['imagem'];
         $situacaoAnterior = $value['situacao'];
         if($situacao == $value['situacao']){
@@ -81,37 +86,51 @@ if (isset($_POST['pagina'])) {
         $idTelefone = $value['telefone_idtelefone'];
         $cargoAnterior = $value['cargo_idcargo'];
         $idCargo == $value['cargo_idcargo'] ? $idCargo = false : $atualizar = ['idCargo' => $idCargo];
-        $emailAnterior = $value['email_idemail'];
         $idEmail = $value['email_idemail'];
         $permissaoAnterior = $value['permissao_idpermissao'];
         $idPermissao == $value['permissao_idpermissao'] ? $idPermissao = false : $atualizar = ['idPermissao' => $idPermissao];
     }
     
     //busca os dados do id do telefone
-    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');
+    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');    
     $sTelefone->consultar('tMenu1_2_1.php');
-    
-    $sTratamentoTelefone = new sTratamentoDados($telefone);
-    $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
     
     foreach ($sTelefone->mConexao->getRetorno() as $value) {
         $telefoneAnterior = $value['numero'];
-        $telefoneTratado == $value['numero'] ? $telefoneTratado = false : $atualizar = ['telefone' => $telefoneTratado];
         $whatsAppAnterior = $value['whatsApp'];
         if($whatsApp == $value['whatsApp']){
             $verificacaoWhatsApp = false;
         }else{
+            $alteracao = true;
             $verificacaoWhatsApp = true;
             $atualizar = ['whatsApp' => $whatsApp];
         }
     }
-        
+    
+    $sTratamentoTelefone = new sTratamentoDados($telefone);
+    $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
+    
+    if($telefoneAnterior == $telefoneTratado){
+        $verificacaoTelefone = false;
+    }else{
+        $alteracao = true;
+        $verificacaoTelefone = true;
+        $atualizar = ['telefone' => $telefoneTratado];
+    }
+    
     //busca os dados do id do email
     $sEmail = new sEmail($idEmail, 'email');
     $sEmail->consultar('tMenu1_2_1.php');
     
     foreach ($sEmail->mConexao->getRetorno() as $value) {
-        $email == $value['nomenclatura'] ? $email = false : $atualizar = ['nomenclatura' => $email];
+        if($email == $value['nomenclatura']){
+            $verificacaoEmail = false;
+        }else{
+            $emailAnterior = $value['nomenclatura'];
+            $alteracao = true;
+            $verificacaoEmail = true;
+            $atualizar = ['email' => $email];
+        }
     }
             
     //alimentar histórico
@@ -121,16 +140,16 @@ if (isset($_POST['pagina'])) {
     if($sobrenome){
         alimentaHistorico($pagina, $acao, 'sobrenome', $sobrenomeAnterior, $sobrenome, $idUsuario);
     }
-    if($sexo){
+    if($verificacaoSexo){
         alimentaHistorico($pagina, $acao, 'sexo', $sexoAnterior, $sexo, $idUsuario);
     }
-    if($telefoneTratado){
+    if($verificacaoTelefone){
         alimentaHistorico($pagina, $acao, 'numero', $telefoneAnterior, $telefone, $idUsuario);
     }
     if($verificacaoWhatsApp){
         alimentaHistorico($pagina, $acao, 'whatsApp', $whatsAppAnterior, $whatsApp, $idUsuario);
     }
-    if($email){
+    if($verificacaoEmail){
         alimentaHistorico($pagina, $acao, 'email', $emailAnterior, $email, $idUsuario);
     }
     if($idPermissao){
@@ -182,11 +201,11 @@ if (isset($_POST['pagina'])) {
         }
     }
     
-    if($sexo){
+    if($verificacaoSexo){
         $alteracao = true;
     }
         
-    if ($telefoneTratado) {
+    if ($verificacaoTelefone) {
         //etapa4 - validação do conteúdo        
         $sTelefone->verificarTelefone($telefoneTratado);
         if (!$sTelefone->getValidador()) {
@@ -197,13 +216,13 @@ if (isset($_POST['pagina'])) {
             //etapa5 - atualizar os dados
             $alteracao = true;
         }
-    }    
+    }
     
-    if ($whatsApp) {
+    if ($verificacaoWhatsApp) {
         $alteracao = true;
     }
 
-    if ($email) {
+    if ($verificacaoEmail) {
         $sTratamentoEmail = new sTratamentoDados($email);
         $validaEmail = $sTratamentoEmail->tratarEmail();
 
@@ -214,7 +233,6 @@ if (isset($_POST['pagina'])) {
             exit();
         }
         
-        //etapa4 - validação de conteúdo
         $sEmail->setNomenclatura($email);
         $sEmail->verificar('tMenu1_2_1.php');  
         if (!$sEmail->getValidador()) {
@@ -222,7 +240,7 @@ if (isset($_POST['pagina'])) {
             header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=1_2_1&seguranca={$seguranca}&campo=email&codigo={$sEmail->getSNotificacao()->getCodigo()}");
             exit();
         } else {
-            //etapa5 - atualizar os dados
+            //etapa5 - atualizar os dados            
             $alteracao = true;
         }
     }
@@ -307,7 +325,7 @@ if (isset($_POST['pagina'])) {
         
         if (array_key_exists('telefone', $atualizar)) {
             //atualize o campo telefone
-            $sTelefone->setIdTelefone($sUsuario->getTelefone());
+            $sTelefone->setIdTelefone($idTelefone);
             $sTelefone->setNomeCampo('numero');
             $sTelefone->setValorCampo($telefoneTratado);
             $sTelefone->alterar('tMenu1_2_1.php');
@@ -320,7 +338,7 @@ if (isset($_POST['pagina'])) {
         
         if (array_key_exists('whatsApp', $atualizar)) {
             //atualize o campo whatsApp
-            $sTelefone->setIdTelefone($sUsuario->getTelefone());
+            $sTelefone->setIdTelefone($idTelefone);
             $sTelefone->setNomeCampo('whatsApp');
             $sTelefone->setValorCampo($whatsApp);
             $sTelefone->alterar('tMenu1_2_1.php');
@@ -333,7 +351,7 @@ if (isset($_POST['pagina'])) {
         
         if (array_key_exists('email', $atualizar)) {
             //atualize o campo email
-            $sEmail->setIdEmail($sUsuario->getIdEmail());
+            $sEmail->setIdEmail($idEmail);
             $sEmail->setNomeCampo('nomenclatura');
             $sEmail->setValorCampo($email);
             $sEmail->alterar('tMenu1_2_1.php');

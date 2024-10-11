@@ -250,6 +250,7 @@ class sUsuario {
 
                 $this->setSPermissao(new sPermissao($idPermissao));
                 $this->sPermissao->consultar($pagina);
+                
 
                 if(!isset($_SESSION)){
                     session_start();

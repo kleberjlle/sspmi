@@ -71,11 +71,39 @@ if (isset($_GET['campo']) ||
                 $alertaPermissao = ' is-warning';
             }
             break;
+        case 'cargo':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaCargo = ' is-valid';
+            } else {
+                $alertaCargo = ' is-warning';
+            }
+            break;
         case 'secretaria':
             if ($_GET['codigo'] == 'S1') {
                 $alertaSecretaria = ' is-valid';
             } else {
                 $alertaSecretaria = ' is-warning';
+            }
+            break;
+        case 'departamento':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaDepartamento = ' is-valid';
+            } else {
+                $alertaDepartamento = ' is-warning';
+            }
+            break;
+        case 'coordenacao':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaCoordenacao = ' is-valid';
+            } else {
+                $alertaCoordenacao = ' is-warning';
+            }
+            break;
+        case 'setor':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaSetor = ' is-valid';
+            } else {
+                $alertaSetor = ' is-warning';
             }
             break;
         default:

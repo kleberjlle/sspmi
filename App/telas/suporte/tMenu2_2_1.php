@@ -218,8 +218,10 @@ if ($sProtocolo->getValidador()) {
 }
 
 if($whatsApp){
-    $whatsApp = '<b><i class="fab fa-whatsapp mr-1"></i></b>';
+    $whatsApp = '<a class="float-right"><b><i class="fab fa-whatsapp mr-1"></i></b></a>';
+    $linkWhatsApp = '<a class="float-right" href="https://wa.me/55'.$telefone.'" target="_blank">'.$telefoneTratado.'</a>';
 }else{
+    $linkWhatsApp = '<a class="float-right">'.$telefoneTratado.'</a>';
     $whatsApp = '';
 }
 
@@ -250,11 +252,9 @@ echo <<<HTML
                             <i class="fas fa-house-user mr-1"></i><b> Setor</b> <a class="float-right">{$setor}</a>
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-phone mr-1"></i><b> Telefone</b>
-                            <a class="float-right">
-                            {$whatsApp}
-                            {$telefoneTratado}
-                            </a>
+                            <i class="fas fa-phone mr-1"></i><b> Telefone</b>                            
+                            {$linkWhatsApp}                            
+                            {$whatsApp}                                                            
                         </li>
                         <li class="list-group-item">
                             <i class="fas fa-envelope-open-text mr-1"></i><b> Email</b> <a class="float-right">{$email}</a>

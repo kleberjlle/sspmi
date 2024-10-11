@@ -42,6 +42,9 @@ class sConfiguracao{
     private bool $manutencao;
     private string $prazoManutencao;
     private string $timeZone;
+    
+    //atributos da empresa
+    private string $whatsApp;
 
     public function __construct() {
         //Diretórios
@@ -80,6 +83,8 @@ class sConfiguracao{
         $this->manutencao = false;     
         $this->prazoManutencao = '24/09/2024 às 9:00';
         $this->timeZone = date_default_timezone_set('America/Sao_Paulo');
+        //empresa
+        $this->whatsApp = '5547988272029';
     }
     public function getDiretorioPrincipal() {
         return $this->diretorioPrincipal;
@@ -203,6 +208,10 @@ class sConfiguracao{
 
     public function getTimeZone(): string {
         return $this->timeZone;
+    }
+
+    public function getWhatsApp(): string {
+        return $this->whatsApp;
     }
 
     public function setDiretorioPrincipal($diretorioPrincipal): void {
@@ -329,6 +338,8 @@ class sConfiguracao{
         $this->timeZone = $timeZone;
     }
 
-
+    public function setWhatsApp(string $whatsApp): void {
+        $this->whatsApp = $whatsApp;
+    }
 }
 ?>

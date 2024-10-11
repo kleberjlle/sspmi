@@ -1,4 +1,12 @@
 <?php
+//configura expiração da sessão
+session_cache_limiter('public');
+$cache_limiter = session_cache_limiter();
+
+/* define o prazo do cache em 30 minutos */
+session_cache_expire(5);
+$cache_expire = session_cache_expire();
+
 //necessário para chamar headers(Location) após linhas html (caso contrário gera erro de output)
 ob_start();
 
@@ -149,6 +157,11 @@ echo "</pre>";
 
                     </li>
                     -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="https://wa.me/<?php echo $sConfiguracao->getWhatsApp(); ?>" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="<?php echo $sConfiguracao->getDiretorioPrincipal().$sConfiguracao->getDiretorioDoSistema(); ?>telas/acesso/tSair.php">
                             <i class="fas fa-sign-out-alt"></i>

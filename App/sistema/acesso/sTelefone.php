@@ -91,7 +91,6 @@ class sTelefone {
             }
             $telefoneTratado = $mascara;
         }
-
         return $telefoneTratado;
     }
 

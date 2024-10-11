@@ -107,13 +107,17 @@ HTML;
                     <th>Patrimônio</th>
                     <th>Categoria/ Marca/ Modelo</th>
                     <th>Descrição</th>
+                    <th>
+                        Secretaria
                     <?php
                     if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                         echo <<<HTML
-                    <th>Ambiente</th>
+                    /<br />
+                    Ambiente
 HTML;
                     }
                     ?>
+                    </th> 
                     <th>Local</th>
                     <?php
                     if ($_SESSION['credencial']['nivelPermissao'] > 1) {
@@ -132,6 +136,9 @@ HTML;
                     foreach ($sProtocolo->mConexao->getRetorno() as $key => $value) {                        
                         //armazena o id do solicitante para criptografia
                         $seguranca = base64_encode($value['usuario_idusuario']);
+                        
+                        //campo secretaria
+                        $secretaria = $value['secretaria'];
                         
                         //se não tiver permissão visualiza somente os chamados abertos pelo próprio usuário
                         if ($_SESSION['credencial']['nivelPermissao'] < 2 &&
@@ -235,7 +242,7 @@ HTML;
                             foreach ($sMarca->mConexao->getRetorno() as $key => $value) {
                                 $marca = $value['nomenclatura'];
                             }
-
+                            
                             //campo ambiente
                             $sAmbiente = new sAmbiente();
                             $sAmbiente->setNomeCampo('idambiente');
@@ -321,13 +328,17 @@ HTML;
                                 {$modelo}<br />
                             </td>
                             <td>{$descricao}</td>
+                            <td>
+                                {$secretaria}<br />
 HTML;
+                            
                             if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                                 echo <<<HTML
-                            <td>{$ambiente}</td>                            
+                                {$ambiente}                                                        
 HTML;
                             }
                             echo <<<HTML
+                            </td>
                             <td>{$local}</td>
 HTML;
                             if ($_SESSION['credencial']['nivelPermissao'] > 1) {
@@ -460,7 +471,7 @@ HTML;
                             foreach ($sMarca->mConexao->getRetorno() as $key => $value) {
                                 $marca = $value['nomenclatura'];
                             }
-
+                            
                             //campo ambiente
                             $sAmbiente = new sAmbiente();
                             $sAmbiente->setNomeCampo('idambiente');
@@ -539,7 +550,10 @@ HTML;
                                 {$modelo}<br />
                             </td>
                             <td>{$descricao}</td>
-                            <td>{$ambiente}</td> 
+                            <td>
+                                {$secretaria}/<br />
+                                {$ambiente}
+                            </td> 
                             <td>{$local}</td>
                             <td>
                                 <i class="nav-icon fas fa-flag text-{$cor}"></i> {$posicao} - {$prioridade}
@@ -576,13 +590,17 @@ HTML;
                     <th>Patrimônio</th>
                     <th>Categoria/ Marca/ Modelo</th>
                     <th>Descrição</th>
+                    <th>
+                        Secretaria
                     <?php
                     if ($_SESSION['credencial']['nivelPermissao'] > 1) {
                     echo <<<HTML
-                    <th>Ambiente</th>
+                        /<br />
+                        Ambiente
 HTML;
                     }
                     ?>
+                    </th>  
                     <th>Local</th>
                     <?php
                     if ($_SESSION['credencial']['nivelPermissao'] > 1) {
