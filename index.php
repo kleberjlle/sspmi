@@ -1,5 +1,6 @@
 <?php
-$manutenção = true;
+
+$manutenção = false;
 
 if(!$manutenção){
     header('Location: App/telas/acesso/tAcessar.php');

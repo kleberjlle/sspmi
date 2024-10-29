@@ -19,7 +19,8 @@ class sAmbiente {
         $this->setMConexao(new mConexao());
         
         if ($pagina == 'tMenu3_1.php' ||
-            $pagina == 'tMenu3_2_1.php') {
+            $pagina == 'tMenu3_2_1.php' ||
+            $pagina == 'tMenu4_2_1_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -51,8 +52,7 @@ class sAmbiente {
         $this->mConexao->CRUD($dados);
 
         //atualiza o validador da classe de acordo com o validador da conexão
-        $this->setValidador($this->mConexao->getValidador());
-        
+        $this->setValidador($this->mConexao->getValidador());        
     }
     
     public function getValidador(): string {
@@ -94,4 +94,6 @@ class sAmbiente {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
+
+
 }

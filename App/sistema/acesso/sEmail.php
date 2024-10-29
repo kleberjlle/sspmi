@@ -178,10 +178,17 @@ class sEmail {
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
         //encaminha as buscas de acordo com a origem 
-        if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_2.php' ||
-                $pagina == 'tMenu1_2_1.php' ||
-                $pagina == 'tMenu1_3.php') {
+        if ($pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php'||
+            $pagina == 'tMenu4_2_1.php' ||
+            $pagina == 'tMenu4_2_1.php-2' ||
+            $pagina == 'tMenu4_2_2.php' ||
+            $pagina == 'tMenu4_2_2.php-2' ||
+            $pagina == 'tMenu4_2_3.php' ||
+            $pagina == 'tMenu4_2_3.php-2' ||
+            $pagina == 'tMenu4_2_4_1.php' ||
+            $pagina == 'tMenu4_2_4_1.php-2') {
 
             //substituir futuramente
             if ($this->getNomenclaturaLocal() == 'email') {
@@ -198,12 +205,22 @@ class sEmail {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null //ASC ou DESC
                 ];
+                
+                $this->mConexao->CRUD($dados);
+                $this->setValidador($this->mConexao->getValidador());
+                
+                if ($this->getValidador()) {
+                    foreach ($this->mConexao->getRetorno() as $linha) {
+                        $this->setIdEmail($linha['idemail']);
+                        $this->setNomenclatura($linha['nomenclatura']);
+                    }
+                }
             }
 
             if ($this->getNomenclaturaLocal() == 'setor' ||
-                    $this->getNomenclaturaLocal() == 'coordenacao' ||
-                    $this->getNomenclaturaLocal() == 'departamento' ||
-                    $this->getNomenclaturaLocal() == 'secretaria') {
+                $this->getNomenclaturaLocal() == 'coordenacao' ||
+                $this->getNomenclaturaLocal() == 'departamento' ||
+                $this->getNomenclaturaLocal() == 'secretaria') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['email.idemail', 'email.nomenclatura'],
@@ -213,26 +230,174 @@ class sEmail {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null //ASC ou DESC
                 ];
+                
+                $this->mConexao->CRUD($dados);
+                $this->setValidador($this->mConexao->getValidador());
+                
+                
+                if ($this->getValidador()) {
+                    foreach ($this->mConexao->getRetorno() as $linha) {
+                        $this->setIdEmail($linha['idemail']);
+                        $this->setNomenclatura($linha['nomenclatura']);
+                    }
+                }
+            }
+            
+            if( $pagina == 'tMenu4_2_1_1.php-2' ||
+                $pagina == 'tMenu4_2_2_1.php-2' ||
+                $pagina == 'tMenu4_2_3_1.php-2' ||
+                $pagina == 'tMenu4_2_4_1.php-2'){
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'email',
+                    'camposCondicionados' => $this->getNomeCampo(),
+                    'valoresCondicionados' => $this->getValorCampo(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => null
+                ];    
+            }
+            
+            if($pagina == 'tMenu4_2_1_1.php'){
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'email_has_secretaria',
+                    'camposCondicionados' => $this->getNomeCampo(),
+                    'valoresCondicionados' => $this->getValorCampo(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => null
+                ];    
+            }
+                        
+            if($pagina == 'tMenu4_2_2_1.php'){
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'email_has_departamento',
+                    'camposCondicionados' => $this->getNomeCampo(),
+                    'valoresCondicionados' => $this->getValorCampo(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => null
+                ];    
+            }
+            
+            if($pagina == 'tMenu4_2_3_1.php'){
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'email_has_coordenacao',
+                    'camposCondicionados' => $this->getNomeCampo(),
+                    'valoresCondicionados' => $this->getValorCampo(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => null
+                ];    
+            }
+            
+            if($pagina == 'tMenu4_2_4_1.php'){
+                $dados = [
+                    'comando' => 'SELECT',
+                    'busca' => '*',
+                    'tabelas' => 'email_has_setor',
+                    'camposCondicionados' => $this->getNomeCampo(),
+                    'valoresCondicionados' => $this->getValorCampo(),
+                    'camposOrdenados' => null,//caso não tenha, colocar como null
+                    'ordem' => null
+                ];    
             }
 
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
-
-            if ($this->getValidador()) {
-                foreach ($this->mConexao->getRetorno() as $linha) {
-                    $this->setIdEmail($linha['idemail']);
-                    $this->setNomenclatura($linha['nomenclatura']);
-                }
-            }
         }
 
-        if ($pagina == 'tMenu1_1_1.php') {
+        if ($pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu2_2.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'email',
                 'camposCondicionados' => 'idemail',
                 'valoresCondicionados' => $this->getIdEmail(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tAcessar.php-setor2' ||
+            $pagina == 'tAcessar.php-coordenacao2' ||
+            $pagina == 'tAcessar.php-departamento2' ||
+            $pagina == 'tAcessar.php-secretaria2') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php-setor') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email_has_setor',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php-coordenacao') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email_has_coordenacao',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php-departamento') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email_has_departamento',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null //ASC ou DESC
+            ];
+
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php-secretaria') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'email_has_secretaria',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null //ASC ou DESC
             ];

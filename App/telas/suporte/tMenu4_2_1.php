@@ -1,50 +1,52 @@
 <?php
-require_once '../../sistema/acesso/sNotificacao.php';
+use App\sistema\acesso\{
+    sConfiguracao,
+    sSecretaria
+};
 
-//verifica a opção de menu
-isset($_GET['menu']) ? $menu = $_GET['menu'] : $menu = "0";
-//verifica qual form está requisitando alteração
-isset($_GET['opcao']) ? $opcao = $_GET['opcao'] : $opcao = '';
-//verifica qual campo do form está requisitando alteração
-isset($_GET['nomenclatura']) ? $nomenclatura = $_GET['nomenclatura'] : $nomenclatura = '';
-        
+$sConfiguracao = new sConfiguracao();
+
+//busca dados das secretarias no bd
+$sSecretaria = new sSecretaria(0);
+$sSecretaria->consultar('tMenu4_2_1.php');
+
 ?>
-        
 <div class="container-fluid">
     <div class="row">
-        <!-- left column -->
         <!--registro secretaria-->
-        <div class="col-md-12">
+        <div class="col-md-3">
             <!-- general form elements -->
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <h3 class="card-title"><?php echo $opcao; ?></h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+                    <h3 class="card-title">Local</h3>
                 </div>
                 <!-- form start -->                
                 <div class="card-body">
-                    <div class="row">                      
-                        <div class="form-group col-md-2">
-                            <label for="secretaria">Nomenclatura</label>
-                            <input type="text" class="form-control" name="alterarLocal" value="<?php echo $nomenclatura; ?>" form="alterarLocal" required="">
-                            <input type="hidden" value="<?php echo $opcao ?>" name="opcao" form="alterarLocal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="secretaria">Secretaria</label>
+                                <select class="form-control" name="secretaria" id="secretaria" form="f1">
+                                    <?php
+                                    foreach ($sSecretaria->mConexao->getRetorno() as $value) {                                            
+                                        echo '<option value="' . $value['idsecretaria'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
-                <form action="../../sistema/suporte/sAlterarLocal.php" method="post" id="alterarLocal" enctype="multipart/form-data">
+                <form action="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso() ?>tPainel.php?menu=4_2_1_1" method="post" id="f1" name="f1" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" name="pagina" value="menu4_2_1">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
+                        <input type="hidden" name="pagina" id="pagina" value="tMenu4_2_1.php" form="f1">
+                        <input type="hidden" name="formulario" id="formulario" value="f1" form="f1">
+                        <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
                 </form>
             </div>
-        </div>   
+        </div>           
         <!-- /.card -->
     </div>
 </div>

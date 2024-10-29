@@ -5,7 +5,8 @@ require_once '../../../vendor/autoload.php';
 //chama os arquivos para instanciá-los
 use App\sistema\acesso\{
     sConfiguracao,
-    sNotificacao
+    sNotificacao,
+    sSair
 };
 
 if(!isset($_GET['seguranca'])){
@@ -65,7 +66,7 @@ if (isset($_GET['campo']) ||
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Registrar nova senha para acesso</p>
-                    <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sVerificarSenha.php" method="post">
+                    <form action="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>sVerificarSenha.php" method="post" enctype="multipart/form-data">
                         <div class="input-group mb-3">
                             <input class="form-control<?php echo isset($alertaSenha) ? $alertaSenha : ''; ?>" type="password" name="senha" id="senha" placeholder="Senha" required="">
                             <div class="input-group-append">

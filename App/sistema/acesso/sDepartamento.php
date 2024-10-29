@@ -11,7 +11,6 @@ use App\sistema\acesso\{
 };
 
 class sDepartamento {
-
     private int $idDepartamento;
     private int $idSecretaria;
     private string $nomenclatura;
@@ -29,7 +28,8 @@ class sDepartamento {
         if ($pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu2_1.php') {
+            $pagina == 'tMenu2_1.php' ||
+            $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -81,7 +81,8 @@ class sDepartamento {
             $this->mConexao->CRUD($dados);
         }
         
-        if ($pagina == 'tMenu1_2_1.php') {
+        if ($pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu4_2_2.php') {
             //consulta para busca sem o id da secretaria
             $dados = [
                 'comando' => 'SELECT',

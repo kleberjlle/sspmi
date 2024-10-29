@@ -1,6 +1,12 @@
 <?php
 require_once '../../../vendor/autoload.php';
 
+//habilita segurança do cookie
+$lifetime = strtotime('+6 hours', 0);
+session_set_cookie_params(['httponly' => true, 'lifetime' => $lifetime]);
+//altera tempo de acesso 60s*60m*6h = 21600
+ini_set('session.gc_maxlifetime', 21600);
+
 use App\sistema\acesso\{
     sConfiguracao,
     sHistorico,
@@ -49,7 +55,15 @@ if(isset($_POST) && !empty($_POST)){
     $email = $_POST['email'];
     $senha = $_POST['senha'];    
     
-    $sEmail = new sEmail($email, '');
+    $sEmail = new sEmail('', '');
+    $sEmail->setNomeCampo('nomenclatura');
+    $sEmail->setValorCampo($email);
+    $sEmail->consultar('tAcessar.php');
+    
+    foreach ($sEmail->mConexao->getRetorno() as $value) {
+        $idEmail = $value['idemail'];
+    }
+        
     $sSenha = new sSenha($email);
     $sSenha->criptografar($senha);
     
@@ -96,9 +110,10 @@ if(isset($_POST) && !empty($_POST)){
         $sSenha->setEmail($email);
         $sSenha->setSenha($senha);
         $sSenha->verificar('tAcessar.php');
-        if($sSenha->getValidador()){
+        if($sSenha->getValidador()){                
             $sUsuario = new sUsuario();
-            $sUsuario->setIdEmail($sEmail->getIdEmail());            
+            $sUsuario->setNomeCampo('idemail');
+            $sUsuario->setValorCampo($idEmail);        
             $sUsuario->consultar('tAcessar.php');
             if($sUsuario->getValidador()){     
                 //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso

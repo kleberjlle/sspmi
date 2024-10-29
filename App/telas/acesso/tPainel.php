@@ -1,12 +1,4 @@
 <?php
-//configura expiração da sessão
-session_cache_limiter('public');
-$cache_limiter = session_cache_limiter();
-
-/* define o prazo do cache em 30 minutos */
-session_cache_expire(5);
-$cache_expire = session_cache_expire();
-
 //necessário para chamar headers(Location) após linhas html (caso contrário gera erro de output)
 ob_start();
 
@@ -40,8 +32,9 @@ if($sConfiguracao->getManutencao() && $_SESSION['credencial']['nivelPermissao'] 
 
 //atualizar dados do usuário sem realizar logoff
 $sUsuario = new sUsuario();
-$sUsuario->setIdEmail($_SESSION['credencial']['idEmailUsuario']);
-$sUsuario->consultar('tAcessar.php');
+$sUsuario->setNomeCampo('email_idemail');
+$sUsuario->setValorCampo($_SESSION['credencial']['idEmailUsuario']);
+$sUsuario->consultar('tPainel.php');
 
 //caso o usuário esteja inativo faça logoff
 if(!$sUsuario->getValidador()){
@@ -63,16 +56,6 @@ if(isset($_GET['menu'])){
 }else{
     $menu = "0";
 }
-
-//QA - início da área de testes
-/*verificar o que tem no objeto
-
-echo "<pre>";
-var_dump($_SESSION['credencial']);
-echo "</pre>";
- 
-//*/
-//QA - fim da área de testes
 
 ?>
 <!DOCTYPE html>
@@ -114,7 +97,7 @@ echo "</pre>";
                         <div class="navbar-search-block">
                             <form class="form-inline">
                                 <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                    <input class="form-control form-control-navbar" name="navbar" type="search" placeholder="Search" aria-label="Search">
                                     <div class="input-group-append">
                                         <button class="btn btn-navbar" type="submit">
                                             <i class="fas fa-search"></i>
@@ -415,54 +398,148 @@ HTML;
                                 //abre os menus da condição
                                 if($_SESSION['credencial']['nivelPermissao'] > 1){
                                 $menu == '4_1' ||
-                                $menu == '4_2' ?
+                                $menu == '4_2' ||
+                                $menu == '4_2_1' ||
+                                $menu == '4_2_1_1' ||
+                                $menu == '4_2_1_2' ||
+                                $menu == '4_2_2' ||
+                                $menu == '4_2_2_1' ||
+                                $menu == '4_2_3' ||
+                                $menu == '4_2_3_1' ||
+                                $menu == '4_2_4' ||
+                                $menu == '4_2_4_1' ?
                                 $atributo = ' menu-is-opening menu-open' :
                                 $atributo = '';
                                 
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-building"></i>
-                                    <p>
-                                        Local
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <!--FINAL DO CABEÇALHO DO MENU 4-->
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-building"></i>
+                                        <p>
+                                            Local
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <!--FINAL DO CABEÇALHO DO MENU 4-->
                                         
-                                <!--INÍCIO DO SUBMENU 4_1-->
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
+                                    <!--INÍCIO DO SUBMENU 4_1-->
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
 HTML;
-                                //abre os menus da condição
-                                $menu == '4_1' ?
-                                $atributo = ' active' :
-                                $atributo = '';
-                                
-                                echo <<<HTML
-                                        <a href="tPainel.php?menu=4_1" class="nav-link $atributo">
-                                            <p>Registrar</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <!--FINAL SUBMENU 4_1-->
+                                    //abre os menus da condição
+                                    $menu == '4_1' ?
+                                    $atributo = ' active' :
+                                    $atributo = '';
+
+                                    echo <<<HTML
+                                            <a href="tPainel.php?menu=4_1" class="nav-link $atributo">
+                                                <p>Registrar</p>
+                                            </a>
+                                        </li>
+                                    
+                                    <!--FINAL SUBMENU 4_1-->
                                         
-                                <!--SUBMENU 4_2-->
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-HTML;
-                                //abre os menus da condição
-                                $menu == '4_2' ?
-                                $atributo = ' active' :
-                                $atributo = '';
-                                
-                                echo <<<HTML
-                                        <a href="tPainel.php?menu=4_2" class="nav-link $atributo">
-                                            <p>Alterar</p>
+                                    <!--SUBMENU 4_2-->
+HTML;  
+                                    if($_SESSION['credencial']['nivelPermissao'] > 1){
+                                    $menu == '4_2_1' ||
+                                    $menu == '4_2_1_1' ||
+                                    $menu == '4_2_2' ||
+                                    $menu == '4_2_2_1' ||
+                                    $menu == '4_2_3' ||
+                                    $menu == '4_2_3_1' ||
+                                    $menu == '4_2_4' ||
+                                    $menu == '4_2_4_1' ?
+                                    $atributo = ' menu-is-opening menu-open' :
+                                    $atributo = '';
+
+                                    echo <<<HTML
+                                    <li class="nav-item $atributo">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon far fa-edit"></i>
+                                            <p>
+                                                Alterar
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
                                         </a>
+                                        <!--FINAL DO CABEÇALHO DO MENU 4_2-->
+
+                                        <!--INÍCIO DO SUBMENU 4_2_1-->
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+HTML;
+                                        //abre os menus da condição
+                                        $menu == '4_2_1' ||
+                                        $menu == '4_2_1_1' ?
+                                        $atributo = ' active' :
+                                        $atributo = '';
+
+                                        echo <<<HTML
+                                                <a href="tPainel.php?menu=4_2_1" class="nav-link $atributo">
+                                                    <p>Secretaria</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <!--FINAL SUBMENU 4_2_1-->
+
+                                        <!--SUBMENU 4_2_2-->
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+HTML;
+                                        //abre os menus da condição
+                                        $menu == '4_2_2' ||
+                                        $menu == '4_2_2_1' ?
+                                        $atributo = ' active' :
+                                        $atributo = '';
+
+                                        echo <<<HTML
+                                                <a href="tPainel.php?menu=4_2_2" class="nav-link $atributo">
+                                                    <p>Departamento</p>
+                                                </a>
+                                            </li>
+                                        </ul>  
+                                        <!--FINAL SUBMENU 4_2_2-->
+
+                                        <!--SUBMENU 4_2_3-->
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+HTML;
+                                        //abre os menus da condição
+                                        $menu == '4_2_3' ||
+                                        $menu == '4_2_3_1' ?
+                                        $atributo = ' active' :
+                                        $atributo = '';
+
+                                        echo <<<HTML
+                                                <a href="tPainel.php?menu=4_2_3" class="nav-link $atributo">
+                                                    <p>Coordenação</p>
+                                                </a>
+                                            </li>
+                                        </ul>  
+                                        <!--FINAL SUBMENU 4_2_3-->
+
+                                        <!--SUBMENU 4_2_4-->
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+HTML;
+                                        //abre os menus da condição
+                                        $menu == '4_2_4' ||
+                                        $menu == '4_2_4_1' ?
+                                        $atributo = ' active' :
+                                        $atributo = '';
+
+                                        echo <<<HTML
+                                                <a href="tPainel.php?menu=4_2_4" class="nav-link $atributo">
+                                                    <p>Setor</p>
+                                                </a>
+                                            </li>
+                                        </ul>  
                                     </li>
-                                </ul>                                
-                            </li>
+HTML;
+                                    }
+                            echo <<<HTML
+                                    </ul>
+                                </li>
                             <!--FINAL DO SUBMENU 4_2-->                                        
                             <!--FINAL DO SUBMENU 4-->          
                                 
@@ -695,6 +772,27 @@ HTML;
                             break;
                         case "4_2_1":
                             require_once '../suporte/tMenu4_2_1.php';
+                            break;
+                        case "4_2_1_1":
+                            require_once '../suporte/tMenu4_2_1_1.php';
+                            break;
+                        case "4_2_2":
+                            require_once '../suporte/tMenu4_2_2.php';
+                            break;
+                        case "4_2_2_1":
+                            require_once '../suporte/tMenu4_2_2_1.php';
+                            break;
+                        case "4_2_3":
+                            require_once '../suporte/tMenu4_2_3.php';
+                            break;
+                        case "4_2_3_1":
+                            require_once '../suporte/tMenu4_2_3_1.php';
+                            break;
+                        case "4_2_4":
+                            require_once '../suporte/tMenu4_2_4.php';
+                            break;
+                        case "4_2_4_1":
+                            require_once '../suporte/tMenu4_2_4_1.php';
                             break;
                         //menu 5
                         case "5_1":

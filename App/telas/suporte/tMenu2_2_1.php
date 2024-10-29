@@ -3,7 +3,8 @@ use App\sistema\acesso\{
     sTratamentoDados,
     sConfiguracao,
     sSair,
-    sUsuario
+    sUsuario,
+    sEmail
 };
 use App\sistema\suporte\{
     sProtocolo,
@@ -47,8 +48,22 @@ if ($sProtocolo->getValidador()) {
         $sUsuario->setValorCampo($value['usuario_idusuario']);
         $sUsuario->consultar('tMenu2_2_1.php');
         
-        //campo do requerente ou solicitante
-        $nomeSolicitante = $sUsuario->getNome() . ' ' . $sUsuario->getSobrenome();
+        foreach ($sUsuario->mConexao->getRetorno() as $dadosUsuario) {
+            $nomeSolicitante = $dadosUsuario['nome']. ' ' . $dadosUsuario['sobrenome'];
+            $idEmail = $dadosUsuario['email_idemail'];
+        }
+        
+        //dados do email
+        $sEmail = new sEmail('', '');
+        $sEmail->setIdEmail($idEmail);
+        $sEmail->consultar('tMenu2_2_1.php');
+        
+        foreach ($sEmail->mConexao->getRetorno() as $dadosEmail) {
+            $email = $dadosEmail['nomenclatura'];
+        }
+        
+        $email == $value['emailDoRequerente'] ? $requerente = false : $requerente = true;
+        
         $nomeRequerente = $value['nomeDoRequerente'] . ' ' . $value['sobrenomeDoRequerente'];
         
         //demais dados do protocolo
@@ -60,15 +75,11 @@ if ($sProtocolo->getValidador()) {
         $whatsApp = $value['whatsAppDoRequerente'];
         $email = $value['emailDoRequerente'];      
         
-        //trata os nomes do solicitante e requerente
-        if ($nomeSolicitante == $nomeRequerente) {
-            $requerente = false;
-            $nome = '<h3 class="profile-username text-center">'.$nomeSolicitante. '</h3>';
-        } else {
-            $requerente = true;
-            $nome = '<h3 class="profile-username text-center">'.$nomeRequerente . '</h3><p class="text-muted text-center">por <i>' . $nomeSolicitante . '</i></p>';
-        }    
         
+        $requerente ? 
+        $nome = '<h3 class="profile-username text-center">'.$nomeRequerente . '</h3><p class="text-muted text-center">por <i>' . $nomeSolicitante . '</i></p>' : 
+        $nome = '<h3 class="profile-username text-center">'.$nomeSolicitante. '</h3>';
+                
         //verifique se há algum protocolo sem etapa vinculada
         $idProtocolo = $value['idprotocolo'];
         $sEtapa = new sEtapa();

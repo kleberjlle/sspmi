@@ -19,7 +19,9 @@ class sSecretaria {
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu1_2_1.php'){                            
+            $pagina == 'tMenu1_2_1.php'
+            //$pagina == 'tMenu4_2_1_1.php'
+            ){                            
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -43,7 +45,12 @@ class sSecretaria {
             $pagina == 'tMenu4_1.php' ||
             $pagina == 'tMenu3_1.php'||
             $pagina == 'tMenu2_1.php-f1' ||
-            $pagina == 'tMenu2_2_2.php'){
+            $pagina == 'tMenu2_2_2.php' ||
+            $pagina == 'tMenu4_2.php' ||
+            $pagina == 'tMenu4_2_1.php' ||
+            $pagina == 'tMenu4_2_2.php' ||
+            $pagina == 'tMenu4_2_3.php' ||
+            $pagina == 'tMenu4_2_4.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -53,7 +60,75 @@ class sSecretaria {
                 'camposOrdenados' => 'nomenclatura',//caso não tenha, colocar como null
                 'ordem' => 'ASC'
             ];            
-            $this->mConexao->CRUD($dados);
+            $this->mConexao->CRUD($dados);            
+        }
+        
+        if($pagina == 'tMenu4_2_1_1.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'secretaria',
+                'camposCondicionados' => 'idsecretaria',
+                'valoresCondicionados' => $this->getIdSecretaria(),
+                'camposOrdenados' => null,//caso não tenha, colocar como null
+                'ordem' => null
+            ];          
+            $this->mConexao->CRUD($dados);  
+            
+            
+            $query = '';
+            $n1 = '';
+            $n2 = '';
+            $ordem = false;
+            $valoresCondicionados = false;
+
+            foreach ($dados as $key => $value) {
+                if ($key == 'busca' && $value) {
+                    $query .= $value . ' FROM ';
+                } else if ($key == 'camposCondicionados' && $value) {
+                    if($dados['valoresCondicionados'] == "IS NULL"){
+                        $query .= 'WHERE ' . $value . ' ';
+                    }else{
+                        $query .= 'WHERE ' . $value . '=';
+                    }               
+                } else if ($key == 'valoresCondicionados' && $value) {
+                    $valoresCondicionados = true;
+                    if($value == "IS NULL"){
+                        //$n1 = "$value ";
+                        //$n2 = "$value";
+                        $n1 = '? ';
+                        $n2 = '?';
+                    }else{
+                        //$n1 = "'$value' ";
+                        //$n2 = "'$value'";
+                        $n1 = "'?' ";
+                        $n2 = "'?'";
+                    }
+                } else if ($key == 'camposOrdenados' && $value) {
+                    $ordem = true;
+                    $query .= $n1 . 'ORDER BY ' . $value . ' ';
+                } else if ($key == 'ordem') {
+                    if ($ordem) {
+                        $query .= $value;
+                    } else {
+                        $query .= $n2;
+                    }
+                } else {
+                    if ($valoresCondicionados) {
+                        $query .= $value;
+                    } else {
+                        $query .= $value . ' ';
+                    }
+                }
+            }
+        
+            //$sql = "SELECT * FROM users WHERE id=?"; // SQL with parameters
+            //$stmt = $conn->prepare($sql); 
+            //$stmt->bind_param("i", $id); i = integer, d = double (float), s = string, b = blobs
+            //$resultado = $this->conexao->execute_query($query, $dados['valoresCondicionados']);
+
+
+            echo $query;
         }
     }
     

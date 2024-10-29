@@ -67,13 +67,14 @@ class sUsuario {
         $this->setMConexao(new mConexao());
 
         //tomada de decisão de acordo com a página
-        if ($pagina == 'tAcessar.php') {
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tPainel.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'usuario',
-                'camposCondicionados' => 'email_idemail',
-                'valoresCondicionados' => $this->getIdEmail(),
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null
             ];
@@ -92,7 +93,7 @@ class sUsuario {
                 $idSecretaria = $linha['secretaria_idsecretaria'];
                 $idTelefoneUsuario = $linha['telefone_idtelefone'];
                 $idCargo = $linha['cargo_idcargo'];
-                $idEmail = $linha['email_idemail'];
+                $idEmailUsuario = $linha['email_idemail'];
                 $idPermissao = $linha['permissao_idpermissao'];
             }
 
@@ -144,11 +145,25 @@ class sUsuario {
                 }
 
                 if (!is_null($idSetor)) {
-                    $this->setSTelefoneSetor(new sTelefone(0, $this->sSetor->getIdSetor(), 'setor'));
-                    $this->sTelefoneSetor->consultar($pagina);
-                    if ($this->sTelefoneSetor->getValidador()) {
-                        $telefoneSetor = $this->sTelefoneSetor->getNumero();
-                        $whatsAppSetor = $this->sTelefoneSetor->getWhatsApp();
+                    $sTelefoneSetor = new sTelefone(0, 0, '');
+                    $sTelefoneSetor->setNomeCampo('setor_idsetor');
+                    $sTelefoneSetor->setValorCampo($idSetor);
+                    $sTelefoneSetor->consultar('tAcessar.php-setor');
+                    
+                    if ($sTelefoneSetor->getValidador()) {
+                        foreach ($sTelefoneSetor->mConexao->getRetorno() as $value) {
+                            $idTelefoneSetor = $value['telefone_idtelefone'];
+                        }
+                        
+                        $sTelefoneSetor = new sTelefone(0, 0, '');
+                        $sTelefoneSetor->setNomeCampo('idtelefone');
+                        $sTelefoneSetor->setValorCampo($idTelefoneSetor);
+                        $sTelefoneSetor->consultar('tAcessar.php-setor2');
+                        
+                        foreach ($sTelefoneSetor->mConexao->getRetorno() as $value) {
+                            $telefoneSetor = $value['numero'];
+                            $whatsAppSetor = $value['whatsApp'];
+                        }
                     } else {
                         $telefoneSetor = '--';
                         $whatsAppSetor = false;
@@ -157,13 +172,28 @@ class sUsuario {
                     $telefoneSetor = '--';
                     $whatsAppSetor = false;
                 }
-
+                
+                
                 if (!is_null($idCoordenacao)) {
-                    $this->setSTelefoneCoordenacao(new sTelefone(0, $this->sCoordenacao->getIdCoordenacao(), 'coordenacao'));
-                    $this->sTelefoneCoordenacao->consultar($pagina);
-                    if ($this->sTelefoneCoordenacao->getValidador()) {
-                        $telefoneCoordenacao = $this->sTelefoneCoordenacao->getNumero();
-                        $whatsAppCoordenacao = $this->sTelefoneCoordenacao->getWhatsApp();
+                    $sTelefoneCoordenacao = new sTelefone(0, 0, '');
+                    $sTelefoneCoordenacao->setNomeCampo('coordenacao_idcoordenacao');
+                    $sTelefoneCoordenacao->setValorCampo($idCoordenacao);
+                    $sTelefoneCoordenacao->consultar('tAcessar.php-coordenacao');
+                    
+                    if ($sTelefoneCoordenacao->getValidador()) {
+                        foreach ($sTelefoneCoordenacao->mConexao->getRetorno() as $value) {
+                            $idTelefoneCoordenacao = $value['telefone_idtelefone'];
+                        }
+                        
+                        $sTelefoneCoordenacao = new sTelefone(0, 0, '');
+                        $sTelefoneCoordenacao->setNomeCampo('idtelefone');
+                        $sTelefoneCoordenacao->setValorCampo($idTelefoneCoordenacao);
+                        $sTelefoneCoordenacao->consultar('tAcessar.php-coordenacao2');
+                        
+                        foreach ($sTelefoneCoordenacao->mConexao->getRetorno() as $value) {
+                            $telefoneCoordenacao = $value['numero'];
+                            $whatsAppCoordenacao = $value['whatsApp'];
+                        }
                     } else {
                         $telefoneCoordenacao = '--';
                         $whatsAppCoordenacao = false;
@@ -172,13 +202,27 @@ class sUsuario {
                     $telefoneCoordenacao = '--';
                     $whatsAppCoordenacao = false;
                 }
-
+                 
                 if (!is_null($idDepartamento)) {
-                    $this->setSTelefoneDepartamento(new sTelefone(0, $this->sDepartamento->getIdDepartamento(), 'departamento'));
-                    $this->sTelefoneDepartamento->consultar($pagina);
-                    if ($this->sTelefoneDepartamento->getValidador()) {
-                        $telefoneDepartamento = $this->sTelefoneDepartamento->getNumero();
-                        $whatsAppDepartamento = $this->sTelefoneDepartamento->getWhatsApp();
+                    $sTelefoneDepartamento = new sTelefone(0, 0, '');
+                    $sTelefoneDepartamento->setNomeCampo('departamento_iddepartamento');
+                    $sTelefoneDepartamento->setValorCampo($idDepartamento);
+                    $sTelefoneDepartamento->consultar('tAcessar.php-departamento');
+                                        
+                    if ($sTelefoneDepartamento->getValidador()) {
+                        foreach ($sTelefoneDepartamento->mConexao->getRetorno() as $value) {
+                            $idTelefoneDepartamento = $value['telefone_idtelefone'];
+                        }
+                        
+                        $sTelefoneDepartamento = new sTelefone(0, 0, '');
+                        $sTelefoneDepartamento->setNomeCampo('idtelefone');
+                        $sTelefoneDepartamento->setValorCampo($idTelefoneDepartamento);
+                        $sTelefoneDepartamento->consultar('tAcessar.php-departamento2');
+                        
+                        foreach ($sTelefoneDepartamento->mConexao->getRetorno() as $value) {
+                            $telefoneDepartamento = $value['numero'];
+                            $whatsAppDepartamento = $value['whatsApp'];
+                        }
                     } else {
                         $telefoneDepartamento = '--';
                         $whatsAppDepartamento = false;
@@ -188,24 +232,63 @@ class sUsuario {
                     $whatsAppDepartamento = false;
                 }
 
-                $this->setSTelefoneSecretaria(new sTelefone(0, $this->sSecretaria->getIdSecretaria(), 'secretaria'));
-                $this->sTelefoneSecretaria->consultar($pagina);
-                if ($this->sTelefoneSecretaria->getValidador()) {
-                    $telefoneSecretaria = $this->sTelefoneSecretaria->getNumero();
-                    $whatsAppSecretaria = $this->sTelefoneSecretaria->getWhatsApp();
+               if (!is_null($idSecretaria)) {
+                    $sTelefoneSecretaria = new sTelefone(0, 0, '');
+                    $sTelefoneSecretaria->setNomeCampo('secretaria_idsecretaria');
+                    $sTelefoneSecretaria->setValorCampo($idSecretaria);
+                    $sTelefoneSecretaria->consultar('tAcessar.php-secretaria');
+                    
+                    if ($sTelefoneSecretaria->getValidador()) {
+                        foreach ($sTelefoneSecretaria->mConexao->getRetorno() as $value) {
+                            $idTelefoneSecretaria = $value['telefone_idtelefone'];
+                        }
+                        
+                        $sTelefoneSecretaria = new sTelefone(0, 0, '');
+                        $sTelefoneSecretaria->setNomeCampo('idtelefone');
+                        $sTelefoneSecretaria->setValorCampo($idTelefoneSecretaria);
+                        $sTelefoneSecretaria->consultar('tAcessar.php-secretaria2');
+                        
+                        foreach ($sTelefoneSecretaria->mConexao->getRetorno() as $value) {
+                            $telefoneSecretaria = $value['numero'];
+                            $whatsAppSecretaria = $value['whatsApp'];
+                        }
+                    } else {
+                        $telefoneSecretaria = '--';
+                        $whatsAppSecretaria = false;
+                    }
                 } else {
                     $telefoneSecretaria = '--';
                     $whatsAppSecretaria = false;
                 }
-
-                $this->setSEmailUsuario(new sEmail($idEmail, 'email'));
-                $this->sEmailUsuario->consultar($pagina);
+                
+                $sEmailUsuario = new sEmail('', '');
+                $sEmailUsuario->setNomeCampo('idemail');
+                $sEmailUsuario->setValorCampo($idEmailUsuario);
+                $sEmailUsuario->consultar('tAcessar.php');
+                
+                foreach ($sEmailUsuario->mConexao->getRetorno() as $value) {
+                    $emailUsuario = $value['nomenclatura'];
+                }
 
                 if (!is_null($idSetor)) {
-                    $this->setSEmailSetor(new sEmail($idEmail, 'setor'));
-                    $this->sEmailSetor->consultar($pagina);
-                    if ($this->sEmailSetor->getValidador()) {
-                        $emailSetor = $this->sEmailSetor->getNomenclatura();
+                    $sEmailSetor = new sEmail('', '');
+                    $sEmailSetor->setNomeCampo('setor_idsetor');
+                    $sEmailSetor->setValorCampo($idSetor);
+                    $sEmailSetor->consultar('tAcessar.php-setor');
+                    
+                    if ($sEmailSetor->getValidador()) {
+                        foreach ($sEmailSetor->mConexao->getRetorno() as $value) {
+                            $idEmailSetor = $value['email_idemail'];
+                        }
+                        
+                        $sEmailSetor = new sEmail('', '');
+                        $sEmailSetor->setNomeCampo('idemail');
+                        $sEmailSetor->setValorCampo($idEmailSetor);
+                        $sEmailSetor->consultar('tAcessar.php-setor2');
+                        
+                        foreach ($sEmailSetor->mConexao->getRetorno() as $value) {
+                            $emailSetor = $value['nomenclatura'];
+                        }
                     } else {
                         $emailSetor = '--';
                     }
@@ -214,10 +297,24 @@ class sUsuario {
                 }
 
                 if (!is_null($idCoordenacao)) {
-                    $this->setSEmailCoordenacao(new sEmail($idEmail, 'coordenacao'));
-                    $this->sEmailCoordenacao->consultar($pagina);
-                    if ($this->sEmailCoordenacao->getValidador()) {
-                        $emailCoordenacao = $this->sEmailCoordenacao->getNomenclatura();
+                    $sEmailCoordenacao = new sEmail('', '');
+                    $sEmailCoordenacao->setNomeCampo('coordenacao_idcoordenacao');
+                    $sEmailCoordenacao->setValorCampo($idCoordenacao);
+                    $sEmailCoordenacao->consultar('tAcessar.php-coordenacao');
+                    
+                    if ($sEmailCoordenacao->getValidador()) {
+                        foreach ($sEmailCoordenacao->mConexao->getRetorno() as $value) {
+                            $idEmailCoordenacao = $value['email_idemail'];
+                        }
+                        
+                        $sEmailCoordenacao = new sEmail('', '');
+                        $sEmailCoordenacao->setNomeCampo('idemail');
+                        $sEmailCoordenacao->setValorCampo($idEmailCoordenacao);
+                        $sEmailCoordenacao->consultar('tAcessar.php-coordenacao2');
+                        
+                        foreach ($sEmailCoordenacao->mConexao->getRetorno() as $value) {
+                            $emailCoordenacao = $value['nomenclatura'];
+                        }
                     } else {
                         $emailCoordenacao = '--';
                     }
@@ -226,10 +323,24 @@ class sUsuario {
                 }
 
                 if (!is_null($idDepartamento)) {
-                    $this->setSEmailDepartamento(new sEmail($idEmail, 'departamento'));
-                    $this->sEmailDepartamento->consultar($pagina);
-                    if ($this->sEmailDepartamento->getValidador()) {
-                        $emailDepartamento = $this->sEmailDepartamento->getNomenclatura();
+                    $sEmailDepartamento = new sEmail('', '');
+                    $sEmailDepartamento->setNomeCampo('departamento_iddepartamento');
+                    $sEmailDepartamento->setValorCampo($idDepartamento);
+                    $sEmailDepartamento->consultar('tAcessar.php-departamento');
+                    
+                    if ($sEmailDepartamento->getValidador()) {
+                        foreach ($sEmailDepartamento->mConexao->getRetorno() as $value) {
+                            $idEmailDepartamento = $value['email_idemail'];
+                        }
+                        
+                        $sEmailDepartamento = new sEmail('', '');
+                        $sEmailDepartamento->setNomeCampo('idemail');
+                        $sEmailDepartamento->setValorCampo($idEmailDepartamento);
+                        $sEmailDepartamento->consultar('tAcessar.php-departamento2');
+                        
+                        foreach ($sEmailDepartamento->mConexao->getRetorno() as $value) {
+                            $emailDepartamento = $value['nomenclatura'];
+                        }
                     } else {
                         $emailDepartamento = '--';
                     }
@@ -237,11 +348,29 @@ class sUsuario {
                     $emailDepartamento = '--';
                 }
 
-                $this->setSEmailSecretaria(new sEmail($idEmail, 'secretaria'));
-                $this->sEmailSecretaria->consultar($pagina);
-                if($this->sEmailSecretaria->getValidador()){
-                    $emailSecretaria = $this->sEmailSecretaria->getNomenclatura();
-                }else{
+                if (!is_null($idSecretaria)) {
+                    $sEmailSecretaria = new sEmail('', '');
+                    $sEmailSecretaria->setNomeCampo('secretaria_idsecretaria');
+                    $sEmailSecretaria->setValorCampo($idSecretaria);
+                    $sEmailSecretaria->consultar('tAcessar.php-secretaria');
+                    
+                    if ($sEmailSecretaria->getValidador()) {
+                        foreach ($sEmailSecretaria->mConexao->getRetorno() as $value) {
+                            $idEmailSecretaria = $value['email_idemail'];
+                        }
+                        
+                        $sEmailSecretaria = new sEmail('', '');
+                        $sEmailSecretaria->setNomeCampo('idemail');
+                        $sEmailSecretaria->setValorCampo($idEmailSecretaria);
+                        $sEmailSecretaria->consultar('tAcessar.php-secretaria2');
+                        
+                        foreach ($sEmailSecretaria->mConexao->getRetorno() as $value) {
+                            $emailSecretaria = $value['nomenclatura'];
+                        }
+                    } else {
+                        $emailSecretaria = '--';
+                    }
+                } else {
                     $emailSecretaria = '--';
                 }
 
@@ -282,8 +411,8 @@ class sUsuario {
                     'whatsAppDepartamento' => $whatsAppDepartamento,
                     'telefoneSecretaria' => $telefoneSecretaria,
                     'whatsAppSecretaria' => $whatsAppSecretaria,
-                    'idEmailUsuario' => $idEmail,
-                    'emailUsuario' => $this->sEmailUsuario->getNomenclatura(),
+                    'idEmailUsuario' => $idEmailUsuario,
+                    'emailUsuario' => $emailUsuario,
                     'emailSetor' => $emailSetor,
                     'emailCoordenacao' => $emailCoordenacao,
                     'emailDepartamento' => $emailDepartamento,

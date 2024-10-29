@@ -5,13 +5,45 @@
             Atualizações
         </h3>
     </div>
-
     <div class="card-body">
-        <div class="callout callout-warning">
-            <h5>Teste</h5>
+        <div class="callout callout-info">
+            <h5>Alterar dados dos locais</h5>
             <p>
-                Limitador de Cache: <?php echo $cache_limiter ?>;<br />
-                Expiração de Sessões em Cache: <?php echo $cache_expire ?>;               
+                Versão: 2.8.2-beta (teste);<br />
+                Local: telas 4_2_1, 4_2_2, 4_2_3, 4_2_4, 4_2_1_1, 4_2_2_1, 4_2_3_1, 4_2_4_1;<br />
+                Campo: Secretaria, Departamento, Coordenação, Setor, Endereço, E-mail, Ambiente, Telefone, WhatsApp;<br />
+                Data: 24/10/2024;<br />                
+                Descrição: Implementado menus e telas até 4 nível para alterar os dados dos locais.<br />                
+            </p>
+        </div>
+        <div class="callout callout-warning">
+            <h5>Correção de bug (Multibyte String)</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Local: telas 2_2 e 2_2_1;<br />
+                Campo: Solicitante;<br />
+                Data: 17/10/2024;<br />                
+                Descrição: Alterado lógica do algoritmo, ao invés de comparar nome do requerente com solicitante, comparar e-mail do requerente com solicitante.<br />                
+            </p>
+        </div>
+        <div class="callout callout-info">
+            <h5><s>Alterado tempo limite do Garbage Collector</s></h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Local: tAcessar.php;<br />
+                Campo: --;<br />
+                Data: 15/10/2024;<br />                
+                Descrição: Alterado tempo limite do GC para 6h.<br />                
+            </p>
+        </div>
+        <div class="callout callout-info">
+            <h5>Implementado segurança de cookie</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Local: tAcessar.php;<br />
+                Campo: --;<br />
+                Data: 14/10/2024;<br />                
+                Descrição: Habilitado HttpOnly.<br />                
             </p>
         </div>
         <div class="callout callout-info">
@@ -21,8 +53,7 @@
                 Local: Perfil->Outros Usuários->Editar;<br />
                 Campo: Nome, Sobrenome, Sexo, Telefone, WhatsApp, E-mail, Permissão, Cargo, Secretaria, Departamento, Coordenação, Setor, Situação;<br />
                 Data: 11/10/2024;<br />                
-                Descrição: Implementado backend da tela 1_2_1.<br />
-                
+                Descrição: Implementado backend da tela 1_2_1.<br />                
             </p>
         </div>
         <div class="callout callout-info">
@@ -32,8 +63,7 @@
                 Local: Barra de menus (top);<br />
                 Campo: Conversa via WhatsApp;<br />
                 Data: 08/10/2024;<br />                
-                Descrição: Incrementado link de redirecionamento para conversa via WhatsApp.<br />
-                
+                Descrição: Incrementado link de redirecionamento para conversa via WhatsApp.<br />                
             </p>
         </div>
         <div class="callout callout-info">

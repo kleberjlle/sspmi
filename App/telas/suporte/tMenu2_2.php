@@ -4,7 +4,8 @@ use App\sistema\acesso\{
     sTratamentoDados,
     sUsuario,
     sConfiguracao,
-    sNotificacao
+    sNotificacao,
+    sEmail
 };
 use App\sistema\suporte\{
     sProtocolo,
@@ -168,15 +169,25 @@ HTML;
                             $sUsuario->setNomeCampo('idusuario');
                             $sUsuario->setValorCampo($value['usuario_idusuario']);
                             $sUsuario->consultar('tMenu2_2.php');
-                            $nomeSolicitante = $sUsuario->getNome() . ' ' . $sUsuario->getSobrenome();
-                            if ($nomeSolicitante == $nomeRequerente) {
-                                $requerente = false;
-                                $nome = $nomeSolicitante;
-                            } else {
-                                $requerente = true;
-                                $nome = $nomeRequerente . '<br />por <i>' . $nomeSolicitante . '</i>';
+                            
+                            foreach ($sUsuario->mConexao->getRetorno() as $dadosUsuario) {
+                                $nomeSolicitante = $dadosUsuario['nome']. ' ' . $dadosUsuario['sobrenome'];
+                                $idEmail = $dadosUsuario['email_idemail'];
                             }
 
+                            //dados do email
+                            $sEmail = new sEmail('', '');
+                            $sEmail->setIdEmail($idEmail);
+                            $sEmail->consultar('tMenu2_2.php');
+
+                            foreach ($sEmail->mConexao->getRetorno() as $dadosEmail) {
+                                $email = $dadosEmail['nomenclatura'];
+                            }
+
+                            $email == $value['emailDoRequerente'] ? $requerente = false : $requerente = true;
+                            
+                            $requerente ? $nome = $nomeRequerente . '<br />por <i>' . $nomeSolicitante . '</i>' : $nome = $nomeSolicitante;
+                            
                             //campo telefone
                             $sTratamentoTelefone = new sTratamentoDados($value['telefoneDoRequerente']);
                             $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
@@ -385,14 +396,24 @@ HTML;
                             $sUsuario->setNomeCampo('idusuario');
                             $sUsuario->setValorCampo($value['usuario_idusuario']);
                             $sUsuario->consultar('tMenu2_2.php');
-                            $nomeSolicitante = $sUsuario->getNome() . ' ' . $sUsuario->getSobrenome();
-                            if ($nomeSolicitante == $nomeRequerente) {
-                                $requerente = false;
-                                $nome = $nomeSolicitante;
-                            } else {
-                                $requerente = true;
-                                $nome = $nomeRequerente . '<br />por <i>' . $nomeSolicitante . '</i>';
+                            
+                            foreach ($sUsuario->mConexao->getRetorno() as $dadosUsuario) {
+                                $nomeSolicitante = $dadosUsuario['nome']. ' ' . $dadosUsuario['sobrenome'];
+                                $idEmail = $dadosUsuario['email_idemail'];
                             }
+
+                            //dados do email
+                            $sEmail = new sEmail('', '');
+                            $sEmail->setIdEmail($idEmail);
+                            $sEmail->consultar('tMenu2_2.php');
+
+                            foreach ($sEmail->mConexao->getRetorno() as $dadosEmail) {
+                                $email = $dadosEmail['nomenclatura'];
+                            }
+
+                            $email == $value['emailDoRequerente'] ? $requerente = false : $requerente = true;
+                            
+                            $requerente ? $nome = $nomeRequerente . '<br />por <i>' . $nomeSolicitante . '</i>' : $nome = $nomeSolicitante;
 
                             //campo telefone
                             $sTratamentoTelefone = new sTratamentoDados($value['telefoneDoRequerente']);

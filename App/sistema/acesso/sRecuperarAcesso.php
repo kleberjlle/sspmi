@@ -25,7 +25,8 @@ class sRecuperarAcesso {
                 'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => null,//caso não tenha, colocar como null
                 'ordem' => null
-            ];            
+            ];  
+            
             $this->mConexao->CRUD($dados);
                         
             $this->setValidador($this->mConexao->getValidador());

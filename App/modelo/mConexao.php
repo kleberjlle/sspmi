@@ -57,19 +57,15 @@ class mConexao {
             $query = $this->consultarJuncao($dados);
         } else {
             $query = $this->consultarBasico($dados);
-        }
-        $query .= ';';
-
-        //QA - início da área de testes
-        /* verificar o que tem no objeto
-
-        echo "<pre>";
-        echo $query;
-        echo "</pre>";
-        */
-        //QA - fim da área de testes
-
-        $resultado = $this->conexao->query($query);
+        }        
+        
+        $resultado = $this->conexao->query($query);           
+        /*
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute([$dados['valoresCondicionados']]);
+        $resultado = $stmt->get_result();
+         * 
+         */
         
         //tomada de decisão de acordo com o(s) campo(s)
         switch ($dados['tabelas']) {
@@ -258,6 +254,98 @@ class mConexao {
                     }
                 }
                 break;
+            case 'email':
+                if ($dados['busca'] == '*') {
+                    if ($resultado->num_rows > 0) {
+                        foreach ($resultado as $linha) {
+                            $this->setRetorno($resultado);
+                        }
+                        $this->setValidador(true);
+                    } else {
+                        $this->setValidador(false);
+                    }
+                }
+                break;
+            case 'telefone_has_setor':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'telefone_has_coordenacao':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'telefone_has_departamento':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'telefone_has_secretaria':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'email_has_setor':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'email_has_coordenacao':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'email_has_departamento':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
+            case 'email_has_secretaria':
+                if ($resultado->num_rows > 0) {
+                    foreach ($resultado as $linha) {
+                        $this->setRetorno($resultado);
+                    }
+                    $this->setValidador(true);
+                } else {
+                    $this->setValidador(false);
+                }
+                break;
             case is_array(['telefone', 'telefone_has_setor']):
                 if ($resultado->num_rows > 0) {
                     foreach ($resultado as $linha) {
@@ -288,6 +376,7 @@ class mConexao {
                     $this->setValidador(false);
                 }
                 break;
+            
             case is_array(['telefone', 'telefone_has_secretaria']):
                 if ($resultado->num_rows > 0) {
                     foreach ($resultado as $linha) {
@@ -362,13 +451,17 @@ class mConexao {
                 }               
             } else if ($key == 'valoresCondicionados' && $value) {
                 $valoresCondicionados = true;
-                if($value == "IS NULL"){
-                    $n1 = "$value ";
-                    $n2 = "$value";
-                }else{
-                    $n1 = "'$value' ";
-                    $n2 = "'$value'";
-                }
+                    if($value == "IS NULL"){
+                        $n1 = "$value ";
+                        $n2 = "$value";
+                        //$n1 = '? ';
+                        //$n2 = '?';
+                    }else{
+                        $n1 = "'$value' ";
+                        $n2 = "'$value'";
+                        //$n1 = "'?' ";
+                        //$n2 = "?";
+                    }
             } else if ($key == 'camposOrdenados' && $value) {
                 $ordem = true;
                 $query .= $n1 . 'ORDER BY ' . $value . ' ';
@@ -386,7 +479,8 @@ class mConexao {
                 }
             }
         }
-        
+        $query .= ';';
+                       
         return $query;
     }
 
