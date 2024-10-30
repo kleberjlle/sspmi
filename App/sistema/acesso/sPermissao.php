@@ -7,6 +7,9 @@ class sPermissao {
     private int $idPermissao;
     private int $nivel;
     private string $nomenclatura;
+    private string $nomeCampo;
+    private string $valorCampo;
+    private bool $validador;
     public mConexao $mConexao;
     
     public function __construct(int $idPermissao) {
@@ -16,8 +19,7 @@ class sPermissao {
     public function consultar($pagina) {
         //cria conexão para realizar a consulta de acordo com a página requerente
         $this->setMConexao(new mConexao());  
-        if( $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu2_2_1_3_1.php'){                           
+        if( $pagina == 'tMenu2_2_1_3_1.php'){                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -35,6 +37,20 @@ class sPermissao {
             }
         }  
         
+        if ($pagina == 'tAcessar.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'permissao',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
         if($pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php'){                           
             $dados = [
@@ -49,7 +65,6 @@ class sPermissao {
             $this->mConexao->CRUD($dados);
         }     
     }
-
     public function getIdPermissao(): int {
         return $this->idPermissao;
     }
@@ -60,6 +75,18 @@ class sPermissao {
 
     public function getNomenclatura(): string {
         return $this->nomenclatura;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
+    }
+
+    public function getValidador(): bool {
+        return $this->validador;
     }
 
     public function getMConexao(): mConexao {
@@ -78,9 +105,19 @@ class sPermissao {
         $this->nomenclatura = $nomenclatura;
     }
 
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
+    }
+
     public function setMConexao(mConexao $mConexao): void {
         $this->mConexao = $mConexao;
     }
-
-
 }

@@ -14,7 +14,8 @@ use App\sistema\acesso\{
     sSenha,
     sUsuario,
     sSair,
-    sNotificacao    
+    sNotificacao,
+    sTratamentoDados
 };
 
 //Objetos instanciados
@@ -53,29 +54,19 @@ if(isset($_GET['codigo'])){
 //Dados do form enviados via POST
 if(isset($_POST) && !empty($_POST)){
     $email = $_POST['email'];
-    $senha = $_POST['senha'];    
+    $senha = $_POST['senha']; 
+    $acao = $_POST['acao'];
     
-    $sEmail = new sEmail('', '');
-    $sEmail->setNomeCampo('nomenclatura');
-    $sEmail->setValorCampo($email);
-    $sEmail->consultar('tAcessar.php');
-    
-    foreach ($sEmail->mConexao->getRetorno() as $value) {
-        $idEmail = $value['idemail'];
-    }
-        
+    //criptografa senha para alimentar o histórico
     $sSenha = new sSenha($email);
-    $sSenha->criptografar($senha);
-    
-    //Etapa 1 - registrar histórico
-    //coletar dados do navegador
+    $sSenha->criptografar($senha);   
     
     //instancia sHistorico para alimentar a tabela de log
     $tratarDados = [
-        'pagina' => basename($_SERVER['PHP_SELF']),
-        'acao' => $_POST['acao'],
+        'pagina' => 'tAcessar.php',
+        'acao' => $acao,
         'campo' => 'email',
-        'valorCampoAtual' => $_POST['email'],
+        'valorCampoAtual' => $email,
         'valorCampoAnterior' => null,
         'ip' => $_SERVER['REMOTE_ADDR'],
         'navegador' => $_SERVER['HTTP_USER_AGENT'],
@@ -87,8 +78,8 @@ if(isset($_POST) && !empty($_POST)){
     $sHistorico->inserir('tAcessar.php', $tratarDados);
     
     $tratarDados = [
-        'pagina' => basename($_SERVER['PHP_SELF']),
-        'acao' => $_POST['acao'],
+        'pagina' => 'tAcessar.php',
+        'acao' => $acao,
         'campo' => 'senha',
         'valorCampoAtual' => $sSenha->getSenhaCriptografada(),
         'valorCampoAnterior' => null,
@@ -100,54 +91,76 @@ if(isset($_POST) && !empty($_POST)){
     ];
     $sHistorico = new sHistorico();
     $sHistorico->inserir('tAcessar.php', $tratarDados);
-       
-    //Etapa2 - validar o campo e-mail
-    $sEmail->verificar('tAcessar.php');
     
-    //Etapa3 - validar o campo senha
+    //verifica se o e-mail é válido
+    $sTratarEmail = new sTratamentoDados($email);
+    $validacaoEmail = $sTratarEmail->tratarEmail();
     
-    if( $sEmail->getValidador()){
-        $sSenha->setEmail($email);
-        $sSenha->setSenha($senha);
-        $sSenha->verificar('tAcessar.php');
-        if($sSenha->getValidador()){                
-            $sUsuario = new sUsuario();
-            $sUsuario->setNomeCampo('idemail');
-            $sUsuario->setValorCampo($idEmail);        
-            $sUsuario->consultar('tAcessar.php');
-            if($sUsuario->getValidador()){     
-                //Etapa4 - criar credencial de acesso para o usuário e redirecionar o acesso
-                $sUsuario->acessar(basename($_SERVER['PHP_SELF']));                        
+    if($validacaoEmail){
+        //verifica se existe o registro do e-mail no bd
+        $sEmail = new sEmail('', '');
+        $sEmail->setNomeCampo('nomenclatura');
+        $sEmail->setValorCampo($email);
+        $sEmail->consultar('tAcessar.php');
+
+        //se tiver registro do e-mail no bd
+        if($sEmail->getValidador()){
+            foreach ($sEmail->mConexao->getRetorno() as $value) {
+                $idEmail = $value['idemail'];
+                $senhaBD = $value['senha'];
+            }
+            
+            //verificar se a senha atende aos requisitos
+            $sTratamentoSenha = new sTratamentoDados($senha);
+            $validacaoSenha = $sTratamentoSenha->tratarSenha();
+            
+            //se a senha atender aos requisitos
+            if($validacaoSenha){
+                //verifica se a senha passa na comparação da hash
+                $sSenha = new sSenha(false);
+                $sSenha->setSenhaCriptografada($senhaBD);
+                $sSenha->setSenha($senha);
+                $sSenha->verificar('tAcessar.php');
+                
+                //se a senha estiver correta
+                if($sSenha->getValidador()){
+                    //criar credencial do usuário
+                    $sUsuario = new sUsuario();
+                    $sUsuario->setNomeCampo('email_idemail');
+                    $sUsuario->setValorCampo($idEmail);
+                    $sUsuario->consultar('tAcessar.php');
+                    
+                    //redirecionar o acesso ao painel
+                    $sUsuario->acessar('tAcessar.php');
+                }else{
+                    //senha incorreta
+                    $sNotificacao = new sNotificacao('A6');
+                    $tipo = $sNotificacao->getTipo();
+                    $titulo = $sNotificacao->getTitulo();
+                    $mensagem = $sNotificacao->getMensagem();
+                }
             }else{
-                //cria as variáveis da notificação
-                $tipo = $sUsuario->sNotificacao->getTipo();
-                $titulo = $sUsuario->sNotificacao->getTitulo();
-                $mensagem = $sUsuario->sNotificacao->getMensagem();
+                //senha não atende aos requisitos
+                $sNotificacao = new sNotificacao('A4');
+                $tipo = $sNotificacao->getTipo();
+                $titulo = $sNotificacao->getTitulo();
+                $mensagem = $sNotificacao->getMensagem();
             }
         }else{
-            //cria as variáveis da notificação
-            $tipo = $sSenha->sNotificacao->getTipo();
-            $titulo = $sSenha->sNotificacao->getTitulo();
-            $mensagem = $sSenha->sNotificacao->getMensagem();
-        }
+            //não há registro do e-mail no bd
+            $sNotificacao = new sNotificacao('A1');
+            $tipo = $sNotificacao->getTipo();
+            $titulo = $sNotificacao->getTitulo();
+            $mensagem = $sNotificacao->getMensagem();
+        }  
     }else{
-        //cria as variáveis da notificação
-        $tipo = $sEmail->sNotificacao->getTipo();
-        $titulo = $sEmail->sNotificacao->getTitulo();
-        $mensagem = $sEmail->sNotificacao->getMensagem();
+        //se não for um endereço de e-mail válido
+        $sNotificacao = new sNotificacao('A2');
+        $tipo = $sNotificacao->getTipo();
+        $titulo = $sNotificacao->getTitulo();
+        $mensagem = $sNotificacao->getMensagem();
     }
-        
-    //QA - início da área de testes
-    /*verificar o que tem no objeto
-    /*
-    echo "<pre>";
-    var_dump($sNotificacao);
-    echo "</pre>";
-    * 
-    */
-    //QA - fim da área de testes
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $sConfiguracao->getLang(); ?>">

@@ -6,12 +6,22 @@
         </h3>
     </div>
     <div class="card-body">
+        <div class="callout callout-warning">
+            <h5>Credencial do usuário</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Locais: controladores sCargo, sCoordenacao, sDepartamento, sEmail, sPermissao, sSecretaria, sSenha, sSetor, sTelefone, sUsuario;<br />
+                Campo: --;<br />
+                Data: 29/10/2024;<br />                
+                Descrição: Alterado lógica dos controladores, removendo INNER_JOIN e implementando 2 consultas.<br />                
+            </p>
+        </div>
         <div class="callout callout-info">
             <h5>Alterar dados dos locais</h5>
             <p>
                 Versão: 2.8.2-beta (teste);<br />
-                Local: telas 4_2_1, 4_2_2, 4_2_3, 4_2_4, 4_2_1_1, 4_2_2_1, 4_2_3_1, 4_2_4_1;<br />
-                Campo: Secretaria, Departamento, Coordenação, Setor, Endereço, E-mail, Ambiente, Telefone, WhatsApp;<br />
+                Locais: telas 4_2_1, 4_2_2, 4_2_3, 4_2_4, 4_2_1_1, 4_2_2_1, 4_2_3_1, 4_2_4_1;<br />
+                Campos: Secretaria, Departamento, Coordenação, Setor, Endereço, E-mail, Ambiente, Telefone, WhatsApp;<br />
                 Data: 24/10/2024;<br />                
                 Descrição: Implementado menus e telas até 4 nível para alterar os dados dos locais.<br />                
             </p>
@@ -20,7 +30,7 @@
             <h5>Correção de bug (Multibyte String)</h5>
             <p>
                 Versão: 2.8.2-beta (teste);<br />
-                Local: telas 2_2 e 2_2_1;<br />
+                Locais: telas 2_2 e 2_2_1;<br />
                 Campo: Solicitante;<br />
                 Data: 17/10/2024;<br />                
                 Descrição: Alterado lógica do algoritmo, ao invés de comparar nome do requerente com solicitante, comparar e-mail do requerente com solicitante.<br />                
@@ -30,7 +40,7 @@
             <h5><s>Alterado tempo limite do Garbage Collector</s></h5>
             <p>
                 Versão: 2.8.2-beta (teste);<br />
-                Local: tAcessar.php;<br />
+                Local: tela tAcessar.php;<br />
                 Campo: --;<br />
                 Data: 15/10/2024;<br />                
                 Descrição: Alterado tempo limite do GC para 6h.<br />                
@@ -40,7 +50,7 @@
             <h5>Implementado segurança de cookie</h5>
             <p>
                 Versão: 2.8.2-beta (teste);<br />
-                Local: tAcessar.php;<br />
+                Local: tela tAcessar.php;<br />
                 Campo: --;<br />
                 Data: 14/10/2024;<br />                
                 Descrição: Habilitado HttpOnly.<br />                
@@ -51,7 +61,7 @@
             <p>
                 Versão: 2.8.2-beta (teste);<br />
                 Local: Perfil->Outros Usuários->Editar;<br />
-                Campo: Nome, Sobrenome, Sexo, Telefone, WhatsApp, E-mail, Permissão, Cargo, Secretaria, Departamento, Coordenação, Setor, Situação;<br />
+                Campos: Nome, Sobrenome, Sexo, Telefone, WhatsApp, E-mail, Permissão, Cargo, Secretaria, Departamento, Coordenação, Setor, Situação;<br />
                 Data: 11/10/2024;<br />                
                 Descrição: Implementado backend da tela 1_2_1.<br />                
             </p>

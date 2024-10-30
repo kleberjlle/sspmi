@@ -59,14 +59,17 @@ class mConexao {
             $query = $this->consultarBasico($dados);
         }        
         
-        $resultado = $this->conexao->query($query);           
+        $resultado = $this->conexao->query($query);   
         /*
         $stmt = $this->conexao->prepare($query);
-        $stmt->execute([$dados['valoresCondicionados']]);
+        if(!empty($dados['valoresCondicionados'])){
+            $stmt->execute([$dados['valoresCondicionados']]);
+        }else{
+            $stmt->execute();
+        }    
         $resultado = $stmt->get_result();
          * 
          */
-        
         //tomada de decisão de acordo com o(s) campo(s)
         switch ($dados['tabelas']) {
             case 'email':

@@ -76,7 +76,7 @@ class sUsuario {
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
+                'ordem' => null //caso não tenha, colocar como null
             ];
             $this->mConexao->CRUD($dados);
             //busca dos dados do usuário
@@ -107,38 +107,67 @@ class sUsuario {
                 $sexo == 'M' ? $sexo = 'Masculino' : $sexo = 'Feminino';
                 $situacao == true ? $situacao = 'Ativo' : $situacao = 'Inativo';
 
+                //busca dados do setor no bd
                 if (!is_null($idSetor)) {
-                    $this->setSSetor(new sSetor($idSetor));
-                    $this->sSetor->consultar($pagina);
-                    $nomenclaturaSetor = $this->sSetor->getNomenclatura();
+                    $sSetor = new sSetor($idSetor);
+                    $sSetor->setNomeCampo('idsetor');
+                    $sSetor->setValorCampo($idSetor);
+                    $sSetor->consultar('tAcessar.php');
+                    
+                    foreach ($sSetor->mConexao->getRetorno() as $value) {
+                        $nomenclaturaSetor = $value['nomenclatura'];
+                    }
                 } else {
                     $nomenclaturaSetor = '--';
                 }
 
+                //busca dados do coordenacao no bd
                 if (!is_null($idCoordenacao)) {
-                    $this->setSCoordenacao(new sCoordenacao($idCoordenacao));
-                    $this->sCoordenacao->consultar($pagina);
-                    $nomenclaturaCoordenacao = $this->sCoordenacao->getNomenclatura();
+                    $sCoordenacao = new sCoordenacao($idCoordenacao);
+                    $sCoordenacao->setNomeCampo('idcoordenacao');
+                    $sCoordenacao->setValorCampo($idCoordenacao);
+                    $sCoordenacao->consultar('tAcessar.php');
+                    
+                    foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+                        $nomenclaturaCoordenacao = $value['nomenclatura'];
+                    }
                 } else {
                     $nomenclaturaCoordenacao = '--';
                 }
 
+                //busca dados do departamento no bd
                 if (!is_null($idDepartamento)) {
-                    $this->setSDepartamento(new sDepartamento($idDepartamento));
-                    $this->sDepartamento->consultar($pagina);
-                    $nomenclaturaDepartamento = $this->sDepartamento->getNomenclatura();
+                    $sDepartamento = new sDepartamento($idDepartamento);
+                    $sDepartamento->setNomeCampo('iddepartamento');
+                    $sDepartamento->setValorCampo($idDepartamento);
+                    $sDepartamento->consultar('tAcessar.php');
+                    
+                    foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+                        $nomenclaturaDepartamento = $value['nomenclatura'];
+                    }
                 } else {
                     $nomenclaturaDepartamento = '--';
                 }
 
-                $this->setSSecretaria(new sSecretaria($idSecretaria));
-                $this->sSecretaria->consultar($pagina);
-
+                $sSecretaria = new sSecretaria($idSecretaria);
+                $sSecretaria->setNomeCampo('idsecretaria');
+                $sSecretaria->setValorCampo($idSecretaria);
+                $sSecretaria->consultar('tAcessar.php');
+                
+                foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+                    $nomenclaturaSecretaria = $value['nomenclatura'];
+                }
+                
                 if (!is_null($idTelefoneUsuario)) {
-                    $this->setSTelefoneUsuario(new sTelefone($idTelefoneUsuario, $idUsuario, 'usuario'));
-                    $this->sTelefoneUsuario->consultar($pagina);
-                    $telefoneUsuario = $this->sTelefoneUsuario->getNumero();
-                    $whatsAppUsuario = $this->sTelefoneUsuario->getWhatsApp();
+                    $sTelefoneUsuario = new sTelefone(0, 0, '');
+                    $sTelefoneUsuario->setNomeCampo('idtelefone');
+                    $sTelefoneUsuario->setValorCampo($idTelefoneUsuario);                    
+                    $sTelefoneUsuario->consultar('tAcessar.php');
+                    
+                    foreach ($sTelefoneUsuario->mConexao->getRetorno() as $value) {
+                        $telefoneUsuario = $value['numero'];
+                        $whatsAppUsuario = $value['whatsApp'];
+                    }
                 } else {
                     $telefoneUsuario = '--';
                     $whatsAppUsuario = false;
@@ -321,7 +350,7 @@ class sUsuario {
                 } else {
                     $emailCoordenacao = '--';
                 }
-
+                
                 if (!is_null($idDepartamento)) {
                     $sEmailDepartamento = new sEmail('', '');
                     $sEmailDepartamento->setNomeCampo('departamento_iddepartamento');
@@ -374,12 +403,24 @@ class sUsuario {
                     $emailSecretaria = '--';
                 }
 
-                $this->setSCargo(new sCargo($idCargo));
-                $this->sCargo->consultar($pagina);
-
-                $this->setSPermissao(new sPermissao($idPermissao));
-                $this->sPermissao->consultar($pagina);
+                $sCargo = new sCargo($idCargo);
+                $sCargo->setNomeCampo('idcargo');
+                $sCargo->setValorCampo($idCargo);
+                $sCargo->consultar('tAcessar.php');
                 
+                foreach ($sCargo->mConexao->getRetorno() as $value) {
+                    $nomenclaturaCargo = $value['nomenclatura'];
+                }
+
+                $sPermissao = new sPermissao($idPermissao);
+                $sPermissao->setNomeCampo('idpermissao');
+                $sPermissao->setValorCampo($idPermissao);
+                $sPermissao->consultar('tAcessar.php');
+                
+                foreach ($sPermissao->mConexao->getRetorno() as $value) {
+                    $nomenclaturaPermissao = $value['nomenclatura'];
+                    $nivelPermissao = $value['nivel'];
+                }
 
                 if(!isset($_SESSION)){
                     session_start();
@@ -399,7 +440,7 @@ class sUsuario {
                     'idDepartamento' => $idDepartamento,
                     'departamento' => $nomenclaturaDepartamento,
                     'idSecretaria' => $idSecretaria,
-                    'secretaria' => $this->sSecretaria->getNomenclatura(),
+                    'secretaria' => $nomenclaturaSecretaria,
                     'idTelefoneUsuario' => $idTelefoneUsuario,
                     'telefoneUsuario' => $telefoneUsuario,
                     'whatsAppUsuario' => $whatsAppUsuario,
@@ -418,10 +459,10 @@ class sUsuario {
                     'emailDepartamento' => $emailDepartamento,
                     'emailSecretaria' => $emailSecretaria,
                     'idCargo' => $idCargo,
-                    'cargo' => $this->sCargo->getNomenclatura(),
-                    'nivelPermissao' => $this->sPermissao->getNivel(),
+                    'cargo' => $nomenclaturaCargo,
+                    'nivelPermissao' => $nivelPermissao,
                     'idPermissao' => $idPermissao,
-                    'permissao' => $this->sPermissao->getNomenclatura()
+                    'permissao' => $nomenclaturaPermissao
                 ];
 
                 //aprovado em todas as validações

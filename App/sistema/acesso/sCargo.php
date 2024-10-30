@@ -18,8 +18,7 @@ class sCargo {
     public function consultar($pagina) {
         //cria conexão para sonsulta
         $this->setMConexao(new mConexao());
-        if( $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
+        if( $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu5_2_1.php'){                             
             $dados = [
@@ -37,6 +36,20 @@ class sCargo {
                 $this->setNomenclatura($linha['nomenclatura']);
             }
         } 
+        
+        if ($pagina == 'tAcessar.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'cargo',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
         
         if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||

@@ -7,6 +7,9 @@ class sSecretaria {
     private int $idSecretaria;
     private string $nomenclatura;
     private string $endereco;
+    private string $nomeCampo;
+    private string $valorCampo;
+    private bool $validador;
     public mConexao $mConexao;
     
     public function __construct(int $idSecretaria) {
@@ -15,8 +18,7 @@ class sSecretaria {
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if( $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
+        if( $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu2_1.php' ||
             $pagina == 'tMenu1_2_1.php'
@@ -38,6 +40,20 @@ class sSecretaria {
                 $this->setNomenclatura($linha['nomenclatura']);  
             }
         } 
+        
+        if($pagina == 'tAcessar.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'secretaria',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null,//caso não tenha, colocar como null
+                'ordem' => null
+            ];            
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
         
         if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tSolicitarAcesso.php' ||
@@ -154,7 +170,6 @@ class sSecretaria {
         }
         $this->mConexao->CRUD($dados);
     }
-
     public function getIdSecretaria(): int {
         return $this->idSecretaria;
     }
@@ -165,6 +180,18 @@ class sSecretaria {
 
     public function getEndereco(): string {
         return $this->endereco;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
+    }
+
+    public function getValidador(): bool {
+        return $this->validador;
     }
 
     public function getMConexao(): mConexao {
@@ -181,6 +208,18 @@ class sSecretaria {
 
     public function setEndereco(string $endereco): void {
         $this->endereco = $endereco;
+    }
+
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
     }
 
     public function setMConexao(mConexao $mConexao): void {

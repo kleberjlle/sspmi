@@ -31,11 +31,10 @@ class sTelefone {
 
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_1_1.php' ||
+        if ($pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php'||
+            $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu4_2_1.php') {
             if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
@@ -47,20 +46,20 @@ class sTelefone {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null
                 ];
-                
+
                 $this->mConexao->CRUD($dados);
                 $this->setValidador($this->mConexao->getValidador());
-                
-                if($this->getValidador()){
+
+                if ($this->getValidador()) {
                     foreach ($this->mConexao->getRetorno() as $linha) {
                         $this->setNumero($linha['numero']);
                         $this->setWhatsApp($linha['whatsApp']);
                     }
                 }
             } else if ($this->getNomenclaturaLocal() == 'setor' ||
-                $this->getNomenclaturaLocal() == 'coordenacao' ||
-                $this->getNomenclaturaLocal() == 'departamento' ||
-                $this->getNomenclaturaLocal() == 'secretaria') {
+                    $this->getNomenclaturaLocal() == 'coordenacao' ||
+                    $this->getNomenclaturaLocal() == 'departamento' ||
+                    $this->getNomenclaturaLocal() == 'secretaria') {
                 $dados = [
                     'comando' => 'SELECT',
                     'busca' => ['telefone.numero', 'telefone.whatsApp'],
@@ -70,153 +69,151 @@ class sTelefone {
                     'camposOrdenados' => null, //caso não tenha, colocar como null
                     'ordem' => null
                 ];
-                
-                
+
                 $this->mConexao->CRUD($dados);
                 $this->setValidador($this->mConexao->getValidador());
-                
-                if($this->getValidador()){
+
+                if ($this->getValidador()) {
                     foreach ($this->mConexao->getRetorno() as $linha) {
                         $this->setNumero($linha['numero']);
                         $this->setWhatsApp($linha['whatsApp']);
                     }
-                }                
+                }
             }
-            
-            if($pagina == 'tMenu4_2_1.php'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_secretaria',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            } 
-            
-            if( $pagina == 'tMenu4_2_1.php-2' ||
-                $pagina == 'tMenu4_2_2_1.php-2' ||
-                $pagina == 'tMenu4_2_3_1.php-2' ||
-                $pagina == 'tMenu4_2_4_1.php-2'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            } 
-            
-            if($pagina == 'tMenu4_2_2_1.php'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_departamento',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            } 
-            
-            if($pagina == 'tMenu4_2_3_1.php'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_coordenacao',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            } 
-            
         }
-        
-            if( $pagina == 'tAcessar.php-setor2' ||
+        if ($pagina == 'tMenu4_2_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_secretaria',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu4_2_1.php-2' ||
+            $pagina == 'tMenu4_2_2_1.php-2' ||
+            $pagina == 'tMenu4_2_3_1.php-2' ||
+            $pagina == 'tMenu4_2_4_1.php-2') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tMenu4_2_2_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_departamento',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tMenu4_2_3_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_coordenacao',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php-setor2' ||
                 $pagina == 'tAcessar.php-coordenacao2' ||
                 $pagina == 'tAcessar.php-departamento2' ||
-                $pagina == 'tAcessar.php-secretaria2'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            }
-            
-            if( $pagina == 'tAcessar.php-setor' ||
-                $pagina == 'tMenu4_2_4_1.php'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_setor',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            }
-            
-            if( $pagina == 'tAcessar.php-coordenacao'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_coordenacao',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            }
-            
-            if( $pagina == 'tAcessar.php-departamento'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_departamento',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            }
-            
-            if( $pagina == 'tAcessar.php-secretaria'){
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => '*',
-                    'tabelas' => 'telefone_has_secretaria',
-                    'camposCondicionados' => $this->getNomeCampo(),
-                    'valoresCondicionados' => $this->getValorCampo(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => null
-                ];    
-                $this->mConexao->CRUD($dados);
-                $this->setValidador($this->mConexao->getValidador());
-            }
+                $pagina == 'tAcessar.php-secretaria2') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php-setor' ||
+                $pagina == 'tMenu4_2_4_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_setor',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php-coordenacao') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_coordenacao',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php-departamento') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_departamento',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+
+        if ($pagina == 'tAcessar.php-secretaria') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_secretaria',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
     }
 
     public function tratarTelefone($telefone) {
@@ -226,7 +223,7 @@ class sTelefone {
             $telefoneTratado = str_replace(" ", "", $telefone);
             //se for número de telefone fixo
             if (strlen($telefoneTratado) == 10) {
-                $mascara = "(##) ####-####";                
+                $mascara = "(##) ####-####";
             } else {
                 //se for número de telefone celular
                 $mascara = "(##) # ####-####";
@@ -254,7 +251,7 @@ class sTelefone {
         $this->setMConexao(new mConexao());
 
         if ($pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_2_1.php') {
+                $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'telefone',
@@ -272,13 +269,13 @@ class sTelefone {
             }
         }
     }
-    
+
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu4_1.php' ||
-            $pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_3_1.php') {
+                $pagina == 'tMenu1_1_1.php' ||
+                $pagina == 'tMenu1_3_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -293,29 +290,29 @@ class sTelefone {
                 ]
             ];
         }
-        
+
         if ($pagina == 'tMenu4_1-telefone_has_secretaria.php' ||
-            $pagina == 'tMenu4_1-telefone_has_departamento.php' ||
-            $pagina == 'tMenu4_1-telefone_has_coordenacao.php' ||
-            $pagina == 'tMenu4_1-telefone_has_setor.php') {
+                $pagina == 'tMenu4_1-telefone_has_departamento.php' ||
+                $pagina == 'tMenu4_1-telefone_has_coordenacao.php' ||
+                $pagina == 'tMenu4_1-telefone_has_setor.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
-                'tabela' => 'telefone_has_'.$this->getNomeCampo(),
+                'tabela' => 'telefone_has_' . $this->getNomeCampo(),
                 'camposInsercao' => [
                     'telefone_idtelefone',
-                    $this->getNomeCampo().'_id'.$this->getNomeCampo()
+                    $this->getNomeCampo() . '_id' . $this->getNomeCampo()
                 ],
                 'valoresInsercao' => [
                     $tratarDados['idtelefone'],
-                    $tratarDados['id'.$this->getNomeCampo()],
+                    $tratarDados['id' . $this->getNomeCampo()],
                 ]
             ];
         }
-        
+
         $this->mConexao->CRUD($dados);
-        
-        if($this->mConexao->getValidador()){
+
+        if ($this->mConexao->getValidador()) {
             $this->setSNotificacao(new sNotificacao('S1'));
         }
     }

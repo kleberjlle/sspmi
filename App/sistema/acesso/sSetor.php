@@ -9,16 +9,19 @@ class sSetor {
     private int $idSecretaria;
     private string $nomenclatura;
     private string $endereco;
+    private string $nomeCampo;
+    private string $valorCampo;
+    private bool $validador;
     public mConexao $mConexao;
     
     public function __construct(int $idSetor) {
         $this->idSetor = $idSetor;
+        $this->validacao = false;
     }
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());  
-        if( $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
+        if( $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu2_1.php' ||
@@ -34,6 +37,7 @@ class sSetor {
                 'ordem' => null
             ];            
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
                         
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $this->setIdSecretaria($linha['secretaria_idsecretaria']);
@@ -41,6 +45,21 @@ class sSetor {
                 $this->setNomenclatura($linha['nomenclatura']);
             }
         }    
+        
+        if( $pagina == 'tAcessar.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'setor',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null,//caso não tenha, colocar como null
+                'ordem' => null
+            ];            
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
         if($pagina == 'ajaxSetor.php'){
             //reoordena os IDs corretamente
             $this->setIdSecretaria($this->getIdSetor());
@@ -99,7 +118,6 @@ class sSetor {
         }
         $this->mConexao->CRUD($dados);
     }
-
     public function getIdSetor(): int {
         return $this->idSetor;
     }
@@ -118,6 +136,18 @@ class sSetor {
 
     public function getEndereco(): string {
         return $this->endereco;
+    }
+
+    public function getNomeCampo(): string {
+        return $this->nomeCampo;
+    }
+
+    public function getValorCampo(): string {
+        return $this->valorCampo;
+    }
+
+    public function getValidador(): bool {
+        return $this->validador;
     }
 
     public function getMConexao(): mConexao {
@@ -142,6 +172,18 @@ class sSetor {
 
     public function setEndereco(string $endereco): void {
         $this->endereco = $endereco;
+    }
+
+    public function setNomeCampo(string $nomeCampo): void {
+        $this->nomeCampo = $nomeCampo;
+    }
+
+    public function setValorCampo(string $valorCampo): void {
+        $this->valorCampo = $valorCampo;
+    }
+
+    public function setValidador(bool $validador): void {
+        $this->validador = $validador;
     }
 
     public function setMConexao(mConexao $mConexao): void {

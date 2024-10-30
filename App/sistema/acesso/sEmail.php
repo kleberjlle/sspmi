@@ -39,12 +39,11 @@ class sEmail {
 
     public function verificar($pagina) {
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tAcessar.php' ||
-                $pagina == 'tMenu1_1_1.php' ||
-                $pagina == 'tMenu1_2_1.php' ||
-                $pagina == 'tSolicitarAcesso.php' ||
-                $pagina == 'tMenu4_1.php' ||
-                $pagina == 'tEsqueciMinhaSenha.php') {
+        if ($pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tSolicitarAcesso.php' ||
+            $pagina == 'tMenu4_1.php' ||
+            $pagina == 'tEsqueciMinhaSenha.php') {
             //etapas de verificase é um endereço de e-mail
             if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
                 //verifica se consta o email no BD               
@@ -173,6 +172,15 @@ class sEmail {
                 $this->setSNotificacao(new sNotificacao('A2'));
             }
         }
+        
+        if($pagina == 'tAcessar.php'){
+            if (filter_var($this->getNomenclatura(), FILTER_VALIDATE_EMAIL)) {
+                $this->setValidador(true);
+            }else{
+                $this->setValidador(false);
+            }
+        }
+        
     }
 
     public function consultar($pagina) {

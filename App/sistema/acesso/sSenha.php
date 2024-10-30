@@ -49,41 +49,15 @@ class sSenha {
     public function verificar($pagina) {        
         //verifica os requisitos da senha
         if($pagina == 'tAcessar.php'){
-            $sTratamentoSenha = new sTratamentoDados($this->getSenha());
-            $sTratamentoSenha->tratarSenha();
-            
-            if($sTratamentoSenha->tratarSenha()){
-                //pega a senha do BD
-                $this->mConexao = new mConexao();
-
-                $dados = [
-                    'comando' => 'SELECT',
-                    'busca' => 'senha',
-                    'tabelas' => 'email',
-                    'camposCondicionados' => 'nomenclatura',
-                    'valoresCondicionados' => $this->getEmail(),
-                    'camposOrdenados' => null,//caso não tenha, colocar como null
-                    'ordem' => 'ASC'
-                ];
-
-                //busca a senha do e-mail correspondente
-                $this->mConexao->CRUD($dados);            
-
-                //verifica se a senha informada é a mesma constante no BD
-                if(password_verify(hash_hmac("sha256", $this->getSenha(), "sspmi"), $this->mConexao->getRetorno())){
-                    //permita o acesso ao sistema
-                    $this->setValidador(true);
-                }else{
-                    $this->setValidador(false);
-                    $this->setSNotificacao(new sNotificacao('A6'));
-                }
+            //verifica se a senha informada é a mesma constante no BD
+            if(password_verify(hash_hmac("sha256", $this->getSenha(), "sspmi"), $this->getSenhaCriptografada())){
+                //permita o acesso ao sistema
+                $this->setValidador(true);
             }else{
                 $this->setValidador(false);
-                 $this->setSNotificacao(new sNotificacao('A6'));
             }
         }
-        
-        
+                
         if($pagina == 'tAlterarSenha.php'){
             //verifica os requisitos da senha
             $this->sTratamentoDados->setDados($this->getSenha());
@@ -115,6 +89,7 @@ class sSenha {
             }
         }
     }
+    
 
     public function getEmail(): string {
         return $this->email;
