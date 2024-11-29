@@ -22,7 +22,8 @@ use App\sistema\suporte\{
 //consulta os dados para apresentar na tabela
 $sProtocolo = new sProtocolo();
 $sProtocolo->setNomeCampo('dataHoraEncerramento');
-$sProtocolo->setValorCampo('IS NULL');
+$sProtocolo->setValorCampo('null');
+//$sProtocolo->setValorCampo('IS NULL');
 $sProtocolo->consultar('tMenu2_2.php');
 
 //retorno de campo inválidos para notificação
@@ -177,7 +178,8 @@ HTML;
 
                             //dados do email
                             $sEmail = new sEmail('', '');
-                            $sEmail->setIdEmail($idEmail);
+                            $sEmail->setNomeCampo('idemail');
+                            $sEmail->setValorCampo($idEmail);
                             $sEmail->consultar('tMenu2_2.php');
 
                             foreach ($sEmail->mConexao->getRetorno() as $dadosEmail) {
@@ -327,6 +329,8 @@ HTML;
                                 $atribuirTicket = '<i class="fas fa-hands-helping mr-1"></i> Em Andamento<br />';
                             }
                             
+                            
+                            
                             echo <<<HTML
                         <tr $ocultarLinha>
                             <td>{$protocolo}</td>
@@ -404,7 +408,8 @@ HTML;
 
                             //dados do email
                             $sEmail = new sEmail('', '');
-                            $sEmail->setIdEmail($idEmail);
+                            $sEmail->setNomeCampo('idemail');
+                            $sEmail->setValorCampo($idEmail);
                             $sEmail->consultar('tMenu2_2.php');
 
                             foreach ($sEmail->mConexao->getRetorno() as $dadosEmail) {
@@ -638,7 +643,6 @@ HTML;
     </div>
     <!-- /.card-body -->
 </div>
-<input type="hidden" id="quantidadeRegistro" value="<?php echo $quantidadeRegistro; ?>">
 <script>
     //função para alterar texto da checkbox
     function decisao(){

@@ -18,8 +18,7 @@ class sCargo {
     public function consultar($pagina) {
         //cria conexão para sonsulta
         $this->setMConexao(new mConexao());
-        if( $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_3.php' ||
+        if( $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu5_2_1.php'){                             
             $dados = [
                 'comando' => 'SELECT',
@@ -37,7 +36,9 @@ class sCargo {
             }
         } 
         
-        if ($pagina == 'tAcessar.php') {
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

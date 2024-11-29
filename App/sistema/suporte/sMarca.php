@@ -53,8 +53,7 @@ class sMarca {
         $this->mConexao->CRUD($dados);
 
         //atualiza o validador da classe de acordo com o validador da conexão
-        $this->setValidador($this->mConexao->getValidador());
-        
+        $this->setValidador($this->mConexao->getValidador());        
     }
 
     public function inserir($pagina) {

@@ -31,11 +31,7 @@ class sTelefone {
 
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu4_2_1.php') {
+        if ($pagina == 'tMenu4_2_1.php') {
             if ($this->getNomenclaturaLocal() == 'usuario') {
                 $dados = [
                     'comando' => 'SELECT',
@@ -81,25 +77,30 @@ class sTelefone {
                 }
             }
         }
-        if ($pagina == 'tMenu4_2_1.php') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'telefone_has_secretaria',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
-
+                
         if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tAcessar.php-secretaria2' ||
+            $pagina == 'tAcessar.php-departamento2' ||   
+            $pagina == 'tAcessar.php-coordenacao2' ||   
+            $pagina == 'tAcessar.php-setor2' ||  
+            $pagina == 'tMenu1_2.php' || 
+            $pagina == 'tMenu1_2.php-secretaria2' ||
+            $pagina == 'tMenu1_2.php-departamento2' ||
+            $pagina == 'tMenu1_2.php-coordenacao2' ||
+            $pagina == 'tMenu1_2.php-setor2' || 
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu1_3.php-secretaria2' ||
+            $pagina == 'tMenu1_3.php-departamento2' ||
+            $pagina == 'tMenu1_3.php-coordenacao2' ||
+            $pagina == 'tMenu1_3.php-setor2' ||        
+            $pagina == 'tMenu1_1_1.php' ||            
             $pagina == 'tMenu4_2_1.php-2' ||
+            $pagina == 'tMenu4_2_1_1.php-2' ||
             $pagina == 'tMenu4_2_2_1.php-2' ||
             $pagina == 'tMenu4_2_3_1.php-2' ||
-            $pagina == 'tMenu4_2_4_1.php-2') {
+            $pagina == 'tMenu4_2_4_1.php-2'
+            ) {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -112,8 +113,30 @@ class sTelefone {
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
         }
-
-        if ($pagina == 'tMenu4_2_2_1.php') {
+        
+        if ($pagina == 'tAcessar.php-secretaria' ||
+            $pagina == 'tMenu1_2.php-secretaria' ||
+            $pagina == 'tMenu1_3.php-secretaria' ||
+            $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu4_2_1.php' ||
+            $pagina == 'tMenu4_2_1_1.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'telefone_has_secretaria',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tAcessar.php-departamento' ||
+            $pagina == 'tMenu1_2.php-departamento' ||
+            $pagina == 'tMenu1_3.php-departamento' ||
+            $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -127,7 +150,10 @@ class sTelefone {
             $this->setValidador($this->mConexao->getValidador());
         }
 
-        if ($pagina == 'tMenu4_2_3_1.php') {
+        if ($pagina == 'tAcessar.php-coordenacao' ||
+            $pagina == 'tMenu1_2.php-coordenacao' ||
+            $pagina == 'tMenu1_3.php-coordenacao' ||
+            $pagina == 'tMenu4_2_3_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -141,25 +167,10 @@ class sTelefone {
             $this->setValidador($this->mConexao->getValidador());
         }
 
-        if ($pagina == 'tAcessar.php-setor2' ||
-                $pagina == 'tAcessar.php-coordenacao2' ||
-                $pagina == 'tAcessar.php-departamento2' ||
-                $pagina == 'tAcessar.php-secretaria2') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'telefone',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
-
         if ($pagina == 'tAcessar.php-setor' ||
-                $pagina == 'tMenu4_2_4_1.php') {
+            $pagina == 'tMenu1_2.php-setor' ||
+            $pagina == 'tMenu1_3.php-setor' ||
+            $pagina == 'tMenu4_2_4_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -173,47 +184,6 @@ class sTelefone {
             $this->setValidador($this->mConexao->getValidador());
         }
 
-        if ($pagina == 'tAcessar.php-coordenacao') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'telefone_has_coordenacao',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
-
-        if ($pagina == 'tAcessar.php-departamento') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'telefone_has_departamento',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
-
-        if ($pagina == 'tAcessar.php-secretaria') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'telefone_has_secretaria',
-                'camposCondicionados' => $this->getNomeCampo(),
-                'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
     }
 
     public function tratarTelefone($telefone) {

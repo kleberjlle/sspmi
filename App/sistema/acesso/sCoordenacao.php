@@ -19,11 +19,7 @@ class sCoordenacao {
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());  
-        if( $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu4_2_3_1.php'){                           
+        if( $pagina == 'tMenu4_2_3_1.php'){                           
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -42,7 +38,11 @@ class sCoordenacao {
             }
         }    
         
-        if($pagina == 'tAcessar.php'){
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

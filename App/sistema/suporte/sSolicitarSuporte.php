@@ -43,6 +43,8 @@ if (isset($_POST['formulario'])) {
     isset($_POST['categoria']) ? $categoria = $_POST['categoria'] : $categoria = false;
     $idEquipamento = $_POST['idEquipamento'];
     
+    $descricao = mb_convert_encoding($descricao, "ISO8859-1", "HTML-ENTITIES");
+    
     //verifica se serão passados os dados do solicitante ou do requerente
     if ($meusDados) {
         $nome = $_SESSION['credencial']['nome'];
@@ -99,33 +101,53 @@ if (isset($_POST['formulario'])) {
         header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=2_1_1&campo=secretaria&codigo=A17");
         exit();
     }else{
-        $sSecretaria = new sSecretaria($idSecretaria);
+        $sSecretaria = new sSecretaria(0);
+        $sSecretaria->setNomeCampo('idsecretaria');
+        $sSecretaria->setValorCampo($idSecretaria);
         $sSecretaria->consultar('tMenu2_1.php');
-        $secretaria = $sSecretaria->getNomenclatura();
+        
+        foreach ($sSecretaria->mConexao->getRetorno() as $value) {
+            $secretaria = $value['nomenclatura'];
+        }
     }
 
     if ($idDepartamento == 0) {
         $departamento = '--';
     } else {
-        $sDepartamento = new sDepartamento($idDepartamento);
+        $sDepartamento = new sDepartamento(0);
+        $sDepartamento->setNomeCampo('iddepartamento');
+        $sDepartamento->setValorCampo($idDepartamento);
         $sDepartamento->consultar('tMenu2_1.php');
-        $departamento = $sDepartamento->getNomenclatura();
+        
+        foreach ($sDepartamento->mConexao->getRetorno() as $value) {
+            $departamento = $value['nomenclatura'];
+        }
     }
 
     if ($idCoordenacao == 0) {
         $coordenacao = '--';
     } else {
-        $sCoordenacao = new sCoordenacao($idCoordenacao);
+        $sCoordenacao = new sCoordenacao(0);
+        $sCoordenacao->setNomeCampo('idcoordenacao');
+        $sCoordenacao->setValorCampo($idCoordenacao);
         $sCoordenacao->consultar('tMenu2_1.php');
-        $coordenacao = $sCoordenacao->getNomenclatura();
+        
+        foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+            $coordenacao = $value['nomenclatura'];
+        }
     }
 
     if ($idSetor == 0) {
         $setor = '--';
     } else {
-        $sSetor = new sSetor($idSetor);
+        $sSetor = new sSetor(0);
+        $sSetor->setNomeCampo('idsetor');
+        $sSetor->setValorCampo($idSetor);
         $sSetor->consultar('tMenu2_1.php');
-        $setor = $sSetor->getNomenclatura();
+        
+        foreach ($sSetor->mConexao->getRetorno() as $value) {
+            $setor = $value['nomenclatura'];
+        }
     }
     
     //gerar histórico dos campos do solicitante ou requerente

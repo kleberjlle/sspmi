@@ -176,39 +176,9 @@ if (isset($_GET['campo'])) {
         <!-- left column -->
         <div class="col-md-12">
             <!-- general form elements -->
-            <div class="card card-outline card-primary
-                <?php
-                echo isset($alertaPatrimonioF1) ||
-                isset($alertaCategoriaF1) ||
-                isset($alertaMarcaF1) ||
-                isset($alertaModeloF1) ||
-                isset($alertaServiceTagF1) ||
-                isset($alertaNumeroSerieF1) ||
-                isset($alertaTensaoF1) ||
-                isset($alertaCorrenteF1) ||
-                isset($alertaSistemaOperacionalF1) ||
-                isset($alertaAmbienteF1) ||
-                isset($alertaLocalF1) ? '' : 'collapsed-card' ?>
-            ">
+            <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Etapa 1 - Equipamento</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas <?php echo isset($alertaPatrimonioF1) ||
-                                            isset($alertaCategoriaF1) ||
-                                            isset($alertaMarcaF1) ||
-                                            isset($alertaModeloF1) ||
-                                            isset($alertaServiceTagF1) ||
-                                            isset($alertaNumeroSerieF1) ||
-                                            isset($alertaTensaoF1) ||
-                                            isset($alertaCorrenteF1) ||
-                                            isset($alertaSistemaOperacionalF1) ||
-                                            isset($alertaAmbienteF1) ||
-                                            isset($alertaLocalF1) ? 'fa-minus' : 'fa-plus' ?>">
-                            </i>
-                        </button>
-                    </div>
-                    <!-- /.card-tools -->
+                    <h3 class="card-title">Equipamento</h3>
                 </div>
                 <!-- form start -->
                 <div class="card-body">

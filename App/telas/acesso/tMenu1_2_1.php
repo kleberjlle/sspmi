@@ -138,41 +138,64 @@ foreach ($sUsuario->mConexao->getRetorno() as $value) {
 }
 
 //busca dados do telefone
-$sTelefone = new sTelefone($idTelefone, 0, 'usuario');
+$sTelefone = new sTelefone(0, 0, '');
+$sTelefone->setNomeCampo('idtelefone');
+$sTelefone->setValorCampo($idTelefone);
 $sTelefone->consultar('tMenu1_2_1.php');
 
+foreach ($sTelefone->mConexao->getRetorno() as $valorTelefoneUsuario) {
+    $telefoneUsuario = $valorTelefoneUsuario['numero'];
+    $whatsApp = $valorTelefoneUsuario['whatsApp'];
+}
+
 //trata o número do telefone
-$sTratamentoTelefone = new sTratamentoDados($sTelefone->getNumero());
+$sTratamentoTelefone = new sTratamentoDados($telefoneUsuario);
 $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
-$whatsApp = $sTelefone->getWhatsApp();
 
 //busca dados do e-mail
-$sEmail = new sEmail($idEmail, 'email');
+$sEmail = new sEmail(0, '');
+$sEmail->setNomeCampo('idemail');
+$sEmail->setValorCampo($idEmail);
 $sEmail->consultar('tMenu1_2_1.php');
-$email = $sEmail->getNomenclatura();
 
-//busca os dados do cargo
-$sCargo = new sCargo($idCargo);
-$sCargo->consultar('tMenu1_2_1.php');
+foreach ($sEmail->mConexao->getRetorno() as $valorEmailUsuario) {
+    $email = $valorEmailUsuario['nomenclatura'];
+}
 
 //busca os dados da permissão
 $sPermissao = new sPermissao($idPermissao);
+$sPermissao->setNomeCampo('idpermissao');
+$sPermissao->setValorCampo($idPermissao);
 $sPermissao->consultar('tMenu1_2_1.php');
+
+//busca os dados do cargo
+$sCargo = new sCargo($idCargo);
+$sCargo->setNomeCampo('idcargo');
+$sCargo->setValorCampo($idCargo);
+$sCargo->consultar('tMenu1_2_1.php');
 
 //busca os dados da secretaria
 $sSecretaria = new sSecretaria($idSecretaria);
+$sSecretaria->setNomeCampo('idsecretaria');
+$sSecretaria->setValorCampo($idSecretaria);
 $sSecretaria->consultar('tMenu1_2_1.php');
 
 //busca os dados do departamento
 $sDepartamento = new sDepartamento($idDepartamento);
+$sDepartamento->setNomeCampo('iddepartamento');
+$sDepartamento->setValorCampo($idDepartamento);
 $sDepartamento->consultar('tMenu1_2_1.php');
 
 //busca os dados do departamento
 $sCoordenacao = new sCoordenacao($idCoordenacao);
+$sCoordenacao->setNomeCampo('idcoordenacao');
+$sCoordenacao->setValorCampo($idCoordenacao);
 $sCoordenacao->consultar('tMenu1_2_1.php');
 
 //busca os dados do departamento
 $sSetor = new sSetor($idSetor);
+$sSetor->setNomeCampo('idsetor');
+$sSetor->setValorCampo($idSetor);
 $sSetor->consultar('tMenu1_2_1.php');
 ?>
 <div class="container-fluid">
@@ -233,8 +256,12 @@ $sSetor->consultar('tMenu1_2_1.php');
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo $whatsApp ? 'checked=""' : ''; ?>>
-                                        <label class="custom-control-label" for="whatsApp"><?php echo $whatsApp ? 'Sim' : 'Não'; ?></label>
+                                        <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo $whatsApp ? 'checked=""' : ''; ?> onclick="decisaoWhatsApp();" form="f1">
+                                        <label class="custom-control-label" for="whatsApp">
+                                            <div class="conteudoWhatsApp" name="conteudoWhatsApp" id="conteudoWhatsApp">
+                                                <?php echo $whatsApp ? 'Sim' : 'Não'; ?>
+                                            </div>
+                                        </label>                                        
                                     </div>
                                 </div>
                             </div>
@@ -341,8 +368,12 @@ $sSetor->consultar('tMenu1_2_1.php');
                                 <div class="form-group">
                                     <label>Situação</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $situacao ? 'checked=""' : ''; ?> form="f1">
-                                        <label class="custom-control-label" for="situacao"><?php echo $situacao ? 'Conta Ativa' : 'Conta Inativa'; ?></label>
+                                        <input class="custom-control-input" type="checkbox" name="situacao" id="situacao" <?php echo $situacao ? 'checked=""' : ''; ?> onclick="decisaoSituacao();" form="f1">
+                                        <label class="custom-control-label" for="situacao">
+                                            <div class="conteudoSituacao" name="conteudoSituacao" id="conteudoSituacao">
+                                                <?php echo $situacao ? 'Conta Ativa' : 'Conta Inativa'; ?>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>  
@@ -426,4 +457,18 @@ HTML;
             });
         });
     });
+    function decisaoWhatsApp(){
+        if (document.getElementById('whatsApp').checked) {
+            document.getElementById('conteudoWhatsApp').innerHTML = 'Sim';
+        } else {
+            document.getElementById('conteudoWhatsApp').innerHTML = 'Não';
+        }
+    }
+    function decisaoSituacao(){            
+        if (document.getElementById('situacao').checked) {
+            document.getElementById('conteudoSituacao').innerHTML = 'Conta Ativa';
+        } else {
+            document.getElementById('conteudoSituacao').innerHTML = 'Conta Inativa';
+        }
+    }
 </script>

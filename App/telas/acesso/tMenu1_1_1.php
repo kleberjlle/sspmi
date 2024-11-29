@@ -6,16 +6,6 @@ use App\sistema\acesso\{
     sNotificacao
 };
 
-//QA - início da área de testes
-/* verificar o que tem no objeto
-
-  echo "<pre>";
-  var_dump($_SESSION['credencial']);
-  echo "</pre>";
-
-  // */
-//QA - fim da área de testes
-
 $sConfiguracao = new sConfiguracao();
 
 $sPermissao = new sPermissao($_SESSION['credencial']['idPermissao']);
@@ -135,8 +125,12 @@ if(isset($_GET['campo'])){
                                 <div class="form-group">
                                     <label>WhatsApp</label>
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'checked=""' : '';?>>
-                                        <label class="custom-control-label" for="whatsAppUsuario"><?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'Sim' : 'Não'; ?></label>
+                                        <input class="custom-control-input" type="checkbox" name="whatsAppUsuario" id="whatsAppUsuario" <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'checked=""' : '';?> onclick="decisao();">
+                                        <label class="custom-control-label" for="whatsAppUsuario">
+                                            <div class="conteudo" name="conteudo" id="conteudo">
+                                                <?php echo $_SESSION['credencial']['whatsAppUsuario'] ? 'Sim' : 'Não'; ?>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -178,3 +172,12 @@ HTML;
         </div>
     </div>
 </div>
+<script>
+    function decisao(){
+       if (document.getElementById('whatsAppUsuario').checked) {
+            document.getElementById('conteudo').innerHTML = 'Sim';
+        } else {
+            document.getElementById('conteudo').innerHTML = 'Não';
+        }
+    }
+</script>

@@ -180,7 +180,7 @@ if ($pagina == 'tMenu2_2_1.php') {
                             <div class="form-group">
                                 <label>Descrição</label>
                                 <textarea class="form-control" rows="3" name="descricao" id="descricao" required="" maxlength="254" onkeyup="limite_textarea(this.value)" form="f1"><?php echo $descricao; ?></textarea>
-                                <span id="cont">254</span> Caracteres restantes <br>
+                                <span id="cont">254</span> Caracteres restantes <br />
                             </div>
                         </div>                        
                     </div>

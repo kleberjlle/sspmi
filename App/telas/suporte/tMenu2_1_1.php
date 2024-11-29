@@ -109,8 +109,12 @@ if (isset($_GET['campo'])) {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="meusDados" name="meusDados" checked="checked" value="1" onclick="habilitar();" form="f2">
-                                        <label class="custom-control-label" for="meusDados">Utilizar meus dados para a solicitação do suporte</label>
+                                        <input type="checkbox" class="custom-control-input" id="meusDados" name="meusDados" checked="checked" value="1" onclick="decisao();" form="f2">
+                                        <label class="custom-control-label" for="meusDados">
+                                            <div class="conteudo" name="conteudo" id="conteudo">
+                                                Utilizar meus dados para a solicitação do suporte
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -168,32 +172,36 @@ if (isset($_GET['campo'])) {
                                 </div>                                
                             </div>
                             <div class="row">
-                            <div class="form-group col-md-2">
-                                <label>Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f2">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>Sobrenome</label>
-                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f2">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f2">
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Whatsapp</label>
-                                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                        <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="habilitar();" disabled="" form="f2">
-                                        <label class="custom-control-label" for="whatsApp">Sim</label>
+                                <div class="form-group col-md-2">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required="" disabled="" form="f2">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Sobrenome</label>
+                                    <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required="" disabled="" form="f2">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Telefone</label>
+                                    <input type="text" class="form-control" id="telefone" name="telefone" required="" disabled="" placeholder="(99) 9 9999-9999" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text" form="f2">
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Whatsapp</label>
+                                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                            <input type="checkbox" class="custom-control-input" id="whatsApp" name="whatsApp" value="1" onclick="decisaoWhatsApp();" disabled="" form="f2">
+                                            <label class="custom-control-label" for="whatsApp">
+                                                <div class="conteudo" name="conteudo" id="conteudoWhatsApp">
+                                                    Não
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="form-group col-md-2">
+                                    <label>E-mail</label>
+                                    <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
+                                </div>                            
                             </div>
-                            <div class="form-group col-md-2">
-                                <label>E-mail</label>
-                                <input class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" type="email" id="email" name="email" placeholder="E-mail" required="" disabled="" form="f2">
-                            </div>                            
-                        </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2">
@@ -256,8 +264,8 @@ if (isset($_GET['campo'])) {
                                 <!-- textarea -->
                                 <div class="form-group">
                                     <label>Descrição</label>
-                                    <textarea class="form-control" rows="3" name="descricao" id="descricao" placeholder="Descrição..." required="" maxlength="254"  onkeyup="limite_textarea(this.value)" form="f2"></textarea>
-                                    <span id="cont">254</span> Caracteres restantes <br>
+                                    <textarea class="form-control" rows="3" name="descricao" id="descricao" placeholder="Descrição..." required="" maxlength="240"  onkeyup="limite_textarea(this.value)" form="f2"></textarea>
+                                    <span id="cont">240</span> Caracteres restantes <br>
                                 </div>
                             </div>
                             <!-- próxima build
@@ -303,7 +311,6 @@ HTML;
                         <input type="hidden" value="f2" name="formulario" form="f2">
                         <input type="hidden" value="inserir" name="acao" form="f2">
                         <input type="hidden" value="menu2_1_1" name="pagina" form="f2">
-                        <input type="hidden" value="<?php echo $categoria ?>" name="categoria" form="f2">
                         <input type="hidden" value="<?php echo $idEquipamento ?>" name="idEquipamento" form="f2">
                         <button type="submit" class="btn btn-primary">Próxima</button>
                     </div>
@@ -316,8 +323,9 @@ HTML;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript">
     //habilita/ desabilita campos ao ativar/ desativar checkbox
-    function habilitar() {
+    function decisao() {
         if (document.getElementById('meusDados').checked) {
+            document.getElementById('conteudo').innerHTML = 'Utilizar meus dados';
             document.getElementById('secretaria').disabled = true;
             document.getElementById('departamento').disabled = true;
             document.getElementById('coordenacao').disabled = true;
@@ -328,6 +336,7 @@ HTML;
             document.getElementById('whatsApp').disabled = true;
             document.getElementById('email').disabled = true;
         } else {
+            document.getElementById('conteudo').innerHTML = 'Utilizar dados de outra pessoa';
             document.getElementById('secretaria').disabled = false;
             document.getElementById('departamento').disabled = false;
             document.getElementById('coordenacao').disabled = false;
@@ -337,6 +346,14 @@ HTML;
             document.getElementById('telefone').disabled = false;
             document.getElementById('whatsApp').disabled = false;
             document.getElementById('email').disabled = false;
+        }
+    }
+    
+    function decisaoWhatsApp() {
+        if (document.getElementById('whatsApp').checked) {
+            document.getElementById('conteudoWhatsApp').innerHTML = 'Sim';
+        }else{
+            document.getElementById('conteudoWhatsApp').innerHTML = 'Não';
         }
     }
     
@@ -395,7 +412,7 @@ HTML;
     
     //contador de caracteres para o campo descrição
     function limite_textarea(valor) {
-        quant = 254;
+        quant = 240;
         total = valor.length;
         if(total <= quant) {
             resto = quant - total;
@@ -404,4 +421,5 @@ HTML;
             document.getElementById('descricao').value = valor.substr(0,quant);
         }
     }
+   
 </script>

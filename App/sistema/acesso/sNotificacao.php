@@ -167,6 +167,10 @@ class sNotificacao{
                 //deve existir um registro na tabela de equipamento com patrimônio de nomenclatura "Indefinido"
                 $this->setMensagem('O sistema necessita ser configurado corretamente, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');
                 break;
+            case '5':
+                //Não há ID do último e-mail registrado, verifique o método getRegistro da classe mConexao
+                $this->setMensagem('Não foi possível registrar o e-mail, contate o administrador do sistema e informe este erro ('.$this->getCodigo().').');
+                break;
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

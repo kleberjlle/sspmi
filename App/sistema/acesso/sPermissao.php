@@ -37,7 +37,8 @@ class sPermissao {
             }
         }  
         
-        if ($pagina == 'tAcessar.php') {
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -51,7 +52,7 @@ class sPermissao {
             $this->setValidador($this->mConexao->getValidador());
         }
         
-        if($pagina == 'tMenu1_1_1.php' ||
+        if( $pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php'){                           
             $dados = [
                 'comando' => 'SELECT',
@@ -63,6 +64,7 @@ class sPermissao {
                 'ordem' => null //ASC ou DESC
             ];            
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }     
     }
     public function getIdPermissao(): int {

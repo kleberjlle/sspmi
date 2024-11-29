@@ -20,6 +20,7 @@ class sAmbiente {
         
         if ($pagina == 'tMenu3_1.php' ||
             $pagina == 'tMenu3_2_1.php' ||
+            $pagina == 'tMenu4_1.php' ||
             $pagina == 'tMenu4_2_1_1.php') {
             //monta os dados há serem passados na query               
             $dados = [

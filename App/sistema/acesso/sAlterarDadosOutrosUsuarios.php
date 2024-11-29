@@ -92,7 +92,9 @@ if (isset($_POST['pagina'])) {
     }
     
     //busca os dados do id do telefone
-    $sTelefone = new sTelefone($idTelefone, 0, 'usuario');    
+    $sTelefone = new sTelefone(0, 0, '');   
+    $sTelefone->setNomeCampo('idtelefone');
+    $sTelefone->setValorCampo($idTelefone);
     $sTelefone->consultar('tMenu1_2_1.php');
     
     foreach ($sTelefone->mConexao->getRetorno() as $value) {
@@ -119,7 +121,9 @@ if (isset($_POST['pagina'])) {
     }
     
     //busca os dados do id do email
-    $sEmail = new sEmail($idEmail, 'email');
+    $sEmail = new sEmail(0, '');
+    $sEmail->setNomeCampo('idemail');
+    $sEmail->setValorCampo($idEmail);
     $sEmail->consultar('tMenu1_2_1.php');
     
     foreach ($sEmail->mConexao->getRetorno() as $value) {

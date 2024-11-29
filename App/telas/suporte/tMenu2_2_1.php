@@ -4,7 +4,9 @@ use App\sistema\acesso\{
     sConfiguracao,
     sSair,
     sUsuario,
-    sEmail
+    sEmail,
+    sSecretaria,
+    sTelefone
 };
 use App\sistema\suporte\{
     sProtocolo,
@@ -36,12 +38,13 @@ if (isset($_GET)) {
 $sProtocolo = new sProtocolo();
 $sProtocolo->setNomeCampo('idprotocolo');
 $sProtocolo->setValorCampo($idProtocolo);
-$sProtocolo->consultar('tMenu2_2_2.php');
+$sProtocolo->consultar('tMenu2_2_1.php');
 
 $sConfiguracao = new sConfiguracao();
 
 if ($sProtocolo->getValidador()) {
     foreach ($sProtocolo->mConexao->getRetorno() as $value) {
+       
         //dados do usuario
         $sUsuario = new sUsuario();
         $sUsuario->setNomeCampo('idusuario');
@@ -74,6 +77,21 @@ if ($sProtocolo->getValidador()) {
         $telefone = $value['telefoneDoRequerente'];
         $whatsApp = $value['whatsAppDoRequerente'];
         $email = $value['emailDoRequerente'];      
+        
+        $sSecretaria = new sSecretaria(0);
+        $sSecretaria->setNomeCampo('nomenclatura');
+        $sSecretaria->setValorCampo($secretaria);
+        $sSecretaria->consultar('tMenu2_2_1.php');
+        
+        foreach ($sSecretaria->mConexao->getRetorno() as $valorSecretaria) {
+            $idSecretaria = $valorSecretaria['idsecretaria'];
+        }
+        
+        $sTelefone = new sTelefone(0, 0, '');
+        $sTelefone->setNomeCampo('secretaria_idsecretaria');
+        $sTelefone->setValorCampo($idSecretaria);
+        $sTelefone->consultar('tMenu2_2_1.php');
+        
         
         
         $requerente ? 
@@ -251,7 +269,8 @@ echo <<<HTML
                     {$nome}
                     <ul class="list-group list-group-unbordered mb-4">
                         <li class="list-group-item">
-                            <i class="fas fa-building mr-1"></i><b> Secretaria</b><a class="float-right">{$secretaria}</a>
+                            <i class="fas fa-building mr-1"></i><b> Secretaria</b><a class="float-right">{$secretaria}</a><br/>
+                            
                         </li>
                         <li class="list-group-item">
                             <i class="fas fa-house-user mr-1"></i><b> Departamento/ Unidade</b><a class="float-right">{$departamento}</a>
@@ -268,7 +287,17 @@ echo <<<HTML
                             {$whatsApp}                                                            
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-envelope-open-text mr-1"></i><b> Email</b> <a class="float-right">{$email}</a>
+                            <i class="fas fa-envelope-open-text mr-1"></i>
+                            <b>E-mail</b> 
+                            <a class="float-right">  
+                                <div id="conteudo">{$email}</div>
+                            </a>
+                            <a class="float-right">
+                                <button type="button" class="btn btn-tool" title="Copiar" onclick="copiarTexto();">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </a>
+                            
                         </li>
                     </ul>
                 </div>
@@ -617,5 +646,14 @@ echo <<<HTML
     </div>
 </div>
     -->
+
 HTML;
 ?>
+<script>
+    //Copiar texto ao clicar sobre o mesmo
+    function copiarTexto(){
+    var content = document.getElementById('conteudo').innerHTML;
+
+    navigator.clipboard.writeText(content).then();
+}
+</script>

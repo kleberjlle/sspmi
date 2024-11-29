@@ -5,7 +5,10 @@ use App\sistema\acesso\{
     sNotificacao,
     sSecretaria,
     sDepartamento,
-    sCoordenacao,
+    sCoordenacao
+};
+
+use App\sistema\suporte\{
     sAmbiente
 };
 

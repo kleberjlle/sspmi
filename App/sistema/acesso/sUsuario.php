@@ -79,6 +79,7 @@ class sUsuario {
                 'ordem' => null //caso não tenha, colocar como null
             ];
             $this->mConexao->CRUD($dados);
+            
             //busca dos dados do usuário
             foreach ($this->mConexao->getRetorno() as $linha) {
                 $idUsuario = $linha['idusuario'];
@@ -554,9 +555,7 @@ class sUsuario {
             $this->setValidador($this->mConexao->getValidador());
         }
         
-        if ($pagina == 'tMenu1_3-examinador.php' ||
-            $pagina == 'tMenu1_1_1.php' || 
-            $pagina == 'tMenu1_2_1.php') {
+        if ($pagina == 'tMenu1_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -573,6 +572,22 @@ class sUsuario {
                 $this->setSobrenome($linha['sobrenome']);
             }
 
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if ($pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_3-examinador.php') {
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'usuario',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            
+            $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
         }
         

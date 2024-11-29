@@ -54,16 +54,19 @@ if (isset($_POST['pagina'])) {
     
     //busca os dados do usuário no bd
     $sNomeUsuario = new sUsuario();
-    $sNomeUsuario->setIdUsuario($idUsuario);
+    $sNomeUsuario->setNomeCampo('idusuario');
+    $sNomeUsuario->setValorCampo($idUsuario);
     $sNomeUsuario->consultar('tMenu1_1_1.php');
     
     foreach ($sNomeUsuario->mConexao->getRetorno() as $value) {
         $idEmail = $value['email_idemail'];
     }
     
-    $sEmailUsuario = new sEmail($emailUsuario, 'tMenu1_1_1.php');
-    $sEmailUsuario->setIdEmail($idEmail);
+    $sEmailUsuario = new sEmail(0, '');
+    $sEmailUsuario->setNomeCampo('idemail');
+    $sEmailUsuario->setValorCampo($idEmail);
     $sEmailUsuario->consultar('tMenu1_1_1.php');
+    
     foreach ($sEmailUsuario->mConexao->getRetorno() as $value) {
         $senha = $value['senha'];
         $email = $value['nomenclatura'];
@@ -253,12 +256,11 @@ if (isset($_POST['pagina'])) {
                 //altera na sessão
                 $idTelefoneUsuario = $sTelefoneUsuario->mConexao->getRegistro();
                 $_SESSION['credencial']['idTelefoneUsuario'] = $idTelefoneUsuario;
-                $sUsuario = new sUsuario();
-                $sUsuario->setIdUsuario($idUsuario);
-                $sUsuario->setNomeCampo('telefone_idtelefone');
-                $sUsuario->setValorCampo($idTelefoneUsuario);
-                $sUsuario->alterar('tMenu1_1_1.php');
                 
+                $sUsuario = new sUsuario();
+                $sUsuario->setNomeCampo('idusuario');
+                $sUsuario->setValorCampo($idUsuario);
+                $sUsuario->alterar('tMenu1_1_1.php');                
             }
             
             if ($sTelefoneUsuario->mConexao->getValidador()) {

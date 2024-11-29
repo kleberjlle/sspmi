@@ -28,10 +28,7 @@ class sDepartamento {
     public function consultar($pagina) {
         //cria conexão para as opções das páginas abaixo
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu4_2_2_1.php') {
+        if ($pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -51,7 +48,11 @@ class sDepartamento {
             }
         }
         
-        if($pagina == 'tAcessar.php'){
+        if( $pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

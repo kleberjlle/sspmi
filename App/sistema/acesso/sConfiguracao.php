@@ -81,7 +81,7 @@ class sConfiguracao{
         $this->empresa = 'Prefeitura de Itapoá';
         $this->siteDaEmpresa = 'https://www.itapoa.sc.gov.br';
         $this->manutencao = false;     
-        $this->prazoManutencao = '25/10/2024 às 9:00';
+        $this->prazoManutencao = '08/11/2024 às 13:15';
         $this->timeZone = date_default_timezone_set('America/Sao_Paulo');
         //empresa
         $this->whatsApp = '5547988272029';

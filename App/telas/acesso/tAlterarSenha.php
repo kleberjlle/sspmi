@@ -15,7 +15,9 @@ if(!isset($_GET['seguranca'])){
     $sSair->verificar('0');
 }
 
-$chave = $_GET['seguranca'];
+//caso o sistema esteja retornando o alerta A31 verifique os caracteres da url com os do BD
+//altera "espaço" por sinal de "+" ao passar via get
+$chave = str_replace([' '], '+', $_GET['seguranca']);
 
 $sConfiguracao = new sConfiguracao();
 
