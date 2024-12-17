@@ -58,9 +58,9 @@ class sEmail {
                         'ordem' => null //ASC ou DESC
                     ];
                     $this->mConexao->CRUD($dados);
-
-                    if ($this->mConexao->getValidador()) {
-                        $this->setValidador($this->mConexao->getValidador());
+                    $this->setValidador($this->mConexao->getValidador());
+                    
+                    if ($this->mConexao->getValidador()) {    
                         //retornar notificação
                         $this->setValidador(true);
                     } else {
@@ -198,6 +198,7 @@ class sEmail {
             $pagina == 'tMenu1_2.php-departamento2' ||
             $pagina == 'tMenu1_2.php-coordenacao2' ||
             $pagina == 'tMenu1_2.php-setor2' ||
+            $pagina == 'tMenu2_2_1.php-2' ||
             $pagina == 'tMenu2_2.php' ||
             $pagina == 'tMenu4_2_1_1.php-2' ||
             $pagina == 'tMenu4_2_2_1.php-2' ||
@@ -216,24 +217,10 @@ class sEmail {
             $this->mConexao->CRUD($dados);
             $this->setValidador($this->mConexao->getValidador());
         }
-
-        if ($pagina == 'tMenu2_2_1.php') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'email',
-                'camposCondicionados' => 'idemail',
-                'valoresCondicionados' => $this->getIdEmail(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null //ASC ou DESC
-            ];
-
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
         
         if ($pagina == 'tAcessar.php-secretaria' ||
             $pagina == 'tMenu1_2.php-secretaria' ||
+            $pagina == 'tMenu2_2_1.php' ||
             $pagina == 'tMenu4_2_1_1.php') {
             $dados = [
                 'comando' => 'SELECT',
@@ -251,6 +238,7 @@ class sEmail {
         
         if ($pagina == 'tAcessar.php-departamento' ||
             $pagina == 'tMenu1_2.php-departamento' ||
+            $pagina == 'tMenu2_2_1.php-departamento' ||
             $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
@@ -307,7 +295,8 @@ class sEmail {
 
         if ($pagina == 'tMenu1_1_1.php' ||
             $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu4_2_1_1.php') {
+            $pagina == 'tMenu4_2_1_1.php' ||
+            $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'email',
@@ -317,10 +306,9 @@ class sEmail {
                 'valoresCondicionados' => $this->getIdEmail(),
             ];
             $this->mConexao->CRUD($dados);
-
+            $this->setValidador($this->mConexao->getValidador());
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
-            if ($this->mConexao->getValidador()) {
-                $this->setValidador(true);
+            if ($this->mConexao->getValidador()) {                
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
@@ -343,7 +331,10 @@ class sEmail {
     public function inserir($pagina, $tratarDados) {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu4_2_1_1.php') {
+        if ($pagina == 'tMenu4_2_1_1.php' ||
+            $pagina == 'tMenu4_2_2_1.php' ||
+            $pagina == 'tMenu4_2_3_1.php' ||
+            $pagina == 'tMenu4_2_4_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -378,7 +369,10 @@ class sEmail {
             $pagina == 'tMenu4_1-email_has_departamento.php' ||
             $pagina == 'tMenu4_1-email_has_coordenacao.php' ||
             $pagina == 'tMenu4_1-email_has_setor.php' ||
-            $pagina == 'tMenu4_2_1_1-email_has_secretaria.php') {
+            $pagina == 'tMenu4_2_1_1-email_has_secretaria.php' ||
+            $pagina == 'tMenu4_2_2_1-email_has_departamento.php' ||
+            $pagina == 'tMenu4_2_3_1-email_has_coordenacao.php' ||
+            $pagina == 'tMenu4_2_4_1-email_has_setor.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -395,6 +389,89 @@ class sEmail {
         }
 
         $this->mConexao->CRUD($dados);
+    }
+    
+    public function deletar($pagina, $tratarDados) {
+        //cria conexão para inserir os dados na tabela
+        $this->setMConexao(new mConexao());
+        if ($pagina == 'tMenu4_2_1_1.php-2' ||
+            $pagina == 'tMenu4_2_2_1.php-2' ||
+            $pagina == 'tMenu4_2_3_1.php-2' ||
+            $pagina == 'tMenu4_2_4_1.php-2') {
+            //encaminha os dados para deletar 
+            $dados = [
+                'comando' => 'DELETE',
+                'tabela' => 'email',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo()
+            ];
+        }   
+        
+        if ($pagina == 'tMenu4_2_1_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'DELETE',
+                'tabela' => 'email_has_secretaria',
+                'camposCondicionados' => [
+                    'email_idemail',
+                    'secretaria_idsecretaria'
+                ],
+                'valoresCondicionados' => [
+                    $tratarDados['email_idemail'],
+                    $tratarDados['secretaria_idsecretaria']
+                ]
+            ];
+        }  
+        
+        if ($pagina == 'tMenu4_2_2_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'DELETE',
+                'tabela' => 'email_has_departamento',
+                'camposCondicionados' => [
+                    'email_idemail',
+                    'departamento_iddepartamento'
+                ],
+                'valoresCondicionados' => [
+                    $tratarDados['email_idemail'],
+                    $tratarDados['departamento_iddepartamento']
+                ]
+            ];
+        }  
+        
+        if ($pagina == 'tMenu4_2_3_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'DELETE',
+                'tabela' => 'email_has_coordenacao',
+                'camposCondicionados' => [
+                    'email_idemail',
+                    'coordenacao_idcoordenacao'
+                ],
+                'valoresCondicionados' => [
+                    $tratarDados['email_idemail'],
+                    $tratarDados['coordenacao_idcoordenacao']
+                ]
+            ];
+        }  
+        
+        if ($pagina == 'tMenu4_2_4_1.php') {
+            //insere os dados do histórico no BD            
+            $dados = [
+                'comando' => 'DELETE',
+                'tabela' => 'email_has_setor',
+                'camposCondicionados' => [
+                    'email_idemail',
+                    'setor_idsetor'
+                ],
+                'valoresCondicionados' => [
+                    $tratarDados['email_idemail'],
+                    $tratarDados['setor_idsetor']
+                ]
+            ];
+        }  
+        $this->mConexao->CRUD($dados);
+        $this->setValidador($this->mConexao->getValidador());
     }
 
     public function enviar($pagina) {

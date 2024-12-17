@@ -13,9 +13,9 @@ use App\sistema\suporte\{
     sAmbiente
 };
 
-if(isset($_POST['idEquipamento'])){
+if(isset($_GET['seguranca'])){
     //busca os dados do equipamento
-    $idEquipamento = $_POST['idEquipamento'];
+    $idEquipamento = base64_decode($_GET['seguranca']);
     
     $sEquipamento = new sEquipamento();
     $sEquipamento->setNomeCampo('idequipamento');
@@ -67,6 +67,10 @@ if(isset($_POST['idEquipamento'])){
     //busca a ambiente do equipamento
     $sAmbiente = new sAmbiente();
     $sAmbiente->consultar('tMenu3_2_1.php');
+}else{
+    //solicitar saída com tentativa de violação
+    $sSair = new sSair();
+    $sSair->verificar('0');
 }
 
 ?>

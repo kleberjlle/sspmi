@@ -7,6 +7,7 @@ use App\sistema\acesso\{
 };
 
 class sEquipamento {
+    private int $idEquipamento;
     private string $patrimonio;
     private string $categoria;
     private string $modelo;
@@ -26,7 +27,8 @@ class sEquipamento {
         $this->setMConexao(new mConexao());
         
         if ($pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu3_2.php') {
+            $pagina == 'tMenu3_2.php' ||
+            $pagina == 'tMenu6_2.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -103,6 +105,28 @@ class sEquipamento {
         }
     }
     
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == '') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'equipamento',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idequipamento',
+                'valoresCondicionados' => $this->getIdEquipamento()
+            ];
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+    }
+    
+    public function getIdEquipamento(): int {
+        return $this->idEquipamento;
+    }
+
     public function getPatrimonio(): string {
         return $this->patrimonio;
     }
@@ -153,6 +177,10 @@ class sEquipamento {
 
     public function getSNotificacao(): sNotificacao {
         return $this->sNotificacao;
+    }
+
+    public function setIdEquipamento(int $idEquipamento): void {
+        $this->idEquipamento = $idEquipamento;
     }
 
     public function setPatrimonio(string $patrimonio): void {
@@ -206,6 +234,5 @@ class sEquipamento {
     public function setSNotificacao(sNotificacao $sNotificacao): void {
         $this->sNotificacao = $sNotificacao;
     }
-
 
 }

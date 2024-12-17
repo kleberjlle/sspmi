@@ -9,9 +9,6 @@ use App\sistema\acesso\{
     sSair,
     sNotificacao
 };
-use App\sistema\suporte\{
-    sAmbiente
-};
 
 if(isset($_GET['pagina'])){
     $pagina = $_GET['pagina'];
@@ -47,12 +44,7 @@ if (!$pagina || !$formulario) {
         foreach ($sSecretaria->mConexao->getRetorno() as $value) {
             $secretaria = $value['nomenclatura'];
             $endereco = $value['endereco'];
-            $idAmbiente = $value['ambiente_idambiente'];
         }
-
-        //busca dados do ambiente no bd
-        $sAmbiente = new sAmbiente();
-        $sAmbiente->consultar('tMenu4_2_1_1.php');
 
         //busca dados do telefone
         $sTelefone = new sTelefone(0, $idSecretaria, '');
@@ -135,6 +127,13 @@ if (!$pagina || !$formulario) {
                 $alertaEmail = ' is-warning';
             }
             break;
+        case 'telefone':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaTelefone = ' is-valid';
+            } else {
+                $alertaTelefone = ' is-warning';
+            }
+            break;
     }
 
     //cria as variáveis da notificação
@@ -175,27 +174,28 @@ if (!$pagina || !$formulario) {
                             <label for="endereco">E-mail</label>
                             <input type="email" class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" name="email" value="<?php echo isset($email) ? $email : ''; ?>" form="f1">
                         </div>
-                        <div class="form-group">
-                            <label>Ambiente</label>
-                            <select class="form-control" name="idAmbiente" id="idAmbiente" form="f1">
-                                <?php
-                                foreach ($sAmbiente->mConexao->getRetorno() as $value) {
-                                    $idAmbiente == $value['idambiente'] ? $atributo = 'selected=""' : $atributo = '';
-                                    echo '<option value="' . $value['idambiente'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
                         <div class="form-group col-md-2">
                             <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" value="<?php echo isset($telefoneTratado) ? $telefoneTratado : ''; ?>" form="f1">
+                            <input type="text" class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" name="telefone" value="<?php echo isset($telefoneTratado) ? $telefoneTratado : ''; ?>" form="f1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                         </div>
                         <div class="form-group">
                             <label>WhatsApp?</label>
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo isset($whatsApp) == 1 ? 'checked=""' : ''; ?> onclick="decisao();" form="f1">
+                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" 
+                                    <?php
+                                    if(isset($whatsApp)){
+                                        echo $whatsApp == 1 ? 'checked=""' : ''; 
+                                    }
+                                    ?>                                       
+                                onclick="decisao();" form="f1">
                                 <label class="custom-control-label" for="whatsApp">
-                                    <div class="conteudo" name="conteudo" id="conteudo"><?php echo isset($whatsApp) == 1 ? 'sim' : 'Não'; ?></div>
+                                    <div class="conteudo" name="conteudo" id="conteudo">
+                                    <?php 
+                                    if(isset($whatsApp)){
+                                        echo $whatsApp == 1 ? 'Sim' : 'Não';
+                                    }    
+                                    ?>
+                                    </div>
                                 </label>
                             </div>
                         </div>

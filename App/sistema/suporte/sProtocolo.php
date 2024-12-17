@@ -21,7 +21,8 @@ class sProtocolo {
         //cria conexão com o bd
         $this->setMConexao(new mConexao());
         
-        if ($pagina == 'tMenu2_2.php') {
+        if ($pagina == 'tMenu2_2.php' ||
+            $pagina == 'tMenu6_1.php') {
             //monta os dados há serem passados na query               
             $dados = [
                 'comando' => 'SELECT',
@@ -44,6 +45,19 @@ class sProtocolo {
                 'tabelas' => 'protocolo',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null//caso não tenha, colocar como null
+            ];
+        }
+        
+        if ($pagina == 'tMenu6_1.php-2') {
+            //monta os dados há serem passados na query               
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'protocolo',
+                'camposCondicionados' => '',
+                'valoresCondicionados' => '',
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null//caso não tenha, colocar como null
             ];

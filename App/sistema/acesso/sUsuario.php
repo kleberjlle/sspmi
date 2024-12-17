@@ -138,7 +138,7 @@ class sUsuario {
 
                 //busca dados do departamento no bd
                 if (!is_null($idDepartamento)) {
-                    $sDepartamento = new sDepartamento($idDepartamento);
+                    $sDepartamento = new sDepartamento(0);
                     $sDepartamento->setNomeCampo('iddepartamento');
                     $sDepartamento->setValorCampo($idDepartamento);
                     $sDepartamento->consultar('tAcessar.php');
@@ -576,7 +576,8 @@ class sUsuario {
         }
         
         if ($pagina == 'tMenu1_1_1.php' ||
-            $pagina == 'tMenu1_3-examinador.php') {
+            $pagina == 'tMenu1_3-examinador.php' ||
+            $pagina == 'tMenu6_1_2.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

@@ -184,12 +184,12 @@ if (isset($_GET['campo'])) {
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-1">
-                            <label for="Patrimonio">Patrimônio</label> <a href="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
-                            <input class="form-control <?php echo isset($alertaPatrimonioF1) ? $alertaPatrimonioF1 : ''; ?>" type="text" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 20580" form="f1">
+                            <label for="Patrimonio">Patrimônio *</label> <a href="<?php echo $sConfiguracao->getDiretorioControleAcesso(); ?>tFAQ.php" target="_blank"><i class="fas fa-info-circle text-primary mr-1"></i></a>
+                            <input class="form-control <?php echo isset($alertaPatrimonioF1) ? $alertaPatrimonioF1 : ''; ?>" type="text" id="patrimonioF1" name="patrimonioF1" placeholder="Ex.: 20580" form="f1" required="">
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Categoria</label>
+                                <label>Categoria *</label>
                                 <select class="form-control <?php echo isset($alertaCategoriaF1) ? $alertaCategoriaF1 : ''; ?>" name="categoriaF1" id="categoriaF1" form="f1" required="">
                                 <option value="0" selected="">--</option>
                                 <?php
@@ -204,7 +204,7 @@ if (isset($_GET['campo'])) {
                         </div>                           
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Marca</label>
+                                <label>Marca *</label>
                                 <select class="form-control<?php echo isset($alertaMarcaF1) ? $alertaMarcaF1 : ''; ?>" name="marcaF1" id="marcaF1" form="f1" required="">
                                     <option value="0" selected="">--</option>
                                 <?php
@@ -235,7 +235,7 @@ if (isset($_GET['campo'])) {
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Tensão</label>
+                                <label>Tensão *</label>
                                 <select class="form-control<?php echo isset($alertaTensaoF1) ? $alertaTensaoF1 : ''; ?>" name="tensaoF1" id="tensaoF1" form="f1" required="">
                                     <option value="0" selected="">--</option>
                                     <?php
@@ -250,7 +250,7 @@ if (isset($_GET['campo'])) {
                         </div>  
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Corrente</label>
+                                <label>Corrente *</label>
                                 <select class="form-control<?php echo isset($alertaCorrenteF1) ? $alertaCorrenteF1 : ''; ?>" name="correnteF1" id="correnteF1" form="f1" required="">
                                     <option value="0" selected="">--</option>
                                     <?php
@@ -265,7 +265,7 @@ if (isset($_GET['campo'])) {
                         </div>  
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Sistema Operacional</label>
+                                <label>Sistema Operacional *</label>
                                 <select class="form-control<?php echo isset($alertaSistemaOperacionalF1) ? $alertaSistemaOperacionalF1 : ''; ?>" name="sistemaOperacionalF1" id="sistemaOperacionalF1" form="f1" required="">
                                     <option value="0" selected="">--</option>
                                     <?php
@@ -280,7 +280,7 @@ if (isset($_GET['campo'])) {
                         </div> 
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Ambiente</label>
+                                <label>Ambiente *</label>
                                 <select class="form-control<?php echo isset($alertaAmbienteF1) ? $alertaAmbienteF1 : ''; ?>" name="ambienteF1" id="ambienteF1" form="f1" required="">
                                     <option value="0" selected="">--</option>
                                     <?php

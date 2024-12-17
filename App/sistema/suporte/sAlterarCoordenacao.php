@@ -8,7 +8,7 @@ use App\sistema\acesso\{
     sConfiguracao,
     sHistorico,
     sTratamentoDados,
-    sSecretaria,
+    sCoordenacao,
     sEmail,
     sTelefone
 };
@@ -25,29 +25,29 @@ if (isset($_POST['pagina'])) {
     $idUsuario = $_SESSION['credencial']['idUsuario'];
     $pagina = $_POST['pagina'];
     $acao = $_POST['acao'];
-    $idSecretaria = $_POST['idSecretaria'];
-    $idSecretariaCriptografada = base64_encode($idSecretaria);
-    isset($_POST['secretaria']) ? $secretaria = $_POST['secretaria'] : $secretaria = 0;
+    $idCoordenacao = $_POST['idCoordenacao'];
+    $idCoordenacaoCriptografada = base64_encode($idCoordenacao);
+    isset($_POST['coordenacao']) ? $coordenacao = $_POST['coordenacao'] : $coordenacao = 0;
     isset($_POST['endereco']) ? $endereco = $_POST['endereco'] : $endereco = 0;
     isset($_POST['email']) ? $email = $_POST['email'] : $email = 0;
     isset($_POST['telefone']) ? $telefone = $_POST['telefone'] : $telefone = 0;
     isset($_POST['whatsApp']) ? $whatsApp = 1 : $whatsApp = 0;
     
-    //obter dados anteriores da secretaria
-    $sSecretaria = new sSecretaria(0);
-    $sSecretaria->setNomeCampo('idsecretaria');
-    $sSecretaria->setValorCampo($idSecretaria);
-    $sSecretaria->consultar($pagina);
+    //obter dados anteriores da coordenacao
+    $sCoordenacao = new sCoordenacao(0);
+    $sCoordenacao->setNomeCampo('idcoordenacao');
+    $sCoordenacao->setValorCampo($idCoordenacao);
+    $sCoordenacao->consultar($pagina);
     
-    foreach ($sSecretaria->mConexao->getRetorno() as $value) {
-        $secretariaAnterior = $value['nomenclatura'];
+    foreach ($sCoordenacao->mConexao->getRetorno() as $value) {
+        $coordenacaoAnterior = $value['nomenclatura'];
         $enderecoAnterior = $value['endereco'];
     }
     
-    //verifica se a secretaria já possui email
+    //verifica se a coordenacao já possui email
     $sEmail = new sEmail('', '');
-    $sEmail->setNomeCampo('secretaria_idsecretaria');
-    $sEmail->setValorCampo($idSecretaria);
+    $sEmail->setNomeCampo('coordenacao_idcoordenacao');
+    $sEmail->setValorCampo($idCoordenacao);
     $sEmail->consultar($pagina);
     
     //caso tenha email registrado então retorne o id do email
@@ -59,17 +59,17 @@ if (isset($_POST['pagina'])) {
         //consulta os dados do e-mail anterior
         $sEmail->setNomeCampo('idemail');
         $sEmail->setValorCampo($idEmail);
-        $sEmail->consultar('tMenu4_2_1_1.php-2');
+        $sEmail->consultar('tMenu4_2_3_1.php-2');
         
         foreach ($sEmail->mConexao->getRetorno() as $value) {
             $emailAnterior = $value['nomenclatura'];
         }
     }   
     
-    //verifica se a secretaria já possui telefone
+    //verifica se a coordenacao já possui telefone
     $sTelefone = new sTelefone(0, 0, '');
-    $sTelefone->setNomeCampo('secretaria_idsecretaria');
-    $sTelefone->setValorCampo($idSecretaria);
+    $sTelefone->setNomeCampo('coordenacao_idcoordenacao');
+    $sTelefone->setValorCampo($idCoordenacao);
     $sTelefone->consultar($pagina);
     
     //caso tenha telefone registrado então retorne o id do telefone
@@ -81,7 +81,7 @@ if (isset($_POST['pagina'])) {
         //consulta os dados do e-mail anterior
         $sTelefone->setNomeCampo('idtelefone');
         $sTelefone->setValorCampo($idTelefone);
-        $sTelefone->consultar('tMenu4_2_1_1.php-2');
+        $sTelefone->consultar('tMenu4_2_3_1.php-2');
         
         foreach ($sTelefone->mConexao->getRetorno() as $value) {
             $telefoneAnterior = $value['numero'];
@@ -94,8 +94,8 @@ if (isset($_POST['pagina'])) {
     }        
     
     //alimenta histórico
-    if($secretaria != $secretariaAnterior){
-        alimentaHistorico($pagina, $acao, 'secretaria', $secretariaAnterior, $secretaria, $idUsuario);
+    if($coordenacao != $coordenacaoAnterior){
+        alimentaHistorico($pagina, $acao, 'coordenacao', $coordenacaoAnterior, $coordenacao, $idUsuario);
     }    
     if(isset($enderecoAnterior)){
         if($endereco != $enderecoAnterior){
@@ -135,37 +135,37 @@ if (isset($_POST['pagina'])) {
     }
     
     
-    //se não for preenchido o campo secretaria, retorne com mensagem de erro
-    if(!$secretaria){
+    //se não for preenchido o campo coordenacao, retorne com mensagem de erro
+    if(!$coordenacao){
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=secretaria&codigo=A10");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=coordenacao&codigo=A10");
         exit(); 
     }else{
-        //altera a nomenclatura da secretaria        
-        if($secretaria != $secretariaAnterior){
+        //altera a nomenclatura da coordenacao        
+        if($coordenacao != $coordenacaoAnterior){
             $alteracao = true;
-            $sSecretaria = new sSecretaria(0);
-            $sSecretaria->setNomeCampo('nomenclatura');
-            $sSecretaria->setValorCampo($secretaria);
-            $sSecretaria->setIdSecretaria($idSecretaria);
-            $sSecretaria->alterar($pagina);
+            $sCoordenacao = new sCoordenacao(0);
+            $sCoordenacao->setNomeCampo('nomenclatura');
+            $sCoordenacao->setValorCampo($coordenacao);
+            $sCoordenacao->setIdCoordenacao($idCoordenacao);
+            $sCoordenacao->alterar($pagina);
         }
     }
     
     //se não for preenchido o campo endereco, retorne com mensagem de erro
     if(!$endereco){
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=endereco&codigo=A10");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=endereco&codigo=A10");
         exit(); 
     }else{
-        //altera o endereco da secretaria        
+        //altera o endereco da coordenacao        
         if($endereco != $enderecoAnterior){
             $alteracao = true;
-            $sSecretaria = new sSecretaria(0);
-            $sSecretaria->setNomeCampo('endereco');
-            $sSecretaria->setValorCampo($endereco);
-            $sSecretaria->setIdSecretaria($idSecretaria);
-            $sSecretaria->alterar($pagina);
+            $sCoordenacao = new sCoordenacao(0);
+            $sCoordenacao->setNomeCampo('endereco');
+            $sCoordenacao->setValorCampo($endereco);
+            $sCoordenacao->setIdCoordenacao($idCoordenacao);
+            $sCoordenacao->alterar($pagina);
         }
     }
     
@@ -185,35 +185,35 @@ if (isset($_POST['pagina'])) {
                 
                 $sEmail->setNomeCampo('nomenclatura');
                 $sEmail->setValorCampo($email);
-                $sEmail->consultar('tMenu4_2_1_1.php-2');
+                $sEmail->consultar('tMenu4_2_3_1.php-2');
                                 
                 if($sEmail->getValidador()){
                     $sConfiguracao = new sConfiguracao();
-                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=email&codigo=A12");
+                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=email&codigo=A12");
                     exit();
                 }else{
                     if($email == 'null'){
                         $alteracao = true;
                         $dados = [
                             'email_idemail' => $idEmail,
-                            'secretaria_idsecretaria' => $idSecretaria
+                            'coordenacao_idcoordenacao' => $idCoordenacao
                         ];
-                        $sEmail->deletar('tMenu4_2_1_1.php', $dados);
+                        $sEmail->deletar('tMenu4_2_3_1.php', $dados);
                         
                         $sEmail->setNomeCampo('idemail');
                         $sEmail->setValorCampo($idEmail);
-                        $sEmail->deletar('tMenu4_2_1_1.php-2', '');
+                        $sEmail->deletar('tMenu4_2_3_1.php-2', '');
                     }else{
                         $alteracao = true;
                         $sEmail->setNomeCampo('nomenclatura');
                         $sEmail->setValorCampo($email);
                         $sEmail->setIdEmail($idEmail);
-                        $sEmail->alterar('tMenu4_2_1_1.php');
+                        $sEmail->alterar('tMenu4_2_3_1.php');
                     }
                 }
             }else{
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=email&codigo=A2");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=email&codigo=A2");
                 exit(); 
             }
         }
@@ -222,11 +222,11 @@ if (isset($_POST['pagina'])) {
             //verifica se já existe um e-mail com essa nomenclatura
             $sEmail->setNomeCampo('nomenclatura');
             $sEmail->setValorCampo($email);
-            $sEmail->consultar('tMenu4_2_1_1.php-2');
+            $sEmail->consultar('tMenu4_2_3_1.php-2');
                 
             if($sEmail->getValidador()){
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=email&codigo=A12");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=email&codigo=A12");
                 exit();
             }else{
                 //caso não tenha e-mail registrado para alteração, registre um novo na tabela email   
@@ -235,20 +235,20 @@ if (isset($_POST['pagina'])) {
                 ];
                 $sEmail->inserir($pagina, $tratarDados);
 
-                //se obteve o registro do último e-mail inserido, registre-o na tabela email_has_secretaria
+                //se obteve o registro do último e-mail inserido, registre-o na tabela email_has_coordenacao
                 if($sEmail->mConexao->getRegistro()){
-                    //registre também na tabela email_has_secretaria  
+                    //registre também na tabela email_has_coordenacao  
                     $alteracao = true;
-                    $sEmail->setNomeCampo('secretaria');
+                    $sEmail->setNomeCampo('coordenacao');
                     $tratarDados = [
                         'idemail' => $sEmail->mConexao->getRegistro(),
-                        'idsecretaria' => $idSecretaria
+                        'idcoordenacao' => $idCoordenacao
                     ];
-                    $sEmail->inserir('tMenu4_2_1_1-email_has_secretaria.php', $tratarDados);
+                    $sEmail->inserir('tMenu4_2_3_1-email_has_coordenacao.php', $tratarDados);
                 }else{
                     //retorne mensagem de erro sem registrar o e-mail
                     $sConfiguracao = new sConfiguracao();
-                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=email&codigo=E5");
+                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=email&codigo=E5");
                     exit(); 
                 }   
             }
@@ -260,23 +260,23 @@ if (isset($_POST['pagina'])) {
         if($telefone != $telefoneAnterior){
             //trata o numero antes de alterar no bd            
             $sTratamentoTelefone = new sTratamentoDados($telefone);
-            $telefoneSecretariaTratado = $sTratamentoTelefone->tratarTelefone();
+            $telefoneCoordenacaoTratado = $sTratamentoTelefone->tratarTelefone();
             
             $sTelefone = new sTelefone(0, 0, '');
-            $sTelefone->verificarTelefone($telefoneSecretariaTratado);
+            $sTelefone->verificarTelefone($telefoneCoordenacaoTratado);
             
-            if($sTelefone->getValidador() || strlen($telefoneSecretariaTratado) == 0){
+            if($sTelefone->getValidador() || strlen($telefoneCoordenacaoTratado) == 0){
                 $alteracao = true;
                 //altera os dados do telefone no bd
                 $sTelefone = new sTelefone(0, 0, '');
                 $sTelefone->setIdTelefone($idTelefone);
                 $sTelefone->setNomeCampo('numero');
-                $sTelefone->setValorCampo($telefoneSecretariaTratado);
-                $sTelefone->alterar('tMenu4_2_1_1.php');
+                $sTelefone->setValorCampo($telefoneCoordenacaoTratado);
+                $sTelefone->alterar('tMenu4_2_3_1.php');
             }else{
                 //retorne com mensagem de alerta por não atender aos requisitos
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=telefone&codigo=A11");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=telefone&codigo=A11");
                 exit();
             }
         }
@@ -296,29 +296,29 @@ if (isset($_POST['pagina'])) {
                     'whatsApp' => 0,
                     'numero' => $telefoneTratado
                 ];                
-                $sTelefone->inserir('tMenu4_2_1_1.php', $tratarDados);
+                $sTelefone->inserir('tMenu4_2_3_1.php', $tratarDados);
                 
                 //se o registro foi realizado com sucesso
                 if($sTelefone->mConexao->getRegistro()){
                     $idTelefone = $sTelefone->mConexao->getRegistro();                    
-                    //registre também na tabela email_has_secretaria  
+                    //registre também na tabela email_has_coordenacao  
                     $alteracao = true;
-                    $sTelefone->setNomeCampo('secretaria');
+                    $sTelefone->setNomeCampo('coordenacao');
                     $tratarDados = [
                         'idtelefone' => $sTelefone->mConexao->getRegistro(),
-                        'idsecretaria' => $idSecretaria
+                        'idcoordenacao' => $idCoordenacao
                     ];
-                    $sTelefone->inserir('tMenu4_2_1_1-telefone_has_secretaria.php', $tratarDados);                    
+                    $sTelefone->inserir('tMenu4_2_3_1-telefone_has_coordenacao.php', $tratarDados);                    
                 }else{
                     //não registrou o telefone
                     $sConfiguracao = new sConfiguracao();
-                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=telefone&codigo=E6");
+                    header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=telefone&codigo=E6");
                     exit();
                 }   
             }else{
                 //retorne com mensagem de alerta por não atender aos requisitos
                 $sConfiguracao = new sConfiguracao();
-                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=telefone&codigo=A11");
+                header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=telefone&codigo=A11");
                 exit();
             }
         }
@@ -329,22 +329,22 @@ if (isset($_POST['pagina'])) {
         $sTelefone->setIdTelefone($idTelefone);
         $sTelefone->setNomeCampo('whatsApp');
         $sTelefone->setValorCampo($whatsApp);
-        $sTelefone->alterar('tMenu4_2_1_1.php');
+        $sTelefone->alterar('tMenu4_2_3_1.php');
 
         //retorne com as alterações realizadas
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=telefone&codigo=S1");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=telefone&codigo=S1");
     }
     
     if($alteracao){
         //retorne com as alterações realizadas
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1&campo=todos&codigo=S1");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1&campo=todos&codigo=S1");
         exit();
     }else{
         //retorne com as alterações realizadas
         $sConfiguracao = new sConfiguracao();
-        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_1_1&pagina=tMenu4_2_1.php&seguranca={$idSecretariaCriptografada}&formulario=f1");
+        header("Location: {$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=4_2_3_1&pagina=tMenu4_2_3.php&seguranca={$idCoordenacaoCriptografada}&formulario=f1");
         exit();
     }    
 }else{

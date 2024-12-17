@@ -144,6 +144,7 @@ if(isset($_GET['campo'])){
                             </div>
                         </div>
                     </div>
+                    
                     <?php
                     if(isset($tipo) && isset($titulo) && isset($mensagem)){
                     echo <<<HTML

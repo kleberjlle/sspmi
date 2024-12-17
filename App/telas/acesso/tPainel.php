@@ -12,7 +12,8 @@ require_once '../../../vendor/autoload.php';
 use App\sistema\acesso\{
     sConfiguracao,
     sUsuario,
-    sSair    
+    sSair,
+    sNotificacao
 };
 
 //verifica se tem credencial para acessar o sistema
@@ -213,6 +214,7 @@ HTML;
                             
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=1_1" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Meus Dados</p>
                                         </a>
                                     </li>
@@ -232,6 +234,7 @@ HTML;
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="tPainel.php?menu=1_2" class="nav-link $atributo"> 
+                                                <i class="nav-icon fas fa-circle"></i>
                                                 <p>Outros Usuários</p>
                                             </a>
                                         </li>
@@ -252,6 +255,7 @@ HTML;
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="tPainel.php?menu=1_3" class="nav-link $atributo"> 
+                                                <i class="nav-icon fas fa-circle"></i>
                                                 <p>Solicitações de Acesso</p>
                                             </a>
                                         </li>
@@ -301,6 +305,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=2_1" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Solicitar</p>
                                         </a>
                                     </li>
@@ -324,6 +329,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=2_2" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Acompanhar</p>
                                         </a>
                                     </li>
@@ -368,6 +374,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=3_1" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Registrar</p>
                                         </a>
                                     </li>
@@ -386,6 +393,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=3_2" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Alterar</p>
                                         </a>
                                     </li>
@@ -433,6 +441,7 @@ HTML;
 
                                     echo <<<HTML
                                             <a href="tPainel.php?menu=4_1" class="nav-link $atributo">
+                                                <i class="nav-icon fas fa-circle"></i>
                                                 <p>Registrar</p>
                                             </a>
                                         </li>
@@ -476,6 +485,7 @@ HTML;
 
                                         echo <<<HTML
                                                 <a href="tPainel.php?menu=4_2_1" class="nav-link $atributo">
+                                                    <i class="nav-icon fas fa-circle"></i>
                                                     <p>Secretaria</p>
                                                 </a>
                                             </li>
@@ -494,6 +504,7 @@ HTML;
 
                                         echo <<<HTML
                                                 <a href="tPainel.php?menu=4_2_2" class="nav-link $atributo">
+                                                    <i class="nav-icon fas fa-circle"></i>
                                                     <p>Departamento</p>
                                                 </a>
                                             </li>
@@ -512,6 +523,7 @@ HTML;
 
                                         echo <<<HTML
                                                 <a href="tPainel.php?menu=4_2_3" class="nav-link $atributo">
+                                                    <i class="nav-icon fas fa-circle"></i>
                                                     <p>Coordenação</p>
                                                 </a>
                                             </li>
@@ -530,6 +542,7 @@ HTML;
 
                                         echo <<<HTML
                                                 <a href="tPainel.php?menu=4_2_4" class="nav-link $atributo">
+                                                    <i class="nav-icon fas fa-circle"></i>
                                                     <p>Setor</p>
                                                 </a>
                                             </li>
@@ -575,6 +588,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=5_1" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Registrar</p>
                                         </a>
                                     </li>
@@ -592,6 +606,7 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=5_2" class="nav-link $atributo">
+                                            <i class="nav-icon fas fa-circle"></i>
                                             <p>Alterar</p>
                                         </a>
                                     </li>
@@ -604,8 +619,9 @@ HTML;
 HTML;
                                 }
                                 //abre os menus da condição
-                                if($_SESSION['credencial']['nivelPermissao'] > 4){
+                                
                                 $menu == '6_1' ||
+                                $menu == '6_1_2' ||
                                 $menu == '6_2' ||
                                 $menu == '6_3' ?
                                 $atributo = ' menu-is-opening menu-open' :
@@ -614,9 +630,9 @@ HTML;
                                 echo <<<HTML
                                 <li class="nav-item $atributo">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-cogs"></i>
+                                    <i class="nav-icon fas fa-file-archive"></i>
                                     <p>
-                                        Configuração
+                                        Relatórios
                                         <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
@@ -627,13 +643,15 @@ HTML;
                                     <li class="nav-item">
 HTML;
                                 //abre os menus da condição
-                                $menu == '6_1' ?
+                                $menu == '6_1' ||
+                                $menu == '6_1_2' ?
                                 $atributo = ' active' :
                                 $atributo = '';
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=6_1" class="nav-link $atributo">
-                                            <p>Menu</p>
+                                            <i class="nav-icon fas fa-circle"></i>
+                                            <p>Ticktes Encerrados</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -642,6 +660,7 @@ HTML;
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
 HTML;
+                                if($_SESSION['credencial']['nivelPermissao'] > 1){
                                 //abre os menus da condição
                                 $menu == '6_2' ?
                                 $atributo = ' active' :
@@ -649,7 +668,8 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=6_2" class="nav-link $atributo">
-                                            <p>Histórico</p>
+                                            <i class="nav-icon fas fa-circle"></i>
+                                            <p>Recorrências</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -666,11 +686,11 @@ HTML;
                                 
                                 echo <<<HTML
                                         <a href="tPainel.php?menu=6_3" class="nav-link $atributo">
-                                            <p>Gerador de Senhas</p>
+                                            <i class="nav-icon fas fa-circle"></i>
+                                            <p>Gráficos</p>
                                         </a>
                                     </li>
                                 </ul>
-
                                 <!--FINAL SUBMENU 6_3-->
                                 <!--FINAL MENU-->
 HTML;
@@ -806,7 +826,10 @@ HTML;
                             break;
                         //menu 6
                         case "6_1":
-                            require_once './tMenu6_1.php';
+                            require_once '../suporte/tMenu6_1.php';
+                            break;
+                        case "6_1_2":
+                            require_once '../suporte/tMenu6_1_2.php';
                             break;
                         case "6_2":
                             require_once '../suporte/tMenu6_2.php';
@@ -816,8 +839,26 @@ HTML;
                             break;
                         //padrão
                         default:
-                            require_once '../acesso/tInicio.php?notificacao=E2';
-                            break;
+                            $sNotificacao = new sNotificacao('E2');
+                            //cria as variáveis da notificação
+                            $tipo = $sNotificacao->getTipo();
+                            $titulo = $sNotificacao->getTitulo();
+                            $mensagem = $sNotificacao->getMensagem();
+                            $menu = $_GET['menu'];
+                                                        
+                            echo <<<HTML
+                                <div class="col-mb-3">
+                                    <div class="card card-outline card-{$tipo}">
+                                        <div class="card-header">
+                                            <h3 class="card-title">{$titulo}</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            {$mensagem} Menu: {$menu}
+                                        </div>
+                                    </div>
+                                </div>
+HTML;
+                        break;
                     }
                     ?>
                 </section>

@@ -40,7 +40,8 @@ class sSecretaria {
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu2_1.php' ||
-            $pagina == 'tMenu4_2_1_1.php'){
+            $pagina == 'tMenu4_2_1_1.php' ||
+            $pagina == 'tMenu2_2_1.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',

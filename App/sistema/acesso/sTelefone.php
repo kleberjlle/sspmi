@@ -10,7 +10,6 @@ use App\sistema\acesso\{
 };
 
 class sTelefone {
-
     private string $nomeCampo;
     private string $valorCampo;
     private bool $validador;
@@ -83,6 +82,7 @@ class sTelefone {
             $pagina == 'tAcessar.php-departamento2' ||   
             $pagina == 'tAcessar.php-coordenacao2' ||   
             $pagina == 'tAcessar.php-setor2' ||  
+            $pagina == 'tMenu1_1_1.php' ||     
             $pagina == 'tMenu1_2.php' || 
             $pagina == 'tMenu1_2.php-secretaria2' ||
             $pagina == 'tMenu1_2.php-departamento2' ||
@@ -94,7 +94,7 @@ class sTelefone {
             $pagina == 'tMenu1_3.php-departamento2' ||
             $pagina == 'tMenu1_3.php-coordenacao2' ||
             $pagina == 'tMenu1_3.php-setor2' ||        
-            $pagina == 'tMenu1_1_1.php' ||            
+            $pagina == 'tMenu2_2_1.php-2' ||
             $pagina == 'tMenu4_2_1.php-2' ||
             $pagina == 'tMenu4_2_1_1.php-2' ||
             $pagina == 'tMenu4_2_2_1.php-2' ||
@@ -136,6 +136,7 @@ class sTelefone {
         if ($pagina == 'tAcessar.php-departamento' ||
             $pagina == 'tMenu1_2.php-departamento' ||
             $pagina == 'tMenu1_3.php-departamento' ||
+            $pagina == 'tMenu2_2_1.php-departamento' ||
             $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
@@ -208,7 +209,7 @@ class sTelefone {
 
     public function verificarTelefone($telefone) {
         if (strlen($telefone) < 10 ||
-                strlen($telefone) > 11) {
+            strlen($telefone) > 11) {
             $this->setSNotificacao(new sNotificacao('A11'));
             $this->setValidador(false);
         } else {
@@ -221,7 +222,11 @@ class sTelefone {
         $this->setMConexao(new mConexao());
 
         if ($pagina == 'tMenu1_1_1.php' ||
-                $pagina == 'tMenu1_2_1.php') {
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu4_2_1_1.php' ||
+            $pagina == 'tMenu4_2_2_1.php' ||
+            $pagina == 'tMenu4_2_3_1.php' ||
+            $pagina == 'tMenu4_2_4_1.php') {
             $dados = [
                 'comando' => 'UPDATE',
                 'tabela' => 'telefone',
@@ -232,9 +237,9 @@ class sTelefone {
             ];
 
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
             //UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value 
             if ($this->mConexao->getValidador()) {
-                $this->setValidador(true);
                 $this->setSNotificacao(new sNotificacao('S1'));
             }
         }
@@ -244,8 +249,12 @@ class sTelefone {
         //cria conexão para inserir os dados na tabela
         $this->setMConexao(new mConexao());
         if ($pagina == 'tMenu4_1.php' ||
-                $pagina == 'tMenu1_1_1.php' ||
-                $pagina == 'tMenu1_3_1.php') {
+            $pagina == 'tMenu1_1_1.php' ||
+            $pagina == 'tMenu1_3_1.php' ||
+            $pagina == 'tMenu4_2_1_1.php' ||
+            $pagina == 'tMenu4_2_2_1.php' ||
+            $pagina == 'tMenu4_2_3_1.php' ||
+            $pagina == 'tMenu4_2_4_1.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',
@@ -262,9 +271,13 @@ class sTelefone {
         }
 
         if ($pagina == 'tMenu4_1-telefone_has_secretaria.php' ||
-                $pagina == 'tMenu4_1-telefone_has_departamento.php' ||
-                $pagina == 'tMenu4_1-telefone_has_coordenacao.php' ||
-                $pagina == 'tMenu4_1-telefone_has_setor.php') {
+            $pagina == 'tMenu4_1-telefone_has_departamento.php' ||
+            $pagina == 'tMenu4_2_1_1-telefone_has_secretaria.php' ||
+            $pagina == 'tMenu4_2_2_1-telefone_has_departamento.php' ||
+            $pagina == 'tMenu4_2_3_1-telefone_has_coordenacao.php' ||
+            $pagina == 'tMenu4_2_4_1-telefone_has_setor.php' ||
+            $pagina == 'tMenu4_1-telefone_has_coordenacao.php' ||
+            $pagina == 'tMenu4_1-telefone_has_setor.php') {
             //insere os dados do histórico no BD            
             $dados = [
                 'comando' => 'INSERT INTO',

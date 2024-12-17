@@ -21,32 +21,14 @@ class sSetor {
     
     public function consultar($pagina) {
         $this->setMConexao(new mConexao());  
-        if( $pagina == 'tMenu4_2_4_1.php'){
-                           
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'setor',
-                'camposCondicionados' => 'idsetor',
-                'valoresCondicionados' => $this->getIdSetor(),
-                'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => null
-            ];            
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-                        
-            foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setIdSecretaria($linha['secretaria_idsecretaria']);
-                $this->setEndereco($linha['endereco']);
-                $this->setNomenclatura($linha['nomenclatura']);
-            }
-        }    
-        
+                
         if( $pagina == 'tAcessar.php' ||
             $pagina == 'tMenu1_2.php' ||
             $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu2_1.php'){
+            $pagina == 'tMenu2_1.php' ||
+            $pagina == 'tMenu2_2_1.php' ||
+            $pagina == 'tMenu4_2_4_1.php'){
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
@@ -118,6 +100,25 @@ class sSetor {
         }
         $this->mConexao->CRUD($dados);
     }
+    
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu4_2_4_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'setor',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'idsetor',
+                'valoresCondicionados' => $this->getIdSetor()
+            ];            
+        }
+        
+        $this->mConexao->CRUD($dados);
+    }
+    
     public function getIdSetor(): int {
         return $this->idSetor;
     }

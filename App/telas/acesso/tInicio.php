@@ -6,6 +6,46 @@
         </h3>
     </div>
     <div class="card-body">
+        <div class="callout callout-info">
+            <h5>Implementado menu Relatórios->Tickets Encerrados</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Locais: telas 6_1 e 6_1_2;<br />
+                Campos: tabela;<br />
+                Data: 17/12/2024;<br />                
+                Descrição: Implementado menu Relatórios->Tickets Encerrados para privilégios de nível de permissão < 2 e > 2<br />                
+            </p>
+        </div>
+        <div class="callout callout-info">
+            <h5>Alterado algoritmo para imprimir dados dos locais</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Locais: tela 2_2_1;<br />
+                Campos: telefone, e-mail;<br />
+                Data: 11/12/2024;<br />                
+                Descrição: Implementado lógica para buscar e imprimir os dados de telefone e e-mail da Secretaria, Departamento, Coordenação e Setor.<br />                
+            </p>
+        </div>
+        <div class="callout callout-info">
+            <h5>Implementado algoritmo para alterar dados dos locais</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Locais: telas 4_2_1, 4_2_1_1, 4_2_2, 4_2_2_1, 4_2_3, 4_2_3_1, 4_2_4, 4_2_4_1;<br />
+                Campo: --;<br />
+                Data: 11/12/2024;<br />                
+                Descrição: Implementado lógica de alteração dos dados da Secretaria, Departamento, Coordenação e Setor.<br />                
+            </p>
+        </div>
+        <div class="callout callout-warning">
+            <h5>Implementado Declarações Preparadas para exclusão do BD</h5>
+            <p>
+                Versão: 2.8.2-beta (teste);<br />
+                Locais: modelo mConexao;<br />
+                Campo: --;<br />
+                Data: 11/12/2024;<br />                
+                Descrição: Alterado lógica do modelo, atendendo a versão 8.2 da linguagem PHP.<br />                
+            </p>
+        </div>
         <div class="callout callout-warning">
             <h5>Implementado Declarações Preparadas para alterações do BD</h5>
             <p>

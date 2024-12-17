@@ -68,7 +68,7 @@ $sUsuario->consultar('tMenu1_2.php');
                             }
 
                             //se tiver um departamento vinculado, retorna os dados
-                            if($value['departamento_iddepartamento']){
+                            if( $value['departamento_iddepartamento']){
                                 $sDepartamento = new sDepartamento(0);
                                 $sDepartamento->setNomeCampo('iddepartamento');
                                 $sDepartamento->setValorCampo($value['departamento_iddepartamento']);

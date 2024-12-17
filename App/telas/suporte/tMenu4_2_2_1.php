@@ -1,75 +1,94 @@
 <?php
+
 use App\sistema\acesso\{
     sConfiguracao,
     sDepartamento,
     sTelefone,
     sTratamentoDados,
     sEmail,
-    sSair
+    sSair,
+    sNotificacao
 };
 
-if(!isset($_POST['pagina']) || !isset($_POST['formulario'])){
+if(isset($_GET['pagina'])){
+    $pagina = $_GET['pagina'];
+    $idDepartamento = base64_decode($_GET['seguranca']);
+    if(isset($_GET['formulario'])){
+        $formulario = $_GET['formulario'];
+    }
+}else if(isset($_POST['pagina'])){
+    $pagina = $_POST['pagina'];
+    $idDepartamento = $_POST['departamento'];
+    if(isset($_POST['formulario'])){
+        $formulario = $_POST['formulario'];
+    }
+}else{
+    $pagina = 0;
+    $formulario = 0;
+}
+
+if (!$pagina || !$formulario) {
     //solicitar saída com tentativa de violação
     $sSair = new sSair();
     $sSair->verificar('0');
-}else{
-    if($_POST['formulario'] == 'f1'){
-        $pagina = $_POST['pagina'];
-        $idDepartamento = $_POST['departamento'];
-        $opcao = 'Departamento/ Gerência/ Assessoria';
+} else {
+    if ($formulario == 'f1') {
+        $opcao = 'Departamento';
 
         //busca dados da departamento no bd
-        $sDepartamento = new sDepartamento($idDepartamento);
+        $sDepartamento = new sDepartamento(0);
+        $sDepartamento->setNomeCampo('iddepartamento');
+        $sDepartamento->setValorCampo($idDepartamento);
         $sDepartamento->consultar('tMenu4_2_2_1.php');
 
         foreach ($sDepartamento->mConexao->getRetorno() as $value) {
             $departamento = $value['nomenclatura'];
             $endereco = $value['endereco'];
         }
-        
+
         //busca dados do telefone
         $sTelefone = new sTelefone(0, $idDepartamento, '');
         $sTelefone->setNomeCampo('departamento_iddepartamento');
         $sTelefone->setValorCampo($idDepartamento);
         $sTelefone->consultar('tMenu4_2_2_1.php');
-        
+
         //se tiver alguma Departamento registrada na tabela telefone_has_departamento
-        if($sTelefone->getValidador()){
+        if ($sTelefone->getValidador()) {
             foreach ($sTelefone->mConexao->getRetorno() as $value) {
                 $idTelefone = $value['telefone_idtelefone'];
             }
-            
+
             //consulta o idTelefone na tabela telefone
             $sTelefone = new sTelefone($idTelefone, 0, 0);
             $sTelefone->setNomeCampo('idtelefone');
             $sTelefone->setValorCampo($idTelefone);
             $sTelefone->consultar('tMenu4_2_2_1.php-2');
-            
+
             //se localizou um telefone registrado colete as informações
-            if($sTelefone->getValidador()){            
+            if ($sTelefone->getValidador()) {
                 foreach ($sTelefone->mConexao->getRetorno() as $value) {
                     $numero = $value['numero'];
                     $whatsApp = $value['whatsApp'];
                 }
-                
+
                 //trata o numero de telefone para inserção dos caracteres especiais
                 $sTratamentoTelefone = new sTratamentoDados($numero);
                 $telefoneTratado = $sTratamentoTelefone->tratarTelefone();
-            }            
+            }
         }
-                
+
         //busca dados do e-mail no bd
         $sEmail = new sEmail('', '');
         $sEmail->setNomeCampo('departamento_iddepartamento');
         $sEmail->setValorCampo($idDepartamento);
         $sEmail->consultar('tMenu4_2_2_1.php');
-        
+
         //se tiver algum e-mail registrado na tabela email_has_departamento
-        if($sEmail->getValidador()){
+        if ($sEmail->getValidador()) {
             foreach ($sEmail->mConexao->getRetorno() as $value) {
                 $idEmail = $value['email_idemail'];
             }
-            
+
             //consulta se possui e-mail registrado na tabela email
             $sEmail->setNomeCampo('idemail');
             $sEmail->setValorCampo($idEmail);
@@ -78,9 +97,50 @@ if(!isset($_POST['pagina']) || !isset($_POST['formulario'])){
             //armazena os dados da consulta
             foreach ($sEmail->mConexao->getRetorno() as $value) {
                 $email = $value['nomenclatura'];
-            }            
+            }
         }
+
+        $sConfiguracao = new sConfiguracao();
     }
+    
+    if (isset($_GET['campo'])) {
+    $sNotificacao = new sNotificacao($_GET['codigo']);
+    switch ($_GET['campo']) {
+        case 'departamento':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaDepartamento = ' is-valid';
+            } else {
+                $alertaDepartamento = ' is-warning';
+            }
+            break;
+        case 'endereco':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaEndereco = ' is-valid';
+            } else {
+                $alertaEndereco = ' is-warning';
+            }
+            break;
+        case 'email':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaEmail = ' is-valid';
+            } else {
+                $alertaEmail = ' is-warning';
+            }
+            break;
+        case 'telefone':
+            if ($_GET['codigo'] == 'S1') {
+                $alertaTelefone = ' is-valid';
+            } else {
+                $alertaTelefone = ' is-warning';
+            }
+            break;
+    }
+
+    //cria as variáveis da notificação
+    $tipo = $sNotificacao->getTipo();
+    $titulo = $sNotificacao->getTitulo();
+    $mensagem = $sNotificacao->getMensagem();
+}
 }
 ?>        
 <div class="container-fluid">
@@ -102,38 +162,69 @@ if(!isset($_POST['pagina']) || !isset($_POST['formulario'])){
                 <!-- form start -->                
                 <div class="card-body">
                     <div class="row">                      
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label for="departamento">Departamento</label>
-                            <input type="text" class="form-control" name="departamento" value="<?php echo $departamento; ?>" form="f1" required="">
+                            <input type="text" class="form-control<?php echo isset($alertaDepartamento) ? $alertaDepartamento : ''; ?>" name="departamento" value="<?php echo $departamento; ?>" form="f1" required="">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="endereco">Endereço</label>
-                            <input type="text" class="form-control" name="endereco" value="<?php echo $endereco; ?>" form="f1" required="">
+                            <input type="text" class="form-control<?php echo isset($alertaEndereco) ? $alertaEndereco : ''; ?>" name="endereco" value="<?php echo $endereco; ?>" form="f1" required="">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="endereco">E-mail</label>
-                            <input type="email" class="form-control" name="email" value="<?php echo isset($email) ? $email : ''; ?>" form="f1" required="">
+                            <input type="email" class="form-control<?php echo isset($alertaEmail) ? $alertaEmail : ''; ?>" name="email" value="<?php echo isset($email) ? $email : ''; ?>" form="f1">
                         </div>
                         <div class="form-group col-md-2">
                             <label for="telefone">Telefone</label>
-                            <input type="text" class="form-control" name="telefone" value="<?php echo isset($telefoneTratado) ? $telefoneTratado : ''; ?>" form="f1" required="">
+                            <input type="text" class="form-control<?php echo isset($alertaTelefone) ? $alertaTelefone : ''; ?>" name="telefone" value="<?php echo isset($telefoneTratado) ? $telefoneTratado : ''; ?>" form="f1" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask inputmode="text">
                         </div>
                         <div class="form-group">
                             <label>WhatsApp?</label>
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" <?php echo isset($whatsApp) ? 'checked=""' : ''; ?> onclick="decisao();" form="f1">
+                                <input class="custom-control-input" type="checkbox" name="whatsApp" id="whatsApp" 
+                                    <?php
+                                    if(isset($whatsApp)){
+                                        echo $whatsApp == 1 ? 'checked=""' : ''; 
+                                    }
+                                    ?>                                       
+                                onclick="decisao();" form="f1">
                                 <label class="custom-control-label" for="whatsApp">
-                                    <div class="conteudo" name="conteudo" id="conteudo"><?php echo isset($whatsApp) ? 'sim' : 'Não'; ?></div>
+                                    <div class="conteudo" name="conteudo" id="conteudo">
+                                    <?php 
+                                    if(isset($whatsApp)){
+                                        echo $whatsApp == 1 ? 'Sim' : 'Não';
+                                    }    
+                                    ?>
+                                    </div>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <form action="<?php echo $sConfiguracao->getDiretorioVisualizacaoAcesso() ?>sAlterarLocal.php" method="post" id="alterarLocal" enctype="multipart/form-data">
+                <?php
+                if (isset($tipo) &&
+                    isset($titulo) &&
+                    isset($mensagem)) {
+                        echo <<<HTML
+                            <div class="col-mb-3">
+                                <div class="card card-outline card-{$tipo}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">{$titulo}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        {$mensagem}
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                    }
+                ?>
+                <form action="<?php echo $sConfiguracao->getDiretorioControleSuporte(); ?>sAlterarDepartamento.php" method="post" id="f1" name="f1" enctype="multipart/form-data">
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <input type="hidden" name="acao" value="alterar">
+                        <input type="hidden" name="idDepartamento" id="idDepartamento" value="<?php echo $idDepartamento; ?>">
+                        <input type="hidden" name="idTelefone" id="idTelefone" value="<?php echo $idTelefone ? $idTelefone : ''; ?>">
+                        <input type="hidden" name="acao" id="acao" value="alterar">
                         <input type="hidden" name="pagina" value="tMenu4_2_2_1.php">
                         <button type="submit" class="btn btn-primary">Alterar</button>
                     </div>
@@ -143,3 +234,12 @@ if(!isset($_POST['pagina']) || !isset($_POST['formulario'])){
         <!-- /.card -->
     </div>
 </div>
+<script>
+    function decisao() {
+        if (document.getElementById('whatsApp').checked) {
+            document.getElementById('conteudo').innerHTML = 'Sim';
+        } else {
+            document.getElementById('conteudo').innerHTML = 'Não';
+        }
+    }
+</script>

@@ -27,6 +27,7 @@ $sEquipamento->consultar('tMenu3_2.php');
         <table id="tabelaMenu3_2" class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Patrimônio</th>
                     <th>Categoria</th>
                     <th>Marca</th>
@@ -126,8 +127,11 @@ $sEquipamento->consultar('tMenu3_2.php');
                         $ambiente = $value['nomenclatura'];
                     }
                     
+                    $idEquipamentoCriptografada = base64_encode($idEquipamento);
+                    
                     echo <<<HTML
                     <tr>
+                        <td>{$idEquipamento}</td>
                         <td>{$patrimonio}</td>
                         <td>{$categoria}</td>
                         <td>{$marca}</td>
@@ -140,7 +144,7 @@ $sEquipamento->consultar('tMenu3_2.php');
                         <td>{$ambiente}</td>
                         <td>
                             <i class="fas fa-edit mr-1"></i>
-                            <a href="#">
+                            <a href="{$sConfiguracao->getDiretorioVisualizacaoAcesso()}tPainel.php?menu=3_2_1&seguranca={$idEquipamentoCriptografada}">
                                  Alterar
                             </a>
                         </td>
@@ -152,6 +156,7 @@ HTML;
             </tbody>
             <tfoot>
                 <tr>
+                    <th>ID</th>
                     <th>Patrimônio</th>
                     <th>Categoria</th>
                     <th>Marca</th>

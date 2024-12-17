@@ -8,10 +8,6 @@ use App\sistema\acesso\{
     sCoordenacao
 };
 
-use App\sistema\suporte\{
-    sAmbiente
-};
-
 //instancia classes para manipulação dos dados
 $sConfiguracao = new sConfiguracao();
 
@@ -23,9 +19,6 @@ $sDepartamento->consultar('tMenu4_1.php');
 
 $sCoordenacao = new sCoordenacao(0);
 $sCoordenacao->consultar('tMenu4_1.php');
-
-$sAmbiente = new sAmbiente(0);
-$sAmbiente->consultar('tMenu4_1.php');
 //retorno de campo inválidos para notificação
 if (isset($_GET['campo'])) {
     $sNotificacao = new sNotificacao($_GET['codigo']);
@@ -209,20 +202,6 @@ if (isset($_GET['campo'])) {
                                     <input class="custom-control-input" type="checkbox" name="whatsAppF1" id="whatsAppF1" form="f1">
                                     <label class="custom-control-label" for="whatsAppF1">Não</label>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Ambiente</label>
-                                <select class="form-control<?php echo isset($alertaAmbienteF1) ? $alertaAmbienteF1 : ''; ?>" name="ambienteF1" id="ambienteF1" form="f1">
-                                    <?php
-                                    foreach ($sAmbiente->mConexao->getRetorno() as $value) {
-                                        echo '<option value="' . $value['idambiente'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                    }
-                                    ?>
-                                </select>
                             </div>
                         </div>
                     </div>

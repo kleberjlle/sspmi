@@ -28,56 +28,40 @@ class sDepartamento {
     public function consultar($pagina) {
         //cria conexão para as opções das páginas abaixo
         $this->setMConexao(new mConexao());
-        if ($pagina == 'tMenu4_2_2_1.php') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'departamento',
-                'camposCondicionados' => 'iddepartamento',
-                'valoresCondicionados' => $this->getIdDepartamento(),
-                'camposOrdenados' => null, //caso não tenha, colocar como null
-                'ordem' => null
-            ];
-            
-            $this->mConexao->CRUD($dados);
-            
-            foreach ($this->mConexao->getRetorno() as $linha) {
-                $this->setIdSecretaria($linha['secretaria_idsecretaria']);
-                $this->setEndereco($linha['endereco']);
-                $this->setNomenclatura($linha['nomenclatura']);
-            }
-        }
-        
-        if( $pagina == 'tAcessar.php' ||
-            $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
-            $pagina == 'tMenu1_3.php' ||
-            $pagina == 'tMenu2_1.php'){
+        if ($pagina == 'tAcessar.php' ||
+            $pagina == 'tMenu4_2_2_1.php') {
             $dados = [
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'departamento',
                 'camposCondicionados' => $this->getNomeCampo(),
                 'valoresCondicionados' => $this->getValorCampo(),
-                'camposOrdenados' => null,//caso não tenha, colocar como null
-                'ordem' => null
-            ];            
-            $this->mConexao->CRUD($dados);
-            $this->setValidador($this->mConexao->getValidador());
-        }
-
-        if ($pagina == 'tMenu1_1_1.php') {
-            $dados = [
-                'comando' => 'SELECT',
-                'busca' => '*',
-                'tabelas' => 'departamento',
-                'camposCondicionados' => 'secretaria_idsecretaria',
-                'valoresCondicionados' => $this->getIdSecretaria(),
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null
             ];
             
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
+        }
+        
+        if( 
+            $pagina == 'tMenu1_2.php' ||
+            $pagina == 'tMenu1_2_1.php' ||
+            $pagina == 'tMenu1_3.php' ||
+            $pagina == 'tMenu2_1.php' ||
+            $pagina == 'tMenu2_2_1.php'){
+            $dados = [
+                'comando' => 'SELECT',
+                'busca' => '*',
+                'tabelas' => 'departamento',
+                'camposCondicionados' => $this->getNomeCampo(),
+                'valoresCondicionados' => $this->getValorCampo(),
+                'camposOrdenados' => null, //caso não tenha, colocar como null
+                'ordem' => null
+            ];
+            
+            $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }
 
         if ($pagina == 'ajaxDepartamento.php') {
@@ -96,6 +80,7 @@ class sDepartamento {
             ];
             
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }
         
         if ($pagina == 'tMenu1_2_1.php' ||
@@ -112,6 +97,7 @@ class sDepartamento {
             ];
             
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }
         
         if ($pagina == 'tMenu4_1.php' ||
@@ -128,6 +114,7 @@ class sDepartamento {
             ];
             
             $this->mConexao->CRUD($dados);
+            $this->setValidador($this->mConexao->getValidador());
         }
     }
     
@@ -154,6 +141,24 @@ class sDepartamento {
         }
         $this->mConexao->CRUD($dados);
     }
+    
+    public function alterar($pagina) {
+        //cria conexão para inserir os dados no BD
+        $this->setMConexao(new mConexao());
+
+        if ($pagina == 'tMenu4_2_2_1.php') {
+            $dados = [
+                'comando' => 'UPDATE',
+                'tabela' => 'departamento',
+                'camposAtualizar' => $this->getNomeCampo(),
+                'valoresAtualizar' => $this->getValorCampo(),
+                'camposCondicionados' => 'iddepartamento',
+                'valoresCondicionados' => $this->getIdDepartamento()
+            ];
+            $this->mConexao->CRUD($dados);
+        }
+    }
+    
     public function getIdDepartamento(): int {
         return $this->idDepartamento;
     }
