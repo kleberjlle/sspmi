@@ -46,7 +46,6 @@ class sDepartamento {
         
         if( 
             $pagina == 'tMenu1_2.php' ||
-            $pagina == 'tMenu1_2_1.php' ||
             $pagina == 'tMenu1_3.php' ||
             $pagina == 'tMenu2_1.php' ||
             $pagina == 'tMenu2_2_1.php'){

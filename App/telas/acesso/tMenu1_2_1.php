@@ -182,20 +182,16 @@ $sSecretaria->consultar('tMenu1_2_1.php');
 
 //busca os dados do departamento
 $sDepartamento = new sDepartamento($idDepartamento);
-$sDepartamento->setNomeCampo('iddepartamento');
-$sDepartamento->setValorCampo($idDepartamento);
 $sDepartamento->consultar('tMenu1_2_1.php');
+
 
 //busca os dados do departamento
 $sCoordenacao = new sCoordenacao($idCoordenacao);
-$sCoordenacao->setNomeCampo('idcoordenacao');
-$sCoordenacao->setValorCampo($idCoordenacao);
 $sCoordenacao->consultar('tMenu1_2_1.php');
+
 
 //busca os dados do departamento
 $sSetor = new sSetor($idSetor);
-$sSetor->setNomeCampo('idsetor');
-$sSetor->setValorCampo($idSetor);
 $sSetor->consultar('tMenu1_2_1.php');
 ?>
 <div class="container-fluid">
@@ -317,12 +313,12 @@ $sSetor->consultar('tMenu1_2_1.php');
                                         <?php
                                         if($idDepartamento == 0){
                                             echo '<option value="0" selected="">--</option>';
-                                        }
-                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {                                            
+                                        }                                        
+                                        foreach ($sDepartamento->mConexao->getRetorno() as $value) {    
                                             if($idDepartamento != 0){
                                                 $idDepartamento == $value['iddepartamento'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
+                                            }                                            
+                                            echo '<option value="' . $value['iddepartamento'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -339,8 +335,8 @@ $sSetor->consultar('tMenu1_2_1.php');
                                         foreach ($sCoordenacao->mConexao->getRetorno() as $value) {                                            
                                             if($idCoordenacao != 0){
                                                 $idCoordenacao == $value['idcoordenacao'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
+                                            }    
+                                            echo '<option value="' . $value['idcoordenacao'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';                                            
                                         }
                                         ?>
                                     </select>
@@ -357,8 +353,8 @@ $sSetor->consultar('tMenu1_2_1.php');
                                         foreach ($sSetor->mConexao->getRetorno() as $value) {                                            
                                             if($idSetor != 0){
                                                 $idSetor == $value['idsetor'] ? $atributo = ' selected' : $atributo = '';
-                                                echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
-                                            }
+                                            } 
+                                            echo '<option value="' . $value['idsetor'] . '"' . $atributo . ' >' . $value['nomenclatura'] . '</option>';
                                         }
                                         ?>
                                     </select>

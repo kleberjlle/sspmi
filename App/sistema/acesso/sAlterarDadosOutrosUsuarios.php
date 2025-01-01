@@ -76,11 +76,23 @@ if (isset($_POST['pagina'])) {
             $atualizar = ['situacao' => $situacao];
         }
         $setorAnterior = $value['setor_idsetor'];
-        $idSetor == $value['setor_idsetor'] ? $idSetor = false : $atualizar = ['idSetor' => $idSetor];
+        if($idSetor != 0){
+            $idSetor == $value['setor_idsetor'] ? $idSetor = false : $atualizar = ['idSetor' => $idSetor];
+        }else{
+            $idSetor = false;
+        }        
         $coordenacaoAnterior = $value['coordenacao_idcoordenacao'];
-        $idCoordenacao == $value['coordenacao_idcoordenacao'] ? $idCoordenacao = false : $atualizar = ['idCoordenacao' => $idCoordenacao];
+        if($idCoordenacao != 0){
+            $idCoordenacao == $value['coordenacao_idcoordenacao'] ? $idCoordenacao = false : $atualizar = ['idCoordenacao' => $idCoordenacao];
+        }else{
+            $idCoordenacao = false;
+        }        
         $departamentoAnterior = $value['departamento_iddepartamento'];
-        $idDepartamento == $value['departamento_iddepartamento'] ? $idDepartamento = false : $atualizar = ['idDepartamento' => $idDepartamento];
+        if($idDepartamento != 0){
+            $idDepartamento == $value['departamento_iddepartamento'] ? $idDepartamento = false : $atualizar = ['idDepartamento' => $idDepartamento];
+        }else{
+            $idDepartamento = false;
+        }        
         $secretariaAnterior = $value['secretaria_idsecretaria'];
         $idSecretaria == $value['secretaria_idsecretaria'] ? $idSecretaria = false : $atualizar = ['idSecretaria' => $idSecretaria];
         $idTelefone = $value['telefone_idtelefone'];

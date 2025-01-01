@@ -366,8 +366,8 @@ if ($sProtocolo->getValidador()) {
         }
 
         $requerente ?
-                        $nome = '<h3 class="profile-username text-center">' . $nomeRequerente . '</h3><p class="text-muted text-center">por <i>' . $nomeSolicitante . '</i></p>' :
-                        $nome = '<h3 class="profile-username text-center">' . $nomeSolicitante . '</h3>';
+        $nome = '<h3 class="profile-username text-center">' . $nomeRequerente . '</h3><p class="text-muted text-center">por <i>' . $nomeSolicitante . '</i></p>' :
+        $nome = '<h3 class="profile-username text-center">' . $nomeSolicitante . '</h3>';
 
         //verifique se há algum protocolo sem etapa vinculada
         $idProtocolo = $value['idprotocolo'];

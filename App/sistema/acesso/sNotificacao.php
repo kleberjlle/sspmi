@@ -141,6 +141,10 @@ class sNotificacao{
                 //não localizou a chave no bd
                 $this->setMensagem('O prazo da chave de recuperação de senha expirou, solicite uma recuperação de senha novamente.');
                 break;
+            case '33':
+                //não localizou a chave no bd
+                $this->setMensagem('Esse equipamento não pode ter seus atributos alterados devido ao [RF014] O sistema deve conter um registro de equipamento indefinido e o mesmo não poderá ter seus atributos alterados.');
+                break;          
             default:
                 $this->setTipo('danger');
                 $this->setTitulo('Erro!');

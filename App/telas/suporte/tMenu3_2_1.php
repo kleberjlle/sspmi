@@ -1,6 +1,8 @@
 <?php
 use App\sistema\acesso\{
-    sConfiguracao
+    sConfiguracao,
+    sNotificacao,
+    sSair
 };
 use App\sistema\suporte\{
     sEquipamento,
@@ -204,7 +206,29 @@ if(isset($_GET['seguranca'])){
                 <!-- /.card-body -->
                 <form action="#" method="post" enctype="multipart/form-data" name="f1" id="f1">
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Alterar</button>
+                        <?php
+                        if($idEquipamento != 6){
+                            echo "<button type=\"submit\" class=\"btn btn-primary\">Alterar</button>";
+                        }else{
+                            $sNotificacao = new sNotificacao("A33");
+                            //cria as variáveis da notificação
+                            $tipo = $sNotificacao->getTipo();
+                            $titulo = $sNotificacao->getTitulo();
+                            $mensagem = $sNotificacao->getMensagem();
+                            echo <<<HTML
+                            <div class="col-mb-3">
+                                <div class="card card-outline card-{$tipo}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">{$titulo}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        {$mensagem}
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                        }
+                        ?>
                     </div>
                 </form>
             </div>
