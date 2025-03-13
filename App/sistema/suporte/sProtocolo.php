@@ -56,8 +56,8 @@ class sProtocolo {
                 'comando' => 'SELECT',
                 'busca' => '*',
                 'tabelas' => 'protocolo',
-                'camposCondicionados' => '',
-                'valoresCondicionados' => '',
+                'camposCondicionados' => $this->nomeCampo,
+                'valoresCondicionados' => $this->valorCampo,
                 'camposOrdenados' => null, //caso não tenha, colocar como null
                 'ordem' => null//caso não tenha, colocar como null
             ];

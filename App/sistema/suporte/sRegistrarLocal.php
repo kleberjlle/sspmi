@@ -57,6 +57,7 @@ if (isset($_POST['formulario'])) {
         $sSecretaria->consultar('tMenu4_1.php');
 
         $sEmail = new sEmail($email, 'secretaria');
+        $sEmail->setNomenclatura($email);
         $sEmail->verificar('tMenu4_1.php');
 
         //compara os registros do BD com a nova solicitação

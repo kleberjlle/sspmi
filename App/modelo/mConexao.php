@@ -64,12 +64,17 @@ class mConexao {
             if ($key == 'busca' && $value) {
                 $query .= $value . ' FROM ';
             } else if ($key == 'camposCondicionados' && $value) {
+                
                 if ($dados['valoresCondicionados'] == "null") {
                     $query .= 'WHERE ' . $value . ' <=> ';
                 } else if($dados['valoresCondicionados'] == "is not null"){
                     $query .= 'WHERE ' . $value.'!=';
                 }else {
-                    $query .= 'WHERE ' . $value . '=';
+                    if($dados['camposCondicionados'] == 'dataHoraAbertura'){
+                        $query .= 'WHERE YEAR(' . $dados['camposCondicionados'] . ')=';
+                    }else{
+                        $query .= 'WHERE ' . $value . '=';
+                    }
                 }
             } else if ($key == 'valoresCondicionados' && $value) {
                 $valoresCondicionados = true;
@@ -92,7 +97,7 @@ class mConexao {
                 }
             }
         }
-        
+                
         $stmt = $this->conexao->prepare($query);
         
         if (empty($dados['valoresCondicionados'])) {   

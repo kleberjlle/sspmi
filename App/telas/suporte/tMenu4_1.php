@@ -195,6 +195,17 @@ if (isset($_GET['campo'])) {
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Ambiente</label>
+                                <select class="form-control<?php echo isset($alertaAmbienteF1) ? $alertaAmbienteF1 : ''; ?>" name="ambienteF1" id="ambienteF1" form="f1">
+                                    <option value="interno">Interno</option>
+                                    <option value="externo">Externo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>WhatsApp</label>

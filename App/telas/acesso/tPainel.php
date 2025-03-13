@@ -621,6 +621,7 @@ HTML;
                                 //abre os menus da condição
                                 
                                 $menu == '6_1' ||
+                                $menu == '6_1_1' ||
                                 $menu == '6_1_2' ||
                                 $menu == '6_2' ||
                                 $menu == '6_3' ?
@@ -827,6 +828,9 @@ HTML;
                         //menu 6
                         case "6_1":
                             require_once '../suporte/tMenu6_1.php';
+                            break;
+                        case "6_1_1":
+                            require_once '../suporte/tMenu6_1_1.php';
                             break;
                         case "6_1_2":
                             require_once '../suporte/tMenu6_1_2.php';

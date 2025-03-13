@@ -68,9 +68,25 @@ $sCategoria->consultar('tMenu2_1.php');
                                         <div class="conteudo" name="conteudo" id="conteudo">Sim</div>
                                     </label>
                                 </div>
+                                
                             </div>
-                        </div>                        
+                        </div>  
+                        <div class="col-md-10">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="text-success text-xl">
+                                </p>
+                                <p class="d-flex flex-column text-left">
+                                    <span class="text-muted">
+                                        Digite o número de Patrimônio do<br />
+                                        equipamento, ou o código SELB<br />
+                                        para impressoras locadas.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                
+                                
                     <?php
                         if (isset($tipo) &&
                             isset($titulo) &&

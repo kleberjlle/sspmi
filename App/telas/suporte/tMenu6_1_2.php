@@ -373,13 +373,13 @@ if ($sProtocolo->getValidador()) {
         $sEtapa->consultar('tMenu2_2_1.php');
 
         $i = 0;
-        foreach ($sEtapa->mConexao->getRetorno() as $key => $value) {
-            $idEquipamento = $value['equipamento_idequipamento'];
-            $descricao = $value['descricao'];
-            $idLocal = $value['local_idlocal'];
-            $idPrioridade = $value['prioridade_idprioridade'];
+        foreach ($sEtapa->mConexao->getRetorno() as $key => $valorEquipamento) {
+            $idEquipamento = $valorEquipamento['equipamento_idequipamento'];
+            $descricao = $valorEquipamento['descricao'];
+            $idLocal = $valorEquipamento['local_idlocal'];
+            $idPrioridade = $valorEquipamento['prioridade_idprioridade'];
 
-            $etapaReversa[$i] = $value;
+            $etapaReversa[$i] = $valorEquipamento;
             $i++;
         }
 
@@ -602,16 +602,16 @@ HTML;
                         $sEtapa->setValorCampo($idProtocolo);
                         $sEtapa->consultar('tMenu6_1_2.php');
 
-                        foreach ($sEtapa->mConexao->getRetorno() as $value) {
-                            $numero = $value['numero'];
-                            $idPrioridadeEtapa = $value['prioridade_idprioridade'];
-                            $dataAberturaEtapa = $value['dataHoraAbertura'];
-                            $dataEncerramentoEtapa = $value['dataHoraEncerramento'];
-                            $acessoRemotoEtapa = $value['acessoRemoto'];
-                            $descricaoEtapa = $value['descricao'];
-                            $idLocalEtapa = $value['local_idlocal'];
-                            $idUsuarioEtapa = $value['usuario_idusuario'];
-                            $solucaoEtapa = $value['solucao'];
+                        foreach ($sEtapa->mConexao->getRetorno() as $valorEtapa) {
+                            $numero = $valorEtapa['numero'];
+                            $idPrioridadeEtapa = $valorEtapa['prioridade_idprioridade'];
+                            $dataAberturaEtapa = $valorEtapa['dataHoraAbertura'];
+                            $dataEncerramentoEtapa = $valorEtapa['dataHoraEncerramento'];
+                            $acessoRemotoEtapa = $valorEtapa['acessoRemoto'];
+                            $descricaoEtapa = $valorEtapa['descricao'];
+                            $idLocalEtapa = $valorEtapa['local_idlocal'];
+                            $idUsuarioEtapa = $valorEtapa['usuario_idusuario'];
+                            $solucaoEtapa = $valorEtapa['solucao'];
 
                             //buscar dados da prioridade
                             $sPrioridadeEtapa = new sPrioridade();
@@ -619,8 +619,8 @@ HTML;
                             $sPrioridadeEtapa->setValorCampo($idPrioridadeEtapa);
                             $sPrioridadeEtapa->consultar('tMenu6_1_2.php');
 
-                            foreach ($sPrioridadeEtapa->mConexao->getRetorno() as $value) {
-                                $prioridadeEtapa = $value['nomenclatura'];
+                            foreach ($sPrioridadeEtapa->mConexao->getRetorno() as $valorEtapa) {
+                                $prioridadeEtapa = $valorEtapa['nomenclatura'];
                             }
 
                             //tratamento da prioridade
@@ -645,8 +645,8 @@ HTML;
                             $sLocalEtapa->setValorCampo($idLocalEtapa);
                             $sLocalEtapa->consultar('tMenu6_1_2.php');
 
-                            foreach ($sLocalEtapa->mConexao->getRetorno() as $value) {
-                                $localEtapa = $value['nomenclatura'];
+                            foreach ($sLocalEtapa->mConexao->getRetorno() as $valorEtapa) {
+                                $localEtapa = $valorEtapa['nomenclatura'];
                             }
                             
                             //buscar dados da usuario

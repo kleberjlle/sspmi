@@ -146,7 +146,8 @@ class sEmail {
                     }
                 }
 
-                if ($pagina == 'tMenu1_2_1.php') {
+                if ($pagina == 'tMenu1_2_1.php' ||
+                    $pagina == 'tMenu4_1.php'){
                     $dados = [
                         'comando' => 'SELECT',
                         'busca' => '*',
